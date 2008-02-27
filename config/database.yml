@@ -1,23 +1,12 @@
-# MySQL (default setup).  Versions 4.1 and 5.0 are recommended.
-#
-# Install the MySQL driver:
-#   gem install mysql
-# On MacOS X:
-#   gem install mysql -- --include=/usr/local/lib
-# On Windows:
-#   gem install mysql
-#       Choose the win32 build.
-#       Install MySQL and put its /bin directory on your path.
-#
-# And be sure to use new-style password hashing:
-#   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
+# SQLite version 3.x
+#   gem install sqlite3-ruby (not necessary on OS X Leopard)
 development:
   adapter: postgresql
-  database: quorum2_development
+  database: quorum2_dev
   username: quorum2_dev
   password: PASSWORD
+  encoding: UTF8
   template: template_postgis
-  host: localhost
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
@@ -25,14 +14,14 @@ development:
 test:
   adapter: postgresql
   database: quorum2_test
-  username: quorum_test
+  username: quorum2_test
   password: PASSWORD
+  encoding: UTF8
   template: template_postgis
-  host: localhost
+
+# Warning: The database defined as 'test' will be erased and
 
 production:
-  adapter: postgres
-  database: quorum2_production
-  username: root
-  password: 
-  host: localhost
+  adapter: sqlite3
+  database: db/production.sqlite3
+  timeout: 5000

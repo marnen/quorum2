@@ -1,4 +1,4 @@
-#!/Applications/Locomotive2/Bundles/standardRailsMar2007.locobundle/i386/bin/ruby
+#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
 #
 # You may specify the path to the FastCGI crash log (a log of unhandled
 # exceptions which forced the FastCGI instance to exit, great for debugging)
