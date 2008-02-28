@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 2) do
+ActiveRecord::Schema.define(:version => 3) do
 
   create_table "events", :force => true do |t|
     t.column "name", :string
@@ -23,6 +23,12 @@ ActiveRecord::Schema.define(:version => 2) do
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
     t.column "coords", :point, :srid => 4326
+  end
+
+  create_table "events_users", :force => true do |t|
+    t.column "event_id", :integer, :null => false
+    t.column "user_id", :string, :null => false
+    t.column "status", :boolean
   end
 
 end
