@@ -9,7 +9,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 3) do
+ActiveRecord::Schema.define(:version => 4) do
+
+  create_table "countries", :force => true do |t|
+    t.column "code", :string, :limit => 2, :null => false
+    t.column "name", :string, :null => false
+  end
 
   create_table "events", :force => true do |t|
     t.column "name", :string
@@ -29,6 +34,12 @@ ActiveRecord::Schema.define(:version => 3) do
     t.column "event_id", :integer, :null => false
     t.column "user_id", :string, :null => false
     t.column "status", :boolean
+  end
+
+  create_table "states", :force => true do |t|
+    t.column "country_id", :integer
+    t.column "code", :string, :limit => 10, :null => false
+    t.column "name", :string, :null => false
   end
 
 end
