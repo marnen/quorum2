@@ -14,16 +14,12 @@ describe State, "(validations)" do
     @state.code = "AA" # arbitrary value
   end
   
-  it "should not be valid without a state code" do
+  it "should have a name iff it has a state code" do
     @state.should be_valid
     @state.code = nil
     @state.should_not be_valid
-  end
-  
-  it "should not be valid without a name" do
-    @state.should be_valid
     @state.name = nil
-    @state.should_not be_valid
+    @state.should be_valid
   end
   
   it "should not be valid without a country" do
