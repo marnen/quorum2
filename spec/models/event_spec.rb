@@ -22,11 +22,8 @@ describe Event, "(validations)" do
     @event = Event.new
   end
   
-  it "should be invalid if state_id is nil" do
+  it "should not be valid without a state" do
     @event.should_not be_valid
-  end
-  
-  it "should be valid if state_id is not nil" do
     @event.state_id = 23 # arbitrary; should be able to use any value
     @event.should be_valid
   end
