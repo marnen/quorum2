@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 1) do
+ActiveRecord::Schema.define(:version => 2) do
 
   create_table "events", :force => true do |t|
     t.column "name", :string
@@ -20,7 +20,6 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column "city", :string
     t.column "state_id", :integer
     t.column "zip", :string
-    t.column "country_id", :integer
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
     t.column "coords", :point, :srid => 4326
