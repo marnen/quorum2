@@ -20,13 +20,21 @@ end
 describe Event, "(validations)" do
   before(:each) do
     @event = Event.new
+    @event.state_id = 23 # arbitrary; should be able to use any value
+    @event.city = "x" # arbitrary value
   end
   
   it "should not be valid without a state" do
-    @event.should_not be_valid
-    @event.state_id = 23 # arbitrary; should be able to use any value
-    @event.should be_valid
-  end
+   @event.should be_valid
+   @event.state_id = nil
+   @event.should_not be_valid
+ end
+ 
+ it "should not be valid without a city" do
+   @event.should be_valid
+   @event.city = nil
+   @event.should_not be_valid
+ end
 end
 =begin
 describe Event, "(geographical features)" do

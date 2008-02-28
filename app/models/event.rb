@@ -1,6 +1,7 @@
 class Event < ActiveRecord::Base
   belongs_to :state, :include => :country
   has_and_belongs_to_many :users
+  validates_presence_of :city
   validates_presence_of :state_id
 =begin
   def coords
