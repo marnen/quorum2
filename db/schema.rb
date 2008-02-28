@@ -9,24 +9,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 1) do
 
-  create_table "geometry_columns", :id => false, :force => true do |t|
-    t.string  "f_table_catalog",   :limit => 256, :null => false
-    t.string  "f_table_schema",    :limit => 256, :null => false
-    t.string  "f_table_name",      :limit => 256, :null => false
-    t.string  "f_geometry_column", :limit => 256, :null => false
-    t.integer "coord_dimension",                  :null => false
-    t.integer "srid",                             :null => false
-    t.string  "type",              :limit => 30,  :null => false
-  end
-
-  create_table "spatial_ref_sys", :id => false, :force => true do |t|
-    t.integer "srid",                      :null => false
-    t.string  "auth_name", :limit => 256
-    t.integer "auth_srid"
-    t.string  "srtext",    :limit => 2048
-    t.string  "proj4text", :limit => 2048
+  create_table "events", :force => true do |t|
+    t.column "name", :string
+    t.column "date", :date
+    t.column "site", :string
+    t.column "street", :string
+    t.column "street2", :string
+    t.column "city", :string
+    t.column "state_id", :integer
+    t.column "zip", :string
+    t.column "country_id", :integer
+    t.column "created_at", :timestamp
+    t.column "updated_at", :timestamp
+    t.column "coords", :point, :srid => 4326
   end
 
 end

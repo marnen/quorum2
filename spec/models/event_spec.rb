@@ -8,4 +8,8 @@ describe Event do
   it "should be valid" do
     @event.should be_valid
   end
+  
+  it "should belong to a State" do
+    Event.reflect_on_association(:state).macro.should == :belongs_to
+  end
 end

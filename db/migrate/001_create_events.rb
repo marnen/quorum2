@@ -7,10 +7,10 @@ class CreateEvents < ActiveRecord::Migration
       t.string :street
       t.string :street2
       t.string :city
-      t.number :state_id
+      t.integer :state_id
       t.string :zip
-      t.number :country_id
-      t.geometry :coords
+      t.integer :country_id
+      t.column :coords, :point, :null => true, :srid => 4326, :with_z => false
 
       t.timestamps
     end
