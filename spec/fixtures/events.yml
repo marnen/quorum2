@@ -14,10 +14,10 @@ one:
 two:
   name: Event 2
   date: 2008-02-22
-  site: MyString
-  street: MyString
-  street2: MyString
-  city: MyString
+  site: Event 2 site
+  street: Event 2 street
+  street2: Event 2 street2
+  city: Event 2 city
   state: "on"
-  zip: MyString
+  zip: B2B 2B2
   coords: ~
