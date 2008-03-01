@@ -11,9 +11,33 @@ describe Event, "(general properties)" do
   it "should belong to a Country" do
     pending("should test for :include :country on :state, but I'm not sure how to write that.")
   end
+    
+  it "should have many Commitments" do
+    Event.reflect_on_association(:commitments).macro.should == :has_many
+  end
   
-  it "should have and belong to many Users" do
-    Event.reflect_on_association(:users).macro.should == :has_and_belongs_to_many
+  it "should have many Users through Commitments" do
+    reflection = Event.reflect_on_association(:users)
+    reflection.macro.should == :has_many
+    reflection.options.should have_key(:through)
+    reflection.options[:through].should == :commitments
+  end
+end
+
+describe Event, "(find_committed)" do
+  before(:each) do
+    @event = Event.new
+    @find = @event.method(:find_committed)
+  end
+  
+  it "should exist with one optional argument" do
+    @event.should respond_to(:find_committed)
+    @find.arity.should == -1
+  end
+  
+  it "should get a collection of Users" do
+    @event.users.should_receive(:find_by_status).with(true)
+    @find[true]
   end
 end
 

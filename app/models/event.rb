@@ -1,8 +1,23 @@
 class Event < ActiveRecord::Base
   belongs_to :state, :include => :country
-  has_and_belongs_to_many :users
+  has_many :commitments
+  has_many :users, :through => :commitments
   validates_presence_of :city
   validates_presence_of :state_id
+  
+  def find_committed(status = :yes)
+    # status may be :yes, :no, or nil
+    # returns an array of Users with the appropriate commitment status
+    if status.nil? then
+      nil
+    elsif status == :yes then
+      nil
+    elsif status == :no then
+      nil
+    else
+      raise "Invalid status: " << status
+    end
+  end
 
   def coords
     c = self[:coords]
