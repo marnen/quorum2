@@ -3,11 +3,11 @@ class Event < ActiveRecord::Base
   has_and_belongs_to_many :users
   validates_presence_of :city
   validates_presence_of :state_id
-=begin
+
   def coords
     c = self[:coords]
     if (c.nil?)
-      address_to_code = "#{street}, #{city}, #{state.code}, #{zip}, #{country.code}"
+      address_to_code = "#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}"
       begin
         geo = Geocoding::get(address_to_code)
         if geo.status == Geocoding::GEO_SUCCESS
@@ -22,5 +22,4 @@ class Event < ActiveRecord::Base
     end
    c
   end
-=end
 end

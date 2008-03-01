@@ -36,15 +36,17 @@ describe Event, "(validations)" do
    @event.should_not be_valid
  end
 end
-=begin
+
 describe Event, "(geographical features)" do
+  fixtures :events, :states, :countries
+  
   before(:each) do
     Geocoding::Placemarks.any_instance.expects(:[]).returns(Geocoding::Placemark.new)
     Geocoding::Placemark.any_instance.stubs(:latlon).returns([1.0, 2.0])
     Geocoding.expects(:get).returns(Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS))
     Point::any_instance.stubs(:from_coordinates).returns(true)
 
-    @event = Event.new
+    @event = events(:one)
   end
 
   it "should have coords (Point)" do
@@ -53,4 +55,3 @@ describe Event, "(geographical features)" do
     @event.coords.should be_a_kind_of(Point)
   end
 end
-=end
