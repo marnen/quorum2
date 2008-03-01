@@ -1,25 +1,23 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  name: MyString
-  date: 2008-02-27
-  site: MyString
-  street: MyString
-  street2: MyString
-  city: MyString
-  state_id: 
-  zip: MyString
-  country_id: 
-  coords: 
+  name: Event 1 with <> signs
+  date: 2008-01-10
+  site: Event 1 site
+  street: Event 1 street
+  street2: Event 1 street2
+  city: Event 1 city
+  state: ny
+  zip: 11111
+  coords: ~
 
 two:
-  name: MyString
-  date: 2008-02-27
+  name: Event 2
+  date: 2008-02-22
   site: MyString
   street: MyString
   street2: MyString
   city: MyString
-  state_id: 
+  state: nj
   zip: MyString
-  country_id: 
-  coords: 
+  coords: ~

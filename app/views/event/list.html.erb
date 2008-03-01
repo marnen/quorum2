@@ -1,2 +1,19 @@
-<h1>Event#list</h1>
-<p>Find me in app/views/event/list.html.erb</p>
+<table class="events">
+	<tr>
+		<td class="edit"><!-- blank --></td>
+		<th><%= h _("Date") %></th>
+		<th><%= h _("Event") %></th>
+		<th><%= h _("Status") %></th>
+		<th><%= h _("Attending") %></th>
+		<th><%= h _("Not attending") %></th>
+	</tr>
+	<% for event in @events -%>
+		<tr class="vevent" id="event_<%= event.id %>">
+			<td class="edit"></td>
+			<td>
+				<h3 class="summary"><%= h(event.name) %></h3>
+				<span class="location vcard"><span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span></span>
+			</td>
+		</tr>
+	<%- end %>
+</table>

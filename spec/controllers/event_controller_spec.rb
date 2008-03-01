@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventController do
 
+=begin
   #Delete these examples and add some real ones
   it "should use EventController" do
     controller.should be_an_instance_of(EventController)
@@ -28,4 +29,5 @@ describe EventController do
       response.should be_success
     end
   end
+=end
 end
