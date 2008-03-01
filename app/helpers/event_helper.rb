@@ -3,7 +3,7 @@ module EventHelper
     # generate a microformat HTML date element
     ical_date = h event.date.to_formatted_s(:ical)
     full_date = h event.date.to_formatted_s(:rfc822)
-    %{<abbr class="dtstart" title="#{ical_date}">#{full_date}</abbr>}
+    content_tag :abbr, full_date, :class => :dtstart, :title => ical_date
   end
   
   def edit_link(event)
