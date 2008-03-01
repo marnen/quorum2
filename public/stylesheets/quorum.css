@@ -1,0 +1,28 @@
+body  { color: black; font-size: 12px; font-family: Verdana, Tahoma, Arial, Geneva, Helvetica, sans-serif; background-color: white; }
+.name { color: red; font-weight: bolder; }
+.hidden { display: none; }
+
+.siteName  { color: #00c; font-style: oblique; font-weight: bolder; font-size: 116% }
+.footer { border-top: 1px solid black; padding-top: 2px; }
+
+td { background-color: #ccc; }
+th { background-color: #666; color: white; }
+
+.map { font-size: 90%; 	}
+.hint { font-size: 90%; font-weight: lighter; }
+
+span.yes  { color: #090; font-weight: bolder }
+span.no { font-weight: bolder; color: #c00; }
+span.maybe  { color: #cc0; font-weight: bolder }
+
+td.yes { background-color: #cfc; }
+td.no { background-color: #fcc; }
+td.maybe { background-color: #ffc; }
+
+td.edit { background-color: transparent; font-size: 90%; }
+
+a.ical   { color: white; font-size: 9px; font-family: Verdana, Tahoma, Arial, Geneva, sans-serif; font-weight: bold; text-decoration: none; background-color: red; text-transform: uppercase; border: outset 1px #900 }
+
+// Some hCalendar properties...
+abbr { text-decoration: inherit; }
+.uid { display: none; }
