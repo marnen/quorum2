@@ -9,16 +9,16 @@
 	</tr>
 	<% for event in @events -%>
 		<tr class="vevent" id="event_<%= event.id %>">
-			<td class="edit"></td>
+			<td class="edit"><%= edit_link(event) %></td>
 			<td>
 				<span class="uid"><%= h ical_uid(event) %></span>
-				<abbr class="dtstart" title="<%= h event.date.to_formatted_s(:ical) %>"><%= h event.date.to_formatted_s(:rfc822)%></abbr>
+				<%= date_element(event) %>
 			</td>
 			<td>
 				<h3 class="summary"><%= h(event.name) %></h3>
 				<span class="location vcard"><span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span>, <span class="country-name"><%= h event.state.country.code %></span></span><br />
-				<span class="map"><%= link_to h(_("map")), url_for(:action => 'map', :id => event.id), :target => 'map' %></span>
-				<p><%= link_to h(_("iCal")), url_for(:action => 'export', :id => event.id), :class => 'ical' %></p>
+				<span class="map"><%= map_link(event) %></span>
+				<p><%= ical_link(event) %></p>
 			</td>
 		</tr>
 	<%- end %>

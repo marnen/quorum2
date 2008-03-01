@@ -1,10 +1,31 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventHelper do
+  before(:each) do
+    @event = Event.new
+  end
+  
+  # refactor from list.html.erb_spec into here?
+  
   it "should generate an iCal unique id as a String" do
-    event = Event.new
-    ical_uid(event).should_not be_nil
-    ical_uid(event).should be_a_kind_of(String)
+    ical_uid(@event).should be_a_kind_of(String)
+  end
+  
+  it "should generate an edit link as a String" do
+    edit_link(@event).should be_a_kind_of(String)
+  end
+  
+  it "should generate an iCal export link as a String" do
+    ical_link(@event).should be_a_kind_of(String)
+  end
+  
+  it "should generate a map link as a String" do
+    map_link(@event).should be_a_kind_of(String)
+  end
+  
+  it "should generate a microformat HTML date element as a String" do
+    @event.date = Time.now # arbitrary value
+    date_element(@event).should be_a_kind_of(String)
   end
 =begin
   #Delete this example and add some real ones or delete this file

@@ -67,4 +67,11 @@ describe "/event/list" do
       response.should have_tag("#event_#{event.id} .uid", ical_uid(event))
     end
   end
+  
+  it "should contain an edit link for each event" do
+    for event in @events do
+     url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
+     response.should have_tag("#event_#{event.id} a[href=" << url << "]")
+    end
+  end
 end
