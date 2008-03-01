@@ -12,7 +12,7 @@ nj:
   code: NJ
   name: New Jersey
   
-on:
+"on":
   country: canada
-  code: ON
+  code: "ON"
   name: Ontario
