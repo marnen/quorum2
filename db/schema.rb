@@ -9,7 +9,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 5) do
+ActiveRecord::Schema.define(:version => 6) do
+
+  create_table "commitments", :force => true do |t|
+    t.column "event_id", :integer, :null => false
+    t.column "user_id", :string, :null => false
+    t.column "status", :boolean
+  end
 
   create_table "countries", :force => true do |t|
     t.column "code", :string, :limit => 2, :null => false
@@ -30,12 +36,6 @@ ActiveRecord::Schema.define(:version => 5) do
     t.column "coords", :point, :srid => 4326
   end
 
-  create_table "events_users", :force => true do |t|
-    t.column "event_id", :integer, :null => false
-    t.column "user_id", :string, :null => false
-    t.column "status", :boolean
-  end
-
   create_table "states", :force => true do |t|
     t.column "country_id", :integer
     t.column "code", :string, :limit => 10, :null => false
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(:version => 5) do
     t.column "email", :string
     t.column "md5_password", :string, :limit => 32
     t.column "salt", :string, :limit => 5
+    t.column "firstname", :string
+    t.column "lastname", :string
     t.column "address", :string
     t.column "address2", :string
     t.column "city", :string
