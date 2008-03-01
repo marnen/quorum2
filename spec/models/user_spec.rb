@@ -15,7 +15,7 @@ describe User, "(general properties)" do
   it "should have many Events through Commitments" do
     reflection = User.reflect_on_association(:events)
     reflection.macro.should == :has_many
-    reflection.options.should have_key :through
+    reflection.options.should have_key(:through)
     reflection.options[:through].should == :commitments
   end
 end
@@ -40,5 +40,23 @@ describe User, "(validations)" do
     @user.should_not be_valid
     @user.md5_password = nil
     @user.should_not be_valid
+  end
+end
+
+describe User, "(instance properties)" do
+  before(:each) do
+    @user = User.new
+  end
+  
+  it "should have a 'fullname' property returning firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
+    @user.email = 'foo@bar.com' # arbitrary
+    @user.fullname.should == @user.email
+    @user.firstname = 'f' # arbitrary
+    @user.fullname.should == @user.firstname
+    @user.firstname = nil
+    @user.lastname = 'l' # arbitrary
+    @user.fullname.should == @user.lastname
+    @user.firstname = 'f'
+    @user.fullname.should == @user.firstname << ' ' << @user.lastname
   end
 end
