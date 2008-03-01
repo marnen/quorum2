@@ -10,7 +10,7 @@ describe EventController, "list" do
   end
   
   it "should get all events, ordered by date" do
-    Event.should_receive(:find) # .with(:all, :order => :date)
+    Event.should_receive(:find).with(:all, :order => :date)
     get 'list'
   end
 end
