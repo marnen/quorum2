@@ -1,6 +1,18 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe EventController do
+describe EventController, "list" do
+  before :each do
+    get 'list'
+  end
+  
+  it "should be successful" do
+    response.should be_success
+  end
+  
+  it "should get all events, ordered by date" do
+    assigns[:events].should == Event.find(:all, :order => :date)
+  end
+end
 
 =begin
   #Delete these examples and add some real ones
@@ -30,4 +42,3 @@ describe EventController do
     end
   end
 =end
-end
