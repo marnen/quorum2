@@ -30,14 +30,16 @@ describe Event, "(find_committed)" do
     @find = @event.method(:find_committed)
   end
   
-  it "should exist with one optional argument" do
+  it "should exist with one argument" do
     @event.should respond_to(:find_committed)
-    @find.arity.should == -1
+    @find.arity.should == 1
   end
   
-  it "should get a collection of Users" do
-    @event.users.should_receive(:find_by_status).with(true)
-    @find[true]
+  it "should get a collection of Users when called with :yes or :no" do
+    @event.users.should_receive(:find_by_status).with(true).once
+    @find[:yes]
+    @event.users.should_receive(:find_by_status).with(false).once
+    @find[:no]
   end
 end
 

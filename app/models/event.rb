@@ -5,15 +5,13 @@ class Event < ActiveRecord::Base
   validates_presence_of :city
   validates_presence_of :state_id
   
-  def find_committed(status = :yes)
-    # status may be :yes, :no, or nil
+  def find_committed(status)
+    # status may be :yes or :no
     # returns an array of Users with the appropriate commitment status
-    if status.nil? then
-      nil
-    elsif status == :yes then
-      nil
+    if status == :yes then
+      users.find_by_status(true)
     elsif status == :no then
-      nil
+      users.find_by_status(false)
     else
       raise "Invalid status: " << status
     end
