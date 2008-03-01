@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/event/list" do
-  fixtures :events, :states
+  fixtures :events, :states, :countries
   
   before(:each) do
     @events = Event.find :all
@@ -28,6 +28,12 @@ describe "/event/list" do
   it "should show a state code for each event in a tag of class 'region'" do
     for event in @events do
       response.should have_tag("#event_#{event.id} .region", ERB::Util.h(event.state.code))
+    end
+  end
+
+  it "should show a country code for each event in a tag of class 'country-name'" do
+    for event in @events do
+      response.should have_tag("#event_#{event.id} .country-name", ERB::Util.h(event.state.country.code))
     end
   end
 end
