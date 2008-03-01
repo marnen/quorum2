@@ -4,6 +4,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :email, :null => :false
       t.string :md5_password, :null => :false, :limit => 32
       t.string :salt, :limit => 5
+      t.string :firstname
+      t.string :lastname
       t.string :address
       t.string :address2
       t.string :city
