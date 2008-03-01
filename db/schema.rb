@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 4) do
+ActiveRecord::Schema.define(:version => 5) do
 
   create_table "countries", :force => true do |t|
     t.column "code", :string, :limit => 2, :null => false
@@ -40,6 +40,21 @@ ActiveRecord::Schema.define(:version => 4) do
     t.column "country_id", :integer
     t.column "code", :string, :limit => 10, :null => false
     t.column "name", :string, :null => false
+  end
+
+  create_table "users", :force => true do |t|
+    t.column "email", :string
+    t.column "md5_password", :string, :limit => 32
+    t.column "salt", :string, :limit => 5
+    t.column "address", :string
+    t.column "address2", :string
+    t.column "city", :string
+    t.column "state_id", :integer
+    t.column "zip", :string
+    t.column "created_at", :timestamp
+    t.column "updated_at", :timestamp
+    t.column "coords", :geometry, :srid => 4326
+    t.column "point", :geometry, :srid => 4326
   end
 
 end
