@@ -11,7 +11,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :city
       t.integer :state_id
       t.string :zip
-      t.geometry :coords, :point, :null => true, :srid => 4326, :with_z => false
+      t.column :coords, :point, :null => true, :srid => 4326, :with_z => false
       t.timestamps
     end
   end
