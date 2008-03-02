@@ -44,8 +44,8 @@ ActiveRecord::Schema.define(:version => 6) do
 
   create_table "users", :force => true do |t|
     t.column "email", :string
-    t.column "md5_password", :string, :limit => 32
-    t.column "salt", :string, :limit => 5
+    t.column "crypted_password", :string, :limit => 40
+    t.column "salt", :string, :limit => 40
     t.column "firstname", :string
     t.column "lastname", :string
     t.column "address", :string
@@ -53,6 +53,9 @@ ActiveRecord::Schema.define(:version => 6) do
     t.column "city", :string
     t.column "state_id", :integer
     t.column "zip", :string
+    t.column "remember_token", :string
+    t.column "remember_token_expires_at", :timestamp
+    t.column "activated_at", :timestamp
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
     t.column "coords", :point, :srid => 4326
