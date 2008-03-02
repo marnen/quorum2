@@ -55,8 +55,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.column "zip", :string
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :geometry, :srid => 4326
-    t.column "point", :geometry, :srid => 4326
+    t.column "coords", :point, :srid => 4326
   end
 
 end
