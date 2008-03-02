@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventHelper do
+  fixtures :users
+  
   before(:each) do
     @event = Event.new
   end
@@ -34,5 +36,11 @@ describe EventHelper do
     included_modules.should include(EventHelper)
   end
 =end
+  it "should generate a comma-separated list of names from an array of users" do
+    names = list_names users
+    for user in users do
+      names.should include user.fullname
+    end
+  end
   
 end

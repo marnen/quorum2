@@ -10,6 +10,7 @@ module EventHelper
     # generate an edit link
     link_to h(_("edit")), url_for(:controller => 'event', :action => 'edit', :id => event.id)
   end
+  
 
   def ical_link(event)
     # generate an iCal export link
@@ -21,6 +22,11 @@ module EventHelper
     "event-" << event.id.to_s << "@" << DOMAIN
   end
   
+  def list_names(users)
+    # users is an Array (or similar) of users
+    users.collect {|u| u.fullname}.join(', ')
+  end
+
   def map_link(event)
     # generate a map link
     link_to h(_("map")), url_for(:controller => 'event', :action => 'map', :id => event.id), :target => 'map'

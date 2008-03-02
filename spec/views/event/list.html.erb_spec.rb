@@ -5,7 +5,7 @@ include ActionView::Helpers::UrlHelper
 include EventHelper
 
 describe "/event/list" do
-  fixtures :events, :states, :countries
+  fixtures :events, :states, :countries, :users, :commitments
   
   before(:each) do
     @events = Event.find :all
@@ -73,5 +73,15 @@ describe "/event/list" do
      url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
      response.should have_tag("#event_#{event.id} a[href=" << url << "]")
     end
+  end
+  
+  it "should get a list of users attending and not attending for each event" do
+=begin
+      for event in @events do
+        event.should_receive(:find_committed).with(:yes).once
+        event.should_receive(:find_committed).with(:no).once
+      end
+=end
+    pending "maybe put this in a before block?"
   end
 end

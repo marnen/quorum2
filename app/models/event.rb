@@ -8,10 +8,13 @@ class Event < ActiveRecord::Base
   def find_committed(status)
     # status may be :yes or :no
     # returns an array of Users with the appropriate commitment status
+    temp = commitments.clone
     if status == :yes then
-      users.find_by_status(true)
+      temp.delete_if {|e| e.status != true}
+      temp.collect{|e| e.user }
     elsif status == :no then
-      users.find_by_status(false)
+      temp.delete_if {|e| e.status != false}
+      temp.collect{|e| e.user }
     else
       raise "Invalid status: " << status
     end

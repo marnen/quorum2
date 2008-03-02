@@ -1,7 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-# one:
-#   column: value
-#
-# two:
-#   column: value
+one:
+  event: one
+  user: marnen
+  status: true
+  
+two:
+  event: one
+  user: millie
+  status: false

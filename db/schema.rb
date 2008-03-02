@@ -13,8 +13,8 @@ ActiveRecord::Schema.define(:version => 6) do
 
   create_table "commitments", :force => true do |t|
     t.column "event_id", :integer, :null => false
-    t.column "user_id", :string, :null => false
     t.column "status", :boolean
+    t.column "user_id", :integer
   end
 
   create_table "countries", :force => true do |t|

@@ -36,10 +36,16 @@ describe Event, "(find_committed)" do
   end
   
   it "should get a collection of Users when called with :yes or :no" do
-    @event.users.should_receive(:find_by_status).with(true).once
-    @find[:yes]
-    @event.users.should_receive(:find_by_status).with(false).once
-    @find[:no]
+    yes = @find[:yes]
+    yes.should be_a_kind_of(Array)
+    if !yes[0].nil? then
+      yes[0].should be_a_kind_of(User)
+    end
+    no = @find[:no]
+    no.should be_a_kind_of(Array)
+    if !no[0].nil? then
+      no[0].should be_a_kind_of(User)
+    end
   end
 end
 
