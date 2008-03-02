@@ -14,6 +14,7 @@ class CreateUsers < ActiveRecord::Migration
       t.column :coords, :point, :null => true, :srid => 4326, :with_z => false
       t.string :remember_token
       t.datetime :remember_token_expires_at
+      t.string :activation_code, :limit => 40
       t.datetime :activated_at
       t.timestamps
     end

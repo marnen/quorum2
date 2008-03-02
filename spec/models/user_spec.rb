@@ -38,7 +38,7 @@ describe User, "(instance properties)" do
   end
 end
 
-describe User, "authentication structure" do
+describe User, "(authentication structure)" do
   fixtures :users
 
   describe 'being created' do
