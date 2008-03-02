@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 6) do
     t.column "zip", :string
     t.column "remember_token", :string
     t.column "remember_token_expires_at", :timestamp
+    t.column "activation_code", :string, :limit => 40
     t.column "activated_at", :timestamp
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
