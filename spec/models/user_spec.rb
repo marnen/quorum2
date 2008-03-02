@@ -20,29 +20,6 @@ describe User, "(general properties)" do
   end
 end
   
-describe User, "(validations)" do
-  before(:each) do
-    @user = User.new
-    @user.email = "foo@bar.com" # arbitrary value
-    @user.md5_password = "0123456789abcdef0123456789abcdef" # arbitrary 32-byte string
-    @user
-  end
-
-  it "should not be valid without an e-mail address" do
-    @user.should be_valid
-    @user.email = nil
-    @user.should_not be_valid
-  end
-  
-  it "should not be valid without a password hash of length exactly 32" do
-    @user.should be_valid
-    @user.md5_password <<= "0" # length 33
-    @user.should_not be_valid
-    @user.md5_password = nil
-    @user.should_not be_valid
-  end
-end
-
 describe User, "(instance properties)" do
   before(:each) do
     @user = User.new
@@ -81,13 +58,6 @@ describe User, "authentication structure" do
       @creating_user.call
       @user.reload.activation_code.should_not be_nil
     end
-  end
-
-  it 'requires login' do
-    lambda do
-      u = create_user(:login => nil)
-      u.errors.on(:login).should_not be_nil
-    end.should_not change(User, :count)
   end
 
   it 'requires password' do
@@ -166,7 +136,7 @@ describe User, "authentication structure" do
 
 protected
   def create_user(options = {})
-    record = User.new({ :login => 'quire', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+    record = User.new({ :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
     record.save
     record
   end

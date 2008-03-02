@@ -7,19 +7,17 @@ class User < ActiveRecord::Base
   has_many :commitments
   has_many :events, :through => :commitments
   validates_presence_of :email
-  validates_length_of :md5_password, :is => 32
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
   validates_length_of       :password, :within => 4..40, :if => :password_required?
   validates_confirmation_of :password,                   :if => :password_required?
-  validates_length_of       :login,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :email, :case_sensitive => false
   before_save :encrypt_password
   before_create :make_activation_code 
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation
+  attr_accessible :email, :password, :password_confirmation
   
   def fullname
     str = [self.firstname, self.lastname].delete_if {|e| e.blank?}.join(' ')

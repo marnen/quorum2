@@ -2,8 +2,8 @@ class CreateUsers < ActiveRecord::Migration
   def self.up
     create_table :users do |t|
       t.string :email, :null => :false
-      t.string :md5_password, :null => :false, :limit => 32
-      t.string :salt, :limit => 5
+      t.string :crypted_password, :limit => 40
+      t.string :salt, :limit => 40
       t.string :firstname
       t.string :lastname
       t.string :address
@@ -12,6 +12,9 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :state_id
       t.string :zip
       t.column :coords, :point, :null => true, :srid => 4326, :with_z => false
+      t.string :remember_token
+      t.datetime :remember_token_expires_at
+      t.datetime :activated_at
       t.timestamps
     end
   end
