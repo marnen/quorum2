@@ -6,8 +6,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :salt, :limit => 40
       t.string :firstname
       t.string :lastname
-      t.string :address
-      t.string :address2
+      t.string :street
+      t.string :street2
       t.string :city
       t.integer :state_id
       t.string :zip

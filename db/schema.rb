@@ -48,8 +48,8 @@ ActiveRecord::Schema.define(:version => 6) do
     t.column "salt", :string, :limit => 40
     t.column "firstname", :string
     t.column "lastname", :string
-    t.column "address", :string
-    t.column "address2", :string
+    t.column "street", :string
+    t.column "street2", :string
     t.column "city", :string
     t.column "state_id", :integer
     t.column "zip", :string
