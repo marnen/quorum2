@@ -1,0 +1,197 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: quorum 2.0.0\n"
+"POT-Creation-Date: 2008-03-02 22:51-0500\n"
+"PO-Revision-Date: 2008-03-02 22:23-0500\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: app/controllers/event_controller.rb:7
+msgid "Upcoming events"
+msgstr ""
+
+#: app/helpers/event_helper.rb:13
+msgid "You are currently %s."
+msgstr ""
+
+#: app/helpers/event_helper.rb:27
+msgid "edit"
+msgstr ""
+
+#: app/helpers/event_helper.rb:33
+msgid "iCal"
+msgstr ""
+
+#: app/helpers/event_helper.rb:48
+msgid "map"
+msgstr ""
+
+#: app/models/commitment.rb:-
+msgid "commitment"
+msgstr ""
+
+#: app/models/commitment.rb:-
+msgid "Commitment|Event"
+msgstr ""
+
+#: app/models/commitment.rb:-
+msgid "Commitment|Status"
+msgstr ""
+
+#: app/models/commitment.rb:-
+msgid "Commitment|User"
+msgstr ""
+
+#: app/models/country.rb:-
+msgid "country"
+msgstr ""
+
+#: app/models/country.rb:-
+msgid "Country|Code"
+msgstr ""
+
+#: app/models/country.rb:-
+msgid "Country|Name"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "event"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Name"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Date"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Site"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Street"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Street2"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|City"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|State"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Zip"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Created at"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Updated at"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Coords"
+msgstr ""
+
+#: app/models/state.rb:-
+msgid "state"
+msgstr ""
+
+#: app/models/state.rb:-
+msgid "State|Country"
+msgstr ""
+
+#: app/models/state.rb:-
+msgid "State|Code"
+msgstr ""
+
+#: app/models/state.rb:-
+msgid "State|Name"
+msgstr ""
+
+#: app/views/event/list.html.erb:4
+msgid "Date"
+msgstr ""
+
+#: app/views/event/list.html.erb:5
+msgid "Event"
+msgstr ""
+
+#: app/views/event/list.html.erb:6
+msgid "Status"
+msgstr ""
+
+#: app/views/event/list.html.erb:7
+msgid "Attending"
+msgstr ""
+
+#: app/views/event/list.html.erb:8
+msgid "Not attending"
+msgstr ""
+
+#: app/views/layouts/standard.html.erb:14
+msgid "List events"
+msgstr ""
+
+#: app/views/layouts/standard.html.erb:15
+msgid "Add event"
+msgstr ""
+
+#: app/views/layouts/standard.html.erb:16
+msgid "User profile"
+msgstr ""
+
+#: app/views/layouts/standard.html.erb:17
+msgid "Log out"
+msgstr ""
+
+#: app/views/layouts/standard.html.erb:19
+msgid "Welcome, %s!"
+msgstr ""
+
+#: app/views/sessions/new.html.erb:2
+msgid "E-mail address"
+msgstr ""
+
+#: app/views/sessions/new.html.erb:5
+msgid "Password"
+msgstr ""
+
+#: app/views/sessions/new.html.erb:15
+msgid "Log in"
+msgstr ""
+
+#: app/views/user_mailer/signup_notification.html.erb:1
+msgid "Your account has been created."
+msgstr ""
+
+#: app/views/user_mailer/signup_notification.html.erb:3
+msgid "E-mail address (this will be your username):"
+msgstr ""
+
+#: app/views/user_mailer/signup_notification.html.erb:4
+msgid "Password:"
+msgstr ""
+
+#: app/views/user_mailer/signup_notification.html.erb:6
+msgid "Visit this URL to activate your account:"
+msgstr ""
