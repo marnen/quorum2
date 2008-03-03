@@ -16,8 +16,11 @@
 			</td>
 			<td>
 				<h3 class="summary"><%= h(event.name) %></h3>
-				<span class="location vcard"><span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span>, <span class="country-name"><%= h event.state.country.code %></span></span><br />
-				<span class="map"><%= map_link(event) %></span>
+				<span class="location vcard">
+					<span class="street-address"><%= [h(event.street), h(event.street2)].join(tag(:br)) %></span><br />
+					<span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span>, <span class="country-name"><%= h event.state.country.code %></span>
+				</span><br />
+				<%= distance_string(event, current_user) %> <span class="map"><%= map_link(event) %></span>
 				<p><%= ical_link(event) %></p>
 			</td>
 			<%= attendance_control(event, current_user) %>

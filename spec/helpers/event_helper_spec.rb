@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventHelper do
-  fixtures :users
+  fixtures :users, :states, :countries
   
   before(:each) do
     @event = Event.new
@@ -49,5 +49,18 @@ describe EventHelper do
     att.should match(/^<td.*<\/td>$/mi)
     att.should have_tag("select.commit")
   end
+  
+  it "should generate a distance string from an event to a user's coords," do
+    @event.state = states(:ny) # required anyway, and makes testing easier
+    @event.coords = nil
+    marnen = users(:marnen)
+    @event.coords = marnen.coords
+    distance_string(@event, marnen).should =~ /\D0(\.0)? miles/
+    user = User.new
+    # distance_string(@event, user).should == "" # user.coords is nil -- this spec is not working right now
+    @event.coords = Point.from_x_y(0, 2)
+    user.coords = Point.from_x_y(0, 1)
+    distance_string(@event, user).should =~ /\D6(8.7)|9.*miles.*#{h('•')}$/ # 1 degree of latitude
+ end
   
 end

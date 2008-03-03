@@ -55,6 +55,17 @@ describe User, "(geographical features)" do
     @user.coords.should_not be_nil
     @user.coords.should be_a_kind_of(Point)
   end
+  
+  it "should save coords when successfully encoded" do
+    @user.should_receive(:save!).once
+    @user.coords
+  end
+  
+  it "should not save coords when unsuccessfully encoded" do
+    Geocoding.expects(:get).returns(false)
+    @user.should_not_receive(:save!)
+    @user.coords
+  end
 end
 
 describe User, "(authentication structure)" do

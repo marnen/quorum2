@@ -26,6 +26,13 @@ module EventHelper
     content_tag :abbr, full_date, :class => :dtstart, :title => ical_date
   end
   
+  def distance_string(event, user)
+    meters = event.coords.ellipsoidal_distance(user.coords)
+    miles = meters / 1609.344
+    
+    content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance) << h(' •')
+  end
+  
   def edit_link(event)
     # generate an edit link
     link_to h(_("edit")), url_for(:controller => 'event', :action => 'edit', :id => event.id)

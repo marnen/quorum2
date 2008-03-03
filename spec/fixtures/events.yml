@@ -3,12 +3,12 @@
 one:
   name: Event 1 with <> signs
   date: 2008-01-10
-  site: Event 1 site
-  street: Event 1 street
-  street2: Event 1 street2
-  city: Event 1 city
+  site: Marnen's house
+  street: 80 State Street
+  street2: 2nd floor
+  city: Albany
   state: ny
-  zip: 11111
+  zip: 12203
   coords: ~
 
 two:

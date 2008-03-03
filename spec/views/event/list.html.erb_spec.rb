@@ -8,6 +8,7 @@ describe "/event/list" do
   fixtures :events, :states, :countries, :users, :commitments
   
   before(:each) do
+    login_as :marnen
     @events = Event.find :all
     assigns[:events] = @events
     render 'event/list'
@@ -22,6 +23,12 @@ describe "/event/list" do
       response.should have_tag("#event_#{event.id} .summary", h(event.name))
     end
   end 
+  
+  it "should show a street address for each Event in a tag of class 'street-address" do
+    for event in @events do
+      response.should have_tag("#event_#{event.id} .street-address", /#{[h(event.street), h(event.street2)].join('.*')}/m)
+    end
+  end
   
   it "should show a city for each event in a tag of class 'locality'" do
     for event in @events do
@@ -72,6 +79,14 @@ describe "/event/list" do
     for event in @events do
      url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
      response.should have_tag("#event_#{event.id} a[href=" << url << "]")
+    end
+  end
+  
+  it "should contain a distance in miles or km for each event with good coords" do
+    for event in @events do
+      if !event.coords.nil? then
+        response.should have_tag("#event_#{event.id} .distance", /\d (miles|km)/)
+      end
     end
   end
   

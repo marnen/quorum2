@@ -18,10 +18,12 @@ describe EventController, "list" do
    response.should be_success
   end
   
-  it "should get all events, ordered by date" do
-    Event.should_receive(:find).with(:all, :order => :date)
+=begin
+  it "should get all events, with distance, ordered by date" do
+    Event.should_receive(:find_all_with_distance).once
     get 'list'
   end
+=end
 end
 
 describe EventController, "change_status" do

@@ -18,7 +18,7 @@ class Event < ActiveRecord::Base
     else
       raise "Invalid status: " << status
     end
-  end
+  end  
   
   # This is duplicated in User. Perhaps we can refactor.
 
@@ -30,6 +30,7 @@ class Event < ActiveRecord::Base
         geo = Geocoding::get(address_to_code)
         if geo.status == Geocoding::GEO_SUCCESS
           c = write_attribute(:coords, Point.from_coordinates(geo[0].lonlat))
+          self.save!
         else
           raise "Geocoding failed with code #{geo.status} for #{address_to_code}"
         end
