@@ -1,4 +1,5 @@
 # Application globals go here.
+require 'gettext/rails'
 
 SITE_TITLE = "Quorum" # Name of site as it appears in <title> element
 
