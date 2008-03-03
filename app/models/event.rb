@@ -19,6 +19,8 @@ class Event < ActiveRecord::Base
       raise "Invalid status: " << status
     end
   end
+  
+  # This is duplicated in User. Perhaps we can refactor.
 
   def coords
     c = self[:coords]

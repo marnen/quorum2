@@ -27,6 +27,11 @@ marnen:
   created_at: <%= 1.days.ago.to_s :db %>
   activation_code: f24789ae988411ccf33ab0c30fe9106fab32e9a8 
   activated_at: <%= 1.days.ago.to_s :db %>
+  street: 719 State Street
+  street2: 1st floor
+  city: Albany
+  state: ny
+  zip: 12203
 
 millie:
   firstname: Millie

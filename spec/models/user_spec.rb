@@ -38,6 +38,25 @@ describe User, "(instance properties)" do
   end
 end
 
+describe User, "(geographical features)" do
+  fixtures :users, :states, :countries
+  
+  before(:each) do
+    Geocoding::Placemarks.any_instance.expects(:[]).returns(Geocoding::Placemark.new)
+    Geocoding::Placemark.any_instance.stubs(:latlon).returns([1.0, 2.0])
+    Geocoding.expects(:get).returns(Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS))
+    Point::any_instance.stubs(:from_coordinates).returns(true)
+
+    @user = users(:marnen)
+  end
+
+  it "should have coords (Point)" do
+    @user.should respond_to(:coords)
+    @user.coords.should_not be_nil
+    @user.coords.should be_a_kind_of(Point)
+  end
+end
+
 describe User, "(authentication structure)" do
   fixtures :users
 

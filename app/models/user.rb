@@ -24,6 +24,29 @@ class User < ActiveRecord::Base
     str.blank? ? self.email : str
   end
 
+  # This is duplicated in Event. Perhaps we can refactor?
+  
+  def coords
+    c = self[:coords]
+    if (c.nil?)
+      address_to_code = "#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}"
+      begin
+        geo = Geocoding::get(address_to_code)
+        if geo.status == Geocoding::GEO_SUCCESS
+          c = write_attribute(:coords, Point.from_coordinates(geo[0].lonlat))
+        else
+          raise "Geocoding failed with code #{geo.status} for #{address_to_code}"
+        end
+      rescue
+        write_attribute(:coords, nil)
+        c = Point.from_x_y(0, 0)
+      end
+    end
+   c
+  end
+
+ ##### The stuff below here comes from restful_authentication.
+
   # Activates the user in the database.
   def activate
     @activated = true
