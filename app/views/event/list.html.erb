@@ -20,7 +20,7 @@
 				<span class="map"><%= map_link(event) %></span>
 				<p><%= ical_link(event) %></p>
 			</td>
-			<td>&nbsp;<!-- not built yet --></td>
+			<%= attendance_control(event, current_user) %>
 			<td><%= h list_names(event.find_committed(:yes)) %></td>
 			<td><%= h list_names(event.find_committed(:no)) %></td>
 		</tr>

@@ -3,13 +3,21 @@
 
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
-		<title><%= SITE_TITLE %> | <%= @page_title %></title>
+		<title><%= h SITE_TITLE %> | <%= h @page_title %></title>
 		<%= stylesheet_link_tag "quorum" %>
 		<?php echo $html_head ?>
 	</head>
 
 	<body>
-		<h1><%= @page_title %></h1>
+		<p>
+			<%= content_tag :span, h(SITE_TITLE), :class => :siteName %> |
+			<%= link_to h(_("List events")), url_for(:controller => :event, :action => :list) %> |
+			<%= link_to h(_("Add event")), url_for(:controller => :event, :action => :new) %> |
+			<%= link_to h(_("User profile")) %> |
+			<%= link_to h(_("Log out")), url_for(:controller => :logout) %> <%- if false %> Is there a better way to generate that URL? <% end %>
+		</p>
+		<p><%= _("Welcome, %s!" % content_tag(:span, h(current_user.fullname), :class => :name)) %></p>
+		<h1><%= h @page_title %></h1>
 		<%= yield %>
 		
 		<p class="footer"><a href="http://validator.w3.org/check?uri=referer"><img
