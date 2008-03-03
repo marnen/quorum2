@@ -56,4 +56,7 @@ Rails::Initializer.run do |config|
 
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
+  
+  # Observer for restful_authentication
+  config.active_record.observers = :user_observer
 end

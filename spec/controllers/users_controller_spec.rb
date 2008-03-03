@@ -1,9 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-# Be sure to include AuthenticatedTestHelper in spec/spec_helper.rb instead
-# Then, you can remove it from this and the units test.
-include AuthenticatedTestHelper
-
 describe UsersController do
   fixtures :users
 
@@ -22,14 +18,6 @@ describe UsersController do
     assigns(:user).activation_code.should_not be_nil
   end
 
-  it 'requires login on signup' do
-    lambda do
-      create_user(:login => nil)
-      assigns[:user].errors.on(:login).should_not be_nil
-      response.should be_success
-    end.should_not change(User, :count)
-  end
-  
   it 'requires password on signup' do
     lambda do
       create_user(:password => nil)
@@ -56,11 +44,11 @@ describe UsersController do
   
   
   it 'activates user' do
-    User.authenticate('aaron', 'test').should be_nil
+    User.authenticate('aaron@example.com', 'test').should be_nil
     get :activate, :activation_code => users(:aaron).activation_code
     response.should redirect_to('/')
     flash[:notice].should_not be_nil
-    User.authenticate('aaron', 'test').should == users(:aaron)
+    User.authenticate('aaron@example.com', 'test').should == users(:aaron)
   end
   
   it 'does not activate user without key' do

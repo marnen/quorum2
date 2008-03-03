@@ -1,8 +1,8 @@
-Your account has been created.
+<%= _("Your account has been created.") %>
 
-  Username: <%= @user.login %>
-  Password: <%= @user.password %>
+  <%= _("E-mail address (this will be your username):") %> <%= @user.email %>
+  <%= _("Password:") %> <%= @user.password %>
 
-Visit this url to activate your account:
+<%= _("Visit this URL to activate your account:") %>
 
   <%= @url %>

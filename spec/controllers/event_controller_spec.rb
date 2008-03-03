@@ -1,7 +1,16 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe EventController do
+  it "should require login" do
+    pending "need to figure out how to test for before_filter"
+  end
+end
+
 describe EventController, "list" do
-  before :each do
+  fixtures :users
+  
+  before(:each) do
+    login_as(:quentin)
   end
   
   it "should be successful" do
