@@ -39,14 +39,14 @@ describe EventHelper do
   it "should generate a comma-separated list of names from an array of users" do
     names = list_names users
     for user in users do
-      names.should include user.fullname
+      names.should include(user.fullname)
     end
   end
   
   it "should generate a <td> with attendance controls for the supplied event and the current user" do
     att = attendance_control(@event, users(:quentin))
     att.should be_a_kind_of(String)
-    att.should match /^<td.*<\/td>$/mi
+    att.should match(/^<td.*<\/td>$/mi)
     att.should have_tag("select.commit")
   end
   
