@@ -87,7 +87,7 @@ describe "/event/list" do
   
   it "should have a control to set the current user's attendance for each event" do
     for event in @events do
-      response.should have_tag("#event_#{event.id} select.commit")
+      response.should have_tag("#event_#{event.id} form select.commit")
     end
   end
 end
