@@ -29,11 +29,16 @@ class User < ActiveRecord::Base
   def coords
     c = self[:coords]
     if (c.nil?)
+      if self.state.nil? then
+        self.state = State.find_or_create_by_id(nil)
+        self.state.country = Country.find_or_create_by_id(nil)
+      end
       address_to_code = "#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}"
       begin
         geo = Geocoding::get(address_to_code)
         if geo.status == Geocoding::GEO_SUCCESS
           c = write_attribute(:coords, Point.from_coordinates(geo[0].lonlat))
+          self.save!
         else
           raise "Geocoding failed with code #{geo.status} for #{address_to_code}"
         end
