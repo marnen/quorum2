@@ -1,2 +1,31 @@
-<h1>Event#new</h1>
-<p>Find me in app/views/event/new.html.erb</p>
+<% form_for :event do |f| %>
+	<table class="edit">
+		<tr>
+			<th><%= h _("Event name")%></th>
+			<td><%= f.text_field :name %></td>
+		</tr>
+		<tr>
+			<th><%= h _("Date") %></th>
+			<td><%= f.date_select :date, :order => [:day, :month, :year], :start_year => 2006 %></td>
+		</tr>
+		<tr>
+			<th><%= h _("Site")%></th>
+			<td><%= f.text_field :site %></td>
+		</tr>
+		<tr>
+			<th><%= h _("Street address")%></th>
+			<td>
+				<%= f.text_field :street %><br />
+				<%= f.text_field :street2 %>
+			</td>
+		</tr>
+		<tr>
+			<th><%= h _("State")%></th>
+			<td><%= f.collection_select :state, State.find(:all), :id, :name %></td>
+		</tr>
+		<tr>
+			<th><%= h _("Zip")%></th>
+			<td><%= f.text_field :zip %></td>
+		</tr>
+	</table>
+<% end %>

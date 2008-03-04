@@ -1,9 +1,14 @@
 class Event < ActiveRecord::Base
+  belongs_to :created_by, :class_name => "User"
   belongs_to :state, :include => :country
   has_many :commitments
   has_many :users, :through => :commitments
   validates_presence_of :city
+  validates_presence_of :created_by_id
   validates_presence_of :state_id
+  before_create do
+    self.created_by = AuthenticatedSystem::current_user
+  end
   
   def find_committed(status)
     # status may be :yes or :no

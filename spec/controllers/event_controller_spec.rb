@@ -1,11 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe EventController do
-  it "should require login" do
-    pending "need to figure out how to test for before_filter"
-  end
-end
-
 describe EventController, "list" do
   fixtures :users
   
@@ -17,13 +11,16 @@ describe EventController, "list" do
    get 'list'
    response.should be_success
   end
+ 
+  it "should set the page_title" do
+    get :list
+    assigns[:page_title].should_not be_nil
+  end
   
-=begin
   it "should get all events, with distance, ordered by date" do
-    Event.should_receive(:find_all_with_distance).once
+    Event.should_receive(:find).with(:all, :order => :date).once
     get 'list'
   end
-=end
 end
 
 describe EventController, "change_status" do
@@ -49,6 +46,28 @@ describe EventController, "change_status" do
     get 'change_status'
     response.should redirect_to(:action => :list)
   end
+end
+
+describe EventController, "new" do
+  fixtures :users
+  
+  before(:each) do
+    login_as :quentin
+    get :new
+  end
+  
+  it "should require login" do
+    pending "need to figure out how to write this"
+  end
+  
+  it "should be successful" do
+   response.should be_success
+  end
+ 
+  it "should set the page_title" do
+    assigns[:page_title].should_not be_nil
+  end
+  
 end
 
 =begin

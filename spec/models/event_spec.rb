@@ -22,6 +22,13 @@ describe Event, "(general properties)" do
     reflection.options.should have_key(:through)
     reflection.options[:through].should == :commitments
   end
+  
+  it "should belong to a User through created_by_id" do
+    reflection = Event.reflect_on_association(:created_by)
+    reflection.macro.should == :belongs_to
+    reflection.options.should have_key(:class_name)
+    reflection.options[:class_name].should == "User"
+  end
 end
 
 describe Event, "(find_committed)" do
@@ -50,10 +57,13 @@ describe Event, "(find_committed)" do
 end
 
 describe Event, "(validations)" do
+  fixtures :users
+  
   before(:each) do
     @event = Event.new
     @event.state_id = 23 # arbitrary; should be able to use any value
     @event.city = "x" # arbitrary value
+    @event.created_by_id = 34 # arbitrary
   end
   
   it "should not be valid without a state" do
@@ -66,6 +76,16 @@ describe Event, "(validations)" do
    @event.should be_valid
    @event.city = nil
    @event.should_not be_valid
+ end
+ 
+ it "should not be valid without a created_by_id" do
+   @event.should be_valid
+   @event.created_by_id = nil
+   @event.should_not be_valid
+ end
+ 
+ it "should assign current_user to created_by" do
+   pending "can't figure out how to write this one"
  end
 end
 

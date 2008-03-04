@@ -8,6 +8,7 @@ class EventController < ApplicationController
   end
 
   def new
+    assigns[:page_title] = _("Add event")
   end
 
   def edit
