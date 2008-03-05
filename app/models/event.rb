@@ -7,7 +7,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :created_by_id
   validates_presence_of :state_id
   before_create do
-    self.created_by = AuthenticatedSystem::current_user
+    created_by = User.current_user
   end
   
   def find_committed(status)

@@ -3,12 +3,16 @@ class EventController < ApplicationController
   before_filter :login_required
   
   def list
-    assigns[:events] = Event.find(:all, :order => :date)
-    assigns[:page_title] = _("Upcoming events")
+    @events = Event.find(:all, :order => :date)
+    @page_title = _("Upcoming events")
   end
 
   def new
-    assigns[:page_title] = _("Add event")
+    @event = Event.new(params[:event])
+    @page_title = _("Add event")
+    if request.post? then
+      @event.save!
+    end
   end
 
   def edit

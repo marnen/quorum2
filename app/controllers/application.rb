@@ -4,6 +4,11 @@ require 'gettext/rails'
 
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem # for restful_authentication
+  
+  # see http://www.ruby-forum.com/topic/51782
+  before_filter :login_from_cookie
+  before_filter :set_current_user 
+  
   helper :all # include all helpers, all the time
 
   # See ActionController::RequestForgeryProtection for details
@@ -12,4 +17,10 @@ class ApplicationController < ActionController::Base
   
   # Add gettext code for i18n, from http://manuals.rubyonrails.com/read/chapter/105
   init_gettext "quorum", "UTF-8", "text/html"
+  
+  protected
+
+  def set_current_user
+    User.current_user = self.current_user
+  end
 end

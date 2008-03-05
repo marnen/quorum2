@@ -20,6 +20,10 @@
 			</td>
 		</tr>
 		<tr>
+			<th><%= h _("City")%></th>
+			<td><%= f.text_field :city %></td>
+		</tr>
+		<tr>
 			<th><%= h _("State")%></th>
 			<td><%= f.collection_select :state, State.find(:all), :id, :name %></td>
 		</tr>
@@ -28,4 +32,5 @@
 			<td><%= f.text_field :zip %></td>
 		</tr>
 	</table>
+	<%= submit_tag _("Save changes") %>
 <% end %>

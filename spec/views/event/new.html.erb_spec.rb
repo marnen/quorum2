@@ -33,12 +33,20 @@ describe "/event/new" do
     response.should have_tag("table.edit input#event_street2")
   end
   
+  it "should have a city field" do
+    response.should have_tag("table.edit input#event_city")
+  end
+  
   it "should have a state field" do
     response.should have_tag("table.edit select#event_state")
   end
   
   it "should have a zip field" do
     response.should have_tag("table.edit input#event_zip")
+  end
+  
+  it "should have a submit button" do
+    response.should have_tag("form input[type=submit]")
   end
   
 end

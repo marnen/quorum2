@@ -2,6 +2,7 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   # Virtual attribute for the unencrypted password
   attr_accessor :password
+  cattr_accessor :current_user
 
   belongs_to :state
   has_many :commitments

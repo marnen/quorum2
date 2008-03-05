@@ -49,11 +49,10 @@ describe EventController, "change_status" do
 end
 
 describe EventController, "new" do
-  fixtures :users
+  fixtures :users, :states, :countries, :commitments
   
   before(:each) do
     login_as :quentin
-    get :new
   end
   
   it "should require login" do
@@ -61,11 +60,29 @@ describe EventController, "new" do
   end
   
   it "should be successful" do
+   get :new
    response.should be_success
   end
  
   it "should set the page_title" do
+    get 'new'
     assigns[:page_title].should_not be_nil
+  end
+  
+  it "should create an Event object" do
+    e = Event.new
+    Event.should_receive(:new).and_return(e)
+    get 'new'
+    assigns[:event].should_not be_nil
+  end
+  
+  it "should save an Event object" do
+    my_event = Event.new(:name => 'name', :state_id => 23, :city => 'x', :created_by_id => 17)
+    my_event.should_not be_nil
+    Event.should_receive(:new).with(my_event.attributes).and_return(my_event)
+    my_event.should_receive(:save!).and_return(true)
+    post 'new', :event => my_event.attributes
+    assigns[:event].should == my_event
   end
   
 end
