@@ -1,4 +1,6 @@
 class Event < ActiveRecord::Base
+  include GeocodingUtilities
+  
   belongs_to :created_by, :class_name => "User"
   belongs_to :state, :include => :country
   has_many :commitments
@@ -23,23 +25,16 @@ class Event < ActiveRecord::Base
     end
   end  
   
-  # This is duplicated in User. Perhaps we can refactor.
-
   def coords
     c = self[:coords]
-    if (c.nil?)
-      address_to_code = "#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}"
+    if c.nil?
       begin
-        geo = Geocoding::get(address_to_code)
-        if geo.status == Geocoding::GEO_SUCCESS
-          c = write_attribute(:coords, Point.from_coordinates(geo[0].lonlat))
-          self.save!
-        else
-          raise "Geocoding failed with code #{geo.status} for #{address_to_code}"
-        end
+        c = coords_from_string("#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}")
+        self[:coords] = c
+        self.save!
       rescue
-        write_attribute(:coords, nil)
-        c = Point.from_x_y(0, 0)
+        c = Point.from_x_y(0, 0)   
+      else
       end
     end
     c

@@ -1,5 +1,6 @@
 require 'digest/sha1'
 class User < ActiveRecord::Base
+  include GeocodingUtilities
   # Virtual attribute for the unencrypted password
   attr_accessor :password
   cattr_accessor :current_user
@@ -25,30 +26,23 @@ class User < ActiveRecord::Base
     str.blank? ? self.email : str
   end
 
-  # This is duplicated in Event. Perhaps we can refactor?
-  
   def coords
     c = self[:coords]
-    if (c.nil?)
+    if c.nil?
       if self.state.nil? then
         self.state = State.find_or_create_by_id(nil)
         self.state.country = Country.find_or_create_by_id(nil)
       end
-      address_to_code = "#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}"
       begin
-        geo = Geocoding::get(address_to_code)
-        if geo.status == Geocoding::GEO_SUCCESS
-          c = write_attribute(:coords, Point.from_coordinates(geo[0].lonlat))
-          self.save!
-        else
-          raise "Geocoding failed with code #{geo.status} for #{address_to_code}"
-        end
+        c = coords_from_string("#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}")
+        self[:coords] = c
+        self.save!
       rescue
-        write_attribute(:coords, nil)
-        c = Point.from_x_y(0, 0)
+        c = Point.from_x_y(0, 0)   
+      else
       end
     end
-   c
+    c
   end
 
  ##### The stuff below here comes from restful_authentication.

@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   # Add gettext code for i18n, from http://manuals.rubyonrails.com/read/chapter/105
   init_gettext "quorum", "UTF-8", "text/html"
   
-  protected
+ protected
 
   def set_current_user
     User.current_user = self.current_user

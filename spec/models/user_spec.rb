@@ -57,6 +57,7 @@ describe User, "(geographical features)" do
   end
   
   it "should save coords when successfully encoded" do
+    @user.should_receive(:coords_from_string).once
     @user.should_receive(:save!).once
     @user.coords
   end
