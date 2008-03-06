@@ -105,6 +105,56 @@ describe EventController, "new" do
   
 end
 
+describe EventController, "edit" do
+  fixtures :users, :events
+  
+  before(:each) do
+    login_as :quentin
+  end
+  
+  it "should reuse the new-event form" do
+    event = Event.find(:first)
+    get 'edit', :id => event.id
+    response.should render_template :new
+  end
+  
+  it "should set the page title" do
+    event = Event.find(:first)
+    get 'edit', :id => event.id
+    assigns[:page_title].should_not be_nil
+  end
+  
+  it "should set the event" do
+    event = Event.find(:first)
+    get 'edit', :id => event.id
+    assigns[:event].should == event
+  end
+  
+  it "should redirect to list with a flash error if no event id is supplied or if id is invalid" do
+    get 'edit', :id => 'a' # invalid
+    response.should redirect_to(:action => :list)
+    flash[:error].should_not be_nil
+
+    get 'edit', :id => nil # no id
+    response.should redirect_to(:action => :list)
+    flash[:error].should_not be_nil
+  end
+  
+  it "should redirect to event list with flash after post with successful save, but not otherwise" do
+    event = Event.find(:first)
+    id = event.id
+    post 'edit', :event => event.attributes, :id => id # valid
+    request.should be_post
+    assigns[:event].should_receive(:update_attributes)
+    response.should redirect_to(:action => :list)
+    flash[:notice].should_not be_nil
+    
+    event.name = nil # now it's invalid
+    post 'edit', :event => event.attributes, :id => id
+    response.should_not redirect_to(:action => :list)
+  end
+end
+
 =begin
   #Delete these examples and add some real ones
   it "should use EventController" do

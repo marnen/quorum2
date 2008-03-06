@@ -26,6 +26,10 @@ a.ical   { color: white; font-size: 9px; font-family: Verdana, Tahoma, Arial, Ge
 .fieldWithErrors { background-color: red }
 .fieldWithErrors input { background-color: #fcc; color: black }
 
-// Some hCalendar properties...
+.flash_notice { background-color: #cfc  }
+.flash_warning { background-color: #ffc }
+.flash_error { background-color: #fcc }
+
+/* Some hCalendar properties... */
 abbr { text-decoration: inherit; }
 .uid { display: none; }

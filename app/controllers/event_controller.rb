@@ -19,6 +19,22 @@ class EventController < ApplicationController
   end
 
   def edit
+    @page_title = _("Edit event")
+    
+    begin
+      @event ||= Event.find(params[:id].to_i)
+    rescue
+      flash[:error] = _("Couldn't find any event to edit!")
+      redirect_to(:action => :list) and return
+    end
+    
+    if request.post?
+      if @event.update_attributes(params[:event])
+        flash[:notice] = _("Your event has been saved.")
+        redirect_to :action => :list and return
+      end
+    end
+    render :action => :new
   end
 
   def change_status
