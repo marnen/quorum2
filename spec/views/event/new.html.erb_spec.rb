@@ -38,7 +38,7 @@ describe "/event/new" do
   end
   
   it "should have a state field" do
-    response.should have_tag("table.edit select#event_state")
+    response.should have_tag("table.edit select#event_state_id")
   end
   
   it "should have a zip field" do

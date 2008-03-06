@@ -64,29 +64,35 @@ describe Event, "(validations)" do
     @event.state_id = 23 # arbitrary; should be able to use any value
     @event.city = "x" # arbitrary value
     @event.created_by_id = 34 # arbitrary
+    @event.name = "y" # arbitrary
   end
   
   it "should not be valid without a state" do
    @event.should be_valid
    @event.state_id = nil
    @event.should_not be_valid
- end
+  end
  
+  it "should not be valid without a name" do
+   @event.should be_valid
+   @event.name = nil
+   @event.should_not be_valid
+  end
+ 
+=begin
  it "should not be valid without a city" do
    @event.should be_valid
    @event.city = nil
    @event.should_not be_valid
  end
- 
- it "should not be valid without a created_by_id" do
-   @event.should be_valid
-   @event.created_by_id = nil
-   @event.should_not be_valid
- end
- 
- it "should assign current_user to created_by" do
-   pending "can't figure out how to write this one"
- end
+=end
+
+  it "should assign current_user to created_by" do
+    @event.created_by_id = nil
+    User.should_receive(:current_user).and_return(users(:marnen))
+    @event.save!
+    @event.created_by.should == users(:marnen)
+  end
 end
 
 describe Event, "(geographical features)" do

@@ -77,12 +77,30 @@ describe EventController, "new" do
   end
   
   it "should save an Event object" do
-    my_event = Event.new(:name => 'name', :state_id => 23, :city => 'x', :created_by_id => 17)
+    my_event = Event.new(:name => 'name', :state_id => 23)
     my_event.should_not be_nil
-    Event.should_receive(:new).with(my_event.attributes).and_return(my_event)
-    my_event.should_receive(:save!).and_return(true)
+    my_event.created_by_id.should be_nil
+    Event.stub!(:new).and_return(my_event)
+    User.current_user.stub!(:id).and_return(3) # arbitrary value
+    my_event.should_receive(:save)
     post 'new', :event => my_event.attributes
-    assigns[:event].should == my_event
+    # assigns[:event].name.should == my_event.name
+    # assigns[:event].id.should_not be_nil
+    # assigns[:event].created_by_id.should == User.current_user.id
+  end
+  
+  it "should redirect to event list with flash after post with successful save, but not otherwise" do
+    get 'new'
+    response.should_not redirect_to(:action => :list)
+
+    my_event = Event.new #invalid
+    post 'new', :event => my_event.attributes
+    response.should_not redirect_to(:action => :list)
+    
+    my_event = Event.new(:name => 'name', :state_id => 23) #valid
+    post 'new', :event => my_event.attributes
+    response.should redirect_to(:action => :list)
+    flash[:notice].should_not be_nil
   end
   
 end

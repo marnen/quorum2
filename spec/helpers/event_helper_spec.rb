@@ -64,3 +64,10 @@ describe EventHelper do
  end
   
 end
+
+describe EventHelper, "list_names" do
+  it "should return an empty string when called with nil argument" do
+    list_names(nil).should == ''
+  end
+  
+end

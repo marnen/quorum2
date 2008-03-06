@@ -10,8 +10,11 @@ class EventController < ApplicationController
   def new
     @event = Event.new(params[:event])
     @page_title = _("Add event")
-    if request.post? then
-      @event.save!
+    if request.post?
+      if @event.save
+        flash[:notice] = _("Your event has been saved.")
+        redirect_to :action => :list
+      end
     end
   end
 

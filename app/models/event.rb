@@ -3,12 +3,10 @@ class Event < ActiveRecord::Base
   belongs_to :state, :include => :country
   has_many :commitments
   has_many :users, :through => :commitments
-  validates_presence_of :city
-  validates_presence_of :created_by_id
+  # validates_presence_of :city
+  validates_presence_of :name
   validates_presence_of :state_id
-  before_create do
-    created_by = User.current_user
-  end
+  before_create :set_created_by_id
   
   def find_committed(status)
     # status may be :yes or :no
@@ -44,6 +42,11 @@ class Event < ActiveRecord::Base
         c = Point.from_x_y(0, 0)
       end
     end
-   c
+    c
+  end
+
+ protected
+  def set_created_by_id
+    self.created_by = User.current_user
   end
 end

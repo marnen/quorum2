@@ -51,7 +51,8 @@ module EventHelper
   
   def list_names(users)
     # users is an Array (or similar) of users
-    users.collect {|u| u.fullname}.join(', ')
+    return '' if users.nil? or users.size == 0
+    users.compact.collect {|u| u.fullname}.join(', ')
   end
 
   def map_link(event)

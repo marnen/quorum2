@@ -23,6 +23,9 @@ td.edit { background-color: transparent; font-size: 90%; }
 
 a.ical   { color: white; font-size: 9px; font-family: Verdana, Tahoma, Arial, Geneva, sans-serif; font-weight: bold; text-decoration: none; background-color: red; text-transform: uppercase; border: outset 1px #900 }
 
+.fieldWithErrors { background-color: red }
+.fieldWithErrors input { background-color: #fcc; color: black }
+
 // Some hCalendar properties...
 abbr { text-decoration: inherit; }
 .uid { display: none; }

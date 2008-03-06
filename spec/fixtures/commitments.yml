@@ -9,3 +9,8 @@ two:
   event: one
   user: millie
   status: false
+  
+three:
+  event: one
+  user: quentin
+  status: true
