@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(:version => 7) do
     t.column "zip", :string
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :point, :srid => 4326
+    t.column "coords", :point
     t.column "created_by_id", :integer
   end
 
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(:version => 7) do
     t.column "activated_at", :timestamp
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :point, :srid => 4326
+    t.column "coords", :point
   end
 
 end

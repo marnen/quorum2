@@ -49,17 +49,16 @@ describe User, "(geographical features)" do
 
     @user = users(:marnen)
   end
+  
+  it "should save coords when successfully encoded" do
+    @user.should_receive(:update_attribute).with(:coords, an_instance_of(Point)).once
+    @user.coords
+  end
 
   it "should have coords (Point)" do
     @user.should respond_to(:coords)
     @user.coords.should_not be_nil
     @user.coords.should be_a_kind_of(Point)
-  end
-  
-  it "should save coords when successfully encoded" do
-    @user.should_receive(:coords_from_string).once
-    @user.should_receive(:save!).once
-    @user.coords
   end
   
   it "should not save coords when unsuccessfully encoded" do

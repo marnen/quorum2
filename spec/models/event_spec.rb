@@ -114,7 +114,7 @@ describe Event, "(geographical features)" do
   end
   
   it "should save coords when successfully encoded" do
-    @event.should_receive(:save!).once
+    @event.should_receive(:update_attribute).with(:coords, an_instance_of(Point)).once
     @event.coords
   end
   

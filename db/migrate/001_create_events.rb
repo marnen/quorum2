@@ -10,7 +10,7 @@ class CreateEvents < ActiveRecord::Migration
       t.integer :state_id
       t.string :zip
       t.integer :country_id
-      t.column :coords, :point, :null => true, :srid => 4326, :with_z => false
+      t.column :coords, :point, :null => true, :with_z => false # :srid => 4326, 
 
       t.timestamps
     end

@@ -5,12 +5,13 @@ include ActionView::Helpers::UrlHelper
 include EventHelper
 
 describe "/event/list" do
-  fixtures :events, :states, :countries, :users, :commitments
+  fixtures :states, :countries, :events, :users, :commitments
   
   before(:each) do
     login_as :marnen
-    @events = Event.find :all
+    @events = Event.find(:all)
     assigns[:events] = @events
+    assigns[:current_user] = users(:marnen)
     render 'event/list'
   end
   

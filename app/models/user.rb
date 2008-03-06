@@ -29,14 +29,12 @@ class User < ActiveRecord::Base
   def coords
     c = self[:coords]
     if c.nil?
-      if self.state.nil? then
-        self.state = State.find_or_create_by_id(nil)
-        self.state.country = Country.find_or_create_by_id(nil)
+      if self.state_id.nil? then
+        return nil
       end
       begin
-        c = coords_from_string("#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}")
-        self[:coords] = c
-        self.save!
+        c = coords_from_string("#{self.street}, #{self.city}, #{self.state.code}, #{self.zip}, #{self.state.country.code}")
+        self.update_attribute(:coords, c)
       rescue
         c = Point.from_x_y(0, 0)   
       else

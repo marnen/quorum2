@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
   def find_committed(status)
     # status may be :yes or :no
     # returns an array of Users with the appropriate commitment status
-    temp = commitments.clone
+    temp = self.commitments.clone
     if status == :yes then
       temp.delete_if {|e| e.status != true}
       temp.collect{|e| e.user }
@@ -30,8 +30,7 @@ class Event < ActiveRecord::Base
     if c.nil?
       begin
         c = coords_from_string("#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}")
-        self[:coords] = c
-        self.save!
+        self.update_attribute(:coords, c)
       rescue
         c = Point.from_x_y(0, 0)   
       else

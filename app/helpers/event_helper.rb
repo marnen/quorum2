@@ -27,10 +27,14 @@ module EventHelper
   end
   
   def distance_string(event, user)
-    meters = event.coords.ellipsoidal_distance(user.coords)
-    miles = meters / 1609.344
-    
-    content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance) << h(' •')
+    begin
+      meters = event.coords.ellipsoidal_distance(user.coords)
+      miles = meters / 1609.344
+      
+      content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance) << h(' •')
+    rescue
+      return nil
+    end
   end
   
   def edit_link(event)
