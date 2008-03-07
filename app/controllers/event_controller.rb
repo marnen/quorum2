@@ -48,4 +48,14 @@ class EventController < ApplicationController
     end
     redirect_to :action => :list
   end
+  
+  def map
+    begin
+      @event = Event.find(params[:id])
+    rescue
+      flash[:error] = _("Couldn't find that event!")
+      redirect_to(:action => :list) and return
+    end
+    @page_title = _("Map for %s" % @event.name)
+  end
 end

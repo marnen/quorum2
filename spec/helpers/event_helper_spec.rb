@@ -52,13 +52,12 @@ describe EventHelper do
   
   it "should generate a distance string from an event to a user's coords," do
     @event.state = states(:ny) # required anyway, and makes testing easier
-    @event.coords = nil
     marnen = users(:marnen)
     @event.coords = marnen.coords
     distance_string(@event, marnen).should =~ /\D0(\.0)? miles/
     user = User.new
     # distance_string(@event, user).should == "" # user.coords is nil -- this spec is not working right now
-    @event.coords = Point.from_x_y(0, 2)
+    @event = Event.new do |e| e.coords = Point.from_x_y(0, 2) end
     user.coords = Point.from_x_y(0, 1)
     distance_string(@event, user).should =~ /\D6(8.7)|9.*miles.*#{h('•')}$/ # 1 degree of latitude
  end
@@ -70,4 +69,25 @@ describe EventHelper, "list_names" do
     list_names(nil).should == ''
   end
   
+end
+
+describe EventHelper, "event_map" do
+  fixtures :events, :states, :countries
+  
+  it "should set up a GMap with all the options" do
+    gmap = GMap.new(:foo)
+    GMap.should_receive(:header).at_least(:once)
+    GMap.should_receive(:new).and_return(gmap)
+    gmap.should_receive(:div)
+    gmap.should_receive(:center_zoom_init)
+    gmap.should_receive(:overlay_init).with(an_instance_of(GMarker))
+    gmap.should_receive(:to_html).at_least(:once)
+    
+    event = events(:one)
+        
+    event_map(event)
+    @extra_headers.should_not be_nil
+    @extra_headers.should include(GMap.header.to_s)
+    @extra_headers.should include(gmap.to_html.to_s)
+  end
 end

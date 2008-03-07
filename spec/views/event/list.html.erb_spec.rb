@@ -24,7 +24,13 @@ describe "/event/list" do
       response.should have_tag("#event_#{event.id} .summary", h(event.name))
     end
   end 
-  
+
+  it "should show a site for each Event" do
+    for event in @events do
+      response.should have_tag("#event_#{event.id}", /#{h(event.site)}/)
+    end
+  end 
+
   it "should show a street address for each Event in a tag of class 'street-address" do
     for event in @events do
       response.should have_tag("#event_#{event.id} .street-address", /#{[h(event.street), h(event.street2)].join('.*')}/m)

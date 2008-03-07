@@ -33,13 +33,35 @@ module EventHelper
       
       content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance) << h(' •')
     rescue
-      return nil
+      content_tag(:span, h(_("%.1f miles" % 0)), :class => :distance) << h(' •')
     end
   end
   
   def edit_link(event)
     # generate an edit link
     link_to h(_("edit")), url_for(:controller => 'event', :action => 'edit', :id => event.id)
+  end
+  
+  def event_map(event)
+    # put together a map div from an event
+    return nil if event.nil?
+    
+    map = GMap.new(:map)
+    latlng = [event.coords.lat, event.coords.lng]
+    map.center_zoom_init(latlng, 14)
+    map.overlay_init(GMarker.new(latlng, :info_window => info(event)))
+    @extra_headers = @extra_headers.to_s 
+    @extra_headers << GMap.header.to_s << map.to_html.to_s
+
+    map.div :width => 500, :height => 400
+=begin
+    @map = GMap.new(:map)
+    @map.center_zoom_init(latlng, 14)
+    @map.overlay_init(GMarker.new(latlng, :info_window => @event.site || @event.street ))
+    @map.control_init(:large_map => true, :scale => true)
+    @page_title = _("Map for %s" % @event.name)
+
+=end
   end
   
 
@@ -51,6 +73,15 @@ module EventHelper
   def ical_uid(event)
     # generate an iCal unique event ID
     "event-" << event.id.to_s << "@" << DOMAIN
+  end
+  
+  def info(event)
+    return nil if (event.nil? or !event.kind_of?(Event))
+    result = ""
+    result << content_tag(:h3, h(event.site || event.name))
+    city = [h(event.city), h(event.state.code), h(event.state.country.code)].compact.join(', ')
+    result << content_tag(:p, [h(event.street), h(event.street2), city].compact.join(tag :br))
+    result
   end
   
   def list_names(users)

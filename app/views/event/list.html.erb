@@ -17,6 +17,7 @@
 			<td>
 				<h3 class="summary"><%= h(event.name) %></h3>
 				<span class="location vcard">
+					<%= h(event.site) + tag(:br) %>
 					<span class="street-address"><%= [h(event.street), h(event.street2)].join(tag(:br)) %></span><br />
 					<span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span>, <span class="country-name"><%= h event.state.country.code %></span>
 				</span><br />

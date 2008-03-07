@@ -2,7 +2,7 @@
 	<table class="edit">
 		<tr>
 			<th><%= h _("Event name")%></th>
-			<td><%= f.text_field :name %><%= _(error_message_on :event, :name) %></td>
+			<td><%= f.text_field :name %><%= _(error_message_on(:event, :name))%></td>
 		</tr>
 		<tr>
 			<th><%= h _("Date") %></th>

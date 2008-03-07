@@ -115,7 +115,7 @@ describe EventController, "edit" do
   it "should reuse the new-event form" do
     event = Event.find(:first)
     get 'edit', :id => event.id
-    response.should render_template :new
+    response.should render_template(:new)
   end
   
   it "should set the page title" do
@@ -153,6 +153,47 @@ describe EventController, "edit" do
     post 'edit', :event => event.attributes, :id => id
     response.should_not redirect_to(:action => :list)
   end
+end
+
+describe EventController, "map" do
+  fixtures :users, :events, :states, :countries
+  
+  before(:each) do
+    login_as :marnen
+    @one = events(:one)
+  end
+  
+  it "should use the map view" do
+    get :map, :id => @one.id
+    response.should render_template(:map)
+  end
+  
+  it "should get an event" do
+    id = @one.id
+    get :map, :id => id
+    assigns[:event].should == @one
+  end
+  
+  it "should set the page title" do
+    get :map, :id => @one.id
+    assigns[:page_title].should_not be_nil
+  end
+  
+=begin  
+  it "should center the map on the event and add a marker and basic and scale controls" do
+    @mock = GMap.new(:map)
+    GMap.should_receive(:new).with(:map).and_return(@mock)
+    @mock.should_receive(:center_zoom_init).with(an_instance_of(Array), an_instance_of(Fixnum))
+    @mock.should_receive(:control_init) do |arg|
+      arg.should be_a_kind_of(Hash)
+      arg[:large_map].should == true
+      arg[:scale].should == true
+    end
+    @mock.should_receive(:overlay_init).with(an_instance_of(GMarker))
+    get :map, :id => @one.id
+    response.should render_template(:_)
+  end
+=end
 end
 
 =begin

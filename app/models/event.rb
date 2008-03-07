@@ -1,6 +1,7 @@
 class Event < ActiveRecord::Base
   include GeocodingUtilities
   
+  attr_writer :coords
   belongs_to :created_by, :class_name => "User"
   belongs_to :state, :include => :country
   has_many :commitments
