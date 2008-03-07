@@ -1,6 +1,7 @@
 class EventController < ApplicationController
-  layout "standard"
+  layout "standard", :except => :export
   before_filter :login_required
+  after_filter :ical_header, :only => :export
   
   def list
     @events = Event.find(:all, :order => :date)
@@ -36,6 +37,17 @@ class EventController < ApplicationController
     end
     render :action => :new
   end
+  
+  def export
+    # export to iCalendar format
+    begin
+      @event = Event.find(params[:id].to_i)
+      render :template => 'event/ical.ics.erb'
+    rescue
+      flash[:error] = _("Couldn't find any event to export!")
+      redirect_to(:action => :list) and return
+    end
+  end
 
   def change_status
     id = params[:id]
@@ -57,5 +69,11 @@ class EventController < ApplicationController
       redirect_to(:action => :list) and return
     end
     @page_title = _("Map for %s" % @event.name)
+  end
+  
+ protected
+  def ical_header
+    # set MIME type for iCal
+    headers['Content-Type'] = 'text/calendar'
   end
 end

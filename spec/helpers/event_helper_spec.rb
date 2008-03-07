@@ -64,13 +64,6 @@ describe EventHelper do
   
 end
 
-describe EventHelper, "list_names" do
-  it "should return an empty string when called with nil argument" do
-    list_names(nil).should == ''
-  end
-  
-end
-
 describe EventHelper, "event_map" do
   fixtures :events, :states, :countries
   
@@ -90,4 +83,26 @@ describe EventHelper, "event_map" do
     @extra_headers.should include(GMap.header.to_s)
     @extra_headers.should include(gmap.to_html.to_s)
   end
+end
+
+describe EventHelper, "ical_escape" do
+  it "should make newlines into '\n'" do
+    ical_escape("a\na").should == 'a\\na'
+  end
+  
+  it "should double backslashes" do
+    bb = '\\' + '\\'
+    ical_escape('\\c\\n\\').should == bb + 'c' + bb + 'n' + bb
+  end
+  
+  it "should put backslashes before commas and semicolons" do
+    ical_escape('comma,semicolon;').should == 'comma\\,semicolon\\;'
+  end
+end
+
+describe EventHelper, "list_names" do
+  it "should return an empty string when called with nil argument" do
+    list_names(nil).should == ''
+  end
+  
 end

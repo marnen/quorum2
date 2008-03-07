@@ -29,6 +29,12 @@ describe Event, "(general properties)" do
     reflection.options.should have_key(:class_name)
     reflection.options[:class_name].should == "User"
   end
+  
+  it "should have a country property referred through state" do
+    event = Event.new
+    event.state = State.new
+    event.country.should == event.state.country
+  end
 end
 
 describe Event, "(find_committed)" do

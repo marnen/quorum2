@@ -24,7 +24,15 @@ class Event < ActiveRecord::Base
     else
       raise "Invalid status: " << status
     end
-  end  
+  end
+  
+  def country
+    if self.state.nil?
+      nil
+    else
+      self.state.country
+    end
+  end
   
   def coords
     c = self[:coords]

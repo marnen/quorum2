@@ -1,5 +1,4 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
 one:
   name: Event 1 with <> signs
   date: 2008-01-10

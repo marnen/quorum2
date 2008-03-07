@@ -64,6 +64,9 @@ module EventHelper
 =end
   end
   
+  def ical_escape(string)
+    string.gsub(%r{[\\,;]}) {|c| '\\' + c}.gsub("\n", '\\n')
+  end
 
   def ical_link(event)
     # generate an iCal export link
@@ -76,11 +79,12 @@ module EventHelper
   end
   
   def info(event)
+    # text for info window on Google maps
     return nil if (event.nil? or !event.kind_of?(Event))
     result = ""
     result << content_tag(:h3, h(event.site || event.name))
     city = [h(event.city), h(event.state.code), h(event.state.country.code)].compact.join(', ')
-    result << content_tag(:p, [h(event.street), h(event.street2), city].compact.join(tag :br))
+    result << content_tag(:p, [h(event.street), h(event.street2), city].compact.join(tag(:br)))
     result
   end
   

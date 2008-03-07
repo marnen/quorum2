@@ -196,6 +196,36 @@ describe EventController, "map" do
 =end
 end
 
+describe EventController, "export" do
+  fixtures :events, :users, :states, :countries
+  
+  before(:each) do
+    login_as :quentin
+    @my_event = Event.new do |e| # arbitrary values
+      e.id = 63
+      e.name = "Test"
+      e.date = Time.now
+      e.state = states(:ny)
+    end
+    Event.should_receive(:find).with(@my_event.id.to_i).and_return(@my_event)
+  end
+  
+  it "should use the ical view" do
+    get :export, :id => @my_event.id
+    response.should render_template('event/ical.ics.erb')
+  end
+  
+  it "should get an event" do
+    get :export, :id => @my_event.id
+    assigns[:event].should == @my_event
+  end
+  
+  it "should set a MIME type of text/calendar" do
+    get :export, :id => @my_event.id
+    response.headers['type'].should =~ (%r{^text/calendar})
+  end
+end
+
 =begin
   #Delete these examples and add some real ones
   it "should use EventController" do

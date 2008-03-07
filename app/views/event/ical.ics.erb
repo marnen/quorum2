@@ -1,0 +1,9 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+UID:<%= ical_uid @event %>
+SUMMARY:<%= ical_escape @event.name %>
+LOCATION:<%= [@event.street, @event.street2, @event.city, @event.state.code, @event.country.code].compact.join(', ') %>
+DTSTART;VALUE=DATE:<%= @event.date.to_s :ical %>
+END:VEVENT
+END:VCALENDAR
