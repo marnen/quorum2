@@ -39,10 +39,10 @@ class Event < ActiveRecord::Base
     if c.nil?
       begin
         c = coords_from_string("#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}")
-        self.update_attribute(:coords, c)
+        self[:coords] = c
+        self.save
       rescue
         c = Point.from_x_y(0, 0)   
-      else
       end
     end
     c

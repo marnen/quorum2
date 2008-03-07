@@ -34,7 +34,8 @@ class User < ActiveRecord::Base
       end
       begin
         c = coords_from_string("#{self.street}, #{self.city}, #{self.state.code}, #{self.zip}, #{self.state.country.code}")
-        self.update_attribute(:coords, c)
+        self[:coords] = c
+        self.save
       rescue
         c = Point.from_x_y(0, 0)   
       else

@@ -120,13 +120,13 @@ describe Event, "(geographical features)" do
   end
   
   it "should save coords when successfully encoded" do
-    @event.should_receive(:update_attribute).with(:coords, an_instance_of(Point)).once
+    @event.should_receive(:save).once
     @event.coords
   end
   
   it "should not save coords when unsuccessfully encoded" do
     Geocoding.stub!(:get).and_return(false)
-    @event.should_not_receive(:save!)
+    @event.should_not_receive(:save)
     @event.coords
   end  
 end

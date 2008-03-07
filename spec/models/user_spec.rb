@@ -51,7 +51,7 @@ describe User, "(geographical features)" do
   end
   
   it "should save coords when successfully encoded" do
-    @user.should_receive(:update_attribute).with(:coords, an_instance_of(Point)).once
+    @user.should_receive(:save).once
     @user.coords
   end
 
@@ -63,7 +63,7 @@ describe User, "(geographical features)" do
   
   it "should not save coords when unsuccessfully encoded" do
     Geocoding.expects(:get).returns(false)
-    @user.should_not_receive(:save!)
+    @user.should_not_receive(:save)
     @user.coords
   end
 end
