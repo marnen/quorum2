@@ -1,7 +1,7 @@
 class EventController < ApplicationController
-  layout "standard", :except => :export
+  layout "standard", :except => :export # no layout needed on export, since it generates an iCal file
   before_filter :login_required
-  after_filter :ical_header, :only => :export
+  after_filter :ical_header, :only => :export # assign the correct MIME type so that it gets recognized as an iCal event
   
   def list
     @events = Event.find(:all, :order => :date)
