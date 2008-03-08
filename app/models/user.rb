@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   before_create :make_activation_code 
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :email, :password, :password_confirmation
+  attr_accessible :email, :password, :password_confirmation, :firstname, :lastname, :street, :street2, :city, :state_id, :zip
   
   def fullname
     str = [self.firstname, self.lastname].delete_if {|e| e.blank?}.join(' ')

@@ -1,5 +1,5 @@
 <h1><%= _('Welcome to <span class="siteName">%s</span>!' % SITE_TITLE) %></h1>
-<p><%= _('This is <span class="siteName">%{site}</span>, an invitation and scheduling system. If you have an account, please log in here; otherwise, please <a href="%{url}">register</a>.' % {:site => SITE_TITLE, :url => signup_url}) %></p>
+<p><%= _('This is <span class="siteName">%{site}</span>, an invitation and scheduling system. If you have an account, please log in here; otherwise, please <a href="%{url}">register</a>.' % {:site => SITE_TITLE, :url => register_url}) %></p>
 <% form_tag session_path do -%>
   <table class="login">
     <tr>
