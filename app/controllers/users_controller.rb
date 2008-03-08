@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  layout "unauthenticated", :only => [:new, :create, :activate]
   # render new.rhtml
   def new
   end

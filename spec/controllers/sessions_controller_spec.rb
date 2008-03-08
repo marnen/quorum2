@@ -68,3 +68,17 @@ describe SessionsController do
     auth_token users(user).remember_token
   end
 end
+
+describe SessionsController, 'new (login)' do
+  before(:each) do
+    get :new
+  end
+  
+  it "should set @page_title" do
+    assigns[:page_title].should_not be_nil
+  end
+  
+  it "should render new template" do
+    response.should render_template :new
+  end
+end
