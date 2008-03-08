@@ -1,16 +1,54 @@
+<h1><%= h _("Register") %></h1>
 <%= error_messages_for :user %>
-<% form_for :user, :url => users_path do |f| -%>
-<p><label for="login">Login</label><br/>
-<%= f.text_field :login %></p>
+<% form_for :user, :url => users_path do |f| %>
+  <h2><%= h _("Who are you?") %></h2>
+  <table class="edit">
+    <tr>
+      <th><%= h _("E-mail address") %><br/><span class="hint"><%= h _("(this will be your user name)") %></span></th>
+      <td><%= f.text_field :email %></td>
+    </tr>
+    <tr>
+      <th><%= h _("First name") %></th>
+      <td><%= f.text_field :firstname %></td>
+    </tr>
+    <tr>
+      <th><%= h _("Last name") %></th>
+      <td><%= f.text_field :lastname %></td>
+    </tr>
+    <tr>
+      <th><%= h _("Password") %></th>
+      <td><%= f.password_field :password %></td>
+    </tr>
+    <tr>
+      <th><%= h _("Password again") %><br /><span class="hint"><%= h _("(for confirmation)") %></span></th>
+      <td><%= f.password_field :password_confirmation %></td>
+    </tr>
+  </table>
+	
+  <h2><%= h _("Where do you live?") %></h2>
+  <p><%= h _("This information is optional, but if you provide it, we can tell you the distance from your house to events. And of course we'll never share it with anyone else (except anonymously for geocoding).") %></p>
+  <table class="edit">
+    <tr>
+      <th><%= h _("Street address") %></th>
+      <td><%= f.text_field :street %></td>
+    </tr>
+    <tr>
+      <th><%= h _("Address line 2") %></th>
+      <td><%= f.text_field :street2 %></td>
+    </tr>
+    <tr>
+      <th><%= h _("City") %></th>
+      <td><%= f.text_field :city %></td>
+    </tr>
+    <tr>
+      <th><%= h _("State") %></th>
+      <td><%= f.collection_select(:state_id, State.find(:all, :order => :name), :id, :name, :include_blank => true) %></td>
+		</tr>
+    <tr>
+      <th><%= h _("ZIP code") %></th>
+      <td><%= f.text_field :zip %></td>
+    </tr>
+	</table>
 
-<p><label for="email">Email</label><br/>
-<%= f.text_field :email %></p>
-
-<p><label for="password">Password</label><br/>
-<%= f.password_field :password %></p>
-
-<p><label for="password_confirmation">Confirm Password</label><br/>
-<%= f.password_field :password_confirmation %></p>
-
-<p><%= submit_tag 'Sign up' %></p>
+  <%= submit_tag _('Sign up') %>
 <% end -%>
