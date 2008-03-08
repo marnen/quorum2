@@ -16,6 +16,10 @@ role :app, "ebon-askavi.homedns.org"
 role :web, "ebon-askavi.homedns.org"
 role :db,  "ebon-askavi.homedns.org", :primary => true
 
+# set process runner
+set :runner, "capistrano" # might want to change this
+set :use_sudo, false
+
 # get GemInstaller working
 
 namespace :deploy do
