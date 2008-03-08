@@ -19,9 +19,10 @@ test:
   encoding: UTF8
   template: template_postgis
 
-# Warning: The database defined as 'test' will be erased and
-
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  timeout: 5000
+  adapter: postgresql
+  database: quorum2
+  username: quorum2
+  password: PASSWORD
+  encoding: UTF8
+  template: template_postgis

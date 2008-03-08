@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: quorum 2.0.0\n"
-"POT-Creation-Date: 2008-03-02 22:51-0500\n"
+"POT-Creation-Date: 2008-03-07 02:21-0500\n"
 "PO-Revision-Date: 2008-03-02 22:23-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,23 +16,73 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: app/controllers/event_controller.rb:7
+#: app/controllers/event_controller.rb:8
 msgid "Upcoming events"
 msgstr ""
 
-#: app/helpers/event_helper.rb:13
+#: app/controllers/event_controller.rb:13
+#: app/views/layouts/standard.html.erb:15
+msgid "Add event"
+msgstr ""
+
+#: app/controllers/event_controller.rb:16
+#: app/controllers/event_controller.rb:34
+msgid "Your event has been saved."
+msgstr ""
+
+#: app/controllers/event_controller.rb:23
+msgid "Edit event"
+msgstr ""
+
+#: app/controllers/event_controller.rb:28
+msgid "Couldn't find any event to edit!"
+msgstr ""
+
+#: app/controllers/event_controller.rb:47
+msgid "Couldn't find any event to export!"
+msgstr ""
+
+#: app/controllers/event_controller.rb:68
+msgid "Couldn't find that event!"
+msgstr ""
+
+#: app/controllers/event_controller.rb:71
+msgid "Map for %s"
+msgstr ""
+
+#: app/helpers/event_helper.rb:12
+msgid "attending"
+msgstr ""
+
+#: app/helpers/event_helper.rb:12
+msgid "not attending"
+msgstr ""
+
+#: app/helpers/event_helper.rb:12
+msgid "uncommitted"
+msgstr ""
+
+#: app/helpers/event_helper.rb:14
 msgid "You are currently %s."
 msgstr ""
 
-#: app/helpers/event_helper.rb:27
+#: app/helpers/event_helper.rb:17
+msgid "Change status"
+msgstr ""
+
+#: app/helpers/event_helper.rb:34 app/helpers/event_helper.rb:36
+msgid "%.1f miles"
+msgstr ""
+
+#: app/helpers/event_helper.rb:42
 msgid "edit"
 msgstr ""
 
-#: app/helpers/event_helper.rb:33
+#: app/helpers/event_helper.rb:73
 msgid "iCal"
 msgstr ""
 
-#: app/helpers/event_helper.rb:48
+#: app/helpers/event_helper.rb:99
 msgid "map"
 msgstr ""
 
@@ -112,6 +162,10 @@ msgstr ""
 msgid "Event|Coords"
 msgstr ""
 
+#: app/models/event.rb:-
+msgid "Event|Created by"
+msgstr ""
+
 #: app/models/state.rb:-
 msgid "state"
 msgstr ""
@@ -128,7 +182,7 @@ msgstr ""
 msgid "State|Name"
 msgstr ""
 
-#: app/views/event/list.html.erb:4
+#: app/views/event/list.html.erb:4 app/views/event/new.html.erb:8
 msgid "Date"
 msgstr ""
 
@@ -148,12 +202,36 @@ msgstr ""
 msgid "Not attending"
 msgstr ""
 
-#: app/views/layouts/standard.html.erb:14
-msgid "List events"
+#: app/views/event/new.html.erb:4
+msgid "Event name"
 msgstr ""
 
-#: app/views/layouts/standard.html.erb:15
-msgid "Add event"
+#: app/views/event/new.html.erb:12
+msgid "Site"
+msgstr ""
+
+#: app/views/event/new.html.erb:16
+msgid "Street address"
+msgstr ""
+
+#: app/views/event/new.html.erb:23
+msgid "City"
+msgstr ""
+
+#: app/views/event/new.html.erb:27
+msgid "State"
+msgstr ""
+
+#: app/views/event/new.html.erb:31
+msgid "Zip"
+msgstr ""
+
+#: app/views/event/new.html.erb:35
+msgid "Save changes"
+msgstr ""
+
+#: app/views/layouts/standard.html.erb:14
+msgid "List events"
 msgstr ""
 
 #: app/views/layouts/standard.html.erb:16
