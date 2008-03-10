@@ -14,8 +14,8 @@ class UsersController < ApplicationController
     @user.save
     if @user.errors.empty?
       self.current_user = @user
-      redirect_back_or_default('/')
-      flash[:notice] = "Thanks for signing up!"
+      redirect_back_or_default('/login')
+      flash[:notice] = "Thanks for signing up! Please check your e-mail for activation instructions."
     else
       render :action => 'new'
     end
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
       current_user.activate
       flash[:notice] = "Signup complete!"
     end
-    redirect_back_or_default('/')
+    redirect_back_or_default('/login')
   end
 
 end
