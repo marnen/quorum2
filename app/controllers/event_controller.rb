@@ -30,7 +30,7 @@ class EventController < ApplicationController
     end
     
     if request.post?
-      if @event.update_attributes(params[:event])
+      if @event.update_attributes(params[:event]) and @event.update_attribute(:coords, nil)
         flash[:notice] = _("Your event has been saved.")
         redirect_to :action => :list and return
       end

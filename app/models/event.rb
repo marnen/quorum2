@@ -1,7 +1,6 @@
 class Event < ActiveRecord::Base
   include GeocodingUtilities
   
-  attr_writer :coords
   belongs_to :created_by, :class_name => "User"
   belongs_to :state, :include => :country
   has_many :commitments
@@ -10,6 +9,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :state_id
   before_create :set_created_by_id
+  
   
   def find_committed(status)
     # status may be :yes or :no
