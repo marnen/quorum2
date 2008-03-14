@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  layout "unauthenticated", :only => [:new, :create, :activate]
+  layout :get_layout
+  before_filter :login_required, :only => :edit
   # render new.rhtml
   def new
   end
@@ -20,6 +21,31 @@ class UsersController < ApplicationController
       render :action => 'new'
     end
   end
+  
+  def edit
+    if request.post?
+      form = params[:user]
+      if form[:password].nil? and form[:password_confirmation].nil?
+        # bypass encryption if both passwords are blank:
+        # User.encrypt_password will not change anything if password is empty
+        form[:password] = ''
+        form[:password_confirmation] = ''
+      end
+      @user = User.current_user # User.find(params[:id].to_i)
+      @user.update_attributes(form)
+      @user.update_attribute(:coords, nil)
+      if @user.errors.empty?
+        flash[:notice] = _("Your changes have been saved.")
+        redirect_to root_url and return
+      else
+        render :action => 'new'
+      end
+    else
+      @user = User.current_user # params[:id].nil? ? User.current_user : User.find(params[:id].to_i)
+      @page_title = _("Edit profile")
+      render :action => 'new'
+    end
+  end
 
   def activate
     self.current_user = params[:activation_code].blank? ? :false : User.find_by_activation_code(params[:activation_code])
@@ -29,5 +55,9 @@ class UsersController < ApplicationController
     end
     redirect_back_or_default('/login')
   end
-
+  
+ protected
+  def get_layout
+    logged_in? ? "standard" : "unauthenticated"
+  end
 end

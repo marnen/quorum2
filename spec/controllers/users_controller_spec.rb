@@ -66,3 +66,60 @@ describe UsersController do
       :password => 'quire', :password_confirmation => 'quire' }.merge(options)
   end
 end
+
+describe UsersController, "edit" do
+  fixtures :users
+  
+  before(:each) do
+    login_as :marnen
+    get :edit
+  end
+  
+  it "should reuse the 'new' form" do
+    response.should render_template :new
+  end
+  
+  it "should get the current user" do
+    assigns[:user].should == User.current_user
+  end
+  
+  it "should not require password validation if both password fields are nil" do
+    marnen = users(:marnen)
+    my_attr = marnen.attributes
+    my_attr[:password] = nil
+    my_attr[:password_confirmation] = nil
+    User.stub!(:current_user).and_return(users(:marnen))
+    post :edit, :user => my_attr
+    marnen.errors.should be_empty
+  end
+  
+  it "should validate password if at least one password field is supplied" do
+    User.stub!(:current_user).and_return(users(:marnen))
+    marnen = users(:marnen)
+ 
+    my_attr = marnen.attributes
+    my_attr[:password] = 'a'
+    my_attr[:password_confirmation] = nil
+    my_attr.should_not be_nil
+    post :edit, :user => my_attr
+    marnen.errors.should_not be_empty
+
+    get :edit
+    marnen = users(:marnen)
+    my_attr = marnen.attributes
+    my_attr[:password] = nil
+    my_attr[:password_confirmation] = 'a'
+    my_attr.should_not be_nil
+    post :edit, :user => my_attr
+    marnen.errors.should_not be_empty
+  end
+  
+  it "should set coords to nil" do
+    marnen = users(:marnen)
+    User.stub!(:current_user).and_return(marnen)
+    post :edit, :user => marnen.attributes
+    marnen.should_receive(:coords_from_string)
+    marnen.coords
+    # pending "Not sure if this spec is working properly."
+  end
+end
