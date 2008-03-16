@@ -50,5 +50,5 @@
     </tr>
 	</table>
 
-  <%= submit_tag _('Sign up') %>
+  <%= submit_tag(logged_in? ? _('Save') : _('Sign up')) %>
 <% end -%>
