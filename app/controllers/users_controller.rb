@@ -14,9 +14,11 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     @user.save
     if @user.errors.empty?
+      @user.activate # so we don't have to go through activation right now
       self.current_user = @user
       redirect_back_or_default('/login')
-      flash[:notice] = "Thanks for signing up! Please check your e-mail for activation instructions."
+      # The next line should be uncommented when we go through e-mail activation.
+      # flash[:notice] = "Thanks for signing up! Please check your e-mail for activation instructions."
     else
       render :action => 'new'
     end

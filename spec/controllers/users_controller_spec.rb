@@ -11,12 +11,13 @@ describe UsersController do
   end
 
   
-
-  
+# Uncomment this spec when we set up e-mail activation.
+=begin  
   it 'signs up user with activation code' do
     create_user
     assigns(:user).activation_code.should_not be_nil
   end
+=end
 
   it 'requires password on signup' do
     lambda do
