@@ -9,6 +9,7 @@ development:
 test:
   ABQIAAAAi00od9kNd2OiZlesUb_8fhQD3HXPGV_kowejAys29DMOPOckJBQWq9qQ8gqcBJwfo36C3VvLvxCMTg
 
+# these keys are actually port 8080; we'll have to change them if we change the port number
 production:
   'quorum.ebon-askavi.homedns.org:8080': ABQIAAAAJP5zVpn4Ba6JGUBpmMTthhQKb7Mx3lNIX7n31Ld_tdL84Cx7kBSYxBEyMTR7PhS8SzdXoTjWrUVyhw
   'quorum2.ebon-askavi.homedns.org:8080': ABQIAAAAJP5zVpn4Ba6JGUBpmMTthhRQM-RwBQn7GqG53sjwsn-aEVJkShT05xMgZAqtEHzio0zT_XV6j-PPPA
