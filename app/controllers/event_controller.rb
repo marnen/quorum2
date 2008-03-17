@@ -64,6 +64,7 @@ class EventController < ApplicationController
   def map
     begin
       @event = Event.find(params[:id])
+      @host = request.host
     rescue
       flash[:error] = _("Couldn't find that event!")
       redirect_to(:action => :list) and return

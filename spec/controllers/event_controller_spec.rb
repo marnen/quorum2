@@ -191,6 +191,11 @@ describe EventController, "map" do
     assigns[:page_title].should_not be_nil
   end
   
+  it "should set the hostname" do
+    get :map, :id => @one.id
+    assigns[:host].should_not be_nil
+  end
+  
 =begin  
   it "should center the map on the event and add a marker and basic and scale controls" do
     @mock = GMap.new(:map)

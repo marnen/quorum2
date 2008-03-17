@@ -42,7 +42,7 @@ module EventHelper
     link_to h(_("edit")), url_for(:controller => 'event', :action => 'edit', :id => event.id)
   end
   
-  def event_map(event)
+  def event_map(event, host)
     # put together a map div from an event
     return nil if event.nil?
     
@@ -51,7 +51,7 @@ module EventHelper
     map.center_zoom_init(latlng, 14)
     map.overlay_init(GMarker.new(latlng, :info_window => info(event)))
     @extra_headers = @extra_headers.to_s 
-    @extra_headers << GMap.header.to_s << map.to_html.to_s
+    @extra_headers << GMap.header(:host => host).to_s << map.to_html.to_s
 
     map.div :width => 500, :height => 400
 =begin
