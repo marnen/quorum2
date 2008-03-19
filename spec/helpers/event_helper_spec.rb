@@ -78,7 +78,7 @@ describe EventHelper, "event_map" do
     
     event = events(:one)
         
-    event_map(event)
+    event_map(event, DOMAIN)
     @extra_headers.should_not be_nil
     @extra_headers.should include(GMap.header.to_s)
     @extra_headers.should include(gmap.to_html.to_s)
