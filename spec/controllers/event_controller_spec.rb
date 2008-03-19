@@ -17,8 +17,8 @@ describe EventController, "list" do
     assigns[:page_title].should_not be_nil
   end
   
-  it "should get all events, with distance, ordered by date" do
-    Event.should_receive(:find).with(:all, :order => :date).once
+  it "should get all non-deleted events, with distance, ordered by date" do
+    Event.should_receive(:find).with(:all, :order => :date, :conditions => 'deleted != true').once
     get 'list'
   end
 end

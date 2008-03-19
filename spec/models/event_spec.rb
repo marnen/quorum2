@@ -35,6 +35,11 @@ describe Event, "(general properties)" do
     event.state = State.new
     event.country.should == event.state.country
   end
+  
+  it "should have a deleted property" do
+    event = Event.new
+    event.should respond_to(:deleted)
+  end
 end
 
 describe Event, "(find_committed)" do
