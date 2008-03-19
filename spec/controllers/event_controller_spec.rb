@@ -18,7 +18,7 @@ describe EventController, "list" do
   end
   
   it "should get all non-deleted events, with distance, ordered by date" do
-    Event.should_receive(:find).with(:all, :order => :date, :conditions => 'deleted != true').once
+    Event.should_receive(:find).with(:all, :order => :date, :conditions => 'deleted is distinct from true').once
     get 'list'
   end
 end
