@@ -8,6 +8,8 @@ class EventController < ApplicationController
     params[:direction] ||= 'asc' # and this?
     @events = Event.find(:all, :order => "#{params[:order]} #{params[:direction]}", :conditions => 'deleted is distinct from true')
     @page_title = _("Upcoming events")
+    @order = params[:order]
+    @direction = params[:direction]
   end
 
   def new

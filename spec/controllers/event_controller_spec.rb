@@ -38,6 +38,12 @@ describe EventController, "list" do
   it "should have date/asc as default order and direction in URL" do
     route_for(:controller => 'event', :action => 'list', :order => 'date', :direction => 'asc').should == '/event/list'
   end
+  
+  it "should pass sorting parameters on to the view" do
+    get :list
+    assigns[:order].should_not be_nil
+    assigns[:direction.should_not be_nil]
+  end
 end
 
 describe EventController, "change_status" do
