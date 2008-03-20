@@ -4,7 +4,9 @@ class EventController < ApplicationController
   after_filter :ical_header, :only => :export # assign the correct MIME type so that it gets recognized as an iCal event
   
   def list
-    @events = Event.find(:all, :order => :date, :conditions => 'deleted is distinct from true')
+    params[:order] ||= 'date' # isn't it enough to define this in routes.rb?
+    params[:direction] ||= 'asc' # and this?
+    @events = Event.find(:all, :order => "#{params[:order]} #{params[:direction]}", :conditions => 'deleted is distinct from true')
     @page_title = _("Upcoming events")
   end
 

@@ -17,9 +17,26 @@ describe EventController, "list" do
     assigns[:page_title].should_not be_nil
   end
   
-  it "should get all non-deleted events, with distance, ordered by date" do
-    Event.should_receive(:find).with(:all, :order => :date, :conditions => 'deleted is distinct from true').once
+  it "should get all non-deleted events, with distance, ordered by date, earliest to latest" do
+    Event.should_receive(:find).with(:all, :order => 'date asc', :conditions => 'deleted is distinct from true').once
     get 'list'
+  end
+  
+  it "should pass sorting parameters from the URL" do
+    order = 'name'
+    direction = 'desc'
+    route_for(:controller => 'event', :action => 'list', :order => order, :direction => direction).should == "/event/list/#{order}/#{direction}"
+    Event.should_receive(:find) do |arg1, arg2|
+      arg1.should == :all
+      arg2.should be_an_instance_of(Hash)
+      arg2.should include(:order)
+      arg2[:order].should == "#{order} #{direction}"
+    end
+    get 'list', :order => order, :direction => direction
+  end
+  
+  it "should have date/asc as default order and direction in URL" do
+    route_for(:controller => 'event', :action => 'list', :order => 'date', :direction => 'asc').should == '/event/list'
   end
 end
 

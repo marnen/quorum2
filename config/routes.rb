@@ -39,6 +39,9 @@ ActionController::Routing::Routes.draw do |map|
   # map.root :controller => "welcome"
   map.root :controller => 'event', :action => 'list'
 
+  # Some stuff for sorting the event list
+  map.connect 'event/list/:order/:direction', :controller => 'event', :action => 'list', :direction => /(a|de)sc/, :defaults => {:order => 'date', :direction => 'asc'}
+
   # See how all your routes lay out with "rake routes"
 
   # Install the default routes as the lowest priority.
