@@ -10,7 +10,9 @@
 	<% for event in @events -%>
 		<tr class="vevent" id="event_<%= event.id %>">
 			<td class="edit">
-				<%= edit_link(event) %><br />
+				<% if User.current_user.role.name == 'admin' or User.current_user == event.created_by -%>
+				  <%= edit_link(event) -%><br />
+				<% end -%>
 				<% if User.current_user.role.name == 'admin' -%>
 				  <%= delete_link(event) -%>
 				<% end %>

@@ -132,7 +132,22 @@ describe EventController, "edit" do
   fixtures :users, :events
   
   before(:each) do
-    login_as :quentin
+    login_as :marnen # admin
+  end
+  
+  it "should redirect to list with an error if the user does not own the event and is not an admin" do
+    marnen = users(:marnen) # current user
+    marnen.stub!(:role).and_return(mock_model(Role, :name => 'user')) # make him non-admin
+    User.stub!(:current_user).and_return(marnen)
+    event = Event.find(:first)
+    event.stub!(:created_by).and_return(users(:quentin))
+    get 'edit', :id => event.id
+    flash[:error].should_not be_nil
+    response.should redirect_to(:action => :list)
+    marnen.stub!(:role).and_return(mock_model(Role, :name => 'admin'))
+    get 'edit', :id => event.id
+    flash[:error].should be_nil
+    response.should_not redirect_to(:action => :list)
   end
   
   it "should reuse the new-event form" do

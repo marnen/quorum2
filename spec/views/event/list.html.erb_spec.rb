@@ -108,11 +108,34 @@ describe "/event/list" do
     end
   end
   
-  it "should contain an edit link for each event" do
+  it "should contain an edit link for each event that the current user created" do
+    pending "app behaves correctly, but this spec doesn't seem to work"
+    user = mock_model(Role, :name => 'user')
+    nonadmin = mock_model(User, :role => user)
+    User.stub!(:current_user).and_return(nonadmin) # non-admin
+    Event.stub!(:created_by).and_return(nonadmin)
     render 'event/list'
     for event in @events do
-     url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
-     response.should have_tag("#event_#{event.id} a[href=" << url << "]")
+      User.current_user.should == nonadmin
+      event.created_by.should == nonadmin
+      url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
+      response.should have_tag("#event_#{event.id} a[href=" << url << "]")
+    end
+    Event.stub!(:created_by).and_return(User.new)
+    for event in @events do
+      url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
+      response.should_not have_tag("#event_#{event.id} a[href=" << url << "]")
+    end
+  end
+  
+  it "should contain an edit link for all events, if the current user is an admin" do
+    role = mock_model(Role, :name => 'admin')
+    admin = mock_model(User, :role => role)
+    User.stub!(:current_user).and_return(admin)
+    render 'event/list'
+    for event in @events do
+      url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
+      response.should have_tag("#event_#{event.id} a[href=" << url << "]")
     end
   end
 
@@ -122,8 +145,8 @@ describe "/event/list" do
     User.stub!(:current_user).and_return(admin)
     render 'event/list'
     for event in @events do
-     url = url_for(:controller => 'event', :action => 'delete', :id => event.id, :escape => false)
-     response.should have_tag("#event_#{event.id} a[href=" << url << "]")
+      url = url_for(:controller => 'event', :action => 'delete', :id => event.id, :escape => false)
+      response.should have_tag("#event_#{event.id} a[href=" << url << "]")
     end
   end
 

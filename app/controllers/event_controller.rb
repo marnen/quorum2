@@ -40,22 +40,26 @@ class EventController < ApplicationController
   end
 
   def edit
-    @page_title = _("Edit event")
-    
     begin
       @event ||= Event.find(params[:id].to_i)
     rescue
       flash[:error] = _("Couldn't find any event to edit!")
       redirect_to(:action => :list) and return
     end
-    
-    if request.post?
-      if @event.update_attributes(params[:event]) and @event.update_attribute(:coords, nil)
-        flash[:notice] = _("Your event has been saved.")
-        redirect_to :action => :list and return
+      
+    if User.current_user.role.name != 'admin' and User.current_user != @event.created_by
+      flash[:error] = _("You are not authorized to edit that event.")
+      redirect_to :action => :list and return
+    else
+      @page_title = _("Edit event")
+      if request.post?
+        if @event.update_attributes(params[:event]) and @event.update_attribute(:coords, nil)
+          flash[:notice] = _("Your event has been saved.")
+          redirect_to :action => :list and return
+        end
       end
+      render :action => :new
     end
-    render :action => :new
   end
   
   def export
