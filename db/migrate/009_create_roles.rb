@@ -12,7 +12,9 @@ class CreateRoles < ActiveRecord::Migration
     add_column :users, :role_id, :integer, :default => user
     User.reset_column_information
     User.find(:all).each do |u|
-      u.role_id ||= user
+      if u.role_id.nil?
+        u.role_id = user
+      end
     end
   end
 
