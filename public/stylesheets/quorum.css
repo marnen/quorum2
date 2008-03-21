@@ -6,7 +6,7 @@ body  { color: black; font-size: 12px; font-family: Verdana, Tahoma, Arial, Gene
 .footer { border-top: 1px solid black; padding-top: 2px; }
 
 td { background-color: #ccc; }
-th { background-color: #666; color: white; }
+th, th a.sort { background-color: #666; color: white; }
 
 .map { font-size: 90%; 	}
 .hint { font-size: 90%; font-weight: lighter; }

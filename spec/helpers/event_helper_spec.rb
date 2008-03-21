@@ -60,8 +60,17 @@ describe EventHelper do
     @event = Event.new do |e| e.coords = Point.from_x_y(0, 2) end
     user.coords = Point.from_x_y(0, 1)
     distance_string(@event, user).should =~ /\D6(8.7)|9.*miles.*#{h('•')}$/ # 1 degree of latitude
- end
+  end
   
+  it "should generate a sort link for a table header (asc unless desc is specified)" do
+    link = sort_link("Date", :date)
+    link.should be_a_kind_of(String)
+    link.should match(/\A<a [^>]*href="#{url_for :controller => 'event', :action => 'list', :order => :date, :direction => :asc}".*<\/a>\Z/i)
+    link.should have_tag("a.sort", "Date")
+    
+    link = sort_link("Date", :date, :desc)
+    link.should match(/\A<a [^>]*href="#{url_for :controller => 'event', :action => 'list', :order => :date, :direction => :desc}".*<\/a>\Z/i)
+ end
 end
 
 describe EventHelper, "event_map" do

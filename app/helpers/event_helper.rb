@@ -99,4 +99,10 @@ module EventHelper
     link_to h(_("map")), url_for(:controller => 'event', :action => 'map', :id => event.id), :target => 'map'
   end
 
+  def sort_link(title, field, direction = :asc, options = {})
+    # generate a sort link
+    my_class = options[:class]
+    my_class ||= 'sort'
+    link_to h(_(title)), url_for(:controller => 'event', :action => 'list', :order => field, :direction => direction), :class => my_class
+  end
 end

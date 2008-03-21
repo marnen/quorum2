@@ -1,8 +1,8 @@
 <table class="events">
 	<tr>
 		<td class="edit"><!-- blank --></td>
-		<th><%= h _("Date") %></th>
-		<th><%= h _("Event") %></th>
+		<th><%= sort_link("Date", :date, (@order == 'date' and @direction == 'asc') ? :desc : :asc) -%> <% if @order == 'date' %><%= @direction == 'asc' ? h('↑') : h('↓') %><% end %></th>
+		<th><%= sort_link("Event", :name, (@order == 'name' and @direction == 'asc') ? :desc : :asc) -%> <% if @order == 'name' %><%= @direction == 'asc' ? h('↑') : h('↓') %><% end %></th>
 		<th><%= h _("Status") %></th>
 		<th><%= h _("Attending") %></th>
 		<th><%= h _("Not attending") %></th>
