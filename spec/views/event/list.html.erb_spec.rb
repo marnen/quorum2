@@ -110,6 +110,7 @@ describe "/event/list" do
   
   it "should contain an edit link for each event that the current user created" do
     pending "app behaves correctly, but this spec doesn't seem to work"
+=begin
     user = mock_model(Role, :name => 'user')
     nonadmin = mock_model(User, :role => user)
     User.stub!(:current_user).and_return(nonadmin) # non-admin
@@ -126,6 +127,7 @@ describe "/event/list" do
       url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
       response.should_not have_tag("#event_#{event.id} a[href=" << url << "]")
     end
+=end
   end
   
   it "should contain an edit link for all events, if the current user is an admin" do
