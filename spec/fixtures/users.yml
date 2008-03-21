@@ -9,7 +9,8 @@ quentin:
   activated_at: <%= 5.days.ago.to_s :db %> 
   firstname: Quentin
   lastname: Quackenbush
-
+  role: user
+  
 aaron:
   id: 2
   email: aaron@example.com
@@ -17,6 +18,7 @@ aaron:
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
   activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a 
+  role: user
 
 marnen:
   firstname: Marnen
@@ -32,6 +34,7 @@ marnen:
   city: Albany
   state: ny
   zip: 12203
+  role: user
 
 millie:
   firstname: Millie
@@ -40,4 +43,5 @@ millie:
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
+  role: user
 

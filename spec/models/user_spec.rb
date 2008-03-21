@@ -18,6 +18,21 @@ describe User, "(general properties)" do
     reflection.options.should have_key(:through)
     reflection.options[:through].should == :commitments
   end
+  
+  it "should have a Role" do
+    User.reflect_on_association(:role).macro.should == :belongs_to
+  end
+end
+
+describe User, "(validations)" do
+  fixtures :users, :roles
+  
+  it "should require a role" do
+    user = users(:marnen)
+    user.should be_valid
+    user.role_id = nil
+    user.should_not be_valid
+  end
 end
   
 describe User, "(instance properties)" do
@@ -167,6 +182,7 @@ describe User, "(authentication structure)" do
 protected
   def create_user(options = {})
     record = User.new({ :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+    record.role_id = 1 # arbitrary
     record.save
     record
   end

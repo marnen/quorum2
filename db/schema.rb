@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 8) do
+ActiveRecord::Schema.define(:version => 9) do
 
   create_table "commitments", :force => true do |t|
     t.column "event_id", :integer, :null => false
@@ -38,6 +38,12 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "deleted", :boolean
   end
 
+  create_table "roles", :force => true do |t|
+    t.column "name", :string
+    t.column "created_at", :timestamp
+    t.column "updated_at", :timestamp
+  end
+
   create_table "states", :force => true do |t|
     t.column "country_id", :integer
     t.column "code", :string, :limit => 10, :null => false
@@ -62,6 +68,7 @@ ActiveRecord::Schema.define(:version => 8) do
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
     t.column "coords", :point
+    t.column "role_id", :integer, :default => 1
   end
 
 end
