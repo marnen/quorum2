@@ -115,7 +115,18 @@ describe "/event/list" do
      response.should have_tag("#event_#{event.id} a[href=" << url << "]")
     end
   end
-  
+
+  it "should contain a delete link for each event, if the current user has an admin account" do
+    role = mock_model(Role, :name => 'admin')
+    admin = mock_model(User, :role => role)
+    User.stub!(:current_user).and_return(admin)
+    render 'event/list'
+    for event in @events do
+     url = url_for(:controller => 'event', :action => 'delete', :id => event.id, :escape => false)
+     response.should have_tag("#event_#{event.id} a[href=" << url << "]")
+    end
+  end
+
   it "should contain a distance in miles or km for each event with good coords" do
     render 'event/list'
     for event in @events do

@@ -26,6 +26,11 @@ class Event < ActiveRecord::Base
     end
   end
   
+  def hide
+    self.deleted = true
+    self.save
+  end
+  
   def country
     if self.state.nil?
       nil

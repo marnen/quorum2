@@ -26,7 +26,12 @@ module EventHelper
     content_tag :abbr, full_date, :class => :dtstart, :title => ical_date
   end
   
-  def distance_string(event, user)
+  def delete_link(event)
+    # generate an edit link
+    link_to h(_("delete")), url_for(:controller => 'event', :action => 'delete', :id => event.id)
+  end
+  
+   def distance_string(event, user)
     begin
       meters = event.coords.ellipsoidal_distance(user.coords)
       miles = meters / 1609.344

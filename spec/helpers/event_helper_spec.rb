@@ -13,6 +13,10 @@ describe EventHelper do
     ical_uid(@event).should be_a_kind_of(String)
   end
   
+  it "should generate a delete link as a String" do
+    delete_link(@event).should be_a_kind_of(String)
+  end
+  
   it "should generate an edit link as a String" do
     edit_link(@event).should be_a_kind_of(String)
   end

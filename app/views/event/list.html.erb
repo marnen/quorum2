@@ -9,7 +9,12 @@
 	</tr>
 	<% for event in @events -%>
 		<tr class="vevent" id="event_<%= event.id %>">
-			<td class="edit"><%= edit_link(event) %></td>
+			<td class="edit">
+				<%= edit_link(event) %><br />
+				<% if User.current_user.role.name == 'admin' -%>
+				  <%= delete_link(event) -%>
+				<% end %>
+			</td>
 			<td>
 				<span class="uid"><%= h ical_uid(event) %></span>
 				<%= date_element(event) %>

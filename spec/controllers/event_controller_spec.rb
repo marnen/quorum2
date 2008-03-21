@@ -190,6 +190,32 @@ describe EventController, "edit" do
   end
 end
 
+describe EventController, "delete" do
+  fixtures :users, :roles, :events
+  
+  before(:each) do
+    @event = Event.find(:first)
+    @id = @event.id
+  end
+  
+  it "should not work from non-admin account" do
+    login_as :quentin
+    @event.should_not_receive(:hide)
+    post 'delete', :id => @id
+    User.current_user.role.name.should_not == 'admin'
+    flash[:error].should_not be_nil
+  end
+  
+  it "should work from admin account" do
+    login_as :marnen
+    Event.should_receive(:find).with(@id).and_return(@event)
+    @event.should_receive(:hide)
+    post 'delete', :id => @id
+    User.current_user.role.name.should == 'admin'
+    flash[:error].should be_nil
+  end
+end
+
 describe EventController, "map" do
   fixtures :users, :events, :states, :countries
   

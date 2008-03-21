@@ -34,7 +34,7 @@ marnen:
   city: Albany
   state: ny
   zip: 12203
-  role: user
+  role: admin
 
 millie:
   firstname: Millie

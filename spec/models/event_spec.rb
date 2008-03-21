@@ -67,6 +67,18 @@ describe Event, "(find_committed)" do
   end
 end
 
+describe Event, "(hide)" do
+  before(:each) do
+    @event = Event.new
+  end
+  
+  it "should set deleted to true" do
+    @event.deleted.should_not == true
+    @event.hide
+    @event.deleted.should == true
+  end
+end
+
 describe Event, "(validations)" do
   fixtures :users
   

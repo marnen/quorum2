@@ -22,6 +22,22 @@ class EventController < ApplicationController
       end
     end
   end
+  
+  def delete
+    if User.current_user.role.name != 'admin'
+      flash[:error] = _("You are not authorized to delete events.")
+      redirect_to :action => :list and return
+    else
+      begin
+        event = Event.find(params[:id].to_i)
+        event.hide
+        flash[:notice] = _("The selected event was deleted.")
+      rescue
+        flash[:error] = _("Couldn't find any event to delete!")
+      end
+      redirect_to(:action => :list) and return
+    end
+  end
 
   def edit
     @page_title = _("Edit event")
