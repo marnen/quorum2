@@ -55,6 +55,7 @@ module EventHelper
     latlng = [event.coords.lat, event.coords.lng]
     map.center_zoom_init(latlng, 14)
     map.overlay_init(GMarker.new(latlng, :info_window => info(event)))
+    map.control_init :large_map => true, :map_type => true
     @extra_headers = @extra_headers.to_s 
     @extra_headers << GMap.header(:host => host).to_s << map.to_html.to_s
 

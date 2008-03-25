@@ -87,6 +87,13 @@ describe EventHelper, "event_map" do
     gmap.should_receive(:div)
     gmap.should_receive(:center_zoom_init)
     gmap.should_receive(:overlay_init).with(an_instance_of(GMarker))
+    gmap.should_receive(:control_init) do |opts|
+      opts.should be_a_kind_of(Hash)
+      opts.should have_key(:large_map)
+      opts[:large_map].should == true
+      opts.should have_key(:map_type)
+      opts[:map_type].should == true
+    end
     gmap.should_receive(:to_html).at_least(:once)
     
     event = events(:one)
