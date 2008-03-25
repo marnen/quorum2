@@ -124,3 +124,43 @@ describe UsersController, "edit" do
     # pending "Not sure if this spec is working properly."
   end
 end
+
+describe UsersController, '(list)' do
+  before(:each) do
+    non_admin_role = mock_model(Role, :name => 'user')
+    @non_admin_user = mock_model(User, :role => non_admin_role)
+
+    admin_role = mock_model(Role, :name => 'admin')
+    @admin_user = mock_model(User, :role => admin_role)
+
+    User.stub!(:current_user).and_return(@admin_user)
+  end
+  
+  it "should be a valid action" do
+    get :list
+    response.should be_success
+  end
+  
+  it "should only be available for admin users" do
+    get :list
+    flash[:error].should be_nil
+
+    User.stub!(:current_user).and_return(@non_admin_user)
+    get :list
+    flash[:error].should_not be_nil
+  end
+  
+  it "should use the list template" do
+    get :list
+    response.should render_template :list
+  end
+  
+  it "should get a list of users" do
+    users = [mock_model(User), mock_model(User), mock_model(User)]
+    User.should_receive(:find).with(:all).and_return(users)
+    get :list
+    assigns[:users].should_not be_nil
+    assigns[:users].should be_a_kind_of(Array)
+    assigns[:users].should == users
+  end
+end

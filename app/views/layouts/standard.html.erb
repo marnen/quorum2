@@ -14,6 +14,9 @@
 			<%= link_to h(_("List events")), url_for(:controller => :event, :action => :list) %> |
 			<%= link_to h(_("Add event")), url_for(:controller => :event, :action => :new) %> |
 			<%= link_to h(_("User profile")), profile_path %> |
+			<% if User.current_user.role.name == 'admin' -%>
+			  <%= link_to h(_("Contact sheet")), url_for(:controller => :users, :action => :list) %> |
+			<% end -%>
 			<%= link_to h(_("Log out")), url_for(:controller => :logout) %> <%- if false %> Is there a better way to generate that URL? <% end %>
 		</p>
 		<p><%= _("Welcome, %s!" % content_tag(:span, h(current_user.fullname), :class => :name)) %></p>

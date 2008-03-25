@@ -58,6 +58,14 @@ class UsersController < ApplicationController
     redirect_back_or_default('/login')
   end
   
+  def list
+    if User.current_user.role.name != 'admin'
+      flash[:error] = _("You are not authorized to perform that action.")
+    else
+      @users = User.find(:all)
+    end
+  end
+  
  protected
   def get_layout
     logged_in? ? "standard" : "unauthenticated"
