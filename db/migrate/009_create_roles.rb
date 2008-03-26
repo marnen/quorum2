@@ -13,7 +13,7 @@ class CreateRoles < ActiveRecord::Migration
     User.reset_column_information
     User.find(:all).each do |u|
       if u.role_id.nil?
-        u.update_attribute(role_id, user)
+        u.update_attribute(:role_id, user)
       end
     end
   end
