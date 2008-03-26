@@ -22,6 +22,12 @@ describe User, "(general properties)" do
   it "should have a Role" do
     User.reflect_on_association(:role).macro.should == :belongs_to
   end
+  
+  it "should have a writable flag controlling display of personal information on contact list" do
+    u = User.new
+    u.should respond_to(:show_contact)
+    u.should respond_to(:show_contact=)
+  end
 end
 
 describe User, "(validations)" do

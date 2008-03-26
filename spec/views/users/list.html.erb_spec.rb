@@ -20,14 +20,18 @@ describe "/users/list" do
   
   it "should show first and last names for each user" do
     for u in @users
-      response.should have_tag(".users td", /#{h(u.firstname)}/)
-      response.should have_tag(".users td", /#{h(u.lastname)}/)
+      response.should have_tag("tr#user_#{u.id} td", /#{h(u.firstname)}/)
+      response.should have_tag("tr#user_#{u.id} td", /#{h(u.lastname)}/)
     end
   end
   
-  it "should show addresses for each user" do
+  it "should show addresses for each user who has not requested to be hidden" do
     for u in @users
-      response.should have_tag(".users td", /#{h(u.street)}.*#{h(u.street2)}.*#{h(u.city)}.*#{h(u.state.code)}/)
+      if u.show_contact
+        response.should have_tag("tr#user_#{u.id} td", /#{h(u.street)}.*#{h(u.street2)}.*#{h(u.city)}.*#{h(u.state.code)}/)
+      else
+        response.should have_tag("tr#user_#{u.id} td", "")
+      end
     end
   end
 end

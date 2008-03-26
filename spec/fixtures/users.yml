@@ -37,6 +37,7 @@ marnen:
   state: ny
   zip: 12203
   role: admin
+  show_contact: true
 
 millie:
   firstname: Millie
@@ -46,5 +47,8 @@ millie:
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
   role: user
+  street: 22 Main Street
+  city: Toronto
   state: "on"
-
+  zip: H0H 0H0
+  show_contact: false
