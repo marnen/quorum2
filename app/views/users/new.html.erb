@@ -26,7 +26,7 @@
   </table>
 	
   <h2><%= h _("Where do you live?") %></h2>
-  <p><%= h _("This information is optional, but if you provide it, we can tell you the distance from your house to events. And of course we'll never share it with anyone else (except anonymously for geocoding).") %></p>
+  <p><%= h _("This information is optional, but if you provide it, we can tell you the distance from your house to events. And of course we'll never share it with anyone else without your permission (except anonymously for geocoding).") %></p>
   <table class="edit">
     <tr>
       <th><%= h _("Street address") %></th>
@@ -49,6 +49,7 @@
       <td><%= f.text_field :zip %></td>
     </tr>
 	</table>
+	<p><label><%= f.check_box :show_contact %> <%= h _('Make my address visible in the contact list (available to administrators only)') %></label></p>
 
   <%= submit_tag(logged_in? ? _('Save') : _('Sign up')) %>
 <% end -%>
