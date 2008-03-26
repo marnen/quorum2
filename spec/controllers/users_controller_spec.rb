@@ -141,13 +141,21 @@ describe UsersController, '(list)' do
     response.should be_success
   end
   
+  it "should set the page title" do
+    get :list
+    assigns[:page_title].should_not be_nil
+  end
+  
   it "should only be available for admin users" do
     get :list
     flash[:error].should be_nil
-
+  end
+  
+  it "should redirect to / with an error for non-admin users" do
     User.stub!(:current_user).and_return(@non_admin_user)
     get :list
     flash[:error].should_not be_nil
+    response.should redirect_to(root_url)
   end
   
   it "should use the list template" do
@@ -157,7 +165,7 @@ describe UsersController, '(list)' do
   
   it "should get a list of users" do
     users = [mock_model(User), mock_model(User), mock_model(User)]
-    User.should_receive(:find).with(:all).and_return(users)
+    User.should_receive(:find).with(:all, :order => 'lastname, firstname').and_return(users)
     get :list
     assigns[:users].should_not be_nil
     assigns[:users].should be_a_kind_of(Array)

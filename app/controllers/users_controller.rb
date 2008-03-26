@@ -61,8 +61,10 @@ class UsersController < ApplicationController
   def list
     if User.current_user.role.name != 'admin'
       flash[:error] = _("You are not authorized to perform that action.")
+      redirect_to root_url and return
     else
-      @users = User.find(:all)
+      @page_title = _("Contact list")
+      @users = User.find(:all, :order => 'lastname, firstname')
     end
   end
   

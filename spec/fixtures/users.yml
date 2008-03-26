@@ -10,6 +10,7 @@ quentin:
   firstname: Quentin
   lastname: Quackenbush
   role: user
+  state: ny
   
 aaron:
   id: 2
@@ -19,6 +20,7 @@ aaron:
   created_at: <%= 1.days.ago.to_s :db %>
   activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a 
   role: user
+  state: nj
 
 marnen:
   firstname: Marnen
@@ -44,4 +46,5 @@ millie:
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
   role: user
+  state: "on"
 
