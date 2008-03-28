@@ -31,7 +31,7 @@ module EventHelper
     link_to h(_("delete")), url_for(:controller => 'event', :action => 'delete', :id => event.id)
   end
   
-   def distance_string(event, user)
+  def distance_string(event, user)
     begin
       meters = event.coords.ellipsoidal_distance(user.coords)
       miles = meters / 1609.344
