@@ -6,12 +6,12 @@ include EventHelper
 
 describe "/event/list" do
   fixtures :states, :countries, :events, :users, :commitments
-  
   before(:each) do
     login_as :marnen
     @events = Event.find(:all)
     assigns[:events] = @events
     assigns[:current_user] = users(:marnen)
+    User.stub!(:current_user).and_return(assigns[:current_user])
   end
   
   it "should have loaded at least one event" do
@@ -174,7 +174,12 @@ describe "/event/list" do
   it "should have a control to set the current user's attendance for each event" do
     render 'event/list'
     for event in @events do
-      response.should have_tag("#event_#{event.id} form select.commit")
+      response.should have_tag("#event_#{event.id} form.attendance select.commit")
     end
+  end
+  
+  it "should include event/list.js for JavaScript enhancements" do
+    render 'event/list'
+    response[:javascript].should =~ %r{<script[^>]*event/list\.js}
   end
 end

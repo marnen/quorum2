@@ -51,7 +51,7 @@ describe EventHelper do
     att = attendance_control(@event, users(:quentin))
     att.should be_a_kind_of(String)
     att.should match(/^<td.*<\/td>$/mi)
-    att.should have_tag("select.commit")
+    att.should have_tag("form.attendance select.commit")
   end
   
   it "should generate a distance string from an event to a user's coords," do

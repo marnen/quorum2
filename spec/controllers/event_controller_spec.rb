@@ -42,7 +42,7 @@ describe EventController, "list" do
   it "should pass sorting parameters on to the view" do
     get :list
     assigns[:order].should_not be_nil
-    assigns[:direction.should_not be_nil]
+    assigns[:direction].should_not be_nil
   end
 end
 

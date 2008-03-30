@@ -15,7 +15,7 @@ module EventHelper
     content << select_tag(nil, options_for_select(status_strings.invert, status), :class => :commit, :name => :status)
     content << tag(:br)
     content << submit_tag(h(_("Change status")))
-    content = content_tag :form, content, :action => url_for(:controller => :event, :action => :change_status, :id => event.id), :name => 'e' << event.id.to_s
+    content = content_tag :form, content, :action => url_for(:controller => :event, :action => :change_status, :id => event.id), :name => 'e' << event.id.to_s, :class => :attendance
     content_tag :td, content, :class => status
   end
   
