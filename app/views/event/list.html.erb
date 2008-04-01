@@ -10,33 +10,5 @@
 		<th><%= h _("Attending") %></th>
 		<th><%= h _("Not attending") %></th>
 	</tr>
-	<% for event in @events -%>
-		<tr class="vevent" id="event_<%= event.id %>">
-			<td class="edit">
-				<% if User.current_user.role.name == 'admin' or User.current_user == event.created_by -%>
-				  <%= edit_link(event) -%><br />
-				<% end -%>
-				<% if User.current_user.role.name == 'admin' -%>
-				  <%= delete_link(event) -%>
-				<% end %>
-			</td>
-			<td>
-				<span class="uid"><%= h ical_uid(event) %></span>
-				<%= date_element(event) %>
-			</td>
-			<td>
-				<h3 class="summary"><%= h(event.name) %></h3>
-				<span class="location vcard">
-					<%= h(event.site) + tag(:br) %>
-					<span class="street-address"><%= [h(event.street), h(event.street2)].join(tag(:br)) %></span><br />
-					<span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span>, <span class="country-name"><%= h event.state.country.code %></span>
-				</span><br />
-				<%= distance_string(event, current_user) %> <span class="map"><%= map_link(event) %></span>
-				<p><%= ical_link(event) %></p>
-			</td>
-			<%= attendance_control(event, current_user) %>
-			<td><%= h list_names(event.find_committed(:yes)) %></td>
-			<td><%= h list_names(event.find_committed(:no)) %></td>
-		</tr>
-	<%- end %>
+	<%= render :partial => 'event', :collection => @events -%>
 </table>

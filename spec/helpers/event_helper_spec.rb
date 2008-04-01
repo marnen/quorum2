@@ -47,11 +47,8 @@ describe EventHelper do
     end
   end
   
-  it "should generate a <td> with attendance controls for the supplied event and the current user" do
-    att = attendance_control(@event, users(:quentin))
-    att.should be_a_kind_of(String)
-    att.should match(/^<td.*<\/td>$/mi)
-    att.should have_tag("form.attendance select.commit")
+  it "should get an attendance status for an event and a user" do
+    attendance_status(@event, users(:quentin)).should == :maybe
   end
   
   it "should generate a distance string from an event to a user's coords," do
