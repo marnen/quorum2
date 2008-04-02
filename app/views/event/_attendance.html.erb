@@ -3,7 +3,8 @@
 <td class="<%= status %>">
 	<% form_for :commitment, event, :url => {:action => :change_status, :id => event.id}, :html => {:class => :attendance} do |f| %>
 	  <p><%= _("You are currently %s." % content_tag(:span, h(@status_strings[status]), :class => status)) %></p>
-		<%= select_tag(nil, options_for_select(@status_strings.invert, status), :class => :commit, :name => :status) %><br />
+		<%= select_tag(nil, options_for_select(@status_strings.invert, status), :class => :commit, :name => :status) %>
+		<span class="progress"></span><br />
 		<%= submit_tag(h(_("Change status"))) %>
 	<% end %>
 </td>

@@ -18,4 +18,8 @@ describe 'event/_attendance' do
   it "should have a select element for event" do
     response.should have_tag("select.commit")
   end
+  
+  it "should have an empty element for the progress indicator" do
+    response.should have_tag(".progress", "")
+  end
 end
