@@ -65,9 +65,16 @@ describe EventController, "change_status" do
     get "change_status", :id => id, :status => status
   end
   
-  it "should redirect to list" do
+  it "should redirect to list on a standard request" do
     get 'change_status'
     response.should redirect_to(:action => :list)
+  end
+  
+  it "should render an event row on an Ajax request" do
+    event = events(:one)
+    request.stub!(:xhr?).and_return(true)
+    get "change_status", :id => event.id, :status => :yes # status could also be :no or :maybe
+    response.should render_template('_event') # with :locals => {:event => event}, but I can't figure out how to test for that
   end
 end
 

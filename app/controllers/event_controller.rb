@@ -82,7 +82,11 @@ class EventController < ApplicationController
       commitment.status = status_map[params[:status].to_s]
       commitment.save!
     end
-    redirect_to :action => :list
+    if request.xhr?
+      render :partial => 'event', :locals => {:event => event}
+    else
+      redirect_to :action => :list
+    end
   end
   
   def map
