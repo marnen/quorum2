@@ -20,6 +20,6 @@ describe 'event/_attendance' do
   end
   
   it "should have an empty element for the progress indicator" do
-    response.should have_tag(".progress", "")
+    response.should have_tag(".progress", /&nbsp;/)
   end
 end
