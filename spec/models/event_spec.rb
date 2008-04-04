@@ -40,6 +40,7 @@ describe Event, "(general properties)" do
     event = Event.new
     event.should respond_to(:deleted)
   end
+  
 end
 
 describe Event, "(find_committed)" do
@@ -129,6 +130,13 @@ describe Event, "(geographical features)" do
 
     @event = events(:one)
   end
+  
+  it "should create a string for the geocodable address parts" do
+    @event.should respond_to(:address_for_geocoding)
+    addr = @event.address_for_geocoding
+    addr.should == "#{@event.street}, #{@event.city}, #{@event.state.code}, #{@event.zip}, #{@event.country.code}"
+  end
+
 
   it "should have coords (Point)" do
     @event.should respond_to(:coords)

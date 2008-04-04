@@ -23,6 +23,10 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :email, :password, :password_confirmation, :firstname, :lastname, :street, :street2, :city, :state_id, :zip, :show_contact
   
+  def country
+    return self.state.country
+  end
+  
   def fullname
     str = [self.firstname, self.lastname].delete_if {|e| e.blank?}.join(' ')
     str.blank? ? self.email : str

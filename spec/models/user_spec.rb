@@ -28,6 +28,16 @@ describe User, "(general properties)" do
     u.should respond_to(:show_contact)
     u.should respond_to(:show_contact=)
   end
+  
+  it "should have country referred through state" do
+    country = mock_model(Country, :name => 'Ruritania', :code => 'RU')
+    state = mock_model(State, :name => 'Federal District', :country => country)
+    user = User.new
+    user.should respond_to(:country)
+    user.state = state
+    user.country.should == user.state.country
+  end
+  
 end
 
 describe User, "(validations)" do

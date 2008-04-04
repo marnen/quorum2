@@ -43,7 +43,7 @@ class Event < ActiveRecord::Base
     c = self[:coords]
     if c.nil?
       begin
-        c = coords_from_string("#{street}, #{city}, #{state.code}, #{zip}, #{state.country.code}")
+        c = coords_from_string(address_for_geocoding)
         self[:coords] = c
         self.save
       rescue

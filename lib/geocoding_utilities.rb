@@ -1,4 +1,8 @@
 module GeocodingUtilities
+  def address_for_geocoding
+    "#{street}, #{city}, #{state.code}, #{zip}, #{country.code}"
+  end
+
   def coords_from_string(string)
     geo = Geocoding::get(string, :host => "#{DOMAIN}:8080")
     if geo.status == Geocoding::GEO_SUCCESS
