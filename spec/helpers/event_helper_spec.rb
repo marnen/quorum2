@@ -78,12 +78,18 @@ describe EventHelper, "event_map" do
   fixtures :events, :states, :countries
   
   it "should set up a GMap with all the options" do
+    event = events(:one)
+    EventHelper::StringVar.stub!(:new).with(an_instance_of(String)).and_return(mock("StringVar", :null_object => true))
+
     gmap = GMap.new(:foo)
+    marker = GMarker.new([1.0, 2.0])
     GMap.should_receive(:header).at_least(:once)
     GMap.should_receive(:new).and_return(gmap)
+    GMarker.stub!(:new).and_return(marker)
     gmap.should_receive(:div)
     gmap.should_receive(:center_zoom_init)
-    gmap.should_receive(:overlay_init).with(an_instance_of(GMarker))
+    gmap.should_receive(:overlay_init).with(marker)
+    marker.should_receive(:open_info_window_html).with(EventHelper::StringVar.new(info(event)))
     gmap.should_receive(:control_init) do |opts|
       opts.should be_a_kind_of(Hash)
       opts.should have_key(:large_map)
@@ -93,8 +99,6 @@ describe EventHelper, "event_map" do
     end
     gmap.should_receive(:to_html).at_least(:once)
     
-    event = events(:one)
-        
     event_map(event, DOMAIN)
     @extra_headers.should_not be_nil
     @extra_headers.should include(GMap.header.to_s)

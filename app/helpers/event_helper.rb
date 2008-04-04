@@ -44,8 +44,15 @@ module EventHelper
     map = GMap.new(:map)
     latlng = [event.coords.lat, event.coords.lng]
     map.center_zoom_init(latlng, 14)
-    map.overlay_init(GMarker.new(latlng, :info_window => info(event)))
+    marker = GMarker.new(latlng)
+    html = StringVar.new(info(event).dump)
+    map.record_init html.declare('html')
+    map.declare_init(marker, 'marker')
+    # map.record_init html.declare('foo')
+    map.record_init marker.bind_info_window_html(html)
+    map.overlay_init(marker)
     map.control_init :large_map => true, :map_type => true
+    map.record_init marker.open_info_window_html(html)
     @extra_headers = @extra_headers.to_s 
     @extra_headers << GMap.header(:host => host).to_s << map.to_html.to_s
 
@@ -75,12 +82,18 @@ module EventHelper
   end
   
   def info(event)
-    # text for info window on Google maps
+    # text for info window on Google maps -- probably should refactor into a partial at some point
     return nil if (event.nil? or !event.kind_of?(Event))
     result = ""
     result << content_tag(:h3, h(event.site || event.name))
     city = [h(event.city), h(event.state.code), h(event.state.country.code)].compact.join(', ')
     result << content_tag(:p, [h(event.street), h(event.street2), city].compact.join(tag(:br)))
+    
+    url = 'http://maps.google.com'
+    from = User.current_user.address_for_geocoding.nil? ? nil : "saddr=#{u User.current_user.address_for_geocoding}"
+    to = event.address_for_geocoding.nil? ? nil : "daddr=#{u event.address_for_geocoding}"
+    params = [from, to].compact.join('&')
+    result << content_tag(:p, link_to(_('Get directions'), 'http://maps.google.com?' + params.to_s))
     result
   end
   
@@ -100,5 +113,13 @@ module EventHelper
     my_class = options[:class]
     my_class ||= 'sort'
     link_to h(_(title)), url_for(:controller => 'event', :action => 'list', :order => field, :direction => direction), :class => my_class
+  end
+  
+  class StringVar < Ym4r::GmPlugin::Variable
+    def declare(name)
+      result = "var #{name} = #{to_javascript};"
+      @variable = name
+      return result
+    end
   end
 end
