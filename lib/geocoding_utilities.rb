@@ -4,7 +4,7 @@ module GeocodingUtilities
   end
 
   def coords_from_string(string)
-    geo = Geocoding::get(string, :host => "#{DOMAIN}:8080")
+    geo = Geocoding::get(string, :host => "#{root_url}")
     if geo.status == Geocoding::GEO_SUCCESS
       return Point.from_coordinates(geo[0].lonlat)
     else
