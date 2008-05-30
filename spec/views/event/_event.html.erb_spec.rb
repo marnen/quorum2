@@ -50,7 +50,12 @@ describe 'event/_event' do
   it "should show the name of the event in a tag of class 'summary'" do
     render_view
     response.should have_tag("#event_#{@event.id} .summary", h(@event.name))
-  end 
+  end
+  
+  it "should show the description of the event in a tag of class 'description'" do
+    render_view
+    response.should have_tag("#event_#{@event.id} .description", h(@event.description))
+  end
 
   it "should show the site for the event" do
     render_view

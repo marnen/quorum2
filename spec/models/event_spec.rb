@@ -41,6 +41,10 @@ describe Event, "(general properties)" do
     event.should respond_to(:deleted)
   end
   
+  it "should have a description" do
+    event = Event.new
+    event.should respond_to(:description)
+  end
 end
 
 describe Event, "(find_committed)" do

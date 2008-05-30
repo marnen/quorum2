@@ -20,6 +20,10 @@ describe "/event/new" do
     response.should have_tag("table.edit input#event_name")
   end
   
+  it "should have a description field" do
+    response.should have_tag("table.edit textarea#event_description")
+  end
+  
   it "should have a date selector" do
     response.should have_tag("table.edit select#event_date_2i")
   end

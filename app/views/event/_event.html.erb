@@ -23,6 +23,11 @@
     <%= distance_string(event, current_user) %> <span class="map"><%= map_link(event) %></span>
     <p><%= ical_link(event) %></p>
   </td>
+  <td>
+    <span class="description">
+      <%= h(event.description) %>
+    </span>
+  </td>
   <%= render :partial => 'attendance', :locals => {:event => event} %>
   <td><%= h list_names(event.find_committed(:yes)) %></td>
   <td><%= h list_names(event.find_committed(:no)) %></td>

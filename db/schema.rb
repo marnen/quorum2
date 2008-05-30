@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 10) do
+ActiveRecord::Schema.define(:version => 11) do
 
   create_table "commitments", :force => true do |t|
     t.column "event_id", :integer, :null => false
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 10) do
     t.column "coords", :point
     t.column "created_by_id", :integer
     t.column "deleted", :boolean
+    t.column "description", :text
   end
 
   create_table "roles", :force => true do |t|

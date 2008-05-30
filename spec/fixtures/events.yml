@@ -1,6 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   name: Event 1 with <> signs
+  description: A longer description of event 1 & all that.
   date: 2008-01-10
   site: Marnen's house
   street: 80 State Street
@@ -12,6 +13,7 @@ one:
 
 two:
   name: Event 2
+  description: ~
   date: 2008-02-22
   site: Event 2 site
   street: Event 2 street
