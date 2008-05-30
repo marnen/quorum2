@@ -21,6 +21,10 @@ describe "/event/ical.ics" do
     response.should have_text(/LOCATION:#{[@event.street, @event.street2, @event.city, @event.state.code, @event.country.code].compact.join(', ')}/)
   end
   
+  it "should contain the event description as description" do
+    response.should have_text(/DESCRIPTION:#{ical_escape @event.description}/)
+  end
+  
   it "should contain the date in iCal format" do
     response.should have_text(/DTSTART;VALUE=DATE:#{@event.date.to_s :ical}/)
   end
