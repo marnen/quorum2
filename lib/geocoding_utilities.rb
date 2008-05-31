@@ -7,7 +7,7 @@ module GeocodingUtilities
     logger = RAILS_DEFAULT_LOGGER
     logger.info "@request: #{@request.inspect}"
     host = @request.nil? ? nil : @request.host_with_port
-    host = host.nil? ? 'localhost' : host
+    host = host.nil? ? DOMAIN : host
     geo = Geocoding::get(string, :host => host)
     if geo.status == Geocoding::GEO_SUCCESS
       return Point.from_coordinates(geo[0].lonlat)

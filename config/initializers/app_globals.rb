@@ -3,7 +3,7 @@ require 'gettext/rails'
 
 SITE_TITLE = "Quorum" # Name of site as it appears in <title> element
 
-DOMAIN = "quorum2.ebon-askavi.homedns.org" # Domain on which the site is hosted
+DOMAIN = "quorum2.ebon-askavi.homedns.org:8080" # Domain on which the site is hosted
 
 GeoRuby::SimpleFeatures::DEFAULT_SRID = 4326
 
