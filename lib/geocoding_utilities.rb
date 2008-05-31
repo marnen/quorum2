@@ -4,8 +4,6 @@ module GeocodingUtilities
   end
 
   def coords_from_string(string)
-    logger = RAILS_DEFAULT_LOGGER
-    logger.info "@request: #{@request.inspect}"
     host = @request.nil? ? nil : @request.host_with_port
     host = host.nil? ? DOMAIN : host
     geo = Geocoding::get(string, :host => host)
