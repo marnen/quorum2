@@ -1,4 +1,4 @@
-module EventHelper  
+module EventsHelper  
   def attendance_status(event, user)
     if event.find_committed(:yes).include? user then
       status = :yes

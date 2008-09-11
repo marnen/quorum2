@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe EventController, "list" do
+describe EventsController, "list" do
   fixtures :users
   
   before(:each) do
@@ -46,7 +46,7 @@ describe EventController, "list" do
   end
 end
 
-describe EventController, "change_status" do
+describe EventsController, "change_status" do
   fixtures :users, :events, :commitments
   
   before(:each) do
@@ -78,7 +78,7 @@ describe EventController, "change_status" do
   end
 end
 
-describe EventController, "new" do
+describe EventsController, "new" do
   fixtures :users, :states, :countries, :commitments
   
   before(:each) do
@@ -135,7 +135,7 @@ describe EventController, "new" do
   
 end
 
-describe EventController, "edit" do
+describe EventsController, "edit" do
   fixtures :users, :events
   
   before(:each) do
@@ -212,7 +212,7 @@ describe EventController, "edit" do
   end
 end
 
-describe EventController, "delete" do
+describe EventsController, "delete" do
   fixtures :users, :roles, :events
   
   before(:each) do
@@ -238,7 +238,7 @@ describe EventController, "delete" do
   end
 end
 
-describe EventController, "map" do
+describe EventsController, "map" do
   fixtures :users, :events, :states, :countries
   
   before(:each) do
@@ -284,7 +284,7 @@ describe EventController, "map" do
 =end
 end
 
-describe EventController, "export" do
+describe EventsController, "export" do
   fixtures :events, :users, :states, :countries
   
   before(:each) do
@@ -316,8 +316,8 @@ end
 
 =begin
   #Delete these examples and add some real ones
-  it "should use EventController" do
-    controller.should be_an_instance_of(EventController)
+  it "should use EventsController" do
+    controller.should be_an_instance_of(EventsController)
   end
 
 
