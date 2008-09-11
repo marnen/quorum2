@@ -1,11 +1,11 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe "/event/new" do
+describe "/events/new" do
   fixtures :users
   
   before(:each) do
     login_as :quentin
-    render 'event/new'
+    render 'events/new'
   end
   
   it "should have a form" do

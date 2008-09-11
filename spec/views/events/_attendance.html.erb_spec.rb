@@ -2,9 +2,9 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 include ERB::Util
 include ActionView::Helpers::UrlHelper
-include EventHelper
+include EventsHelper
 
-describe 'event/_attendance' do
+describe 'events/_attendance' do
   fixtures :events, :countries, :states, :commitments, :users
 
   before(:all) do
@@ -12,7 +12,7 @@ describe 'event/_attendance' do
   end
   
   before(:each) do
-    render :partial => 'event/attendance', :locals => {:event => @event_orig}
+    render :partial => 'events/attendance', :locals => {:event => @event_orig}
   end
   
   it "should have a select element for event" do

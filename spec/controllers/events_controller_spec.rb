@@ -25,7 +25,7 @@ describe EventsController, "list" do
   it "should pass sorting parameters from the URL" do
     order = 'name'
     direction = 'desc'
-    route_for(:controller => 'event', :action => 'list', :order => order, :direction => direction).should == "/event/list/#{order}/#{direction}"
+    route_for(:controller => 'events', :action => 'list', :order => order, :direction => direction).should == "/events/list/#{order}/#{direction}"
     Event.should_receive(:find) do |arg1, arg2|
       arg1.should == :all
       arg2.should be_an_instance_of(Hash)
@@ -36,7 +36,7 @@ describe EventsController, "list" do
   end
   
   it "should have date/asc as default order and direction in URL" do
-    route_for(:controller => 'event', :action => 'list', :order => 'date', :direction => 'asc').should == '/event/list'
+    route_for(:controller => 'events', :action => 'list', :order => 'date', :direction => 'asc').should == '/events/list'
   end
   
   it "should pass sorting parameters on to the view" do
@@ -300,7 +300,7 @@ describe EventsController, "export" do
   
   it "should use the ical view" do
     get :export, :id => @my_event.id
-    response.should render_template('event/ical.ics.erb')
+    response.should render_template('events/ical.ics.erb')
   end
   
   it "should get an event" do

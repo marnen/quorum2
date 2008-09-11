@@ -1,12 +1,12 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
-include EventHelper
+include EventsHelper
 
-describe "/event/ical.ics" do
+describe "/events/ical.ics" do
   fixtures :events, :countries, :states
   before(:each) do
     @event = events(:one)
     assigns[:event] = @event
-    render 'event/ical.ics.erb'
+    render 'events/ical.ics.erb'
   end
   
   it "should contain the iCal UID" do

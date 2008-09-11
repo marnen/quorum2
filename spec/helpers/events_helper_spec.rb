@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe EventHelper do
+describe EventsHelper do
   fixtures :users, :states, :countries
   
   before(:each) do
@@ -35,9 +35,9 @@ describe EventHelper do
   end
 =begin
   #Delete this example and add some real ones or delete this file
-  it "should include the EventHelper" do
+  it "should include the EventsHelper" do
     included_modules = self.metaclass.send :included_modules
-    included_modules.should include(EventHelper)
+    included_modules.should include(EventsHelper)
   end
 =end
   it "should generate a comma-separated list of names from an array of users" do
@@ -66,20 +66,24 @@ describe EventHelper do
   it "should generate a sort link for a table header (asc unless desc is specified)" do
     link = sort_link("Date", :date)
     link.should be_a_kind_of(String)
-    link.should match(/\A<a [^>]*href="#{url_for :controller => 'event', :action => 'list', :order => :date, :direction => :asc}".*<\/a>\Z/i)
+    link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'list', :order => :date, :direction => :asc}".*<\/a>\Z/i)
     link.should have_tag("a.sort", "Date")
     
     link = sort_link("Date", :date, :desc)
-    link.should match(/\A<a [^>]*href="#{url_for :controller => 'event', :action => 'list', :order => :date, :direction => :desc}".*<\/a>\Z/i)
+    link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'list', :order => :date, :direction => :desc}".*<\/a>\Z/i)
  end
 end
 
-describe EventHelper, "event_map" do
-  fixtures :events, :states, :countries
+describe EventsHelper, "event_map" do
+  fixtures :events, :states, :countries, :users, :states, :countries
+  
+  before(:each) do
+    User.stub!(:current_user).and_return(users(:marnen))
+  end
   
   it "should set up a GMap with all the options" do
     event = events(:one)
-    EventHelper::StringVar.stub!(:new).with(an_instance_of(String)).and_return(mock("StringVar", :null_object => true))
+    EventsHelper::StringVar.stub!(:new).with(an_instance_of(String)).and_return(mock("StringVar", :null_object => true))
 
     gmap = GMap.new(:foo)
     marker = GMarker.new([1.0, 2.0])
@@ -89,7 +93,7 @@ describe EventHelper, "event_map" do
     gmap.should_receive(:div)
     gmap.should_receive(:center_zoom_init)
     gmap.should_receive(:overlay_init).with(marker)
-    marker.should_receive(:open_info_window_html).with(EventHelper::StringVar.new(info(event)))
+    marker.should_receive(:open_info_window_html).with(EventsHelper::StringVar.new(info(event)))
     gmap.should_receive(:control_init) do |opts|
       opts.should be_a_kind_of(Hash)
       opts.should have_key(:large_map)
@@ -106,7 +110,7 @@ describe EventHelper, "event_map" do
   end
 end
 
-describe EventHelper, "ical_escape" do
+describe EventsHelper, "ical_escape" do
   it "should make newlines into '\n'" do
     ical_escape("a\na").should == 'a\\na'
   end
@@ -121,7 +125,7 @@ describe EventHelper, "ical_escape" do
   end
 end
 
-describe EventHelper, "list_names" do
+describe EventsHelper, "list_names" do
   it "should return an empty string when called with nil argument" do
     list_names(nil).should == ''
   end

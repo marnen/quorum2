@@ -2,9 +2,9 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 include ERB::Util
 include ActionView::Helpers::UrlHelper
-include EventHelper
+include EventsHelper
 
-describe 'event/_event' do
+describe 'events/_event' do
   fixtures :events, :countries, :states, :commitments, :users
 
   before(:all) do
@@ -22,7 +22,7 @@ describe 'event/_event' do
     admin = mock_model(User, :role => role)
     User.stub!(:current_user).and_return(admin)
     render_view
-    url = url_for(:controller => 'event', :action => 'edit', :id => @event.id, :escape => false)
+    url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
     response.should have_tag("#event_#{@event.id} a[href=" << url << "]")
   end
 
@@ -31,7 +31,7 @@ describe 'event/_event' do
     admin = mock_model(User, :role => role)
     User.stub!(:current_user).and_return(admin)
     render_view
-    url = url_for(:controller => 'event', :action => 'delete', :id => @event.id, :escape => false)
+    url = url_for(:controller => 'events', :action => 'delete', :id => @event.id, :escape => false)
     response.should have_tag("#event_#{@event.id} a[href=" << url << "]")
   end
   
@@ -84,13 +84,13 @@ describe 'event/_event' do
   
   it "should show a map link for the event" do
     render_view
-    url = url_for(:controller => 'event', :action => 'map', :id => @event.id, :escape => false)
+    url = url_for(:controller => 'events', :action => 'map', :id => @event.id, :escape => false)
     response.should have_tag("#event_#{@event.id} a[href=" << url << "]")
   end
   
   it "should show an iCal export link for the event, of class 'ical'" do
     render_view
-    url = url_for(:controller => 'event', :action => 'export', :id => @event.id, :escape => false)
+    url = url_for(:controller => 'events', :action => 'export', :id => @event.id, :escape => false)
     response.should have_tag("#event_#{@event.id} a.ical[href=" << url << "]")
   end
   
@@ -116,12 +116,12 @@ describe 'event/_event' do
     for event in @events do
       User.current_user.should == nonadmin
       event.created_by.should == nonadmin
-      url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
+      url = url_for(:controller => 'events', :action => 'edit', :id => event.id, :escape => false)
       response.should have_tag("#event_#{event.id} a[href=" << url << "]")
     end
     Event.stub!(:created_by).and_return(User.new)
     for event in @events do
-      url = url_for(:controller => 'event', :action => 'edit', :id => event.id, :escape => false)
+      url = url_for(:controller => 'events', :action => 'edit', :id => event.id, :escape => false)
       response.should_not have_tag("#event_#{event.id} a[href=" << url << "]")
     end
 =end
@@ -144,6 +144,6 @@ describe 'event/_event' do
   
  protected
   def render_view
-    render :partial => 'event/event', :locals => {:event => @event}
+    render :partial => 'events/event', :locals => {:event => @event}
   end
 end

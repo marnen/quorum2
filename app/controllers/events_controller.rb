@@ -66,7 +66,7 @@ class EventsController < ApplicationController
     # export to iCalendar format
     begin
       @event = Event.find(params[:id].to_i)
-      render :template => 'event/ical.ics.erb'
+      render :template => 'events/ical.ics.erb'
     rescue
       flash[:error] = _("Couldn't find any event to export!")
       redirect_to(:action => :list) and return

@@ -18,7 +18,7 @@ module EventsHelper
   
   def delete_link(event)
     # generate an edit link
-    link_to h(_("delete")), url_for(:controller => 'event', :action => 'delete', :id => event.id)
+    link_to h(_("delete")), url_for(:controller => 'events', :action => 'delete', :id => event.id)
   end
   
   def distance_string(event, user)
@@ -34,7 +34,7 @@ module EventsHelper
   
   def edit_link(event)
     # generate an edit link
-    link_to h(_("edit")), url_for(:controller => 'event', :action => 'edit', :id => event.id)
+    link_to h(_("edit")), url_for(:controller => 'events', :action => 'edit', :id => event.id)
   end
   
   def event_map(event, host)
@@ -73,7 +73,7 @@ module EventsHelper
 
   def ical_link(event)
     # generate an iCal export link
-    link_to h(_("iCal")), url_for(:controller => 'event', :action => 'export', :id => event.id), :class => 'ical'
+    link_to h(_("iCal")), url_for(:controller => 'events', :action => 'export', :id => event.id), :class => 'ical'
   end
 
   def ical_uid(event)
@@ -105,14 +105,14 @@ module EventsHelper
 
   def map_link(event)
     # generate a map link
-    link_to h(_("map")), url_for(:controller => 'event', :action => 'map', :id => event.id), :target => 'map'
+    link_to h(_("map")), url_for(:controller => 'events', :action => 'map', :id => event.id), :target => 'map'
   end
 
   def sort_link(title, field, direction = :asc, options = {})
     # generate a sort link
     my_class = options[:class]
     my_class ||= 'sort'
-    link_to h(_(title)), url_for(:controller => 'event', :action => 'list', :order => field, :direction => direction), :class => my_class
+    link_to h(_(title)), url_for(:controller => 'events', :action => 'list', :order => field, :direction => direction), :class => my_class
   end
   
   class StringVar < Ym4r::GmPlugin::Variable
