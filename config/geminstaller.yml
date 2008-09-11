@@ -28,6 +28,8 @@ gems:
   version: 0.3.0
 - name: gettext
   version: 1.90.0
+- name: haml
+  version: 2.0.0
 - name: postgres
   version: 0.7.9.2008.01.28
 - name: rails
