@@ -12,8 +12,8 @@
 	<body>
 		<p>
 			<%= content_tag :span, h(SITE_TITLE), :class => :siteName %> |
-			<%= link_to h(_("List events")), url_for(:controller => :event, :action => :list) %> |
-			<%= link_to h(_("Add event")), url_for(:controller => :event, :action => :new) %> |
+			<%= link_to h(_("List events")), url_for(:controller => :events, :action => :index) %> |
+			<%= link_to h(_("Add event")), url_for(:controller => :events, :action => :new) %> |
 			<%= link_to h(_("User profile")), profile_path %> |
 			<% if User.current_user.role.name == 'admin' -%>
 			  <%= link_to h(_("Contact list")), list_users_path %> |

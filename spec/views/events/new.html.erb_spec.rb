@@ -1,10 +1,11 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/events/new" do
-  fixtures :users
+  fixtures :users, :events
   
   before(:each) do
     login_as :quentin
+    assigns[:current_object] = events(:one)
     render 'events/new'
   end
   

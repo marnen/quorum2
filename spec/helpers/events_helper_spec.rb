@@ -66,11 +66,11 @@ describe EventsHelper do
   it "should generate a sort link for a table header (asc unless desc is specified)" do
     link = sort_link("Date", :date)
     link.should be_a_kind_of(String)
-    link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'list', :order => :date, :direction => :asc}".*<\/a>\Z/i)
+    link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'index', :order => :date, :direction => :asc}".*<\/a>\Z/i)
     link.should have_tag("a.sort", "Date")
     
     link = sort_link("Date", :date, :desc)
-    link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'list', :order => :date, :direction => :desc}".*<\/a>\Z/i)
+    link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'index', :order => :date, :direction => :desc}".*<\/a>\Z/i)
  end
 end
 

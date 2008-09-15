@@ -3,6 +3,41 @@ class EventsController < ApplicationController
   before_filter :login_required
   after_filter :ical_header, :only => :export # assign the correct MIME type so that it gets recognized as an iCal event
   
+  make_resourceful do
+    actions :index, :create, :new, :edit, :update, :show
+    
+    before :index do
+      params[:order] ||= 'date' # isn't it enough to define this in routes.rb?
+      params[:direction] ||= 'asc' # and this?
+      @page_title = _("Upcoming events")
+      @order = params[:order]
+      @direction = params[:direction]
+    end
+    
+    before :new do
+      @page_title = _("Add event")
+    end
+    
+    response_for :edit do
+      if current_object.nil?
+        flash[:error] = _("Couldn't find any event to edit!")
+        redirect_to(:action => :list) and return
+      elsif User.current_user.role.name != 'admin' and User.current_user != current_object.created_by
+        flash[:error] = _("You are not authorized to edit that event.")
+        redirect_to :action => :index
+      else
+        @page_title = _("Edit event")
+        render :action => 'new'
+      end
+    end
+    
+    response_for :update, :create do
+      flash[:notice] = _("Your event has been saved.")
+      redirect_to :action => :index
+    end
+  end
+  
+=begin  
   def list
     params[:order] ||= 'date' # isn't it enough to define this in routes.rb?
     params[:direction] ||= 'asc' # and this?
@@ -22,7 +57,8 @@ class EventsController < ApplicationController
       end
     end
   end
-  
+=end
+
   def delete
     if User.current_user.role.name != 'admin'
       flash[:error] = _("You are not authorized to delete events.")
@@ -39,6 +75,7 @@ class EventsController < ApplicationController
     end
   end
 
+=begin
   def edit
     begin
       @event ||= Event.find(params[:id].to_i)
@@ -61,6 +98,7 @@ class EventsController < ApplicationController
       render :action => :new
     end
   end
+=end
   
   def export
     # export to iCalendar format
@@ -85,7 +123,7 @@ class EventsController < ApplicationController
     if request.xhr?
       render :partial => 'event', :locals => {:event => event}
     else
-      redirect_to :action => :list
+      redirect_to :action => :index
     end
   end
   
@@ -98,6 +136,12 @@ class EventsController < ApplicationController
       redirect_to(:action => :list) and return
     end
     @page_title = _("Map for %s" % @event.name)
+  end
+  
+  def current_objects
+    order = params[:order] || 'date'
+    direction = params[:direction] || 'asc'
+    @current_objects || current_model.find(:all, :order => "#{order} #{direction}", :conditions => 'deleted is distinct from true')
   end
   
  protected
