@@ -4,7 +4,7 @@ include ERB::Util
 include ActionView::Helpers::UrlHelper
 include EventsHelper
 
-describe "/events/list" do
+describe "/events/index" do
   fixtures :states, :countries, :events, :users, :commitments
   before(:each) do
     login_as :marnen
@@ -15,12 +15,12 @@ describe "/events/list" do
   end
   
   it "should have loaded at least one event" do
-    render 'events/list'
+    render 'events/index'
     @events.size.should > 0
   end
   
   it "should show a sort link in date and event column header" do
-    render 'events/list'
+    render 'events/index'
     response.should have_tag("th a.sort", h("Date"))
     response.should have_tag("th a.sort", h("Event"))
   end
@@ -29,7 +29,7 @@ describe "/events/list" do
 =begin
     assigns[:order] = 'name'
     assigns[:direction] = 'desc'
-    render 'events/list' # , {:order => 'name', :direction => 'desc'}
+    render 'events/index' # , {:order => 'name', :direction => 'desc'}
     response.should have_text(h("Event ↓"))
 =end
     pending "this spec always fails, even though the application behaves correctly...need to rewrite with a helper?"
@@ -37,11 +37,11 @@ describe "/events/list" do
   
   it "should render _event for each event" do
     template.expect_render(:partial => 'event', :collection => @events)
-    render 'events/list'
+    render 'events/index'
   end
   
-  it "should include events/list.js for JavaScript enhancements" do
-    render 'events/list'
-    response[:javascript].should =~ %r{<script[^>]*events/list\.js}
+  it "should include events/index.js for JavaScript enhancements" do
+    render 'events/index'
+    response[:javascript].should =~ %r{<script[^>]*events/index\.js}
   end
 end
