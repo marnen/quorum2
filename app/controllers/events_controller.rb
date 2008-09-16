@@ -21,7 +21,7 @@ class EventsController < ApplicationController
     response_for :edit do
       if current_object.nil?
         flash[:error] = _("Couldn't find any event to edit!")
-        redirect_to(:action => :list) and return
+        redirect_to(:action => :index) and return
       elsif User.current_user.role.name != 'admin' and User.current_user != current_object.created_by
         flash[:error] = _("You are not authorized to edit that event.")
         redirect_to :action => :index
@@ -62,7 +62,7 @@ class EventsController < ApplicationController
   def delete
     if User.current_user.role.name != 'admin'
       flash[:error] = _("You are not authorized to delete events.")
-      redirect_to :action => :list and return
+      redirect_to :action => :index and return
     else
       begin
         event = Event.find(params[:id].to_i)
@@ -71,7 +71,7 @@ class EventsController < ApplicationController
       rescue
         flash[:error] = _("Couldn't find any event to delete!")
       end
-      redirect_to(:action => :list) and return
+      redirect_to(:action => :index) and return
     end
   end
 
@@ -107,7 +107,7 @@ class EventsController < ApplicationController
       render :template => 'events/ical.ics.erb'
     rescue
       flash[:error] = _("Couldn't find any event to export!")
-      redirect_to(:action => :list) and return
+      redirect_to(:action => :index) and return
     end
   end
 
@@ -133,7 +133,7 @@ class EventsController < ApplicationController
       @host = request.host_with_port
     rescue
       flash[:error] = _("Couldn't find that event!")
-      redirect_to(:action => :list) and return
+      redirect_to(:action => :index) and return
     end
     @page_title = _("Map for %s" % @event.name)
   end
