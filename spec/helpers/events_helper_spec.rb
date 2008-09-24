@@ -55,7 +55,7 @@ describe EventsHelper do
     @event.state = states(:ny) # required anyway, and makes testing easier
     marnen = users(:marnen)
     @event.coords = marnen.coords
-    distance_string(@event, marnen).should =~ /\D0(\.0)? miles/
+    distance_string(@event, marnen).should =~ /\D\d(\.\d+)? miles/
     user = User.new
     # distance_string(@event, user).should == "" # user.coords is nil -- this spec is not working right now
     @event = Event.new do |e| e.coords = Point.from_x_y(0, 2) end
