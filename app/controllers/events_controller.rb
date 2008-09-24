@@ -1,3 +1,4 @@
+# This is the controller for #Event instances. It supports the following make_resourceful[http://mr.hamptoncatlin.com] actions: :index, :create, :new, :edit, :update, :show.
 class EventsController < ApplicationController
   layout "standard", :except => :export # no layout needed on export, since it generates an iCal file
   before_filter :login_required
@@ -59,6 +60,7 @@ class EventsController < ApplicationController
   end
 =end
 
+# Delete an #Event. Admin users can delete any Event; non-admin users can only delete events they created.
   def delete
     if User.current_user.role.name != 'admin'
       flash[:error] = _("You are not authorized to delete events.")
@@ -100,8 +102,8 @@ class EventsController < ApplicationController
   end
 =end
   
+  # Export #Event to iCalendar format.
   def export
-    # export to iCalendar format
     begin
       @event = Event.find(params[:id].to_i)
       render :template => 'events/ical.ics.erb'
@@ -111,6 +113,7 @@ class EventsController < ApplicationController
     end
   end
 
+  # Change current #User's attendance status for the current #Event.
   def change_status
     id = params[:id]
     status_map = {'yes' => true, 'no' => false, 'maybe' => nil}
@@ -127,6 +130,7 @@ class EventsController < ApplicationController
     end
   end
   
+  # Display a map page for the current #Event.
   def map
     begin
       @event = Event.find(params[:id])
@@ -138,6 +142,7 @@ class EventsController < ApplicationController
     @page_title = _("Map for %s" % @event.name)
   end
   
+  # Return non-deleted events, optionally ordered as specified by params[:order] and [:direction]. Provided for use with make_resourceful[http://mr.hamptoncatlin.com].
   def current_objects
     order = params[:order] || 'date'
     direction = params[:direction] || 'asc'
@@ -145,8 +150,8 @@ class EventsController < ApplicationController
   end
   
  protected
+  # Return an HTTP header with proper MIME type for iCal.
   def ical_header
-    # set MIME type for iCal
     headers['Content-Type'] = 'text/calendar'
   end
 end

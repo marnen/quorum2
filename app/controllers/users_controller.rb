@@ -69,6 +69,7 @@ class UsersController < ApplicationController
   end
   
  protected
+  # Returns the name of the layout we should be using. This enables us to have different layouts depending on whether a user is logged in.
   def get_layout
     logged_in? ? "standard" : "unauthenticated"
   end

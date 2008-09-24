@@ -1,4 +1,5 @@
-module EventsHelper  
+module EventsHelper 
+  # Returns #User's commitment status for #Event as a symbol -- :yes, :no, :or maybe.
   def attendance_status(event, user)
     if event.find_committed(:yes).include? user then
       status = :yes
@@ -9,6 +10,13 @@ module EventsHelper
     end
   end
   
+  # Generates an HTML date element for #Event, including hCalendar[http://microformats.org/wiki/hcalendar] annotation.
+  #
+  # Usage:
+  #
+  # <tt>@event.date = today</tt>
+  #
+  # <tt>date_element(@event) # -> something like '<abbr class="dtstart" title="20080924">24 Sep 2008</abbr>'</tt>
   def date_element(event)
     # generate a microformat HTML date element
     ical_date = h event.date.to_formatted_s(:ical)
@@ -16,11 +24,13 @@ module EventsHelper
     content_tag :abbr, full_date, :class => :dtstart, :title => ical_date
   end
   
+  # Generates a delete link for #Event.
   def delete_link(event)
-    # generate an edit link
     link_to h(_("delete")), url_for(:controller => 'events', :action => 'delete', :id => event.id)
   end
   
+  # Returns the distance from #Event to #User's address, in a #String of the form <tt>"35.2 miles"</tt>.
+  # If something goes wrong, returns <tt>"0.0 miles"</tt>.
   def distance_string(event, user)
     begin
       meters = event.coords.ellipsoidal_distance(user.coords)
@@ -32,13 +42,13 @@ module EventsHelper
     end
   end
   
+  # Generates an edit link for #Event.
   def edit_link(event)
-    # generate an edit link
     link_to h(_("edit")), url_for(:controller => 'events', :action => 'edit', :id => event.id)
   end
   
+  # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
   def event_map(event, host)
-    # put together a map div from an event
     return nil if event.nil?
     
     map = GMap.new(:map)
@@ -67,22 +77,25 @@ module EventsHelper
 =end
   end
   
+  # Escapes characters in <em>string</em> that would be illegal in iCalendar format.
   def ical_escape(string)
     string.gsub(%r{[\\,;]}) {|c| '\\' + c}.gsub("\n", '\\n')
   end
 
+  # Generates an iCal export link for #Event.
   def ical_link(event)
-    # generate an iCal export link
     link_to h(_("iCal")), url_for(:controller => 'events', :action => 'export', :id => event.id), :class => 'ical'
   end
 
+  # Generates an iCal unique ID for #Event.
   def ical_uid(event)
-    # generate an iCal unique event ID
     "event-" << event.id.to_s << "@" << DOMAIN
   end
   
+  # Generates text for the info window on Google map of #Event.
+  #
+  # TODO: this should probably become a partial.
   def info(event)
-    # text for info window on Google maps -- probably should refactor into a partial at some point
     return nil if (event.nil? or !event.kind_of?(Event))
     result = ""
     result << content_tag(:h3, h(event.site || event.name))
@@ -97,17 +110,22 @@ module EventsHelper
     result
   end
   
+  # Given an #Array (or similar) of #User objects, returns an #Array of their full names as #Strings.
   def list_names(users)
-    # users is an Array (or similar) of users
     return '' if users.nil? or users.size == 0
     users.compact.collect {|u| u.fullname}.join(', ')
   end
 
+  # Generates a link to a map of #Event.
   def map_link(event)
-    # generate a map link
     link_to h(_("map")), url_for(:controller => 'events', :action => 'map', :id => event.id), :target => 'map'
   end
 
+  # Generates a sort link (e.g., for a table header).
+  # _title_:: Display text for the link (will be treated as a gettext key).
+  # _field_:: Field name that the link will sort on.
+  # _direction_:: Direction to sort. May be <tt>:asc</tt> (default if not supplied) or <tt>:desc</tt>.
+  # _options_:: Hash of options. At the moment, only <tt>:class</tt> is supported; this specifies the class name for the resulting HTML element (default is <tt>"sort"</tt>).
   def sort_link(title, field, direction = :asc, options = {})
     # generate a sort link
     my_class = options[:class]
