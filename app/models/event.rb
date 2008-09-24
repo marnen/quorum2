@@ -13,8 +13,6 @@ class Event < ActiveRecord::Base
   # Returns an #Array of #User objects with commitment status (for the current #Event) of <i>status</i>,
   # where <i>status</i> may be <tt>:yes</tt> or <tt>:no</tt>.
   def find_committed(status)
-    # status may be :yes or :no
-    # returns an array of Users with the appropriate commitment status
     temp = self.commitments.clone
     if status == :yes then
       temp.delete_if {|e| e.status != true}
@@ -35,7 +33,7 @@ class Event < ActiveRecord::Base
   
   # Nil-safe country accessor.
   def country
-    if self.state.nil?
+    if self.state.nil?  
       nil
     else
       self.state.country
