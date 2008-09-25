@@ -37,10 +37,13 @@ ActionController::Routing::Routes.draw do |map|
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
   # map.root :controller => "welcome"
-  map.root :controller => 'events', :action => 'index'
-  map.connect 'events/index', :controller => 'events', :action => 'index'
+  map.root :controller => 'events'
   
-  map.resources :events
+  map.connect 'events/index', :controller => 'events', :action => 'index'
+
+  map.connect 'events/:id', :controller => 'events', :action => 'edit'
+  map.resources :events, :collection => {:feed => :any}
+  
 
   # Some stuff for sorting the event list
   map.connect 'events/index/:order/:direction', :controller => 'events', :action => 'index', :direction => /(a|de)sc/, :defaults => {:order => 'date', :direction => 'asc'}

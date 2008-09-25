@@ -1,7 +1,7 @@
 # This is the controller for #Event instances. It supports the following make_resourceful[http://mr.hamptoncatlin.com] actions: :index, :create, :new, :edit, :update, :show.
 class EventsController < ApplicationController
-  layout "standard", :except => :export # no layout needed on export, since it generates an iCal file
-  before_filter :login_required
+  layout "standard", :except => [:export, :feed] # no layout needed on export, since it generates an iCal file
+  before_filter :login_required, :except => :feed
   after_filter :ical_header, :only => :export # assign the correct MIME type so that it gets recognized as an iCal event
   
   make_resourceful do
@@ -14,7 +14,7 @@ class EventsController < ApplicationController
       @order = params[:order]
       @direction = params[:direction]
     end
-    
+   
     before :new do
       @page_title = _("Add event")
     end
@@ -35,6 +35,13 @@ class EventsController < ApplicationController
     response_for :update, :create do
       flash[:notice] = _("Your event has been saved.")
       redirect_to :action => :index
+    end
+  end
+  
+  # Generate an RSS feed of events.
+  def feed
+    respond_to do |format|
+      format.rss
     end
   end
   

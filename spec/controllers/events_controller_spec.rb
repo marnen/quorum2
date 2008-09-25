@@ -9,7 +9,7 @@ describe EventsController, "index" do
   
   it "should be successful" do
     get :index
-   response.should be_success
+    response.should be_success
   end
  
   it "should set the page_title" do
@@ -43,6 +43,58 @@ describe EventsController, "index" do
     get :index
     assigns[:order].should_not be_nil
     assigns[:direction].should_not be_nil
+  end
+end
+
+describe EventsController, "feed.rss" do
+  fixtures :events
+  integrate_views
+  
+  before(:each) do
+    get :feed, :format => 'rss'
+  end
+  
+  it "should be successful" do
+    response.should be_success
+  end
+  
+  it "should set a MIME type of application/rss+xml" do
+    response.headers['type'].should =~ (%r{^application/rss\+xml})
+  end
+  
+  it "should set RSS version 2.0 and declare the Atom namespace" do
+    m = response.body[%r{<\s*rss(\s*[^>]*)?>}]
+    m.should_not be_blank
+    m.should =~ /version=(["'])2.0\1/
+    m.should =~ %r{xmlns:\w+=(["'])http://www.w3.org/2005/Atom\1}
+  end
+  
+  it "should have an <atom:link rel='self'> tag" do
+    css_select('rss').each do |rss|
+      @m = css_select(rss, 'channel')[0].to_s[%r{<\s*atom:link(\s*[^>]*)?>}]
+    end
+    @m.should_not be_blank
+    @m.should =~ /href=(["'])#{formatted_feed_events_url(:rss)}\1/
+    @m.should =~ /rel=(["'])self\1/
+  end
+  
+  it "should have an appropriate <title> tag" do
+    response.should have_tag('title', %r{#{SITE_TITLE}})
+  end
+  
+  it "should link to the event list" do
+    response.should have_tag('link', events_url)
+  end
+  
+  it "should contain a description element" do
+    response.should have_tag('description')
+  end
+    
+  it "should contain an entry for every event" do
+    Event.find(:all).each do |e|
+      response.should have_tag('item title',ERB::Util::html_escape(e.name)) # actually, this is XML escape, but close enough
+      response.should have_tag('item link', event_url(e))
+    end
   end
 end
 
