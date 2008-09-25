@@ -41,7 +41,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.connect 'events/index', :controller => 'events', :action => 'index'
 
-  map.connect 'events/:id', :controller => 'events', :action => 'edit'
+  map.connect 'events/:id', :controller => 'events', :action => 'edit', :id => /\d+/
   map.resources :events, :collection => {:feed => :any}
   
 
