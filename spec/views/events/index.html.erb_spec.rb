@@ -44,4 +44,9 @@ describe "/events/index" do
     render 'events/index'
     response[:javascript].should =~ %r{<script[^>]*events/index\.js}
   end
+
+  it "should contain an autodiscovery link for the RSS feed" do
+    render 'events/index'
+    response[:head].should have_tag("link[title=RSS][href=#{formatted_feed_events_url(:rss)}]")
+  end
 end
