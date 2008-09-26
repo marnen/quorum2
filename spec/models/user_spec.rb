@@ -52,11 +52,10 @@ describe User, "(validations)" do
 end
   
 describe User, "(instance properties)" do
-  before(:each) do
-    @user = User.new
-  end
+  fixtures :users
   
   it "should have a 'fullname' property returning firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
+    @user = User.new
     @user.email = 'foo@bar.com' # arbitrary
     @user.fullname.should == @user.email
     @user.firstname = 'f' # arbitrary
@@ -67,16 +66,47 @@ describe User, "(instance properties)" do
     @user.firstname = 'f'
     @user.fullname.should == @user.firstname << ' ' << @user.lastname
   end
+  
+  it "should have a 'feed_key' property initialized to a 32-character string" do
+    User.find(:first).feed_key.length.should == 32
+  end
+  
+  it "should set feed_key on save" do
+    @u = User.find(:first)
+    @u.feed_key = nil
+    @u.reload.feed_key.length.should == 32
+  end
+  
+  it "should not overwrite feed_key if already set" do
+    @u = User.find(:first)
+    fk = @u.feed_key
+    @u.reload.feed_key.should == fk
+  end
+  
+  it "should properly deal with regenerating feed_key if it's a duplicate" do
+    @users = User.find(:all)
+    @one = @users[0]
+    @two = @users[1]
+    fk = @two.feed_key
+    @one.feed_key = fk
+    @one.reload.feed_key.should_not == fk
+
+  end
 end
 
 describe User, "(geographical features)" do
   fixtures :users, :states, :countries
   
   before(:each) do
-    Geocoding::Placemarks.any_instance.expects(:[]).returns(Geocoding::Placemark.new)
-    Geocoding::Placemark.any_instance.stubs(:latlon).returns([1.0, 2.0])
-    Geocoding.expects(:get).returns(Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS))
-    Point::any_instance.stubs(:from_coordinates).returns(true)
+    @placemark = Geocoding::Placemark.new
+    @placemark.stub!(:latlon).and_return([1.0, 2.0])
+    Geocoding::Placemark.stub!(:new).and_return(@placemark)
+    
+    @placemarks = Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS)
+    @placemarks.stub!(:[]).and_return(@placemark)
+    Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
+    Geocoding.stub!(:get).and_return(@placemarks)
+    Point.stub!(:from_coordinates).and_return(mock_model(Point))
 
     @user = users(:marnen)
   end
@@ -93,7 +123,7 @@ describe User, "(geographical features)" do
   end
   
   it "should not save coords when unsuccessfully encoded" do
-    Geocoding.expects(:get).returns(false)
+    Geocoding.should_receive(:get).and_return(false)
     @user.should_not_receive(:save)
     @user.coords
   end
