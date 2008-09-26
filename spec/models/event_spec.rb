@@ -127,10 +127,15 @@ describe Event, "(geographical features)" do
   fixtures :events, :states, :countries
   
   before(:each) do
-    Geocoding::Placemarks.any_instance.expects(:[]).returns(Geocoding::Placemark.new)
-    Geocoding::Placemark.any_instance.stubs(:latlon).returns([1.0, 2.0])
-    Geocoding.expects(:get).returns(Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS))
-    Point::any_instance.stubs(:from_coordinates).returns(true)
+    @placemark = Geocoding::Placemark.new
+    @placemark.stub!(:latlon).and_return([1.0, 2.0])
+    Geocoding::Placemark.stub!(:new).and_return(@placemark)
+    
+    @placemarks = Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS)
+    @placemarks.stub!(:[]).and_return(@placemark)
+    Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
+    Geocoding.stub!(:get).and_return(@placemarks)
+    Point.stub!(:from_coordinates).and_return(mock_model(Point))
 
     @event = events(:one)
   end
@@ -154,7 +159,7 @@ describe Event, "(geographical features)" do
   end
   
   it "should not save coords when unsuccessfully encoded" do
-    Geocoding.stub!(:get).and_return(false)
+    Geocoding.should_receive(:get).and_return(false)
     @event.should_not_receive(:save)
     @event.coords
   end  
