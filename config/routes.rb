@@ -42,7 +42,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'events/index', :controller => 'events', :action => 'index'
 
   map.connect 'events/:id', :controller => 'events', :action => 'edit', :id => /\d+/
-  map.resources :events, :collection => {:feed => :any}
+  map.formatted_feed_events 'events/feed.:format/:key', :controller => 'events', :action => 'feed'
+  map.resources :events
   
 
   # Some stuff for sorting the event list

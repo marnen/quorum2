@@ -2,6 +2,7 @@
 class EventsController < ApplicationController
   layout "standard", :except => [:export, :feed] # no layout needed on export, since it generates an iCal file
   before_filter :login_required, :except => :feed
+  before_filter :login_from_key, :only => :feed
   after_filter :ical_header, :only => :export # assign the correct MIME type so that it gets recognized as an iCal event
   
   make_resourceful do
@@ -41,7 +42,9 @@ class EventsController < ApplicationController
   # Generate an RSS feed of events.
   def feed
     respond_to do |format|
-      format.rss
+      format.rss do
+        @key = params[:key]
+      end
     end
   end
   
@@ -160,5 +163,10 @@ class EventsController < ApplicationController
   # Return an HTTP header with proper MIME type for iCal.
   def ical_header
     headers['Content-Type'] = 'text/calendar'
+  end
+  
+  # Log user in based on feed_key.
+  def login_from_key
+    params[:feed_user] = User.find_by_feed_key(params[:key])
   end
 end

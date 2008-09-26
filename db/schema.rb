@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 11) do
+ActiveRecord::Schema.define(:version => 12) do
 
   create_table "commitments", :force => true do |t|
     t.column "event_id", :integer, :null => false
@@ -71,6 +71,9 @@ ActiveRecord::Schema.define(:version => 11) do
     t.column "coords", :point
     t.column "role_id", :integer, :default => 1
     t.column "show_contact", :boolean, :default => true
+    t.column "feed_key", :string, :limit => 32, :null => false
   end
+
+  add_index "users", ["feed_key"], :name => "index_users_on_feed_key", :unique => true
 
 end

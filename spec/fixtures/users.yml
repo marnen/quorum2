@@ -11,6 +11,7 @@ quentin:
   lastname: Quackenbush
   role: user
   state: ny
+  feed_key: <%= 'a' * 32 %>
   
 aaron:
   id: 2
@@ -21,6 +22,7 @@ aaron:
   activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a 
   role: user
   state: nj
+  feed_key: <%= 'b' * 32 %>
 
 marnen:
   firstname: Marnen
@@ -38,6 +40,7 @@ marnen:
   zip: 12203
   role: admin
   show_contact: true
+  feed_key: <%= 'c' * 32 %>
 
 millie:
   firstname: Millie
@@ -52,3 +55,4 @@ millie:
   state: "on"
   zip: H0H 0H0
   show_contact: false
+  feed_key: <%= 'd' * 32 %>

@@ -47,11 +47,11 @@ describe EventsController, "index" do
 end
 
 describe EventsController, "feed.rss" do
-  fixtures :events
+  fixtures :events, :users
   integrate_views
   
   before(:each) do
-    get :feed, :format => 'rss'
+    get :feed, :format => 'rss', :key => User.find(:first).feed_key
   end
   
   it "should be successful" do
@@ -67,6 +67,11 @@ describe EventsController, "feed.rss" do
     m.should_not be_blank
     m.should =~ /version=(["'])2.0\1/
     m.should =~ %r{xmlns:\w+=(["'])http://www.w3.org/2005/Atom\1}
+  end
+  
+  it "should set @key to params[:key]" do
+    params[:key].should_not be_nil
+    assigns[:key].should == params[:key]
   end
   
   it "should have an <atom:link rel='self'> tag" do
@@ -94,7 +99,26 @@ describe EventsController, "feed.rss" do
     Event.find(:all).each do |e|
       response.should have_tag('item title',ERB::Util::html_escape(e.name)) # actually, this is XML escape, but close enough
       response.should have_tag('item link', event_url(e))
+      response.should have_tag('item guid', event_url(e))
     end
+  end
+end
+
+describe EventsController, "feed.rss (login)" do
+  integrate_views
+  fixtures :events
+  
+  it "should not list any events if given an invalid feed_key" do
+    User.stub!(:find_by_feed_key).and_return(nil)
+    get :feed, :format => 'rss', :key => 'fake key'
+    response.should_not have_tag('item')
+  end
+  
+  it "should list events if given a valid feed_key" do
+    @user = mock_model(User, :feed_key => 'foo')
+    User.stub!(:find_by_feed_key).and_return(@user)
+    get :feed, :format => 'rss', :key => @user.feed_key
+    response.should have_tag('item')
   end
 end
 
