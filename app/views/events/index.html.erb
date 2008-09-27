@@ -1,9 +1,12 @@
 <% content_for :head do -%>
-  <%= auto_discovery_link_tag :rss, {:action => :feed, :format => :rss, :key => current_user.feed_key} %>
+  <%= auto_discovery_link_tag :rss, rss_url %>
 <% end -%>
 <% content_for :javascript do -%>
   <%= javascript_include_tag :defaults, 'lowpro/lowpro', 'events/index' %>
 <% end -%>
+<p class="rss">
+  <%= h(_("Your personal %{RSS_feed} for this page is available at %{URL}")) % {:RSS_feed => link_to(h(_('RSS feed')), rss_url), :URL => content_tag(:span, h(rss_url), :class => :url)} %>
+</p>
 <table class="events">
 	<tr>
 		<td class="edit"><!-- blank --></td>

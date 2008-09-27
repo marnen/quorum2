@@ -47,6 +47,12 @@ describe "/events/index" do
 
   it "should contain an autodiscovery link for the RSS feed" do
     render 'events/index'
-    response[:head].should have_tag("link[title=RSS][href=#{formatted_feed_events_url(:format => :rss, :key => User.current_user.feed_key)}]")
+    response[:head].should have_tag("link[title=RSS][href=#{rss_url}]")
+  end
+  
+  it "should contain a link and a URL for  the RSS feed" do
+    render 'events/index'
+    response.should have_tag(".rss a[href=#{rss_url}]")
+    response.should have_tag(".rss .url", %r{#{rss_url}})
   end
 end

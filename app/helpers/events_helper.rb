@@ -120,6 +120,15 @@ module EventsHelper
   def map_link(event)
     link_to h(_("map")), url_for(:controller => 'events', :action => 'map', :id => event.id), :target => 'map'
   end
+  
+  # Generates an RSS URL for the current user's events feed.
+  def rss_url
+    if User.current_user
+      formatted_feed_events_url(:format => :rss, :key => User.current_user.feed_key)
+    else
+      nil
+    end
+  end
 
   # Generates a sort link (e.g., for a table header).
   # _title_:: Display text for the link (will be treated as a gettext key).

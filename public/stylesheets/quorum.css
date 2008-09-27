@@ -23,6 +23,10 @@ td.edit { background-color: transparent; font-size: 90%; }
 
 a.ical   { color: white; font-size: 9px; font-family: Verdana, Tahoma, Arial, Geneva, sans-serif; font-weight: bold; text-decoration: none; background-color: red; text-transform: uppercase; border: outset 1px #900 }
 
+.rss { font-size: 90%; background-repeat: no-repeat; background-image: url('../images/feed-icon-14x14.png'); padding-left: 17px; min-height: 14px; }
+
+.url { font-weight: bolder; }
+
 .fieldWithErrors { background-color: red }
 .fieldWithErrors input { background-color: #fcc; color: black }
 

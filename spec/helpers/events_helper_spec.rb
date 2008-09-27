@@ -129,5 +129,20 @@ describe EventsHelper, "list_names" do
   it "should return an empty string when called with nil argument" do
     list_names(nil).should == ''
   end
+end
+
+describe EventsHelper, "rss_url" do
+  fixtures :users
   
+  it "should return the RSS feed URL for the current user" do
+    User.current_user = users(:marnen)
+    rss_url.should == formatted_feed_events_url(:format => :rss, :key => users(:marnen).feed_key)
+  end
+  
+  it "should return nil if there is no current user" do
+    User.current_user = false
+    rss_url.should be_nil
+    User.current_user = nil
+    rss_url.should be_nil
+  end
 end
