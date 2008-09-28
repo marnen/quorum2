@@ -74,6 +74,10 @@ describe EventsController, "feed.rss" do
     assigns[:key].should == params[:key]
   end
   
+  it "should set params[:feed_user] to the user whom the key belongs to" do
+    params[:feed_user].should == User.find_by_feed_key(params[:key])
+  end
+  
   it "should have an <atom:link rel='self'> tag" do
     css_select('rss').each do |rss|
       @m = css_select(rss, 'channel')[0].to_s[%r{<\s*atom:link(\s*[^>]*)?>}]
@@ -84,15 +88,15 @@ describe EventsController, "feed.rss" do
   end
   
   it "should have an appropriate <title> tag" do
-    response.should have_tag('title', %r{#{SITE_TITLE}})
+    response.should have_tag('channel > title', %r{#{SITE_TITLE}})
   end
   
   it "should link to the event list" do
-    response.should have_tag('link', events_url)
+    response.should have_tag('channel > link', events_url)
   end
   
-  it "should contain a description element" do
-    response.should have_tag('description')
+  it "should contain a <description> element, including (among other things) the name of the user whose feed it is" do
+    response.should have_tag('channel > description', %r{#{ERB::Util::html_escape params[:feed_user].fullname}})
   end
     
   it "should contain an entry for every event, with <title>, <description> (with address and description), <link>, <guid>, and <pubDate> elements" do
@@ -117,7 +121,7 @@ describe EventsController, "feed.rss (login)" do
   end
   
   it "should list events if given a valid feed_key" do
-    @user = mock_model(User, :feed_key => 'foo')
+    @user = mock_model(User, :feed_key => 'foo', :fullname => 'John Smith')
     User.stub!(:find_by_feed_key).and_return(@user)
     get :feed, :format => 'rss', :key => @user.feed_key
     response.should have_tag('item')

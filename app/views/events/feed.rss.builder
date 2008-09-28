@@ -1,10 +1,14 @@
 xml.instruct! :xml, :version => "1.0"
-xml.rss :version => '2.0', :"xmlns:atom" => "http://www.w3.org/2005/Atom" do
+xml.rss :version => '2.0', %s{xmlns:atom} => "http://www.w3.org/2005/Atom" do
   xml.channel do
     xml.tag! 'atom:link', :href => formatted_feed_events_url(:format => :rss, :key => @key), :rel => :self
-    xml.title _("%s Events") % SITE_TITLE
+    xml.title _("%{Quorum} Events") % {:Quorum => SITE_TITLE}
     xml.link events_url
-    xml.description _("The latest events from %s.") % SITE_TITLE
+    xml.description do
+      if !params[:feed_user].blank?
+        xml.text!(_("The latest events from %{Quorum}, generated for %{user}.") % {:Quorum => SITE_TITLE, :user => params[:feed_user].fullname})
+      end
+    end
     if !params[:feed_user].blank?
       current_objects.each do |e|
         xml.item do

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: quorum 2.0.0\n"
-"POT-Creation-Date: 2008-03-07 02:21-0500\n"
+"POT-Creation-Date: 2008-09-28 11:16-0400\n"
 "PO-Revision-Date: 2008-03-02 22:23-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,73 +16,105 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: app/controllers/event_controller.rb:8
+#: app/controllers/events_controller.rb:14
 msgid "Upcoming events"
 msgstr ""
 
-#: app/controllers/event_controller.rb:13
-#: app/views/layouts/standard.html.erb:15
+#: app/controllers/events_controller.rb:20
+#: app/views/layouts/standard.html.erb:17
 msgid "Add event"
 msgstr ""
 
-#: app/controllers/event_controller.rb:16
-#: app/controllers/event_controller.rb:34
-msgid "Your event has been saved."
-msgstr ""
-
-#: app/controllers/event_controller.rb:23
-msgid "Edit event"
-msgstr ""
-
-#: app/controllers/event_controller.rb:28
+#: app/controllers/events_controller.rb:25
 msgid "Couldn't find any event to edit!"
 msgstr ""
 
-#: app/controllers/event_controller.rb:47
+#: app/controllers/events_controller.rb:28
+msgid "You are not authorized to edit that event."
+msgstr ""
+
+#: app/controllers/events_controller.rb:31
+msgid "Edit event"
+msgstr ""
+
+#: app/controllers/events_controller.rb:37
+msgid "Your event has been saved."
+msgstr ""
+
+#: app/controllers/events_controller.rb:76
+msgid "You are not authorized to delete events."
+msgstr ""
+
+#: app/controllers/events_controller.rb:82
+msgid "The selected event was deleted."
+msgstr ""
+
+#: app/controllers/events_controller.rb:84
+msgid "Couldn't find any event to delete!"
+msgstr ""
+
+#: app/controllers/events_controller.rb:121
 msgid "Couldn't find any event to export!"
 msgstr ""
 
-#: app/controllers/event_controller.rb:68
+#: app/controllers/events_controller.rb:149
 msgid "Couldn't find that event!"
 msgstr ""
 
-#: app/controllers/event_controller.rb:71
+#: app/controllers/events_controller.rb:152
 msgid "Map for %s"
 msgstr ""
 
-#: app/helpers/event_helper.rb:12
-msgid "attending"
+#: app/controllers/sessions_controller.rb:7
+msgid "Login"
 msgstr ""
 
-#: app/helpers/event_helper.rb:12
-msgid "not attending"
+#: app/controllers/sessions_controller.rb:18
+msgid "Logged in successfully"
 msgstr ""
 
-#: app/helpers/event_helper.rb:12
-msgid "uncommitted"
+#: app/controllers/sessions_controller.rb:28
+msgid "You have been logged out."
 msgstr ""
 
-#: app/helpers/event_helper.rb:14
-msgid "You are currently %s."
+#: app/controllers/users_controller.rb:40
+msgid "Your changes have been saved."
 msgstr ""
 
-#: app/helpers/event_helper.rb:17
-msgid "Change status"
+#: app/controllers/users_controller.rb:47
+msgid "Edit profile"
 msgstr ""
 
-#: app/helpers/event_helper.rb:34 app/helpers/event_helper.rb:36
+#: app/controllers/users_controller.rb:63
+msgid "You are not authorized to perform that action."
+msgstr ""
+
+#: app/controllers/users_controller.rb:66
+#: app/views/layouts/standard.html.erb:20
+msgid "Contact list"
+msgstr ""
+
+#: app/helpers/events_helper.rb:29
+msgid "delete"
+msgstr ""
+
+#: app/helpers/events_helper.rb:39 app/helpers/events_helper.rb:41
 msgid "%.1f miles"
 msgstr ""
 
-#: app/helpers/event_helper.rb:42
+#: app/helpers/events_helper.rb:47
 msgid "edit"
 msgstr ""
 
-#: app/helpers/event_helper.rb:73
+#: app/helpers/events_helper.rb:87
 msgid "iCal"
 msgstr ""
 
-#: app/helpers/event_helper.rb:99
+#: app/helpers/events_helper.rb:109
+msgid "Get directions"
+msgstr ""
+
+#: app/helpers/events_helper.rb:121
 msgid "map"
 msgstr ""
 
@@ -166,6 +198,30 @@ msgstr ""
 msgid "Event|Created by"
 msgstr ""
 
+#: app/models/event.rb:-
+msgid "Event|Deleted"
+msgstr ""
+
+#: app/models/event.rb:-
+msgid "Event|Description"
+msgstr ""
+
+#: app/models/role.rb:-
+msgid "role"
+msgstr ""
+
+#: app/models/role.rb:-
+msgid "Role|Name"
+msgstr ""
+
+#: app/models/role.rb:-
+msgid "Role|Created at"
+msgstr ""
+
+#: app/models/role.rb:-
+msgid "Role|Updated at"
+msgstr ""
+
 #: app/models/state.rb:-
 msgid "state"
 msgstr ""
@@ -182,79 +238,119 @@ msgstr ""
 msgid "State|Name"
 msgstr ""
 
-#: app/views/event/list.html.erb:4 app/views/event/new.html.erb:8
-msgid "Date"
+#: app/views/events/_attendance.html.erb:1 app/views/events/_event.html.erb:1
+msgid "attending"
 msgstr ""
 
-#: app/views/event/list.html.erb:5
-msgid "Event"
+#: app/views/events/_attendance.html.erb:1 app/views/events/_event.html.erb:1
+msgid "not attending"
 msgstr ""
 
-#: app/views/event/list.html.erb:6
+#: app/views/events/_attendance.html.erb:1 app/views/events/_event.html.erb:1
+msgid "uncommitted"
+msgstr ""
+
+#: app/views/events/_attendance.html.erb:5
+msgid "You are currently %s."
+msgstr ""
+
+#: app/views/events/_attendance.html.erb:8
+msgid "Change status"
+msgstr ""
+
+#: app/views/events/index.html.erb:8
+msgid "Your personal %{RSS_feed} for this page is available at %{URL}"
+msgstr ""
+
+#: app/views/events/index.html.erb:8
+msgid "RSS feed"
+msgstr ""
+
+#: app/views/events/index.html.erb:15 app/views/events/new.html.erb:8
+msgid "Description"
+msgstr ""
+
+#: app/views/events/index.html.erb:16
 msgid "Status"
 msgstr ""
 
-#: app/views/event/list.html.erb:7
+#: app/views/events/index.html.erb:17
 msgid "Attending"
 msgstr ""
 
-#: app/views/event/list.html.erb:8
+#: app/views/events/index.html.erb:18
 msgid "Not attending"
 msgstr ""
 
-#: app/views/event/new.html.erb:4
+#: app/views/events/new.html.erb:4
 msgid "Event name"
 msgstr ""
 
-#: app/views/event/new.html.erb:12
+#: app/views/events/new.html.erb:12
+msgid "Date"
+msgstr ""
+
+#: app/views/events/new.html.erb:16
 msgid "Site"
 msgstr ""
 
-#: app/views/event/new.html.erb:16
+#: app/views/events/new.html.erb:20 app/views/users/new.html.erb:32
 msgid "Street address"
 msgstr ""
 
-#: app/views/event/new.html.erb:23
+#: app/views/events/new.html.erb:27 app/views/users/new.html.erb:40
 msgid "City"
 msgstr ""
 
-#: app/views/event/new.html.erb:27
+#: app/views/events/new.html.erb:31 app/views/users/new.html.erb:44
 msgid "State"
 msgstr ""
 
-#: app/views/event/new.html.erb:31
+#: app/views/events/new.html.erb:35
 msgid "Zip"
 msgstr ""
 
-#: app/views/event/new.html.erb:35
+#: app/views/events/new.html.erb:39
 msgid "Save changes"
 msgstr ""
 
-#: app/views/layouts/standard.html.erb:14
+#: app/views/layouts/standard.html.erb:16
 msgid "List events"
 msgstr ""
 
-#: app/views/layouts/standard.html.erb:16
+#: app/views/layouts/standard.html.erb:18
 msgid "User profile"
 msgstr ""
 
-#: app/views/layouts/standard.html.erb:17
+#: app/views/layouts/standard.html.erb:22
 msgid "Log out"
 msgstr ""
 
-#: app/views/layouts/standard.html.erb:19
+#: app/views/layouts/standard.html.erb:24
 msgid "Welcome, %s!"
 msgstr ""
 
+#: app/views/sessions/new.html.erb:1
+msgid "Welcome to <span class=\"siteName\">%s</span>!"
+msgstr ""
+
 #: app/views/sessions/new.html.erb:2
-msgid "E-mail address"
+msgid ""
+"This is <span class=\"siteName\">%{site}</span>, an invitation and "
+"scheduling system. If you have an account, please log in here; otherwise, "
+"please <a href=\"%{url}\">register</a>."
 msgstr ""
 
-#: app/views/sessions/new.html.erb:5
-msgid "Password"
+#: app/views/sessions/new.html.erb:6
+msgid "E-mail address:"
 msgstr ""
 
-#: app/views/sessions/new.html.erb:15
+#: app/views/sessions/new.html.erb:10
+#: app/views/user_mailer/signup_notification.html.erb:4
+msgid "Password:"
+msgstr ""
+
+#: app/views/sessions/new.html.erb:21
 msgid "Log in"
 msgstr ""
 
@@ -266,10 +362,83 @@ msgstr ""
 msgid "E-mail address (this will be your username):"
 msgstr ""
 
-#: app/views/user_mailer/signup_notification.html.erb:4
-msgid "Password:"
-msgstr ""
-
 #: app/views/user_mailer/signup_notification.html.erb:6
 msgid "Visit this URL to activate your account:"
+msgstr ""
+
+#: app/views/users/list.html.erb:3
+msgid "Name"
+msgstr ""
+
+#: app/views/users/list.html.erb:4
+msgid "Address"
+msgstr ""
+
+#: app/views/users/new.html.erb:1
+msgid "Register"
+msgstr ""
+
+#: app/views/users/new.html.erb:4
+msgid "Who are you?"
+msgstr ""
+
+#: app/views/users/new.html.erb:7
+msgid "E-mail address"
+msgstr ""
+
+#: app/views/users/new.html.erb:7
+msgid "(this will be your user name)"
+msgstr ""
+
+#: app/views/users/new.html.erb:11
+msgid "First name"
+msgstr ""
+
+#: app/views/users/new.html.erb:15
+msgid "Last name"
+msgstr ""
+
+#: app/views/users/new.html.erb:19
+msgid "Password"
+msgstr ""
+
+#: app/views/users/new.html.erb:23
+msgid "Password again"
+msgstr ""
+
+#: app/views/users/new.html.erb:23
+msgid "(for confirmation)"
+msgstr ""
+
+#: app/views/users/new.html.erb:28
+msgid "Where do you live?"
+msgstr ""
+
+#: app/views/users/new.html.erb:29
+msgid ""
+"This information is optional, but if you provide it, we can tell you the "
+"distance from your house to events. And of course we'll never share it with "
+"anyone else without your permission (except anonymously for geocoding)."
+msgstr ""
+
+#: app/views/users/new.html.erb:36
+msgid "Address line 2"
+msgstr ""
+
+#: app/views/users/new.html.erb:48
+msgid "ZIP code"
+msgstr ""
+
+#: app/views/users/new.html.erb:52
+msgid ""
+"Make my address visible in the contact list (available to administrators "
+"only)"
+msgstr ""
+
+#: app/views/users/new.html.erb:54
+msgid "Save"
+msgstr ""
+
+#: app/views/users/new.html.erb:54
+msgid "Sign up"
 msgstr ""
