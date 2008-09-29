@@ -1,0 +1,19 @@
+%h1= _('Welcome to <span class="siteName">%s</span>!') % h(SITE_TITLE)
+%p= _('This is <span class="siteName">%{site}</span>, an invitation and scheduling system. If you have an account, please log in here; otherwise, please <a href="%{url}">register</a>.') % {:site => h(SITE_TITLE), :url => register_url}
+- form_tag session_path do
+  %table.login
+    %tr
+      %td
+        %label{:for => "email"}&= _("E-mail address:")
+      %td= text_field_tag 'email'
+    %tr
+      %td
+        %label{:for => "password"}&= _("Password:")
+      %td= password_field_tag 'password'
+- if false
+  /
+    Uncomment this if you want this functionality
+    %p
+      %label{:for => "remember_me"} Remember me:
+      = check_box_tag 'remember_me'
+= submit_tag _('Log in')
