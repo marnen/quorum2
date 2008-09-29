@@ -11,12 +11,12 @@
 
   %body
     %p
-      = content_tag(:span, h(SITE_TITLE), :class => :siteName) + '|'
-      = link_to(h(_("List events")), url_for(:controller => :events, :action => :index)) + '|'
-      = link_to(h(_("Add event")), url_for(:controller => :events, :action => :new)) + '|'
-      = link_to(h(_("User profile")), profile_path) + '|'
+      = content_tag(:span, h(SITE_TITLE), :class => :siteName) + ' | '
+      = link_to(h(_("List events")), url_for(:controller => :events, :action => :index)) + ' | '
+      = link_to(h(_("Add event")), url_for(:controller => :events, :action => :new)) + ' | '
+      = link_to(h(_("User profile")), profile_path) + ' | '
       - if User.current_user.role.name == 'admin'
-        = link_to(h(_("Contact list")), list_users_path) + '|'
+        = link_to(h(_("Contact list")), list_users_path) + ' | '
       = link_to(h(_("Log out")), url_for(:controller => :logout))
       -# Is there a better way to generate that logout URL?
     %p= h(_("Welcome, %s!")) % content_tag(:span, h(current_user.fullname), :class => :name)
