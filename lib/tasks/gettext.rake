@@ -8,8 +8,9 @@ namespace :gettext do
   desc "Update pot/po files to match new version." 
   task :updatepo do
     require 'gettext/utils'
+    require 'haml_parser'
     MY_APP_TEXT_DOMAIN = "quorum" 
-    MY_APP_VERSION     = "quorum 2.0.0" 
-    GetText.update_pofiles(MY_APP_TEXT_DOMAIN, Dir.glob("{app,lib}/**/*.{rb,rhtml,erb}"), MY_APP_VERSION)
+    MY_APP_VERSION     = "quorum 2 beta" 
+    GetText.update_pofiles(MY_APP_TEXT_DOMAIN, Dir.glob("{app,lib}/**/*.{rb,rhtml,erb,haml}"), MY_APP_VERSION)
   end
 end

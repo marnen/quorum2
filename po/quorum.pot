@@ -6,8 +6,8 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: quorum 2.0.0\n"
-"POT-Creation-Date: 2008-09-28 11:16-0400\n"
+"Project-Id-Version: quorum 2 beta\n"
+"POT-Creation-Date: 2008-09-29 16:58-0400\n"
 "PO-Revision-Date: 2008-03-02 22:23-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgid "Upcoming events"
 msgstr ""
 
 #: app/controllers/events_controller.rb:20
-#: app/views/layouts/standard.html.erb:17
+#: app/views/layouts/standard.html.haml:16
 msgid "Add event"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgid "You are not authorized to perform that action."
 msgstr ""
 
 #: app/controllers/users_controller.rb:66
-#: app/views/layouts/standard.html.erb:20
+#: app/views/layouts/standard.html.haml:19
 msgid "Contact list"
 msgstr ""
 
@@ -238,122 +238,6 @@ msgstr ""
 msgid "State|Name"
 msgstr ""
 
-#: app/views/events/_attendance.html.erb:1 app/views/events/_event.html.erb:1
-msgid "attending"
-msgstr ""
-
-#: app/views/events/_attendance.html.erb:1 app/views/events/_event.html.erb:1
-msgid "not attending"
-msgstr ""
-
-#: app/views/events/_attendance.html.erb:1 app/views/events/_event.html.erb:1
-msgid "uncommitted"
-msgstr ""
-
-#: app/views/events/_attendance.html.erb:5
-msgid "You are currently %s."
-msgstr ""
-
-#: app/views/events/_attendance.html.erb:8
-msgid "Change status"
-msgstr ""
-
-#: app/views/events/index.html.erb:8
-msgid "Your personal %{RSS_feed} for this page is available at %{URL}"
-msgstr ""
-
-#: app/views/events/index.html.erb:8
-msgid "RSS feed"
-msgstr ""
-
-#: app/views/events/index.html.erb:15 app/views/events/new.html.erb:8
-msgid "Description"
-msgstr ""
-
-#: app/views/events/index.html.erb:16
-msgid "Status"
-msgstr ""
-
-#: app/views/events/index.html.erb:17
-msgid "Attending"
-msgstr ""
-
-#: app/views/events/index.html.erb:18
-msgid "Not attending"
-msgstr ""
-
-#: app/views/events/new.html.erb:4
-msgid "Event name"
-msgstr ""
-
-#: app/views/events/new.html.erb:12
-msgid "Date"
-msgstr ""
-
-#: app/views/events/new.html.erb:16
-msgid "Site"
-msgstr ""
-
-#: app/views/events/new.html.erb:20 app/views/users/new.html.erb:32
-msgid "Street address"
-msgstr ""
-
-#: app/views/events/new.html.erb:27 app/views/users/new.html.erb:40
-msgid "City"
-msgstr ""
-
-#: app/views/events/new.html.erb:31 app/views/users/new.html.erb:44
-msgid "State"
-msgstr ""
-
-#: app/views/events/new.html.erb:35
-msgid "Zip"
-msgstr ""
-
-#: app/views/events/new.html.erb:39
-msgid "Save changes"
-msgstr ""
-
-#: app/views/layouts/standard.html.erb:16
-msgid "List events"
-msgstr ""
-
-#: app/views/layouts/standard.html.erb:18
-msgid "User profile"
-msgstr ""
-
-#: app/views/layouts/standard.html.erb:22
-msgid "Log out"
-msgstr ""
-
-#: app/views/layouts/standard.html.erb:24
-msgid "Welcome, %s!"
-msgstr ""
-
-#: app/views/sessions/new.html.erb:1
-msgid "Welcome to <span class=\"siteName\">%s</span>!"
-msgstr ""
-
-#: app/views/sessions/new.html.erb:2
-msgid ""
-"This is <span class=\"siteName\">%{site}</span>, an invitation and "
-"scheduling system. If you have an account, please log in here; otherwise, "
-"please <a href=\"%{url}\">register</a>."
-msgstr ""
-
-#: app/views/sessions/new.html.erb:6
-msgid "E-mail address:"
-msgstr ""
-
-#: app/views/sessions/new.html.erb:10
-#: app/views/user_mailer/signup_notification.html.erb:4
-msgid "Password:"
-msgstr ""
-
-#: app/views/sessions/new.html.erb:21
-msgid "Log in"
-msgstr ""
-
 #: app/views/user_mailer/signup_notification.html.erb:1
 msgid "Your account has been created."
 msgstr ""
@@ -362,83 +246,206 @@ msgstr ""
 msgid "E-mail address (this will be your username):"
 msgstr ""
 
+#: app/views/user_mailer/signup_notification.html.erb:4
+#: app/views/sessions/new.html.haml:11
+msgid "Password:"
+msgstr ""
+
 #: app/views/user_mailer/signup_notification.html.erb:6
 msgid "Visit this URL to activate your account:"
 msgstr ""
 
-#: app/views/users/list.html.erb:3
+#: app/views/events/_attendance.html.haml:1
+#: app/views/events/_event.html.haml:1
+msgid "attending"
+msgstr ""
+
+#: app/views/events/_attendance.html.haml:1
+#: app/views/events/_event.html.haml:1
+msgid "not attending"
+msgstr ""
+
+#: app/views/events/_attendance.html.haml:1
+#: app/views/events/_event.html.haml:1
+msgid "uncommitted"
+msgstr ""
+
+#: app/views/events/_attendance.html.haml:5
+msgid "You are currently %s."
+msgstr ""
+
+#: app/views/events/_attendance.html.haml:8
+msgid "Change status"
+msgstr ""
+
+#: app/views/events/index.html.haml:5
+msgid "Your personal %{RSS_feed} for this page is available at %{URL}"
+msgstr ""
+
+#: app/views/events/index.html.haml:5
+msgid "RSS feed"
+msgstr ""
+
+#: app/views/events/index.html.haml:18 app/views/events/new.html.haml:9
+msgid "Description"
+msgstr ""
+
+#: app/views/events/index.html.haml:19
+msgid "Status"
+msgstr ""
+
+#: app/views/events/index.html.haml:20
+msgid "Attending"
+msgstr ""
+
+#: app/views/events/index.html.haml:21
+msgid "Not attending"
+msgstr ""
+
+#: app/views/events/new.html.haml:4
+msgid "Event name"
+msgstr ""
+
+#: app/views/events/new.html.haml:12
+msgid "Date"
+msgstr ""
+
+#: app/views/events/new.html.haml:17
+msgid "Site"
+msgstr ""
+
+#: app/views/events/new.html.haml:20 app/views/users/new.html.haml:33
+msgid "Street address"
+msgstr ""
+
+#: app/views/events/new.html.haml:26 app/views/users/new.html.haml:39
+msgid "City"
+msgstr ""
+
+#: app/views/events/new.html.haml:29 app/views/users/new.html.haml:42
+msgid "State"
+msgstr ""
+
+#: app/views/events/new.html.haml:34
+msgid "Zip"
+msgstr ""
+
+#: app/views/events/new.html.haml:36
+msgid "Save changes"
+msgstr ""
+
+#: app/views/layouts/standard.html.haml:15
+msgid "List events"
+msgstr ""
+
+#: app/views/layouts/standard.html.haml:17
+msgid "User profile"
+msgstr ""
+
+#: app/views/layouts/standard.html.haml:20
+msgid "Log out"
+msgstr ""
+
+#: app/views/layouts/standard.html.haml:22
+msgid "Welcome, %s!"
+msgstr ""
+
+#: app/views/sessions/new.html.haml:1
+msgid "Welcome to <span class=\"siteName\">%s</span>!"
+msgstr ""
+
+#: app/views/sessions/new.html.haml:2
+msgid ""
+"This is <span class=\"siteName\">%{site}</span>, an invitation and "
+"scheduling system. If you have an account, please log in here; otherwise, "
+"please <a href=\"%{url}\">register</a>."
+msgstr ""
+
+#: app/views/sessions/new.html.haml:7
+msgid "E-mail address:"
+msgstr ""
+
+#: app/views/sessions/new.html.haml:19
+msgid "Log in"
+msgstr ""
+
+#: app/views/users/list.html.haml:3
 msgid "Name"
 msgstr ""
 
-#: app/views/users/list.html.erb:4
+#: app/views/users/list.html.haml:4
+msgid "E-mail"
+msgstr ""
+
+#: app/views/users/list.html.haml:5
 msgid "Address"
 msgstr ""
 
-#: app/views/users/new.html.erb:1
+#: app/views/users/new.html.haml:2
 msgid "Register"
 msgstr ""
 
-#: app/views/users/new.html.erb:4
+#: app/views/users/new.html.haml:5
 msgid "Who are you?"
 msgstr ""
 
-#: app/views/users/new.html.erb:7
+#: app/views/users/new.html.haml:9
 msgid "E-mail address"
 msgstr ""
 
-#: app/views/users/new.html.erb:7
+#: app/views/users/new.html.haml:11
 msgid "(this will be your user name)"
 msgstr ""
 
-#: app/views/users/new.html.erb:11
+#: app/views/users/new.html.haml:14
 msgid "First name"
 msgstr ""
 
-#: app/views/users/new.html.erb:15
+#: app/views/users/new.html.haml:17
 msgid "Last name"
 msgstr ""
 
-#: app/views/users/new.html.erb:19
+#: app/views/users/new.html.haml:20
 msgid "Password"
 msgstr ""
 
-#: app/views/users/new.html.erb:23
+#: app/views/users/new.html.haml:24
 msgid "Password again"
 msgstr ""
 
-#: app/views/users/new.html.erb:23
+#: app/views/users/new.html.haml:26
 msgid "(for confirmation)"
 msgstr ""
 
-#: app/views/users/new.html.erb:28
+#: app/views/users/new.html.haml:29
 msgid "Where do you live?"
 msgstr ""
 
-#: app/views/users/new.html.erb:29
+#: app/views/users/new.html.haml:30
 msgid ""
 "This information is optional, but if you provide it, we can tell you the "
 "distance from your house to events. And of course we'll never share it with "
 "anyone else without your permission (except anonymously for geocoding)."
 msgstr ""
 
-#: app/views/users/new.html.erb:36
+#: app/views/users/new.html.haml:36
 msgid "Address line 2"
 msgstr ""
 
-#: app/views/users/new.html.erb:48
+#: app/views/users/new.html.haml:45
 msgid "ZIP code"
 msgstr ""
 
-#: app/views/users/new.html.erb:52
+#: app/views/users/new.html.haml:50
 msgid ""
 "Make my address visible in the contact list (available to administrators "
 "only)"
 msgstr ""
 
-#: app/views/users/new.html.erb:54
+#: app/views/users/new.html.haml:52
 msgid "Save"
 msgstr ""
 
-#: app/views/users/new.html.erb:54
+#: app/views/users/new.html.haml:52
 msgid "Sign up"
 msgstr ""
