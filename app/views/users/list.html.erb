@@ -1,11 +1,13 @@
 <table class="users">
   <tr>
     <th><%= h(_('Name')) %></th>
+    <th><%= h(_('E-mail')) %></th>
     <th><%= h(_('Address')) %></th>
   </tr>
   <% for user in @users do -%>
     <tr id="<%= 'user_' + user.id.to_s %>">
       <%= content_tag(:td, h([user.lastname, user.firstname].compact.join(', '))) %>
+      <%= content_tag(:td, user.show_contact ? h(user.email) : '') %>
       <%= content_tag(:td, user.show_contact ? [user.street, user.street2, "#{user.city}, #{user.state.code} #{user.zip}, #{user.state.country.code}"].compact.collect {|s| h(s)}.join(tag(:br)) : '') %>
     </tr>
   <% end -%>

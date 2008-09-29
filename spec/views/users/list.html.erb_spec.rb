@@ -25,12 +25,14 @@ describe "/users/list" do
     end
   end
   
-  it "should show addresses for each user who has not requested to be hidden" do
+  it "should show street and e-mail addresses for each user who has not requested to be hidden" do
     for u in @users
       if u.show_contact
         response.should have_tag("tr#user_#{u.id} td", /#{h(u.street)}.*#{h(u.street2)}.*#{h(u.city)}.*#{h(u.state.code)}/)
+        response.should have_tag("tr#user_#{u.id} td", h(u.email))
       else
         response.should have_tag("tr#user_#{u.id} td", "")
+        response.should_not have_tag("tr#user_#{u.id} *", h(u.email))
       end
     end
   end
