@@ -8,12 +8,12 @@ describe 'events/_event' do
   fixtures :events, :countries, :states, :commitments, :users
 
   before(:all) do
-    @event_orig = Event.find(:first).clone
+    @event_orig = Event.find(:first)
     @user = User.find(:first)
   end
   
   before(:each) do
-    @event = @event_orig.clone
+    @event = @event_orig
     User.stub!(:current_user).and_return(@user)
   end
 
