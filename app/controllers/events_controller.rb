@@ -149,7 +149,7 @@ class EventsController < ApplicationController
       flash[:error] = _("Couldn't find that event!")
       redirect_to(:action => :index) and return
     end
-    @page_title = _("Map for %s" % @event.name)
+    @page_title = _("Map for %{event}") % {:event => @event.name}
   end
   
   # Return non-deleted events, optionally ordered as specified by params[:order] and [:direction]. Provided for use with make_resourceful[http://mr.hamptoncatlin.com].

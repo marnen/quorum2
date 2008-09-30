@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: quorum 2 beta\n"
-"POT-Creation-Date: 2008-09-29 16:58-0400\n"
+"POT-Creation-Date: 2008-09-30 01:32-0400\n"
 "PO-Revision-Date: 2008-03-02 22:23-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgid "Couldn't find that event!"
 msgstr ""
 
 #: app/controllers/events_controller.rb:152
-msgid "Map for %s"
+msgid "Map for %{event}"
 msgstr ""
 
 #: app/controllers/sessions_controller.rb:7
@@ -271,7 +271,7 @@ msgid "uncommitted"
 msgstr ""
 
 #: app/views/events/_attendance.html.haml:5
-msgid "You are currently %s."
+msgid "You are currently %{status}."
 msgstr ""
 
 #: app/views/events/_attendance.html.haml:8
@@ -347,18 +347,17 @@ msgid "Log out"
 msgstr ""
 
 #: app/views/layouts/standard.html.haml:22
-msgid "Welcome, %s!"
+msgid "Welcome, %{user}!"
 msgstr ""
 
 #: app/views/sessions/new.html.haml:1
-msgid "Welcome to <span class=\"siteName\">%s</span>!"
+msgid "Welcome to %{Quorum}!"
 msgstr ""
 
 #: app/views/sessions/new.html.haml:2
 msgid ""
-"This is <span class=\"siteName\">%{site}</span>, an invitation and "
-"scheduling system. If you have an account, please log in here; otherwise, "
-"please <a href=\"%{url}\">register</a>."
+"This is %{Quorum}, an invitation and scheduling system. If you have an "
+"account, please log in here; otherwise, please %{link}register%{/link}."
 msgstr ""
 
 #: app/views/sessions/new.html.haml:7

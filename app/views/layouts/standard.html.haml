@@ -19,7 +19,7 @@
         = link_to(h(_("Contact list")), list_users_path) + ' | '
       = link_to(h(_("Log out")), url_for(:controller => :logout))
       -# Is there a better way to generate that logout URL?
-    %p= h(_("Welcome, %s!")) % content_tag(:span, h(current_user.fullname), :class => :name)
+    %p= h(_("Welcome, %{user}!")) % {:user => content_tag(:span, h(current_user.fullname), :class => :name)}
     - if !flash[:notice].nil?
       .flash_notice= flash[:notice]
     - if !flash[:warning].nil?
