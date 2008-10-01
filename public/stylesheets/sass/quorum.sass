@@ -1,0 +1,102 @@
+body
+  :color black
+  :font-size 12px
+  :font-family Verdana, Tahoma, Arial, Geneva, Helvetica, sans-serif
+  :background-color white
+  
+.name
+  :color red
+  :font-weight bolder
+  
+.hidden
+  :display none
+
+.siteName
+  :color #00c
+  :font
+    :style oblique
+    :weight bolder
+    :size 116%
+.footer
+  :border-top 1px solid black
+  :padding-top 2px
+
+td
+  :background-color #ccc
+th, th a.sort
+  :background-color #666
+  :color white
+
+.map
+  :font-size 90%
+.hint
+  :font
+    :size 90%
+    :weight lighter
+
+span.yes
+  :color #090
+  :font-weight bolder
+span.no
+  :font-weight bolder
+  :color #c00
+span.maybe
+  :color #cc0
+  :font-weight bolder
+
+td.yes
+  :background-color #cfc
+td.no 
+  :background-color #fcc
+td.maybe
+  :background-color #ffc
+
+td.edit
+  :background-color transparent
+  :font-size 90%
+
+a.ical
+  :color white
+  :font
+    :size 9px
+    :family Verdana, Tahoma, Arial, Geneva, sans-serif
+    :weight bold
+  :text
+    :decoration none
+    :transform uppercase
+  :background-color red
+  :border outset 1px #900
+
+
+!rss_icon_url = "url('../images/feed-icon-14x14.png')"
+!rss_icon_size = 14px
+  
+.rss
+  :font-size 90%
+  :background
+    :repeat no-repeat
+    :image = !rss_icon_url
+  :min-height = !rss_icon_size
+  :padding-left = !rss_icon_size + 3px
+
+.url
+  :font-weight bolder
+
+.fieldWithErrors
+  :background-color red
+.fieldWithErrors input
+  :background-color #fcc
+  :color black
+
+.flash_notice
+  :background-color #cfc
+.flash_warning
+  :background-color #ffc
+.flash_error
+  :background-color #fcc
+
+/* Some hCalendar properties...
+abbr
+  :text-decoration inherit
+.uid
+  :display none
