@@ -313,6 +313,21 @@ describe EventsController, "edit" do
   end
 end
 
+describe EventsController, "show" do
+  fixtures :users
+  
+  before(:each) do
+    login_as :quentin
+    @event = Event.new(:id => 3, :name => 'Name of event')
+    Event.stub!(:find).and_return(@event)
+    get :show, :id => @event.id
+  end
+  
+  it "should set the page title" do
+    assigns[:page_title].should_not be_nil
+  end
+end
+
 describe EventsController, "delete" do
   fixtures :users, :roles, :events
   

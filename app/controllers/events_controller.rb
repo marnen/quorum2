@@ -36,6 +36,10 @@ class EventsController < ApplicationController
       flash[:notice] = _("Your event has been saved.")
       redirect_to :action => :index
     end
+    
+    before :show do
+      @page_title = current_object.name
+    end
   end
   
   # Generate an RSS feed of events.

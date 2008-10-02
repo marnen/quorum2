@@ -1,0 +1,3 @@
+%table.events
+  = render :partial => 'table_header', :locals => {:sortlinks => false}
+  = render :partial => 'event', :locals => {:event => current_object}
