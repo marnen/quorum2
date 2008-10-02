@@ -2,10 +2,10 @@
 - status = attendance_status(event, User.current_user)
 %tr.vevent[event]
   %td.edit
-    - if User.current_user.role.name == 'admin' or User.current_user == event.created_by
+    - if event.allow?(:edit)
       = edit_link(event)
       %br
-    - if User.current_user.role.name == 'admin'
+    - if event.allow?(:delete)
       = delete_link(event)
   %td
     %span.uid&= ical_uid(event)

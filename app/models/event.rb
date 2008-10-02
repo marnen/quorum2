@@ -10,6 +10,30 @@ class Event < ActiveRecord::Base
   validates_presence_of :state_id
   before_create :set_created_by_id
   
+  # Returns true if #User.current_user is allowed to perform <i>operation</i>, false otherwise.
+  # <i>Operation</i> may be <tt>:edit</tt> or <tt>:delete</tt>.
+  def allow?(operation)
+    u = User.current_user
+    if !u.kind_of? User
+      return nil
+    elsif u.role.nil?
+      return false
+    else
+      case operation
+        when :delete
+          return u.role.name == 'admin'
+        when :edit
+          if self.created_by == u or u.role.name == 'admin'
+            return true
+          else
+            return false
+          end
+        else
+          return nil
+      end
+    end
+  end
+  
   # Returns an #Array of #User objects with commitment status (for the current #Event) of <i>status</i>,
   # where <i>status</i> may be <tt>:yes</tt> or <tt>:no</tt>.
   def find_committed(status)

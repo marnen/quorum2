@@ -23,7 +23,7 @@ class EventsController < ApplicationController
     end
     
     response_for :edit do
-      if User.current_user.role.name != 'admin' and User.current_user != current_object.created_by
+      if !current_object.allow?(:edit)
         flash[:error] = _("You are not authorized to edit that event.")
         redirect_to :action => :index
       else
@@ -71,19 +71,19 @@ class EventsController < ApplicationController
 
 # Delete an #Event. Admin users can delete any Event; non-admin users can only delete events they created.
   def delete
-    if User.current_user.role.name != 'admin'
-      flash[:error] = _("You are not authorized to delete events.")
-      redirect_to :action => :index and return
-    else
-      begin
-        event = Event.find(params[:id].to_i)
+    event = Event.find(params[:id].to_i)
+    begin
+      if event.allow?(:delete)
         event.hide
         flash[:notice] = _("The selected event was deleted.")
-      rescue
-        flash[:error] = _("Couldn't find any event to delete!")
+      else
+        flash[:error] = _("You are not authorized to delete that event.")
+        redirect_to :action => :index and return
       end
-      redirect_to(:action => :index) and return
+    rescue
+      flash[:error] = _("Couldn't find any event to delete!")
     end
+    redirect_to(:action => :index) and return
   end
 
 =begin

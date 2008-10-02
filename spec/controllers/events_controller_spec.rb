@@ -230,12 +230,12 @@ describe EventsController, "edit" do
   
   before(:each) do
     login_as :marnen # admin
+    User.stub!(:current_user).and_return(users(:marnen))
   end
   
   it "should redirect to list with an error if the user does not own the event and is not an admin" do
     marnen = users(:marnen) # current user
     marnen.stub!(:role).and_return(mock_model(Role, :name => 'user')) # make him non-admin
-    User.stub!(:current_user).and_return(marnen)
     event = Event.find(:first)
     event.stub!(:created_by).and_return(users(:quentin))
     get 'edit', :id => event.id
@@ -248,7 +248,6 @@ describe EventsController, "edit" do
   end
   
   it "should redirect to list with an error if the event does not exist" do
-    User.stub!(:current_user).and_return(users(:marnen))
     get 'edit', :id => 0 # nonexistent
     flash[:error].should_not be_nil
     response.should redirect_to(:action => :index)

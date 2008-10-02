@@ -9,7 +9,9 @@ describe Event, "(general properties)" do
   end
   
   it "should belong to a Country" do
-    pending("should test for :include :country on :state, but I'm not sure how to write that.")
+    opts = Event.reflect_on_association(:state).options
+    opts.should include(:include)
+    opts[:include].should == :country
   end
     
   it "should have many Commitments" do
@@ -44,6 +46,47 @@ describe Event, "(general properties)" do
   it "should have a description" do
     event = Event.new
     event.should respond_to(:description)
+  end
+end
+
+describe Event, "(allow?)" do
+  before(:each) do
+    @event = Event.new
+  end
+  
+  it "should exist with one argument" do
+    @event.should respond_to(:allow?)
+    @event.method(:allow?).arity.should == 1
+  end
+  
+  it "should return true for :delete iff current user has a role of admin, false otherwise" do
+    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :role => nil))
+    @event.allow?(:delete).should == false
+    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :role => mock_model(Role, :name => 'admin')))
+    @event.allow?(:delete).should == true
+  end
+  
+  it "should return true for :edit iff current user has a role of admin or created the event" do
+    @one = mock_model(User, :id => 1, :role => nil)
+    @two = mock_model(User, :id => 2, :role => mock_model(Role, :name => 'foo')) # arbitrary non-admin role
+    @admin = mock_model(User, :id => 3, :role => mock_model(Role, :name => 'admin'))
+    @event.created_by = @two
+    User.stub!(:current_user).and_return(@one)
+    @event.allow?(:edit).should == false
+    User.stub!(:current_user).and_return(@two)
+    @event.allow?(:edit).should == true
+    User.stub!(:current_user).and_return(@admin)
+    @event.allow?(:edit).should == true
+  end
+  
+  it "should return nil for any operation if current user is not a User object" do
+    User.stub!(:current_user).and_return('bogus value')
+    @event.allow?(:edit).should be_nil
+  end
+  
+  it "should return nil for any operation it doesn't know about" do
+    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :role => 'admin'))
+    @event.allow?(:foobar).should be_nil
   end
 end
 
