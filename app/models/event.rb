@@ -10,7 +10,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :state_id
   before_create :set_created_by_id
   
-  # Returns true if #User.current_user is allowed to perform <i>operation</i>, false otherwise.
+  # Returns true if #User.current_user is allowed to perform <i>operation</i> on the current #Event, false otherwise.
   # <i>Operation</i> may be <tt>:edit</tt> or <tt>:delete</tt>.
   def allow?(operation)
     u = User.current_user
