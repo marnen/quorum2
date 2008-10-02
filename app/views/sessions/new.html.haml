@@ -10,10 +10,10 @@
       %td
         %label{:for => "password"}&= _("Password:")
       %td= password_field_tag 'password'
-- if false
-  /
-    Uncomment this if you want this functionality
-    %p
-      %label{:for => "remember_me"} Remember me:
-      = check_box_tag 'remember_me'
-= submit_tag _('Log in')
+  - if false
+    /
+      Uncomment this if you want this functionality
+      %p
+        %label{:for => "remember_me"} Remember me:
+        = check_box_tag 'remember_me'
+  = submit_tag _('Log in')
