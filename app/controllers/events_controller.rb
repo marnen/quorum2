@@ -69,7 +69,7 @@ class EventsController < ApplicationController
   end
 =end
 
-# Delete an #Event. Admin users can delete any Event; non-admin users can only delete events they created.
+# Delete an #Event, subject to #Event#allow?.
   def delete
     event = Event.find(params[:id].to_i)
     begin
@@ -78,7 +78,6 @@ class EventsController < ApplicationController
         flash[:notice] = _("The selected event was deleted.")
       else
         flash[:error] = _("You are not authorized to delete that event.")
-        redirect_to :action => :index and return
       end
     rescue
       flash[:error] = _("Couldn't find any event to delete!")
