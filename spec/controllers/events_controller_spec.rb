@@ -247,6 +247,13 @@ describe EventsController, "edit" do
     response.should_not redirect_to(:action => :index)
   end
   
+  it "should redirect to list with an error if the event does not exist" do
+    User.stub!(:current_user).and_return(users(:marnen))
+    get 'edit', :id => 0 # nonexistent
+    flash[:error].should_not be_nil
+    response.should redirect_to(:action => :index)
+  end
+  
   it "should reuse the new-event form" do
     event = Event.find(:first)
     get 'edit', :id => event.id

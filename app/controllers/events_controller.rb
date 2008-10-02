@@ -5,6 +5,8 @@ class EventsController < ApplicationController
   before_filter :login_from_key, :only => :feed
   after_filter :ical_header, :only => :export # assign the correct MIME type so that it gets recognized as an iCal event
   
+  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
+  
   make_resourceful do
     actions :index, :create, :new, :edit, :update, :show
     
@@ -21,10 +23,7 @@ class EventsController < ApplicationController
     end
     
     response_for :edit do
-      if current_object.nil?
-        flash[:error] = _("Couldn't find any event to edit!")
-        redirect_to(:action => :index) and return
-      elsif User.current_user.role.name != 'admin' and User.current_user != current_object.created_by
+      if User.current_user.role.name != 'admin' and User.current_user != current_object.created_by
         flash[:error] = _("You are not authorized to edit that event.")
         redirect_to :action => :index
       else
@@ -168,5 +167,11 @@ class EventsController < ApplicationController
   # Log user in based on feed_key.
   def login_from_key
     params[:feed_user] = User.find_by_feed_key(params[:key])
+  end
+  
+  # Handler for #RecordNotFound.
+  def record_not_found
+    flash[:error] = _("Couldn't find any event to edit!")
+    redirect_to(:action => :index) and return
   end
 end
