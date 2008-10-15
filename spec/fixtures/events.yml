@@ -9,6 +9,7 @@ one:
   city: Albany
   state: ny
   zip: 12203
+  calendar: one
   coords: ~
 
 two:
@@ -21,4 +22,5 @@ two:
   city: Event 2 city
   state: "on"
   zip: B2B 2B2
+  calendar: one
   coords: ~

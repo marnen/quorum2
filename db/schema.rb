@@ -9,7 +9,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 12) do
+ActiveRecord::Schema.define(:version => 13) do
+
+  create_table "calendars", :force => true do |t|
+    t.column "name", :string, :null => false
+    t.column "created_at", :timestamp
+    t.column "updated_at", :timestamp
+  end
 
   create_table "commitments", :force => true do |t|
     t.column "event_id", :integer, :null => false
@@ -33,10 +39,17 @@ ActiveRecord::Schema.define(:version => 12) do
     t.column "zip", :string
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :point
     t.column "created_by_id", :integer
     t.column "deleted", :boolean
     t.column "description", :text
+    t.column "coords", :point
+    t.column "calendar_id", :integer, :null => false
+  end
+
+  create_table "permissions", :force => true do |t|
+    t.column "user_id", :integer, :null => false
+    t.column "calendar_id", :integer, :null => false
+    t.column "role_id", :integer, :null => false
   end
 
   create_table "roles", :force => true do |t|
@@ -68,10 +81,9 @@ ActiveRecord::Schema.define(:version => 12) do
     t.column "activated_at", :timestamp
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :point
-    t.column "role_id", :integer, :default => 1
     t.column "show_contact", :boolean, :default => true
     t.column "feed_key", :string, :limit => 32, :null => false
+    t.column "coords", :point
   end
 
   add_index "users", ["feed_key"], :name => "index_users_on_feed_key", :unique => true

@@ -3,9 +3,11 @@ class Event < ActiveRecord::Base
   
   belongs_to :created_by, :class_name => "User"
   belongs_to :state, :include => :country
+  belongs_to :calendar
   has_many :commitments
   has_many :users, :through => :commitments
   # validates_presence_of :city
+  validates_presence_of :calendar_id
   validates_presence_of :name
   validates_presence_of :state_id
   before_create :set_created_by_id
@@ -16,20 +18,27 @@ class Event < ActiveRecord::Base
     u = User.current_user
     if !u.kind_of? User
       return nil
-    elsif u.role.nil?
-      return false
     else
-      case operation
-        when :delete
-          return u.role.name == 'admin'
-        when :edit
-          if self.created_by == u or u.role.name == 'admin'
-            return true
+      p = u.permissions.find_by_calendar_id(self.calendar_id)
+      if p.nil?
+        return false
+      end
+      role = p.role
+      if role.nil?
+        return false
+      else
+        case operation
+          when :delete
+            return role.name == 'admin'
+          when :edit
+            if self.created_by == u or role.name == 'admin'
+              return true
+            else
+              return false
+            end
           else
-            return false
-          end
-        else
-          return nil
+            return nil
+        end
       end
     end
   end
@@ -64,7 +73,7 @@ class Event < ActiveRecord::Base
     end
   end
   
-  # Returns a #Point with the coordinates of the #Event's address, or with (0, 0) if all else fails.
+  # Returns a #Point with the coordinates of the #Event's address, or with (0, 0) if all else fails, and caches the coordinates so we don't hit the geocoder every time.
   def coords
     c = self[:coords]
     if c.nil?

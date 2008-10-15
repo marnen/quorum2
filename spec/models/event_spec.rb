@@ -14,6 +14,10 @@ describe Event, "(general properties)" do
     opts[:include].should == :country
   end
     
+  it "should belong to a Calendar" do
+    Event.reflect_on_association(:calendar).macro.should == :belongs_to
+  end
+    
   it "should have many Commitments" do
     Event.reflect_on_association(:commitments).macro.should == :has_many
   end
@@ -51,7 +55,7 @@ end
 
 describe Event, "(allow?)" do
   before(:each) do
-    @event = Event.new
+    @event = Event.new(:calendar_id => 27)
   end
   
   it "should exist with one argument" do
@@ -59,20 +63,27 @@ describe Event, "(allow?)" do
     @event.method(:allow?).arity.should == 1
   end
   
-  it "should return true for :delete iff current user has a role of admin, false otherwise" do
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :role => nil))
+  it "should return true for :delete iff current user has a role of admin for the event's calendar, false otherwise" do
+    @notallowed = [mock_model(Permission, :calendar_id => 999)]
+    @notallowed.should_receive(:find_by_calendar_id).with(27).and_return(nil)
+    @admin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
+    @admin.should_receive(:find_by_calendar_id).with(27).and_return(@admin[0])
+    
+    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @notallowed))
     @event.allow?(:delete).should == false
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :role => mock_model(Role, :name => 'admin')))
+    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @admin))
     @event.allow?(:delete).should == true
   end
   
-  it "should return true for :edit iff current user has a role of admin or created the event" do
-    @one = mock_model(User, :id => 1, :role => nil)
-    @two = mock_model(User, :id => 2, :role => mock_model(Role, :name => 'foo')) # arbitrary non-admin role
-    @admin = mock_model(User, :id => 3, :role => mock_model(Role, :name => 'admin'))
+  it "should return true for :edit iff current user has a role of admin for the event's calendar or created the event" do
+    @nonadmin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'foo'))]
+    @nonadmin.should_receive(:find_by_calendar_id).with(27).and_return(@nonadmin[0])
+    @admin_p = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
+    @admin_p.should_receive(:find_by_calendar_id).with(27).and_return(@admin_p[0])
+    
+    @two = mock_model(User, :id => 2, :permissions => @nonadmin) # arbitrary non-admin role
+    @admin = mock_model(User, :id => 3, :permissions => @admin_p)
     @event.created_by = @two
-    User.stub!(:current_user).and_return(@one)
-    @event.allow?(:edit).should == false
     User.stub!(:current_user).and_return(@two)
     @event.allow?(:edit).should == true
     User.stub!(:current_user).and_return(@admin)
@@ -85,7 +96,10 @@ describe Event, "(allow?)" do
   end
   
   it "should return nil for any operation it doesn't know about" do
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :role => 'admin'))
+    @admin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
+    @admin.should_receive(:find_by_calendar_id).with(27).and_return(@admin[0])
+    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @admin))
+    
     @event.allow?(:foobar).should be_nil
   end
 end
@@ -136,6 +150,7 @@ describe Event, "(validations)" do
     @event.city = "x" # arbitrary value
     @event.created_by_id = 34 # arbitrary
     @event.name = "y" # arbitrary
+    @event.calendar_id = 'abc' # arbitrary
   end
   
   it "should not be valid without a state" do
@@ -147,6 +162,12 @@ describe Event, "(validations)" do
   it "should not be valid without a name" do
    @event.should be_valid
    @event.name = nil
+   @event.should_not be_valid
+  end
+ 
+  it "should not be valid without a calendar" do
+   @event.should be_valid
+   @event.calendar_id = nil
    @event.should_not be_valid
   end
  
@@ -167,7 +188,7 @@ describe Event, "(validations)" do
 end
 
 describe Event, "(geographical features)" do
-  fixtures :events, :states, :countries
+  fixtures :events, :calendars, :states, :countries
   
   before(:each) do
     @placemark = Geocoding::Placemark.new

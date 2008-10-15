@@ -196,7 +196,7 @@ describe EventsController, "new" do
     post :create, :event => my_event.attributes
     response.should_not redirect_to(:action => :list)
     
-    my_event = Event.new(:name => 'name', :state_id => 23) #valid
+    my_event = Event.new(:name => 'name', :state_id => 23, :calendar_id => 'foo') # minimal valid set of attributes
     post :create, :event => my_event.attributes
     response.should redirect_to(:action => :index)
     flash[:notice].should_not be_nil
@@ -234,14 +234,18 @@ describe EventsController, "edit" do
   end
   
   it "should redirect to list with an error if the user does not own the event and is not an admin" do
-    marnen = users(:marnen) # current user
-    marnen.stub!(:role).and_return(mock_model(Role, :name => 'user')) # make him non-admin
     event = Event.find(:first)
     event.stub!(:created_by).and_return(users(:quentin))
+    perms = [mock_model(Permission, :calendar_id => event.calendar_id, :role => mock_model(Role, :name => 'user'))]
+    perms.stub!(:find_by_calendar_id).with(event.calendar_id).and_return(perms[0])
+    marnen = users(:marnen) # current user
+    marnen.stub!(:permissions).and_return(perms) # make him non-admin
     get 'edit', :id => event.id
     flash[:error].should_not be_nil
     response.should redirect_to(:action => :index)
-    marnen.stub!(:role).and_return(mock_model(Role, :name => 'admin'))
+    perms[0] = mock_model(Permission, :calendar_id => event.calendar_id, :role => mock_model(Role, :name => 'admin'))
+    perms.stub!(:find_by_calendar_id).with(event.calendar_id).and_return(perms[0])
+    marnen.stub!(:permissions).and_return(perms) # make him admin
     get 'edit', :id => event.id
     flash[:error].should be_nil
     response.should_not redirect_to(:action => :index)
@@ -329,7 +333,7 @@ describe EventsController, "show" do
 end
 
 describe EventsController, "delete" do
-  fixtures :users, :roles, :events
+  fixtures :users, :permissions, :calendars, :roles, :events
   
   before(:each) do
     @event = Event.find(:first)
@@ -340,7 +344,7 @@ describe EventsController, "delete" do
     login_as :quentin
     @event.should_not_receive(:hide)
     post 'delete', :id => @id
-    User.current_user.role.name.should_not == 'admin'
+    User.current_user.permissions.find_by_calendar_id(@event.calendar_id).role.name.should_not == 'admin'
     flash[:error].should_not be_nil
   end
   
@@ -349,7 +353,7 @@ describe EventsController, "delete" do
     Event.should_receive(:find).with(@id.to_i).and_return(@event)
     @event.should_receive(:hide)
     post 'delete', :id => @id
-    User.current_user.role.name.should == 'admin'
+    User.current_user.permissions.find_by_calendar_id(@event.calendar_id).role.name.should == 'admin'
     flash[:error].should be_nil
   end
 end

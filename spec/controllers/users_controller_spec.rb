@@ -4,10 +4,10 @@ describe UsersController do
   fixtures :users
 
   it 'allows signup' do
-    lambda do
-      create_user
-      response.should be_redirect      
-    end.should change(User, :count).by(1)
+    @user = User.new
+    User.should_receive(:new).and_return(@user)
+    @user.should_receive(:save).at_least(:once).and_return(true)
+    create_user
   end
 
   
@@ -64,7 +64,7 @@ describe UsersController do
   
   def create_user(options = {})
     post :create, :user => { :login => 'quire', :email => 'quire@example.com',
-      :password => 'quire', :password_confirmation => 'quire' }.merge(options)
+    :password => 'quire', :password_confirmation => 'quire', :permissions => [mock_model(Permission)] }.merge(options)
   end
 end
 

@@ -5,12 +5,13 @@ class User < ActiveRecord::Base
   attr_accessor :password
   cattr_accessor :current_user
 
-  belongs_to :role
   belongs_to :state
   has_many :commitments
   has_many :events, :through => :commitments
+  has_many :permissions
+  validates_presence_of :permissions
+  
   validates_presence_of :email
-  validates_presence_of :role_id
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
   validates_length_of       :password, :within => 1..40, :if => :password_required?

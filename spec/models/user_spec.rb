@@ -19,8 +19,8 @@ describe User, "(general properties)" do
     reflection.options[:through].should == :commitments
   end
   
-  it "should have a Role" do
-    User.reflect_on_association(:role).macro.should == :belongs_to
+  it "should have many Permissions" do
+    User.reflect_on_association(:permissions).macro.should == :has_many
   end
   
   it "should have a writable flag controlling display of personal information on contact list" do
@@ -41,13 +41,13 @@ describe User, "(general properties)" do
 end
 
 describe User, "(validations)" do
-  fixtures :users, :roles
+  fixtures :users, :roles, :calendars, :permissions
   
-  it "should require a role" do
+  it "should require at least one permission" do
     user = users(:marnen)
     user.should be_valid
-    user.role_id = nil
-    user.should_not be_valid
+    Permission.delete(user.permissions.collect{|p| p.id})
+    user.reload.should_not be_valid
   end
 end
   
@@ -130,8 +130,9 @@ describe User, "(geographical features)" do
 end
 
 describe User, "(authentication structure)" do
-  fixtures :users
+  fixtures :users, :roles, :permissions
 
+=begin
   describe 'being created' do
     before do
       @user = nil
@@ -150,6 +151,7 @@ describe User, "(authentication structure)" do
       @user.reload.activation_code.should_not be_nil
     end
   end
+=end
 
   it 'requires password' do
     lambda do
@@ -227,8 +229,7 @@ describe User, "(authentication structure)" do
 
 protected
   def create_user(options = {})
-    record = User.new({ :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
-    record.role_id = 1 # arbitrary
+    record = User.new({ :id => 1, :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
     record.save
     record
   end

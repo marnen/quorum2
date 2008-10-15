@@ -1,6 +1,5 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 quentin:
-  id: 1
   email: quentin@example.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
@@ -9,18 +8,15 @@ quentin:
   activated_at: <%= 5.days.ago.to_s :db %> 
   firstname: Quentin
   lastname: Quackenbush
-  role: user
   state: ny
   feed_key: <%= 'a' * 32 %>
   
 aaron:
-  id: 2
   email: aaron@example.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
   activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a 
-  role: user
   state: nj
   feed_key: <%= 'b' * 32 %>
 
@@ -38,7 +34,6 @@ marnen:
   city: Albany
   state: ny
   zip: 12203
-  role: admin
   show_contact: true
   feed_key: <%= 'c' * 32 %>
 
@@ -49,7 +44,6 @@ millie:
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
-  role: user
   street: 22 Main Street
   city: Toronto
   state: "on"

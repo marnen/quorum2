@@ -18,18 +18,26 @@ describe 'events/_event' do
   end
 
   it "should contain an edit link for the event, if the current user is an admin" do
+    cal = @event.calendar_id
     role = mock_model(Role, :name => 'admin')
-    admin = mock_model(User, :role => role)
+    admin_p = [mock_model(Permission, :calendar_id => cal, :role => role)]
+    admin_p.stub!(:find_by_calendar_id).with(cal).and_return(admin_p[0])
+    admin = mock_model(User, :permissions => admin_p)
     User.stub!(:current_user).and_return(admin)
+    
     render_view
     url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
     response.should have_tag("#event_#{@event.id} a[href=" << url << "]")
   end
 
   it "should contain a delete link for the event, if the current user has an admin account" do
+    cal = @event.calendar_id
     role = mock_model(Role, :name => 'admin')
-    admin = mock_model(User, :role => role)
+    admin_p = [mock_model(Permission, :calendar_id => cal, :role => role)]
+    admin_p.stub!(:find_by_calendar_id).with(cal).and_return(admin_p[0])
+    admin = mock_model(User, :permissions => admin_p)
     User.stub!(:current_user).and_return(admin)
+    
     render_view
     url = url_for(:controller => 'events', :action => 'delete', :id => @event.id, :escape => false)
     response.should have_tag("#event_#{@event.id} a[href=" << url << "]")
