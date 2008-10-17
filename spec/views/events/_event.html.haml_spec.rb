@@ -90,6 +90,11 @@ describe 'events/_event' do
     response.should have_tag("#event_#{@event.id} .country-name", h(@event.country.code))
   end
   
+  it "should show the zip code of each event in a tag of class 'postal-code'" do
+    render_view
+    response.should have_tag("#event_#{@event.id} .postal-code", h(@event.zip))
+  end
+  
   it "should show a map link for the event" do
     render_view
     url = url_for(:controller => 'events', :action => 'map', :id => @event.id, :escape => false)
