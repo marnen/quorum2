@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
   before_create :set_created_by_id
   
   # Returns true if #User.current_user is allowed to perform <i>operation</i> on the current #Event, false otherwise.
-  # <i>Operation</i> may be <tt>:edit</tt> or <tt>:delete</tt>.
+  # <i>Operation</i> may be <tt>:edit</tt>, <tt>:delete</tt>, or <tt>:show</tt>.
   def allow?(operation)
     u = User.current_user
     if !u.kind_of? User
@@ -36,6 +36,8 @@ class Event < ActiveRecord::Base
             else
               return false
             end
+          when :show
+            return true # yes, this actually works, since we take care of the case where the user has no permissions above
           else
             return nil
         end

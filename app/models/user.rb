@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   has_many :commitments
   has_many :events, :through => :commitments
   has_many :permissions
+  has_many :calendars, :through => :permissions
   validates_presence_of :permissions
   
   validates_presence_of :email

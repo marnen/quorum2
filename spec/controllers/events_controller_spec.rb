@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsController, "index" do
-  fixtures :users
+  fixtures :users, :permissions, :calendars
   
   before(:each) do
     login_as(:quentin)
@@ -18,7 +18,12 @@ describe EventsController, "index" do
   end
   
   it "should get all non-deleted events, with distance, ordered by date, earliest to latest" do
-    Event.should_receive(:find).with(:all, :order => 'date asc', :conditions => 'deleted is distinct from true').once
+    Event.should_receive(:find) do |arg1, opts|
+      arg1.should == :all
+      opts.should be_a_kind_of(Hash)
+      opts[:order].should == 'date asc'
+      opts[:conditions][0].should match(/^deleted is distinct from true/)
+    end.once
     get :index
   end
   
@@ -111,18 +116,22 @@ describe EventsController, "feed.rss" do
 end
 
 describe EventsController, "feed.rss (login)" do
-  integrate_views
   fixtures :events
+  integrate_views
   
   it "should not list any events if given an invalid feed_key" do
     User.stub!(:find_by_feed_key).and_return(nil)
     get :feed, :format => 'rss', :key => 'fake key'
+    Event.should_not_receive(:find)
     response.should_not have_tag('item')
   end
   
   it "should list events if given a valid feed_key" do
-    @user = mock_model(User, :feed_key => 'foo', :fullname => 'John Smith')
+    @events = Event.find(:all)
+    @events.size.should_not == 0
+    @user = mock_model(User, :feed_key => 'foo', :fullname => 'John Smith', :calendars => [mock_model(Calendar, :id => 1, :name => 'Calendar 1')])
     User.stub!(:find_by_feed_key).and_return(@user)
+    Event.should_receive(:find).and_return(@events)
     get :feed, :format => 'rss', :key => @user.feed_key
     response.should have_tag('item')
   end
@@ -318,17 +327,25 @@ describe EventsController, "edit" do
 end
 
 describe EventsController, "show" do
-  fixtures :users
+  fixtures :users, :permissions, :calendars
   
   before(:each) do
     login_as :quentin
-    @event = Event.new(:id => 3, :name => 'Name of event')
-    Event.stub!(:find).and_return(@event)
-    get :show, :id => @event.id
   end
   
   it "should set the page title" do
+    @event = Event.new(:id => 3, :name => 'Name of event', :calendar_id => calendars(:one).id)
+    Event.stub!(:find).and_return(@event)
+    get :show, :id => @event.id
     assigns[:page_title].should_not be_nil
+  end
+  
+  it "should not show an event on a calendar for which the current user doesn't have access" do
+    @event = Event.new(:id => 4, :calendar_id => 57, :name => 'Event on another calendar')
+    Event.stub!(:find).and_return(@event)
+    get :show, :id => @event.id
+    flash[:error].should_not be_nil
+    response.should be_redirect
   end
 end
 

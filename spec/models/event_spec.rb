@@ -90,6 +90,20 @@ describe Event, "(allow?)" do
     @event.allow?(:edit).should == true
   end
   
+  it "should return true for :show iff current user has any role for the event's calendar" do
+    @user_p = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'anything'))]
+    @user_p.should_receive(:find_by_calendar_id).with(27).and_return(@user_p[0])
+    @onr = mock_model(User, :permissions => @user_p)
+    User.stub!(:current_user).and_return(@onr)
+    @event.allow?(:show).should == true
+
+    @user_p = [mock_model(Permission, :calendar_id => 37, :role => mock_model(Role, :name => 'anything'))]
+    @user_p.should_receive(:find_by_calendar_id).with(27).and_return(nil)
+    @two = mock_model(User, :permissions => @user_p)
+    User.stub!(:current_user).and_return(@two)
+    @event.allow?(:show).should == false
+  end
+  
   it "should return nil for any operation if current user is not a User object" do
     User.stub!(:current_user).and_return('bogus value')
     @event.allow?(:edit).should be_nil

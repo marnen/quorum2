@@ -23,6 +23,13 @@ describe User, "(general properties)" do
     User.reflect_on_association(:permissions).macro.should == :has_many
   end
   
+  it "should have many Calendars through Permissions" do
+    reflection = User.reflect_on_association(:calendars)
+    reflection.macro.should == :has_many
+    reflection.options.should have_key(:through)
+    reflection.options[:through].should == :permissions
+  end
+  
   it "should have a writable flag controlling display of personal information on contact list" do
     u = User.new
     u.should respond_to(:show_contact)

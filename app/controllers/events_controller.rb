@@ -38,7 +38,12 @@ class EventsController < ApplicationController
     end
     
     before :show do
-      @page_title = current_object.name
+      if !current_object.allow?(:show)
+        flash[:error] = _("You are not authorized to view that event.")
+        redirect_to :action => :index
+      else
+        @page_title = current_object.name
+      end
     end
   end
   
@@ -156,9 +161,10 @@ class EventsController < ApplicationController
   
   # Return non-deleted events, optionally ordered as specified by params[:order] and [:direction]. Provided for use with make_resourceful[http://mr.hamptoncatlin.com].
   def current_objects
+    user = params[:feed_user] || User.current_user
     order = params[:order] || 'date'
     direction = params[:direction] || 'asc'
-    @current_objects || current_model.find(:all, :order => "#{order} #{direction}", :conditions => 'deleted is distinct from true')
+    @current_objects || current_model.find(:all, :conditions => ['deleted is distinct from true AND calendar_id IN (:calendars)', {:calendars => user.calendars.collect{|c| c.id}}], :order => "#{order} #{direction}")
   end
   
  protected

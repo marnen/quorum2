@@ -15,7 +15,7 @@
       = link_to(h(_("List events")), url_for(:controller => :events, :action => :index)) + ' | '
       = link_to(h(_("Add event")), url_for(:controller => :events, :action => :new)) + ' | '
       = link_to(h(_("User profile")), profile_path) + ' | '
-      - if User.current_user.role.name == 'admin'
+      - if User.current_user.permissions.collect{|p| p.role.name}.include? 'admin'
         = link_to(h(_("Contact list")), list_users_path) + ' | '
       = link_to(h(_("Log out")), url_for(:controller => :logout))
       -# Is there a better way to generate that logout URL?
