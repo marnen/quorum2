@@ -1,0 +1,52 @@
+- if !logged_in?
+  %h1&= _("Register")
+= error_messages_for :user
+- form_for :user, :url => logged_in? ? edit_user_path(current_user) : users_path do |f|
+  %h2&= _("Who are you?")
+  %table.edit
+    %tr
+      %th
+        &= _("E-mail address")
+        %br
+        %span.hint&= _("(this will be your user name)")
+      %td= f.text_field :email
+    %tr
+      %th&= _("First name")
+      %td= f.text_field :firstname
+    %tr
+      %th&= _("Last name")
+      %td= f.text_field :lastname
+    %tr
+      %th&= _("Password")
+      %td= f.password_field :password
+    %tr
+      %th
+        &= _("Password again")
+        %br
+        %span.hint&= _("(for confirmation)")
+      %td= f.password_field :password_confirmation
+  
+  %h2&= _("Where do you live?")
+  %p&= _("This information is optional, but if you provide it, we can tell you the distance from your house to events. And of course we'll never share it with anyone else without your permission (except anonymously for geocoding).")
+  %table.edit
+    %tr
+      %th&= _("Street address")
+      %td= f.text_field :street
+    %tr
+      %th&= _("Address line 2")
+      %td= f.text_field :street2
+    %tr
+      %th&= _("City")
+      %td= f.text_field :city
+    %tr
+      %th&= _("State")
+      %td= f.collection_select(:state_id, State.find(:all, :order => :name), :id, :name, :include_blank => true)
+    %tr
+      %th&= _("ZIP code")
+      %td= f.text_field :zip
+  %p
+    %label
+      = f.check_box :show_contact
+      &= _('Make my address visible in the contact list (available to administrators only)')
+
+  = submit_tag(logged_in? ? _('Save') : _('Sign up'))

@@ -1,0 +1,10 @@
+%table.users
+  %tr
+    %th&= _('Name')
+    %th&= _('E-mail')
+    %th&= _('Address')
+  - for user in @users do
+    %tr[user]
+      %td&= [user.lastname, user.firstname].compact.join(', ')
+      %td&= user.show_contact ? user.email : ''
+      %td= user.show_contact ? [user.street, user.street2, "#{user.city}, #{user.state.code} #{user.zip}, #{user.state.country.code}"].compact.collect {|s| h(s)}.join(tag(:br)) : ''

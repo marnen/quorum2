@@ -1,0 +1,16 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  event: one
+  user: marnen
+  status: true
+  
+two:
+  event: one
+  user: millie
+  status: false
+  
+three:
+  event: one
+  user: quentin
+  status: true

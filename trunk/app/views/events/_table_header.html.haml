@@ -1,0 +1,17 @@
+- sortlinks = true if sortlinks.nil?
+%tr
+  %td.edit
+    / blank
+  %th
+    = sortlinks ? sort_link("Date", :date, (@order == 'date' and @direction == 'asc') ? :desc : :asc) : h(_("Date"))
+    - if @order == 'date'
+      &= @direction == 'asc' ? '↑' : '↓'
+  %th
+    = sortlinks ? sort_link("Event", :name, (@order == 'name' and @direction == 'asc') ? :desc : :asc) : h(_("Event"))
+    - if @order == 'name'
+      &= @direction == 'asc' ? '↑' : '↓'
+  %th&= _("Description")
+  %th&= _("Status")
+  %th&= _("Attending")
+  %th&= _("Not attending")
+
