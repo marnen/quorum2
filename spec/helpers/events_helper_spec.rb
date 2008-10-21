@@ -131,6 +131,14 @@ describe EventsHelper, "list_names" do
   end
 end
 
+describe EventsHelper, "markdown_hint" do
+  it "should return a span of class 'hint' with a link to Markdown in it" do
+    m = markdown_hint
+    m.should match(%r{^<span class=(['"])hint\1[^>]*>.*</span>$})
+    m.should have_tag('a', 'Markdown')
+  end
+end
+
 describe EventsHelper, "rss_url" do
   fixtures :users
   

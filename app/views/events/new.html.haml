@@ -1,12 +1,22 @@
 - form_for @current_object do |f|
   %table.edit
+    - if User.current_user.calendars.size > 1
+      %tr
+        %th&= _("Calendar")
+        %td
+          = f.collection_select :calendar_id, User.current_user.calendars, :id, :name
+    - else
+      = f.hidden_field :calendar_id, :value => User.current_user.calendars[0].id
     %tr
       %th&= _("Event name")
       %td
         = f.text_field :name
         = _(error_message_on(:event, :name))
     %tr
-      %th&= _("Description")
+      %th
+        &= _("Description")
+        %br
+        = markdown_hint
       %td= f.text_area :description, :cols => 40, :rows => 6
     %tr
       %th&= _("Date")

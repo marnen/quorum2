@@ -24,7 +24,9 @@
     %span.map= map_link(event)
     %p= ical_link(event)
   %td
-    %span.description&= event.description
+    %span.description
+      :markdown
+        #{h event.description}
   = render :partial => 'attendance', :locals => {:event => event}
   %td&= list_names(event.find_committed(:yes))
   %td&= list_names(event.find_committed(:no))

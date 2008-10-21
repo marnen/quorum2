@@ -14,6 +14,7 @@ describe 'events/_event' do
   
   before(:each) do
     @event = @event_orig
+    @event.description = 'Testing use of *Markdown*.'
     User.stub!(:current_user).and_return(@user)
   end
 
@@ -60,11 +61,13 @@ describe 'events/_event' do
     response.should have_tag("#event_#{@event.id} .summary", h(@event.name))
   end
   
-  it "should show the description of the event in a tag of class 'description'" do
+  it "should show the description of the event (formatted with Markdown) in a tag of class 'description'" do
     render_view
-    response.should have_tag("#event_#{@event.id} .description", h(@event.description))
+    selector = "#event_#{@event.id} .description"
+    response.should have_tag(selector, /Testing use of/)
+    response.should have_tag("#{selector} em", 'Markdown')
   end
-
+  
   it "should show the site for the event" do
     render_view
     response.should have_tag("#event_#{@event.id}", /#{h(@event.site)}/)

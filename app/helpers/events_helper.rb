@@ -121,6 +121,11 @@ module EventsHelper
     link_to h(_("map")), url_for(:controller => 'events', :action => 'map', :id => event.id), :target => 'map'
   end
   
+  # Generates a hint to use Markdown for formatting.
+  def markdown_hint
+    content_tag(:span, h(_('(use %{Markdown} for formatting)')) % {:Markdown => link_to(h(_('Markdown')), 'http://daringfireball.net/projects/markdown/basics')}, :class => :hint)
+  end
+  
   # Generates an RSS URL for the current user's events feed.
   def rss_url
     if User.current_user
