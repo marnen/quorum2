@@ -11,6 +11,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :state_id
   before_create :set_created_by_id
+  before_update :clear_coords
   
   # Returns true if #User.current_user is allowed to perform <i>operation</i> on the current #Event, false otherwise.
   # <i>Operation</i> may be <tt>:edit</tt>, <tt>:delete</tt>, or <tt>:show</tt>.
@@ -91,6 +92,10 @@ class Event < ActiveRecord::Base
   end
 
  protected
+  def clear_coords
+    self.coords = nil
+  end
+ 
   def set_created_by_id
     self.created_by = User.current_user
   end

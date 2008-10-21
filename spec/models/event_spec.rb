@@ -240,5 +240,12 @@ describe Event, "(geographical features)" do
     Geocoding.should_receive(:get).and_return(false)
     @event.should_not_receive(:save)
     @event.coords
-  end  
+  end 
+  
+  it "should clear coords on update" do
+    @event.should_receive(:coords=)
+    @event.update_attributes(:name => 'foo')
+    # @event.should_not_receive(:coords=)
+    # @event.update_attributes(nil)
+  end
 end
