@@ -1,8 +1,0 @@
-<%= _('Hello, %{user}!') % {:user => (@user.firstname || @user.fullname)} %>
-
-<%= _("This is the %{Quorum} application at %{app_url} .  I just received a request to reset the password for your account with e-mail address %{email} .  I've done that now; your new password is:
-%{password}
-
-To log in, please go to %{login_url} and enter the e-mail address and password given above.  Once you've done that, please go to %{profile_url} and change your password to something that only you know.
-
-Happy scheduling!") % {:Quorum => SITE_TITLE, :app_url => root_url, :email => @user.email, :password => @password, :login_url => login_url, :profile_url => profile_url} %>
