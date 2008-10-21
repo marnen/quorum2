@@ -1,0 +1,26 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  name: Event 1 with <> signs
+  description: A longer description of event 1 & all that.
+  date: 2008-01-10
+  site: Marnen's house
+  street: 80 State Street
+  street2: 2nd floor
+  city: Albany
+  state: ny
+  zip: 12203
+  calendar: one
+  coords: ~
+
+two:
+  name: Event 2
+  description: ~
+  date: 2008-02-22
+  site: Event 2 site
+  street: Event 2 street
+  street2: Event 2 street2
+  city: Event 2 city
+  state: "on"
+  zip: B2B 2B2
+  calendar: one
+  coords: ~

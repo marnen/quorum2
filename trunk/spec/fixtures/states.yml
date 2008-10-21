@@ -1,0 +1,18 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+# states
+
+ny:
+  country: usa
+  code: NY
+  name: New York
+  
+nj:
+  country: usa
+  code: NJ
+  name: New Jersey
+  
+"on":
+  country: canada
+  code: "ON"
+  name: Ontario
