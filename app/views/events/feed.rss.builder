@@ -15,7 +15,7 @@ xml.rss :version => '2.0', %s{xmlns:atom} => "http://www.w3.org/2005/Atom" do
           xml.title e.name
           xml.description do
             xml.text!(['<p>', e.date.to_s(:rfc822), '<br/>', e.address_for_geocoding, '</p>'].join)
-            xml.text!(['<p>', e.description.to_s, '</p>'].join)
+            xml.text!(['<p>', markdown(h(e.description.to_s)), '</p>'].join)
           end
           xml.link event_url(e)
           xml.guid event_url(e)
