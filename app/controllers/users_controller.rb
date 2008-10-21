@@ -53,7 +53,7 @@ class UsersController < ApplicationController
     self.current_user = params[:activation_code].blank? ? :false : User.find_by_activation_code(params[:activation_code])
     if logged_in? && !current_user.active?
       current_user.activate
-      flash[:notice] = "Signup complete!"
+      flash[:notice] = _("Signup complete!")
     end
     redirect_back_or_default('/login')
   end
@@ -65,6 +65,30 @@ class UsersController < ApplicationController
     else
       @page_title = _("Contact list")
       @users = User.find(:all, :order => 'lastname, firstname')
+    end
+  end
+  
+  # Resets password of user specified in <tt>params[:email]</tt>, and sends the new password to the user by e-mail.
+  def reset
+    if request.post?
+      user = User.find_by_email(params[:email])
+      if user.nil?
+        flash[:error] = _("Couldn't find that e-mail address!")
+        return
+      end
+      password = Digest::MD5.hexdigest(Time.now.to_s.split(//).sort_by {rand}.join)[0, 10]
+      user.password = password
+      user.password_confirmation = password
+      begin
+        user.save!
+        Mailer.deliver_reset(user, password)
+        flash[:notice] = _("Password reset for %{email}. Please check your e-mail for your new password.") % {:email => params[:email]}
+      rescue
+        flash[:error] = _("Couldn't reset password. Please try again.")
+        return
+      end
+    else
+      @page_title = _("Reset password")
     end
   end
   

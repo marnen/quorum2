@@ -172,3 +172,45 @@ describe UsersController, '(list)' do
     assigns[:users].should == users
   end
 end
+
+describe UsersController, '(reset)' do
+  integrate_views
+  
+  before(:each) do
+    get :reset
+  end
+  
+  it "should be a valid action" do
+    response.should be_success
+  end
+  
+  it "should display a form asking for e-mail address, with a submit button" do
+    response.should have_tag('input[type=text]')
+    response.should have_tag('input[type=submit]')
+  end
+  
+  it "should set the page title" do
+    assigns[:page_title].should_not be_blank
+  end
+end
+
+describe UsersController, '(reset/POST)' do
+  integrate_views
+  
+  it "should give an error message if e-mail isn't valid" do
+    User.should_receive(:find_by_email).and_return(nil)
+    post :reset, :email => 'someone@example.com'
+    flash[:error].should_not be_nil
+  end
+  
+  it "should reset password if e-mail is valid" do
+    @user = mock_model(User, :email => 'quentin@example.com')
+    @user.should_receive(:password=)
+    @user.should_receive(:password_confirmation=)
+    @user.should_receive(:save!).and_return(true)
+    User.should_receive(:find_by_email).and_return(@user)
+    Mailer.should_receive(:deliver_reset).with(@user, an_instance_of(String)).and_return(true)
+    post :reset, :email => 'quentin@example.com'
+    flash[:notice].should_not be_nil
+  end
+end

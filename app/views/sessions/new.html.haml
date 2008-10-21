@@ -17,3 +17,4 @@
         %label{:for => "remember_me"} Remember me:
         = check_box_tag 'remember_me'
   = submit_tag _('Log in')
+%p= link_to(h(_('Forgot your password?')), reset_password_url)
