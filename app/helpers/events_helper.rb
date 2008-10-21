@@ -123,7 +123,7 @@ module EventsHelper
   
   # Generates a hint to use Markdown for formatting.
   def markdown_hint
-    content_tag(:span, h(_('(use %{Markdown} for formatting)')) % {:Markdown => link_to(h(_('Markdown')), 'http://daringfireball.net/projects/markdown/basics')}, :class => :hint)
+    content_tag(:span, h(_('(use %{Markdown} for formatting)')) % {:Markdown => link_to(h(_('Markdown')), 'http://daringfireball.net/projects/markdown/basics', :target => 'markdown')}, :class => :hint)
   end
   
   # Generates an RSS URL for the current user's events feed.
