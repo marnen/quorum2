@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
     return self.state.country
   end
   
-  def fullname
+  def to_s
     str = [self.firstname, self.lastname].delete_if {|e| e.blank?}.join(' ')
     str.blank? ? self.email : str
   end

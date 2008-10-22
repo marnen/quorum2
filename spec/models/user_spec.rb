@@ -61,17 +61,17 @@ end
 describe User, "(instance properties)" do
   fixtures :users
   
-  it "should have a 'fullname' property returning firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
+  it "should have a 'to_s' property returning firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
     @user = User.new
     @user.email = 'foo@bar.com' # arbitrary
-    @user.fullname.should == @user.email
+    @user.to_s.should == @user.email
     @user.firstname = 'f' # arbitrary
-    @user.fullname.should == @user.firstname
+    @user.to_s.should == @user.firstname
     @user.firstname = nil
     @user.lastname = 'l' # arbitrary
-    @user.fullname.should == @user.lastname
+    @user.to_s.should == @user.lastname
     @user.firstname = 'f'
-    @user.fullname.should == @user.firstname << ' ' << @user.lastname
+    @user.to_s.should == @user.firstname << ' ' << @user.lastname
   end
   
   it "should have a 'feed_key' property initialized to a 32-character string" do

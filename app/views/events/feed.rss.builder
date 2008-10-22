@@ -6,7 +6,7 @@ xml.rss :version => '2.0', %s{xmlns:atom} => "http://www.w3.org/2005/Atom" do
     xml.link events_url
     xml.description do
       if !params[:feed_user].blank?
-        xml.text!(_("The latest events from %{Quorum}, generated for %{user}.") % {:Quorum => SITE_TITLE, :user => params[:feed_user].fullname})
+        xml.text!(_("The latest events from %{Quorum}, generated for %{user}.") % {:Quorum => SITE_TITLE, :user => params[:feed_user]})
       end
     end
     if !params[:feed_user].blank?

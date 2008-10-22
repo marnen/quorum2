@@ -113,7 +113,7 @@ module EventsHelper
   # Given an #Array (or similar) of #User objects, returns an #Array of their full names as #Strings.
   def list_names(users)
     return '' if users.nil? or users.size == 0
-    users.compact.collect {|u| u.fullname}.join(', ')
+    users.compact.join(', ')
   end
 
   # Generates a link to a map of #Event.

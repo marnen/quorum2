@@ -101,7 +101,7 @@ describe EventsController, "feed.rss" do
   end
   
   it "should contain a <description> element, including (among other things) the name of the user whose feed it is" do
-    response.should have_tag('channel > description', %r{#{ERB::Util::html_escape params[:feed_user].fullname}})
+    response.should have_tag('channel > description', %r{#{ERB::Util::html_escape params[:feed_user]}})
   end
     
   it "should contain an entry for every event, with <title>, <description> (with address and description), <link>, <guid>, and <pubDate> elements" do
