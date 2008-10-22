@@ -11,6 +11,12 @@ set :user, "capistrano"
 # your SCM below:
 # set :scm, :subversion
 set :scm_user, "marnen"
+=begin
+set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN 
+password for #{scm_user}, please: ") } 
+set :repository, Proc.new { "--username #{scm_user} --password 
+#{scm_password} --no-auth-cache #{repository}" }
+=end
 
 role :app, "ebon-askavi.homedns.org"
 role :web, "ebon-askavi.homedns.org"
@@ -42,6 +48,9 @@ namespace :deploy do
     # sudoers file to avoid having to type a password.  It can be omitted if you don't want to use sudo.
     # See http://geminstaller.rubyforge.org/documentation/documentation.html#dealing_with_sudo
     args += " --sudo" unless RUBY_PLATFORM =~ /mswin/ 
+    
+    # And show some output...
+    args += " --geminstaller-output=all --rubygems-output=all"
     
     # The 'install' method will auto-install gems as specified by the args and config
     # GemInstaller.run(args)
