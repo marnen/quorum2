@@ -21,6 +21,20 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  # Return true if the current user is admin, otherwise give an error and redirect. Meant as a before_filter.
+  def check_admin
+    if admin?
+      return true
+    else
+      flash[:error] = _('You are not authorized to perform that action.')
+      begin
+        redirect_to :back
+      rescue
+        redirect_to root_url
+      end
+    end
+  end
+
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => 'efb0994fc16e17d478432d89deb46862'
