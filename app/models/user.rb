@@ -26,6 +26,11 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :email, :password, :password_confirmation, :firstname, :lastname, :street, :street2, :city, :state_id, :zip, :show_contact
   
+  def admin?
+    @admin ||= Role.find_by_name('admin')
+    !(self.permissions.find_by_role_id(@admin).nil?)
+  end
+  
   def country
     return self.state.country
   end

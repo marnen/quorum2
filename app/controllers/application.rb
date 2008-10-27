@@ -11,6 +11,16 @@ class ApplicationController < ActionController::Base
   
   helper :all # include all helpers, all the time
 
+  # Check to see if the current user is an admin of at least one calendar.
+  def admin?
+    u = User.current_user
+    if u.nil? or u == false
+      return nil
+    else
+      return u.admin?
+    end
+  end
+  
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => 'efb0994fc16e17d478432d89deb46862'
@@ -19,6 +29,10 @@ class ApplicationController < ActionController::Base
   init_gettext "quorum", "UTF-8", "text/html"
   
  protected
+  def admin
+    @admin ||= Role.find_by_name('admin')
+    @admin
+  end
 
   def set_current_user
     User.current_user = self.current_user

@@ -47,6 +47,30 @@ describe User, "(general properties)" do
   
 end
 
+describe User, "(admin?)" do
+  before(:each) do
+    @admin = mock_model(Role, :name => 'admin')
+    @user = mock_model(Role, :name => 'user')
+    @two = mock_model(Permission, :role => @admin, :calendar => mock_model(Calendar, :id => 2, :name => 'Calendar 2'))
+  end
+  
+  it "should return false if user has no admin roles" do
+    @permissions = [mock_model(Permission, :role => @user, :calendar => mock_model(Calendar, :id => 1, :name => 'Calendar 1')), mock_model(Permission, :role => @user, :calendar => mock_model(Calendar, :id => 2, :name => 'Calendar 2'))]
+    @permissions.stub!(:find_by_role_id).and_return(nil)
+    u = User.new
+    u.permissions << @permissions
+    u.admin?.should == false
+  end
+  
+  it "should return true if user has at least one admin role" do
+    @permissions = [mock_model(Permission, :role => @user, :calendar => mock_model(Calendar, :id => 1, :name => 'Calendar 1')), @two]
+    u = User.new
+    u.permissions << @permissions
+    u.permissions.stub!(:find_by_role_id).and_return(@two)
+    u.admin?.should == true
+  end
+end
+
 describe User, "(validations)" do
   fixtures :users, :roles, :calendars, :permissions
   
