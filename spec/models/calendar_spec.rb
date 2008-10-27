@@ -8,4 +8,9 @@ describe Calendar do
   it "should be valid" do
     @calendar.should be_valid
   end
+  
+  it "should return its name for to_s" do
+    @calendar.name = "My calendar"
+    @calendar.to_s.should == @calendar.name
+  end
 end

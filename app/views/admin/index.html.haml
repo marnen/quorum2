@@ -1,0 +1,4 @@
+%p&= _('You have administrative permissions on the following calendars:')
+%ul
+  - @calendars.each do |c|
+    %li&= c
