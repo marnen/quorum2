@@ -1,4 +1,6 @@
 %p&= _('You have administrative permissions on the following calendars:')
 %ul
   - @calendars.each do |c|
-    %li&= c
+    %li[c]
+      &= c
+      == (#{[link_to(h(_('properties')), :controller => :calendars, :id => c.id, :action => :edit), link_to(h(_('users')), :controller => :calendars, :id => c.id, :action => :users)].join(' | ')})

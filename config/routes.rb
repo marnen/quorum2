@@ -25,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   #   end
 
   # For restful_authentication:
-  map.resources :users, :collection => {:list => :any}
+  map.resources :users
   map.resource :session
   
   # And some prettification...

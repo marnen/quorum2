@@ -58,16 +58,6 @@ class UsersController < ApplicationController
     redirect_back_or_default('/login')
   end
   
-  def list
-    if User.current_user.role.name != 'admin'
-      flash[:error] = _("You are not authorized to perform that action.")
-      redirect_to root_url and return
-    else
-      @page_title = _("Contact list")
-      @users = User.find(:all, :order => 'lastname, firstname')
-    end
-  end
-  
   # Resets password of user specified in <tt>params[:email]</tt>, and sends the new password to the user by e-mail.
   def reset
     if request.post?

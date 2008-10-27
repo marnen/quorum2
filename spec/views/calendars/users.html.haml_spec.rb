@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 include ERB::Util
 
-describe "/users/list" do
+describe "/calendars/users" do
   fixtures :users, :states, :countries
   before(:all) do
     @all_users = User.find(:all, :order => 'lastname, firstname')
@@ -11,7 +11,7 @@ describe "/users/list" do
   
   before(:each) do
     assigns[:users] = @users = User.find(:all)
-    render 'users/list'
+    render 'calendars/users'
   end
   
   it "should show the results in a table" do
