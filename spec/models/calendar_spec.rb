@@ -26,3 +26,39 @@ describe Calendar, '(associations)' do
     u.options[:through].should == :permissions
   end
 end
+
+describe Calendar, '(validations)' do
+  before(:each) do
+    @calendar = Calendar.new(:name => 'Calendar for testing')
+  end
+  
+  it 'should require a name' do
+    @calendar.should be_valid
+    @calendar.name = nil
+    # @calendar.should_not be_valid
+  end
+  
+  it 'should set its creator as admin' do
+    @admin = mock_model(Role, :id => 2, :name => 'admin')
+    @user = mock_model(User, :id => 15, :name => 'creator')
+    User.stub!(:current_user).and_return(@user)
+
+    Role.should_receive(:find_by_name).with('admin').and_return(@admin)
+    opts = {:calendar => @calendar, :user => @user, :role => @admin}
+    @perm = mock_model(Permission, opts.merge(:null_object => true))
+    @perm.should_receive(:[]=).with('calendar_id', anything)
+    Permission.should_receive(:create!).with(opts).and_return(@perm)
+    
+    @calendar.save!
+    @calendar.permissions.should == [@perm]
+  end
+  
+  it 'should not create permissions when the calendar is invalid' do
+    @calendar.name = nil
+    Permission.should_not_receive(:create!)
+    begin
+      @calendar.save! # will throw an exception, of course
+    rescue
+    end
+  end
+end

@@ -15,6 +15,7 @@
       = link_to(h(_("List events")), url_for(:controller => :events, :action => :index)) + ' | '
       = link_to(h(_("Add event")), url_for(:controller => :events, :action => :new)) + ' | '
       = link_to(h(_("User profile")), profile_path) + ' | '
+      = link_to(h(_("Create calendar")), new_calendar_path) + ' | '
       - if User.current_user.admin?
         = link_to(h(_("Admin tools")), url_for(:controller => :admin, :action => :index)) + ' | '
       = link_to(h(_("Log out")), url_for(:controller => :logout))

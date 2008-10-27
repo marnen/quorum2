@@ -46,6 +46,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :events
   
   map.resources :permissions
+  map.resources :calendars
   
 
   # Some stuff for sorting the event list
