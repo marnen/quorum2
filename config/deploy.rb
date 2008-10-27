@@ -29,6 +29,12 @@ set :use_sudo, false
 # get GemInstaller working
 
 namespace :deploy do
+  
+  # Comment out task :restart block unless you're using Phusion Passenger -- it won't work with other servers
+  task :restart, :roles => :app do
+    run "/usr/bin/touch #{current_path}/tmp/restart.txt"
+  end
+  
   task :after_update_code do
     ############# Begin GemInstaller config - see http://geminstaller.rubyforge.org
     require "rubygems" 
