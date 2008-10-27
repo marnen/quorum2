@@ -12,8 +12,8 @@
       %td
         - perm = user.permissions.find_by_calendar_id(@current_object)
         - if user == User.current_user
-          &= perm.role.name
+          &= perm.role
         - else
           - form_for perm do |f|
-            = f.collection_select :role_id, Role.find(:all, :order => :name), :id, :name, {}, {:id => "permission_#{perm.id}_role_id"}
+            = f.collection_select :role_id, Role.find(:all, :order => :name), :id, :to_s, {}, {:id => "permission_#{perm.id}_role_id"}
             = submit_tag(h(_('Save')))

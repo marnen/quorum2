@@ -21,3 +21,14 @@ describe Role, "(validations)" do
     @role.should_not be_valid
   end
 end
+
+describe Role, "(to_s)" do
+  before(:each) do
+    @role = Role.new
+    @role.name = 'foo' # arbitrary value
+  end
+  
+  it "should return the Role's name, piped through gettext translate" do
+    @role.to_s.should == @role.name # Not sure how to call _ from specs.
+  end
+end
