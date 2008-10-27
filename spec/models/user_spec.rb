@@ -74,11 +74,25 @@ end
 describe User, "(validations)" do
   fixtures :users, :roles, :calendars, :permissions
   
+=begin
   it "should require at least one permission" do
     user = users(:marnen)
     user.should be_valid
     Permission.delete(user.permissions.collect{|p| p.id})
     user.reload.should_not be_valid
+  end
+=end
+
+  it 'should create a user permission for the calendar, when there\'s only one calendar' do
+    Calendar.delete(calendars(:two).id) # so we only have one calendar
+    Calendar.count.should == 1
+    user = User.new(:email => 'johndoe@example.com', :password => 'foo', :password_confirmation => 'foo')
+    user.save!
+    user.permissions.should_not be_nil
+    user.permissions.should_not be_empty
+    user.permissions[0].user.should == user
+    user.permissions[0].calendar.should == calendars(:one)
+    user.permissions[0].role.should == roles(:user)
   end
 end
   

@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :events, :through => :commitments
   has_many :permissions
   has_many :calendars, :through => :permissions
-  validates_presence_of :permissions
+  # validates_presence_of :permissions
   
   validates_presence_of :email
   validates_presence_of     :password,                   :if => :password_required?
@@ -21,7 +21,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email, :case_sensitive => false
   before_save :make_feed_key
   before_save :encrypt_password
-  before_create :make_activation_code 
+  before_create :make_activation_code
+  after_create :set_calendar
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :email, :password, :password_confirmation, :firstname, :lastname, :street, :street2, :city, :state_id, :zip, :show_contact
@@ -142,6 +143,12 @@ class User < ActiveRecord::Base
     def make_feed_key
       if self.feed_key.blank?
         self.feed_key = Digest::MD5.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+      end
+    end
+    
+    def set_calendar
+      if Calendar.count == 1
+        self.permissions << Permission.create(:user => self, :calendar => Calendar.find(:first), :role => Role.find_by_name('user'))
       end
     end
 end
