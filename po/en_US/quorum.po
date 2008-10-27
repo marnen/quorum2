@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: quorum 2 beta\n"
-"POT-Creation-Date: 2008-10-02 01:24-0400\n"
+"POT-Creation-Date: 2008-10-27 15:42-0400\n"
 "PO-Revision-Date: 2008-03-02 22:23-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,43 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: app/controllers/admin_controller.rb:6
+msgid "Administrative tools"
+msgstr ""
+
+#: app/controllers/application.rb:29
+msgid "You are not authorized to perform that action."
+msgstr ""
+
+#: app/controllers/calendars_controller.rb:10
+#: app/views/layouts/standard.html.haml:18
+msgid "Create calendar"
+msgstr ""
+
+#: app/controllers/calendars_controller.rb:15
+msgid "Edit calendar"
+msgstr ""
+
+#: app/controllers/calendars_controller.rb:19
+msgid "Your calendar was successfully created."
+msgstr ""
+
+#: app/controllers/calendars_controller.rb:24
+msgid "Couldn't create your calendar!"
+msgstr ""
+
+#: app/controllers/calendars_controller.rb:29
+msgid "Your calendar was successfully saved."
+msgstr ""
+
+#: app/controllers/calendars_controller.rb:34
+msgid "Couldn't save your calendar!"
+msgstr ""
+
+#: app/controllers/calendars_controller.rb:40
+msgid "Users for calendar %{calendar_name}"
+msgstr ""
 
 #: app/controllers/events_controller.rb:16
 msgid "Upcoming events"
@@ -37,32 +74,45 @@ msgstr ""
 msgid "Your event has been saved."
 msgstr ""
 
-#: app/controllers/events_controller.rb:78
+#: app/controllers/events_controller.rb:42
+msgid "You are not authorized to view that event."
+msgstr ""
+
+#: app/controllers/events_controller.rb:87
 msgid "The selected event was deleted."
 msgstr ""
 
-#: app/controllers/events_controller.rb:80
+#: app/controllers/events_controller.rb:89
 msgid "You are not authorized to delete that event."
 msgstr ""
 
-#: app/controllers/events_controller.rb:83
+#: app/controllers/events_controller.rb:92
 msgid "Couldn't find any event to delete!"
 msgstr ""
 
-#: app/controllers/events_controller.rb:119
+#: app/controllers/events_controller.rb:128
 msgid "Couldn't find any event to export!"
 msgstr ""
 
-#: app/controllers/events_controller.rb:147
+#: app/controllers/events_controller.rb:156
 msgid "Couldn't find that event!"
 msgstr ""
 
-#: app/controllers/events_controller.rb:150
+#: app/controllers/events_controller.rb:159
 msgid "Map for %{event}"
 msgstr ""
 
-#: app/controllers/events_controller.rb:173
+#: app/controllers/events_controller.rb:183
 msgid "Couldn't find any event to edit!"
+msgstr ""
+
+#: app/controllers/permissions_controller.rb:8
+#: app/controllers/users_controller.rb:40
+msgid "Your changes have been saved."
+msgstr ""
+
+#: app/controllers/permissions_controller.rb:13
+msgid "Couldn't save changes!"
 msgstr ""
 
 #: app/controllers/sessions_controller.rb:7
@@ -77,21 +127,30 @@ msgstr ""
 msgid "You have been logged out."
 msgstr ""
 
-#: app/controllers/users_controller.rb:40
-msgid "Your changes have been saved."
-msgstr ""
-
 #: app/controllers/users_controller.rb:47
 msgid "Edit profile"
 msgstr ""
 
-#: app/controllers/users_controller.rb:63
-msgid "You are not authorized to perform that action."
+#: app/controllers/users_controller.rb:56
+msgid "Signup complete!"
 msgstr ""
 
 #: app/controllers/users_controller.rb:66
-#: app/views/layouts/standard.html.haml:19
-msgid "Contact list"
+msgid "Couldn't find that e-mail address!"
+msgstr ""
+
+#: app/controllers/users_controller.rb:75
+msgid ""
+"Password reset for %{email}. Please check your e-mail for your new password."
+msgstr ""
+
+#: app/controllers/users_controller.rb:77
+msgid "Couldn't reset password. Please try again."
+msgstr ""
+
+#: app/controllers/users_controller.rb:81 app/views/users/reset.html.haml:1
+#: app/views/users/reset.html.haml:5
+msgid "Reset password"
 msgstr ""
 
 #: app/helpers/events_helper.rb:29
@@ -116,6 +175,30 @@ msgstr ""
 
 #: app/helpers/events_helper.rb:121
 msgid "map"
+msgstr ""
+
+#: app/helpers/events_helper.rb:126
+msgid "(use %{Markdown} for formatting)"
+msgstr ""
+
+#: app/helpers/events_helper.rb:126
+msgid "Markdown"
+msgstr ""
+
+#: app/models/calendar.rb:-
+msgid "calendar"
+msgstr ""
+
+#: app/models/calendar.rb:-
+msgid "Calendar|Name"
+msgstr ""
+
+#: app/models/calendar.rb:-
+msgid "Calendar|Created at"
+msgstr ""
+
+#: app/models/calendar.rb:-
+msgid "Calendar|Updated at"
 msgstr ""
 
 #: app/models/commitment.rb:-
@@ -206,6 +289,30 @@ msgstr ""
 msgid "Event|Description"
 msgstr ""
 
+#: app/models/event.rb:-
+msgid "Event|Calendar"
+msgstr ""
+
+#: app/models/mailer.rb:7
+msgid "Quorum Password Reset"
+msgstr ""
+
+#: app/models/permission.rb:-
+msgid "permission"
+msgstr ""
+
+#: app/models/permission.rb:-
+msgid "Permission|User"
+msgstr ""
+
+#: app/models/permission.rb:-
+msgid "Permission|Calendar"
+msgstr ""
+
+#: app/models/permission.rb:-
+msgid "Permission|Role"
+msgstr ""
+
 #: app/models/role.rb:-
 msgid "role"
 msgstr ""
@@ -238,6 +345,24 @@ msgstr ""
 msgid "State|Name"
 msgstr ""
 
+#: app/views/mailer/reset.erb:1
+msgid "Hello, %{user}!"
+msgstr ""
+
+#: app/views/mailer/reset.erb:3
+msgid ""
+"This is the %{Quorum} application at %{app_url} .  I just received a request "
+"to reset the password for your account with e-mail address %{email} .  I've "
+"done that now; your new password is:\n"
+"%{password}\n"
+"\n"
+"To log in, please go to %{login_url} and enter the e-mail address and "
+"password given above.  Once you've done that, please go to %{profile_url} "
+"and change your password to something that only you know.\n"
+"\n"
+"Happy scheduling!"
+msgstr ""
+
 #: app/views/user_mailer/signup_notification.html.erb:1
 msgid "Your account has been created."
 msgstr ""
@@ -253,6 +378,31 @@ msgstr ""
 
 #: app/views/user_mailer/signup_notification.html.erb:6
 msgid "Visit this URL to activate your account:"
+msgstr ""
+
+#: app/views/admin/index.html.haml:1
+msgid "You have administrative permissions on the following calendars:"
+msgstr ""
+
+#: app/views/calendars/edit.html.haml:4 app/views/calendars/users.html.haml:3
+msgid "Name"
+msgstr ""
+
+#: app/views/calendars/edit.html.haml:6 app/views/calendars/users.html.haml:19
+#: app/views/users/new.html.haml:52
+msgid "Save"
+msgstr ""
+
+#: app/views/calendars/users.html.haml:4
+msgid "E-mail"
+msgstr ""
+
+#: app/views/calendars/users.html.haml:5
+msgid "Address"
+msgstr ""
+
+#: app/views/calendars/users.html.haml:6
+msgid "Role for this calendar"
 msgstr ""
 
 #: app/views/events/_attendance.html.haml:1
@@ -278,6 +428,32 @@ msgstr ""
 msgid "Change status"
 msgstr ""
 
+#: app/views/events/_table_header.html.haml:6
+#: app/views/events/new.html.haml:22
+msgid "Date"
+msgstr ""
+
+#: app/views/events/_table_header.html.haml:10
+msgid "Event"
+msgstr ""
+
+#: app/views/events/_table_header.html.haml:13
+#: app/views/events/new.html.haml:17
+msgid "Description"
+msgstr ""
+
+#: app/views/events/_table_header.html.haml:14
+msgid "Status"
+msgstr ""
+
+#: app/views/events/_table_header.html.haml:15
+msgid "Attending"
+msgstr ""
+
+#: app/views/events/_table_header.html.haml:16
+msgid "Not attending"
+msgstr ""
+
 #: app/views/events/index.html.haml:5
 msgid "Your personal %{RSS_feed} for this page is available at %{URL}"
 msgstr ""
@@ -286,51 +462,35 @@ msgstr ""
 msgid "RSS feed"
 msgstr ""
 
-#: app/views/events/index.html.haml:18 app/views/events/new.html.haml:9
-msgid "Description"
+#: app/views/events/new.html.haml:5
+msgid "Calendar"
 msgstr ""
 
-#: app/views/events/index.html.haml:19
-msgid "Status"
-msgstr ""
-
-#: app/views/events/index.html.haml:20
-msgid "Attending"
-msgstr ""
-
-#: app/views/events/index.html.haml:21
-msgid "Not attending"
-msgstr ""
-
-#: app/views/events/new.html.haml:4
+#: app/views/events/new.html.haml:11
 msgid "Event name"
 msgstr ""
 
-#: app/views/events/new.html.haml:12
-msgid "Date"
-msgstr ""
-
-#: app/views/events/new.html.haml:17
+#: app/views/events/new.html.haml:27
 msgid "Site"
 msgstr ""
 
-#: app/views/events/new.html.haml:20 app/views/users/new.html.haml:33
+#: app/views/events/new.html.haml:30 app/views/users/new.html.haml:33
 msgid "Street address"
 msgstr ""
 
-#: app/views/events/new.html.haml:26 app/views/users/new.html.haml:39
+#: app/views/events/new.html.haml:36 app/views/users/new.html.haml:39
 msgid "City"
 msgstr ""
 
-#: app/views/events/new.html.haml:29 app/views/users/new.html.haml:42
+#: app/views/events/new.html.haml:39 app/views/users/new.html.haml:42
 msgid "State"
 msgstr ""
 
-#: app/views/events/new.html.haml:34
+#: app/views/events/new.html.haml:44
 msgid "Zip"
 msgstr ""
 
-#: app/views/events/new.html.haml:36
+#: app/views/events/new.html.haml:46
 msgid "Save changes"
 msgstr ""
 
@@ -343,10 +503,14 @@ msgid "User profile"
 msgstr ""
 
 #: app/views/layouts/standard.html.haml:20
+msgid "Admin tools"
+msgstr ""
+
+#: app/views/layouts/standard.html.haml:21
 msgid "Log out"
 msgstr ""
 
-#: app/views/layouts/standard.html.haml:22
+#: app/views/layouts/standard.html.haml:23
 msgid "Welcome, %{user}!"
 msgstr ""
 
@@ -368,16 +532,8 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
-#: app/views/users/list.html.haml:3
-msgid "Name"
-msgstr ""
-
-#: app/views/users/list.html.haml:4
-msgid "E-mail"
-msgstr ""
-
-#: app/views/users/list.html.haml:5
-msgid "Address"
+#: app/views/sessions/new.html.haml:20
+msgid "Forgot your password?"
 msgstr ""
 
 #: app/views/users/new.html.haml:2
@@ -442,9 +598,9 @@ msgid ""
 msgstr ""
 
 #: app/views/users/new.html.haml:52
-msgid "Save"
+msgid "Sign up"
 msgstr ""
 
-#: app/views/users/new.html.haml:52
-msgid "Sign up"
+#: app/views/users/reset.html.haml:3
+msgid "Please enter your e-mail address."
 msgstr ""
