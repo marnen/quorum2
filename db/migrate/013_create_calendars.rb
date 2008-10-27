@@ -6,6 +6,9 @@ class CreateCalendars < ActiveRecord::Migration
     end
 
     @cal = Calendar.new(:name => 'Default calendar')
+    def @cal.set_admin #turn off before_create hook on this object only
+      return self
+    end
     @cal.save!
 
     add_column :events, :calendar_id, :integer, :deferrable => true
