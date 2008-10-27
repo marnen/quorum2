@@ -45,6 +45,8 @@ ActionController::Routing::Routes.draw do |map|
   map.formatted_feed_events 'events/feed.:format/:key', :controller => 'events', :action => 'feed'
   map.resources :events
   
+  map.resources :permissions
+  
 
   # Some stuff for sorting the event list
   map.connect 'events/index/:order/:direction', :controller => 'events', :action => 'index', :direction => /(a|de)sc/, :defaults => {:order => 'date', :direction => 'asc'}
