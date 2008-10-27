@@ -4,7 +4,7 @@
       %tr
         %th&= _("Calendar")
         %td
-          = f.collection_select :calendar_id, User.current_user.calendars, :id, :name
+          = f.collection_select :calendar_id, User.current_user.calendars.sort{|x, y| x.name <=> y.name}, :id, :name
     - else
       = f.hidden_field :calendar_id, :value => User.current_user.calendars[0].id
     %tr
