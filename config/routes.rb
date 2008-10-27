@@ -48,6 +48,8 @@ ActionController::Routing::Routes.draw do |map|
 
   # Some stuff for sorting the event list
   map.connect 'events/index/:order/:direction', :controller => 'events', :action => 'index', :direction => /(a|de)sc/, :defaults => {:order => 'date', :direction => 'asc'}
+  
+  map.connect ':controller', :action => 'index'
 
   # See how all your routes lay out with "rake routes"
 
