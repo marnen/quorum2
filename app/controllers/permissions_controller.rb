@@ -1,8 +1,16 @@
 class PermissionsController < ApplicationController
-  before_filter :check_admin
+  @@nonadmin = :index
+  before_filter :check_admin, :except => @@nonadmin
+  before_filter :login_required, :only => @@nonadmin
+  layout 'standard'
   
   make_resourceful do
-    actions :edit, :update
+    actions :index, :edit, :update
+    
+    response_for :index do
+      @page_title = _('Subscriptions')
+      @permissions = User.current_user.permissions.find(:all, :include => [:calendar, :role])
+    end
     
     response_for :update do
       flash[:notice] = _("Your changes have been saved.")

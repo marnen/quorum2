@@ -1,0 +1,11 @@
+%p&= _('You are subscribed to the following calendars.')
+
+%table.subscriptions
+  %tr
+    %th&= _('Name')
+    %th&= _('Role')
+  - @permissions.each do |p|
+    %tr[p]
+      %td[p.calendar]&= p.calendar
+      %td&= p.role
+      
