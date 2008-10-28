@@ -1,6 +1,7 @@
 class CalendarsController < ApplicationController
-  before_filter :check_admin, :except => [:new, :create]
-  before_filter :login_required, :only => [:new, :create]
+  @@nonadmin = [:new, :create]
+  before_filter :check_admin, :except => @@nonadmin
+  before_filter :login_required, :only => @@nonadmin
   layout 'standard'
   
   make_resourceful do
@@ -36,6 +37,7 @@ class CalendarsController < ApplicationController
     end
   end
   
+  # Lists all the users for the current #Calendar.
   def users
     @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => current_object}
     @users = current_object.users.find(:all, :order => 'lastname, firstname')
