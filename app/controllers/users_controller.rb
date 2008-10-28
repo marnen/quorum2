@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   layout :get_layout
-  before_filter :login_required, :only => :edit
+  before_filter :login_required, :only => [:edit, :regenerate_key]
   # render new.rhtml
   def new
   end
@@ -56,6 +56,20 @@ class UsersController < ApplicationController
       flash[:notice] = _("Signup complete!")
     end
     redirect_back_or_default('/login')
+  end
+  
+  # Regenerates #feed_key of #User.current_user, then redirects to previous page.
+  def regenerate_key
+    u = User.current_user
+    begin
+      u.feed_key = nil
+      u.save!
+      flash[:notice] = _('Your RSS URL has been regenerated.')
+    rescue Exception
+      flash[:error] = _("Couldn't regenerate the URL! Please try again.")
+    ensure
+      redirect_to :back
+    end
   end
   
   # Resets password of user specified in <tt>params[:email]</tt>, and sends the new password to the user by e-mail.

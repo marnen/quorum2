@@ -49,9 +49,14 @@ describe "/events/index" do
     response[:head].should have_tag("link[title=RSS][href=#{rss_url}]")
   end
   
-  it "should contain a link and a URL for  the RSS feed" do
+  it "should contain a link and a URL for the RSS feed" do
     render 'events/index'
     response.should have_tag(".rss a[href=#{rss_url}]")
     response.should have_tag(".rss .url", %r{#{rss_url}})
+  end
+  
+  it "should contail a link to regenerate the RSS feed key" do
+    render 'events/index'
+    response.should have_tag(".rss a[href=#{regenerate_key_path}]")
   end
 end

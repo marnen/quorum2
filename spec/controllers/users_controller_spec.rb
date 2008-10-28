@@ -125,6 +125,41 @@ describe UsersController, "edit" do
   end
 end
 
+describe UsersController, '(regenerate_key)' do
+  before(:each) do
+    request.env['HTTP_REFERER'] = 'http://test.host/referer' # so redirect_to :back works
+    controller.stub!(:login_required).and_return(true)
+  end
+  
+  it "should be a valid action" do
+    User.stub!(:current_user).and_return(mock_model(User, :null_object => true))
+    get :regenerate_key
+    response.should redirect_to(:back)
+  end
+  
+  it "should change the current user's feed_key" do
+    @current_user = mock_model(User, :feed_key => 'abc123')
+    @current_user.should_receive(:feed_key=).with(nil).ordered
+    @current_user.should_receive(:save!)
+    User.stub!(:current_user).and_return(@current_user)
+    get :regenerate_key
+  end
+  
+  it 'should set flash[:notice] on success' do
+    User.stub!(:current_user).and_return(mock_model(User, :null_object => true))
+    get :regenerate_key
+    flash[:notice].should_not be_nil
+  end
+
+  it 'should set flash[:error] on failure' do
+    @current_user = mock_model(User, :null_object => true)
+    @current_user.should_receive(:save!).and_raise
+    User.stub!(:current_user).and_return(@current_user)
+    get :regenerate_key
+    flash[:error].should_not be_nil
+  end
+end
+
 describe UsersController, '(reset)' do
   integrate_views
   
