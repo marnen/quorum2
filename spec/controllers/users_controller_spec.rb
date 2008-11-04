@@ -196,8 +196,9 @@ describe UsersController, '(reset/POST)' do
     @user.should_receive(:password_confirmation=)
     @user.should_receive(:save!).and_return(true)
     User.should_receive(:find_by_email).and_return(@user)
-    Mailer.should_receive(:deliver_reset).with(@user, an_instance_of(String)).and_return(true)
+    UserMailer.should_receive(:deliver_reset).with(@user, an_instance_of(String)).at_least(:once).and_return(true)
     post :reset, :email => 'quentin@example.com'
+    flash[:error].should be_nil
     flash[:notice].should_not be_nil
   end
 end

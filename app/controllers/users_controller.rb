@@ -85,11 +85,11 @@ class UsersController < ApplicationController
       user.password_confirmation = password
       begin
         user.save!
-        Mailer.deliver_reset(user, password)
+        UserMailer.deliver_reset(user, password)
         flash[:notice] = _("Password reset for %{email}. Please check your e-mail for your new password.") % {:email => params[:email]}
-      rescue
-        flash[:error] = _("Couldn't reset password. Please try again.")
-        return
+      #rescue
+        #flash[:error] = _("Couldn't reset password. Please try again.")
+        #return
       end
     else
       @page_title = _("Reset password")
