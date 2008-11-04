@@ -26,12 +26,10 @@ describe "/events/index" do
   end
   
   it "should show a sort indicator next to headers that have been sorted by" do
-    pending "this spec always fails, even though the application behaves correctly...need to rewrite with a helper?" do
-      assigns[:order] = 'name'
-      assigns[:direction] = 'desc'
-      render 'events/index' # , {:order => 'name', :direction => 'desc'}
-      response.should have_text(h("Event ↓"))
-    end
+    assigns[:order] = 'name'
+    assigns[:direction] = 'desc'
+    render 'events/index' # , {:order => 'name', :direction => 'desc'}
+    response.should have_text(%r{Event\s?((<[^>]*>)?\s?)*↓})
   end
   
   it "should render _event for each event" do

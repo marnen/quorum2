@@ -122,32 +122,28 @@ describe 'events/_event' do
   end
   
   it "should contain an edit link for each event that the current user created" do
-    pending "app behaves correctly, but this spec doesn't seem to work" do
-      user = mock_model(Role, :name => 'user')
-      nonadmin = mock_model(User, :role => user)
-      User.stub!(:current_user).and_return(nonadmin) # non-admin
-      Event.stub!(:created_by).and_return(nonadmin)
-      render_view
-      for event in @events do
-        User.current_user.should == nonadmin
-        event.created_by.should == nonadmin
-        url = url_for(:controller => 'events', :action => 'edit', :id => event.id, :escape => false)
-        response.should have_tag("#event_#{event.id} a[href=" << url << "]")
-      end
-      Event.stub!(:created_by).and_return(User.new)
-      for event in @events do
-        url = url_for(:controller => 'events', :action => 'edit', :id => event.id, :escape => false)
-        response.should_not have_tag("#event_#{event.id} a[href=" << url << "]")
-      end
+    user = mock_model(Role, :name => 'user')
+    nonadmin = mock_model(User, :role => user, :null_object => true)
+    User.stub!(:current_user).and_return(nonadmin) # non-admin
+    Event.stub!(:created_by).and_return(nonadmin)
+    render_view
+    events.each do |event|
+      User.current_user.should == nonadmin
+      event.created_by.should == nonadmin
+      url = url_for(:controller => 'events', :action => 'edit', :id => event.id, :escape => false)
+      response.should have_tag("#event_#{event.id} a[href=" << url << "]")
+    end
+    Event.stub!(:created_by).and_return(User.new)
+    events.each do |event|
+      url = url_for(:controller => 'events', :action => 'edit', :id => event.id, :escape => false)
+      response.should_not have_tag("#event_#{event.id} a[href=" << url << "]")
     end
   end
   
   it "should get a list of users attending and not attending for each event" do
-    pending "maybe put this in a before block?" do
-      for event in @events do
-        event.should_receive(:find_committed).with(:yes).once
-        event.should_receive(:find_committed).with(:no).once
-      end
+    events.each do |event|
+      event.should_receive(:find_committed).with(:yes).once
+      event.should_receive(:find_committed).with(:no).once
     end
   end
 

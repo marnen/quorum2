@@ -25,12 +25,10 @@ describe CalendarsController, 'new' do
   end
   
   it 'should require login' do
-    pending 'not stubbing login_required properly yet' do
-      User.stub!(:current_user).and_return(false)
-      controller.stub!(:login_required).and_return(false)
-      get :new
-      response.should_not be_success
-    end
+    User.stub!(:current_user).and_return(false)
+    controller.stub!(:login_required).and_return(false)
+    get :new
+    response.body.should be_blank
   end
   
   it 'should share the same template with the edit action' do

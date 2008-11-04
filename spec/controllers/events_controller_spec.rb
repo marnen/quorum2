@@ -177,10 +177,15 @@ describe EventsController, "new" do
   end
   
   it "should require login" do
-    pending "need to figure out how to write this"
+    get :new
+    response.should be_success
+    login_as nil
+    controller.stub!(:login_required).and_return(nil)
+    get :new
+    response.body.should be_blank # not sure why this works and nothing else does...
   end
   
-  it "should be successful" do
+  it "should be successful if logged in" do
    get :new
    response.should be_success
   end
