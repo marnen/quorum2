@@ -52,10 +52,10 @@ class Event < ActiveRecord::Base
     temp = self.commitments.clone
     if status == :yes then
       temp.delete_if {|e| e.status != true}
-      temp.collect{|e| e.user }
+      temp.collect{|e| e.user }.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)}
     elsif status == :no then
       temp.delete_if {|e| e.status != false}
-      temp.collect{|e| e.user }
+      temp.collect{|e| e.user }.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)}
     else
       raise "Invalid status: " << status
     end

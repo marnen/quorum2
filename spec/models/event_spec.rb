@@ -141,6 +141,15 @@ describe Event, "(find_committed)" do
       no[0].should be_a_kind_of(User)
     end
   end
+  
+  it 'should sort the Users on lastname or, failing that, email' do
+    @array = []
+    @array.should_receive(:sort).twice # need to figure out a way to specify the sort block
+    @temp = mock('temp', :collect => @array, :null_object => true)
+    @event.should_receive(:commitments).twice.and_return(mock('commitments', :clone => @temp))
+    @find[:yes]
+    @find[:no]
+  end
 end
 
 describe Event, "(hide)" do
