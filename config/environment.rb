@@ -62,4 +62,7 @@ Rails::Initializer.run do |config|
   
   # Observer for restful_authentication
   config.active_record.observers = :user_observer
+  
+  # Gem versions can go here.
+  config.gem 'haml', :version => '= 2.0.0'
 end
