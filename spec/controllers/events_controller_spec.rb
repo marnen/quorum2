@@ -336,19 +336,23 @@ describe EventsController, "show" do
   
   before(:each) do
     login_as :quentin
+    controller.stub!(:login_required).and_return(true)
   end
   
   it "should set the page title" do
-    @event = Event.new(:id => 3, :name => 'Name of event', :calendar_id => calendars(:one).id)
-    Event.stub!(:find).and_return(@event)
+    @event = mock_model(Event, :id => 3, :name => 'Name of event', :calendar_id => calendars(:one).id)
+    @event.should_receive(:allow?).with(:show).at_least(:once).and_return(true)
+    Event.should_receive(:find).at_least(:once).and_return(@event)
     get :show, :id => @event.id
     assigns[:page_title].should_not be_nil
+    assigns[:page_title].should =~ Regexp.new(@event.name)
   end
   
   it "should not show an event on a calendar for which the current user doesn't have access" do
-    @event = Event.new(:id => 4, :calendar_id => 57, :name => 'Event on another calendar')
-    Event.stub!(:find).and_return(@event)
-    get :show, :id => @event.id
+    @event = mock_model(Event, :id => 4, :calendar_id => 57, :name => 'Event on another calendar')
+    @event.should_receive(:allow?).with(:show).at_least(:once).and_return(false)
+    Event.should_receive(:find).at_least(:once).and_return(@event)
+     get :show, :id => @event.id
     flash[:error].should_not be_nil
     response.should be_redirect
   end

@@ -37,7 +37,7 @@ class EventsController < ApplicationController
       redirect_to :action => :index
     end
     
-    before :show do
+    response_for :show do
       if !current_object.allow?(:show)
         flash[:error] = _("You are not authorized to view that event.")
         redirect_to :action => :index
