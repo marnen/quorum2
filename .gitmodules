@@ -1,0 +1,18 @@
+[submodule "vendor/plugins/spatial_adapter"]
+	path = vendor/plugins/spatial_adapter
+	url = git://github.com/pdeffendol/spatial_adapter.git
+[submodule "vendor/plugins/ym4r_gm"]
+	path = vendor/plugins/ym4r_gm
+	url = git://github.com/ewildgoose/ym4r_gm.git
+[submodule "vendor/plugins/javascript_test"]
+	path = vendor/plugins/javascript_test
+	url = git://github.com/rails/javascript_test.git
+[submodule "vendor/plugins/transactional_migrations"]
+	path = vendor/plugins/transactional_migrations
+	url = git://github.com/harukizaemon/transactional_migrations.git
+[submodule "vendor/plugins/make_resourceful"]
+	path = vendor/plugins/make_resourceful
+	url = git://github.com/hcatlin/make_resourceful.git
+[submodule "vendor/plugins/restful_authentication"]
+	path = vendor/plugins/restful_authentication
+	url = git://github.com/technoweenie/restful-authentication.git
