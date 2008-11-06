@@ -32,7 +32,7 @@ gems:
   version: 1.90.0
 - name: haml
   version: 2.0.0
-- name: hoe
+- name: hoe # testing
   version: 1.8.0
 - name: postgres
   version: 0.7.9.2008.01.28
@@ -40,11 +40,11 @@ gems:
   version: 2.0.2
 - name: rake
   version: 0.8.1
-- name: rcov
+- name: rcov # testing
   version: 0.8.1.2.0
-- name: rspec
+- name: rspec # testing
   version: 1.1.9
-- name: rspec-rails
+- name: rspec-rails # testing
   version: 1.1.9
 - name: rubyforge
   version: 0.4.4
