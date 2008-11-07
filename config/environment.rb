@@ -65,4 +65,7 @@ Rails::Initializer.run do |config|
   
   # Gem versions can go here.
   config.gem 'haml', :version => '= 2.0.0'
+  
+  # Set app to Eastern time for now -- we'll have configurable time zones soon enough
+  config.time_zone = 'Eastern Time (US & Canada)'
 end
