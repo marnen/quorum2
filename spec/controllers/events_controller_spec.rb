@@ -34,7 +34,7 @@ describe EventsController, "index" do
     Event.should_receive(:find) do |arg1, arg2|
       arg1.should == :all
       arg2.should be_an_instance_of(Hash)
-      arg2.should include(:order)
+      arg2.should have_key(:order)
       arg2[:order].should == "#{order} #{direction}"
     end
     get :index, :order => order, :direction => direction
@@ -249,17 +249,17 @@ describe EventsController, "edit" do
   
   it "should redirect to list with an error if the user does not own the event and is not an admin" do
     event = Event.find(:first)
-    event.stub!(:created_by).and_return(users(:quentin))
-    perms = [mock_model(Permission, :calendar_id => event.calendar_id, :role => mock_model(Role, :name => 'user'))]
-    perms.stub!(:find_by_calendar_id).with(event.calendar_id).and_return(perms[0])
-    marnen = users(:marnen) # current user
-    marnen.stub!(:permissions).and_return(perms) # make him non-admin
+    event.should_receive(:allow?).with(:edit).and_return(false)
+    Event.should_receive(:find).and_return(event)
     get 'edit', :id => event.id
     flash[:error].should_not be_nil
     response.should redirect_to(:action => :index)
-    perms[0] = mock_model(Permission, :calendar_id => event.calendar_id, :role => mock_model(Role, :name => 'admin'))
-    perms.stub!(:find_by_calendar_id).with(event.calendar_id).and_return(perms[0])
-    marnen.stub!(:permissions).and_return(perms) # make him admin
+  end
+  
+  it 'should allow editing if the user is authorized to edit the event' do
+    event = Event.find(:first)
+    event.should_receive(:allow?).with(:edit).and_return(true)
+    Event.should_receive(:find).and_return(event)
     get 'edit', :id => event.id
     flash[:error].should be_nil
     response.should_not redirect_to(:action => :index)

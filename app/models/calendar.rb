@@ -14,6 +14,6 @@ class Calendar < ActiveRecord::Base
   
  protected
   def set_admin
-    self.permissions << Permission.create!(:calendar => self, :user => User.current_user, :role => Role.find_by_name('admin'))
+    self.permissions.create(:user => User.current_user, :role => Role.find_by_name('admin'))
   end
 end

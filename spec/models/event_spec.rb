@@ -10,7 +10,7 @@ describe Event, "(general properties)" do
   
   it "should belong to a Country" do
     opts = Event.reflect_on_association(:state).options
-    opts.should include(:include)
+    opts.should have_key(:include)
     opts[:include].should == :country
   end
     

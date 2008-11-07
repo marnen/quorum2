@@ -41,21 +41,20 @@ describe Calendar, '(validations)' do
   it 'should set its creator as admin' do
     @admin = mock_model(Role, :id => 2, :name => 'admin')
     @user = mock_model(User, :id => 15, :name => 'creator')
-    User.stub!(:current_user).and_return(@user)
-
     Role.should_receive(:find_by_name).with('admin').and_return(@admin)
-    opts = {:calendar => @calendar, :user => @user, :role => @admin}
-    @perm = mock_model(Permission, opts.merge(:null_object => true))
-    @perm.should_receive(:[]=).with('calendar_id', anything)
-    Permission.should_receive(:create!).with(opts).and_return(@perm)
-    
+    User.stub!(:current_user).and_return(@user)
+    @perm = mock_model(Permission, :null_object => true)
+    @calendar.permissions.should == []
+    @calendar.permissions.should_receive(:create) {
+      @calendar.permissions << @perm
+    }
     @calendar.save!
     @calendar.permissions.should == [@perm]
   end
   
   it 'should not create permissions when the calendar is invalid' do
     @calendar.name = nil
-    Permission.should_not_receive(:create!)
+    @calendar.permissions.should_not_receive(:create)
     begin
       @calendar.save! # will throw an exception, of course
     rescue
