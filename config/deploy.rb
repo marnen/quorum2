@@ -1,5 +1,5 @@
 set :application, "quorum2"
-set :repository,  "http://svn.ebon-askavi.homedns.org:8080/marnen/quorum2/trunk/"
+set :repository,  "gitosis@geoffrey:quorum2.git"
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
@@ -10,7 +10,12 @@ set :user, "capistrano"
 # If you aren't using Subversion to manage your source code, specify
 # your SCM below:
 # set :scm, :subversion
-set :scm_user, "marnen"
+# set :scm_user, "capistrano"
+set :scm, :git
+set :branch, :master
+set :deploy_via, :remote_cache
+set :git_enable_submodules, 1
+
 =begin
 set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN 
 password for #{scm_user}, please: ") } 
@@ -32,10 +37,12 @@ namespace :deploy do
   
   # Comment out task :restart block unless you're using Phusion Passenger -- it won't work with other servers
   task :restart, :roles => :app do
+    run "if test ! -d #{current_path}/tmp; then mkdir #{current_path}/tmp; fi"
     run "/usr/bin/touch #{current_path}/tmp/restart.txt"
   end
   
   task :after_update_code do
+    #run "chown www-data #{current_path}/config/environment.rb"
     ############# Begin GemInstaller config - see http://geminstaller.rubyforge.org
     require "rubygems" 
     require "geminstaller" 
