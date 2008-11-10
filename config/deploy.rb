@@ -1,5 +1,5 @@
 set :application, "quorum2"
-set :repository,  "gitosis@geoffrey:quorum2.git"
+set :repository,  "gitosis@ebon-askavi.homedns.org:quorum2.git"
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
