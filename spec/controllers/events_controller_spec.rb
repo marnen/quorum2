@@ -52,11 +52,14 @@ describe EventsController, "index" do
 end
 
 describe EventsController, "feed.rss" do
-  fixtures :events, :users
   integrate_views
   
   before(:each) do
-    get :feed, :format => 'rss', :key => User.find(:first).feed_key
+    @one = mock_model(Event, :name => 'Event 1', :date => Date.civil(2008, 7, 4), :description => 'The first event.', :address_for_geocoding => '719 State Street, Albany, NY 12203, US', :created_at => 1.week.ago)
+    @two = mock_model(Event, :name => 'Event 2', :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :address_for_geocoding => '1600 Pennsylvania Avenue, Washington, DC 20500, US', :created_at => 2.days.ago)
+    @events = [@one, @two]
+    controller.stub!(:current_objects).and_return(@events)
+    get :feed, :format => 'rss', :key => 'c' * 32 # arbitrary key
   end
   
   it "should be successful" do
@@ -105,7 +108,7 @@ describe EventsController, "feed.rss" do
   end
     
   it "should contain an entry for every event, with <title>, <description> (with address and description), <link>, <guid>, and <pubDate> elements" do
-    Event.find(:all).each do |e|
+    @events.each do |e|
       response.should have_tag('item title',ERB::Util::html_escape(e.name)) # actually, this is XML escape, but close enough
       response.should have_tag('item description', /#{ERB::Util::html_escape(e.date.to_s(:rfc822))}.*#{ERB::Util::html_escape(e.address_for_geocoding)}.*#{ERB::Util::html_escape(BlueCloth::new(ERB::Util::html_escape(e.description)).to_html)}/m) # kinky but accurate
       response.should have_tag('item link', event_url(e))
