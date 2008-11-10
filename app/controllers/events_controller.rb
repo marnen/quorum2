@@ -52,6 +52,7 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.rss do
         @key = params[:key]
+        params[:from_date] = Date.civil(1, 1, 1)
       end
     end
   end
@@ -159,12 +160,21 @@ class EventsController < ApplicationController
     @page_title = _("Map for %{event}") % {:event => @event.name}
   end
   
-  # Return non-deleted events, optionally ordered as specified by params[:order] and [:direction]. Provided for use with make_resourceful[http://mr.hamptoncatlin.com].
+  # Return non-deleted events between params[:from_date] and params[:to_date], optionally ordered as specified by params[:order] and [:direction]. Provided for use with make_resourceful[http://mr.hamptoncatlin.com].
   def current_objects
     user = params[:feed_user] || User.current_user
     order = params[:order] || 'date'
+    from_date = params[:from_date] || Time.zone.today
+    to_date = params[:to_date]
     direction = params[:direction] || 'asc'
-    @current_objects || current_model.find(:all, :conditions => ['deleted is distinct from true AND calendar_id IN (:calendars)', {:calendars => user.calendars.collect{|c| c.id}}], :order => "#{order} #{direction}")
+    
+    if to_date == nil
+      date_query = 'date >= :from_date'
+    else
+      date_query = 'date BETWEEN :from_date AND :to_date'
+    end
+    
+    @current_objects || current_model.find(:all, :conditions => ['deleted is distinct from true AND calendar_id IN (:calendars) AND ' + date_query, {:calendars => user.calendars.collect{|c| c.id}, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
   end
   
  protected

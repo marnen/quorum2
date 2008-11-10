@@ -30,14 +30,33 @@ describe EventsController, "index" do
   it "should pass sorting parameters from the URL" do
     order = 'name'
     direction = 'desc'
-    route_for(:controller => 'events', :action => 'index', :order => order, :direction => direction).should == "/events/index/#{order}/#{direction}"
+    params = {:order => order, :direction => direction}
+    route_for(params.merge(:controller => 'events', :action => 'index')).should == "/events/index/#{order}/#{direction}"
     Event.should_receive(:find) do |arg1, arg2|
       arg1.should == :all
       arg2.should be_an_instance_of(Hash)
       arg2.should have_key(:order)
       arg2[:order].should == "#{order} #{direction}"
+      arg2.should have_key(:conditions)
+      conditions = arg2[:conditions]
+      conditions.should be_an_instance_of(Array)
+      conditions[0].should =~ /date >= :from_date/i
+      conditions[1].should be_an_instance_of(Hash)
+      conditions[1].should have_key(:from_date)
+      conditions[1][:from_date].should be_an_instance_of(Date)
+      conditions[1][:from_date].should == Time.zone.today # default value if not set in params
+      conditions[1].should have_key(:to_date)
+      conditions[1][:to_date].should be_nil
     end
-    get :index, :order => order, :direction => direction
+    get :index, params
+=begin
+  TODO: when we have a search form, I suppose :)
+  
+  If to_date is not nil, then we need the following specs for the monstrosity above:
+  conditions[0].should =~ /between :from_date and :to_date/i
+  conditions[1][:to_date].should be_an_instance_of(Date)
+  conditions[1][:to_date].should > Time.zone.today + 99.years
+=end
   end
   
   it "should have date/asc as default order and direction in URL" do
