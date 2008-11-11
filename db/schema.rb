@@ -1,5 +1,5 @@
 # This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of ActiveRecord to incrementally modify your database, and
+# please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
 # Note that this schema.rb definition is the authoritative source for your database schema. If you need
@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 13) do
+ActiveRecord::Schema.define(:version => 20081111034201) do
 
   create_table "calendars", :force => true do |t|
     t.column "name", :string, :null => false
@@ -39,10 +39,10 @@ ActiveRecord::Schema.define(:version => 13) do
     t.column "zip", :string
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
+    t.column "coords", :point
     t.column "created_by_id", :integer
     t.column "deleted", :boolean
     t.column "description", :text
-    t.column "coords", :point
     t.column "calendar_id", :integer, :null => false
   end
 
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(:version => 13) do
     t.column "user_id", :integer, :null => false
     t.column "calendar_id", :integer, :null => false
     t.column "role_id", :integer, :null => false
+    t.column "show_in_report", :boolean, :default => true, :null => false
   end
 
   create_table "roles", :force => true do |t|
@@ -81,9 +82,9 @@ ActiveRecord::Schema.define(:version => 13) do
     t.column "activated_at", :timestamp
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
+    t.column "coords", :point
     t.column "show_contact", :boolean, :default => true
     t.column "feed_key", :string, :limit => 32, :null => false
-    t.column "coords", :point
   end
 
   add_index "users", ["feed_key"], :name => "index_users_on_feed_key", :unique => true
