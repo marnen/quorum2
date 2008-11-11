@@ -10,12 +10,23 @@ class EventsController < ApplicationController
   make_resourceful do
     actions :index, :create, :new, :edit, :update, :show
     
-    before :index do
+    response_for :index do
       params[:order] ||= 'date' # isn't it enough to define this in routes.rb?
       params[:direction] ||= 'asc' # and this?
       @page_title = _("Upcoming events")
       @order = params[:order]
       @direction = params[:direction]
+      @search = params[:search]
+      class << @search # NOTE: should we refactor this into a regular class?
+        def method_missing(name)
+          s = name.to_s
+          if s =~ /_date$/
+            return Date.civil(self[:"#{s}(1i)"].to_i, self[:"#{s}(2i)"].to_i, self[:"#{s}(3i)"].to_i)
+          else
+            return self[name]
+          end
+        end
+      end
     end
    
     before :new do

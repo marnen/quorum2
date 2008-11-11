@@ -18,7 +18,7 @@
     %label
       = s.radio_button :from_date_preset, 'other'
       &= _('Other date:')
-    = s.date_select('from_date', :order => [:day, :month, :year])
+    = s.date_select(:from_date, :order => [:day, :month, :year])
     %br
     &= _('To:')
     %label
@@ -27,7 +27,7 @@
     %label
       = s.radio_button :to_date_preset, 'other'
       &= _('Other date:')
-    = s.date_select('to_date', :order => [:day, :month, :year])
+    = s.date_select(:to_date, :order => [:day, :month, :year])
     %br
   = submit_tag(h(_('Search')), :name => nil)
 %table.events
