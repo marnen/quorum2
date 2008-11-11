@@ -20,5 +20,5 @@
             &= perm.role
           - else
             = f.collection_select :role_id, Role.find(:all, :order => :name), :id, :to_s, {}, {:id => "permission_#{perm.id}_role_id"}
-        %td= f.check_box :show_in_report
-        %td= submit_tag(h(_('Save')))
+        %td._show= f.check_box :show_in_report
+        %td._submit= submit_tag(h(_('Save')))
