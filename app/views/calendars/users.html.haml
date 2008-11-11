@@ -5,15 +5,15 @@
     %th&= _('Address')
     %th&= _('Role for this calendar')
   - for user in @users do
-    %tr[user]
-      %td&= [user.lastname, user.firstname].compact.join(', ')
-      %td&= user.show_contact ? user.email : ''
-      %td= user.show_contact ? [user.street, user.street2, "#{user.city}, #{user.state.code} #{user.zip}, #{user.state.country.code}"].compact.collect {|s| h(s)}.join(tag(:br)) : ''
-      %td
-        - perm = user.permissions.find_by_calendar_id(@current_object)
-        - if user == User.current_user
-          &= perm.role
-        - else
-          - form_for perm do |f|
+    - perm = user.permissions.find_by_calendar_id(@current_object)
+    - form_for perm do |f|
+      %tr[user]
+        %td._name&= [user.lastname, user.firstname].compact.join(', ')
+        %td._email&= user.show_contact ? user.email : ''
+        %td._address= user.show_contact ? [user.street, user.street2, "#{user.city}, #{user.state.code} #{user.zip}, #{user.state.country.code}"].compact.collect {|s| h(s)}.join(tag(:br)) : ''
+        %td._role
+          - if user == User.current_user
+            &= perm.role
+          - else
             = f.collection_select :role_id, Role.find(:all, :order => :name), :id, :to_s, {}, {:id => "permission_#{perm.id}_role_id"}
-            = submit_tag(h(_('Save')))
+        %td._submit= submit_tag(h(_('Save')))
