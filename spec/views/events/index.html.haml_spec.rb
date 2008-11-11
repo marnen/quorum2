@@ -5,6 +5,10 @@ include ActionView::Helpers::UrlHelper
 include EventsHelper
 
 describe "/events/index" do
+  def name_selector(string)
+    HTML::Selector.new('[name=?]', string)
+  end
+
   fixtures :states, :countries, :events, :users, :commitments
   before(:each) do
     login_as :marnen
@@ -17,6 +21,33 @@ describe "/events/index" do
   it "should have loaded at least one event" do
     render 'events/index'
     @events.size.should > 0
+  end
+  
+  it "should have a date limiting form" do
+    render 'events/index'
+    form = "form[action=#{events_path}][method=get]"
+    response.should have_tag("#{form}") do |e|
+      e.should have_tag('input') do |inputs|
+        inputs.should have_tag('[type=radio]') do |radios|
+          radios.should have_tag(name_selector('search[from_date_preset]')) do |from_date|
+            from_date.should have_tag('[value=today][checked]')
+            from_date.should have_tag('[value=earliest]')
+            from_date.should have_tag('[value=other]')
+          end
+          radios.should have_tag(HTML::Selector.new('[name=?]', 'search[to_date_preset]')) do |to_date|
+            to_date.should have_tag('[value=latest][checked]')
+            to_date.should have_tag('[value=other]')
+          end
+        end
+        inputs.should have_tag(HTML::Selector.new('[type=submit]:not([name])'))
+      end
+      e.should have_tag('select') do |selects|
+        (1..3).each do |x|
+          selects.should have_tag(name_selector "search[from_date(#{x}i)]")
+          selects.should have_tag(name_selector "search[to_date(#{x}i)]")
+        end
+      end
+    end
   end
   
   it "should show a sort link in date and event column header" do
@@ -53,7 +84,7 @@ describe "/events/index" do
     response.should have_tag(".rss .url", %r{#{rss_url}})
   end
   
-  it "should contail a link to regenerate the RSS feed key" do
+  it "should contain a link to regenerate the RSS feed key" do
     render 'events/index'
     response.should have_tag(".rss a[href=#{regenerate_key_path}]")
   end

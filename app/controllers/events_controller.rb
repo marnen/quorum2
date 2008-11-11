@@ -162,6 +162,25 @@ class EventsController < ApplicationController
   
   # Return non-deleted events between params[:from_date] and params[:to_date], optionally ordered as specified by params[:order] and [:direction]. Provided for use with make_resourceful[http://mr.hamptoncatlin.com].
   def current_objects
+    if !params[:search].nil?
+      search = params[:search]
+      ['to', 'from'].each do |s|
+        date = "#{s}_date"
+        params[:"#{date}"] = case search[:"#{date}_preset"]
+          when 'today'
+            Time.zone.today
+          when 'earliest'
+            Date.civil(1, 1, 1) # do we really need an earlier date? :)
+          when 'latest'
+            nil
+          when 'other'
+            Date.civil(search[:"#{date}(1i)"].to_i, search[:"#{date}(2i)"].to_i, search[:"#{date}(3i)"].to_i)
+          else
+            raise "Illegal value for search[:#{date}_preset]: #{search[:"#{date}_preset"]}"
+        end
+      end
+    end
+    
     user = params[:feed_user] || User.current_user
     order = params[:order] || 'date'
     from_date = params[:from_date] || Time.zone.today
