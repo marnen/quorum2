@@ -73,4 +73,10 @@ describe "/calendars/users" do
       end
     end
   end
+  
+  it "should show whether each user is visible on commitment reports" do
+    for u in @users
+      response.should have_tag("tr#user_#{u.id} input[type=checkbox]")
+    end
+  end
 end
