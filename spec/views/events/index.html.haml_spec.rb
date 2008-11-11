@@ -99,8 +99,7 @@ describe "/events/index" do
   end
   
   it "should contain a link for PDF export" do
-    assigns[:query] = '?foo=bar'
-    render 'events/index'
-    response.should have_tag("a[href=#{url_for(:overwrite_params => {:format => :pdf}, :escape => false)}#{assigns[:query]}]")
+    render "events/index"
+    response.should have_tag("a[href=#{url_for(:overwrite_params => {:format => :pdf}, :escape => false)}]")
   end
 end

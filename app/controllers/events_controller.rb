@@ -17,7 +17,6 @@ class EventsController < ApplicationController
       @order = params[:order]
       @direction = params[:direction]
       @search = params[:search]
-      @query = request.query_string.blank? ? '' : "?#{request.query_string}"
       class << @search # NOTE: should we refactor this into a regular class?
         def method_missing(name)
           s = name.to_s

@@ -43,7 +43,7 @@
           %th&= _('Calendar:')
           %td= s.select(:calendar_id, User.current_user.calendars.collect{|c| [c, c.id.to_s]}, {:include_blank => _('[All calendars]')})
   = submit_tag(h(_('Search')), :name => nil)
-  %p.pdf= h(_("Generate attendance report for these events (%{PDF})")) % {:PDF => link_to(h(_('PDF')), "#{url_for(:overwrite_params => {:format => :pdf})}#{@query}")}
+  %p.pdf= h(_("Generate attendance report for these events (%{PDF})")) % {:PDF => link_to(h(_('PDF')), "#{url_for(:overwrite_params => {:format => :pdf})}")}
 %table.events
   = render :partial => 'table_header'
   = render :partial => 'event', :collection => @events
