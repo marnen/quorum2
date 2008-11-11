@@ -8,27 +8,38 @@
   = h(_("If you'd like to change that URL and disable any previous access, we can %{regenerate_it}.")) % {:regenerate_it => link_to(h(_('regenerate it')), regenerate_key_path)}
 - form_tag events_path, :method => :get do
   - fields_for :search do |s|
-    &= _('From:')
-    %label
-      = s.radio_button :from_date_preset, 'today', :checked => true
-      &= _('Today')
-    %label
-      = s.radio_button :from_date_preset, 'earliest'
-      &= _('Earliest event')
-    %label
-      = s.radio_button :from_date_preset, 'other'
-      &= _('Other date:')
-    = s.date_select(:from_date, :order => [:day, :month, :year])
-    %br
-    &= _('To:')
-    %label
-      = s.radio_button :to_date_preset, 'latest', :checked => true
-      &= _('Latest event')
-    %label
-      = s.radio_button :to_date_preset, 'other'
-      &= _('Other date:')
-    = s.date_select(:to_date, :order => [:day, :month, :year])
-    %br
+    %table.search
+      %tr
+        %th
+          &= _('From:')
+        %td
+          %label
+            = s.radio_button :from_date_preset, 'today', :checked => true
+            &= _('Today')
+        %td
+          %label
+            = s.radio_button :from_date_preset, 'earliest'
+            &= _('Earliest event')
+        %td
+          %label
+            = s.radio_button :from_date_preset, 'other'
+            &= _('Other date:')
+            = s.date_select(:from_date, :order => [:day, :month, :year])
+      %tr
+        %th
+          &= _('To:')
+        %td
+          &nbsp;
+          / blank
+        %td
+          %label
+            = s.radio_button :to_date_preset, 'latest', :checked => true
+            &= _('Latest event')
+        %td
+          %label
+            = s.radio_button :to_date_preset, 'other'
+            &= _('Other date:')
+          = s.date_select(:to_date, :order => [:day, :month, :year])
   = submit_tag(h(_('Search')), :name => nil)
 %table.events
   = render :partial => 'table_header'
