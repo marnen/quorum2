@@ -11,7 +11,6 @@ describe "/events/index" do
 
   fixtures :states, :countries, :events, :users, :commitments
   before(:each) do
-    login_as :marnen
     @events = Event.find(:all)
     assigns[:events] = @events
     assigns[:current_user] = users(:marnen)
@@ -25,7 +24,7 @@ describe "/events/index" do
   
   it "should have a date limiting form" do
     render 'events/index'
-    form = "form[action=#{events_path}][method=get]"
+    form = "form[action=#{url_for(:overwrite_params => {}, :escape => false)}][method=get]"
     response.should have_tag("#{form}") do |e|
       e.should have_tag('input') do |inputs|
         inputs.should have_tag('[type=radio]') do |radios|
@@ -97,5 +96,11 @@ describe "/events/index" do
   it "should contain a link to regenerate the RSS feed key" do
     render 'events/index'
     response.should have_tag(".rss a[href=#{regenerate_key_path}]")
+  end
+  
+  it "should contain a link for PDF export" do
+    assigns[:query] = '?foo=bar'
+    render 'events/index'
+    response.should have_tag("a[href=#{url_for(:overwrite_params => {:format => :pdf}, :escape => false)}#{assigns[:query]}]")
   end
 end

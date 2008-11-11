@@ -81,6 +81,17 @@ a.ical
 
 .url
   :font-weight bolder
+  
+!pdf_icon_url = "url('../images/pdf-icon-16x16.png')"
+!pdf_icon_size = 16px
+
+.pdf
+  :background
+    :repeat no-repeat
+    :image = !pdf_icon_url
+  :min-height = !pdf_icon_size
+  :padding-left = !pdf_icon_size + 3px
+
 
 .fieldWithErrors
   :background-color red
