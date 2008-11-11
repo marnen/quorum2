@@ -10,7 +10,7 @@ class EventsController < ApplicationController
   make_resourceful do
     actions :index, :create, :new, :edit, :update, :show
     
-    response_for :index do
+    before :index do
       params[:order] ||= 'date' # isn't it enough to define this in routes.rb?
       params[:direction] ||= 'asc' # and this?
       @page_title = _("Upcoming events")
@@ -28,6 +28,11 @@ class EventsController < ApplicationController
           end
         end
       end
+    end
+      
+    response_for :index do |format|
+      format.html
+      format.pdf {render :layout => false}
     end
    
     before :new do

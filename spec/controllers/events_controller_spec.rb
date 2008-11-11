@@ -159,6 +159,26 @@ describe EventsController, "feed.rss (login)" do
   end
 end
 
+describe EventsController, 'index.pdf' do
+  integrate_views
+  
+  before(:each) do
+    @user = mock_model(User, :null_object => true)
+    User.stub!(:current_user).and_return(@user)
+    controller.stub!(:login_required).and_return(true)
+    controller.stub!(:current_objects).and_return([mock_model(Event)])
+    get :index, :format => 'pdf'
+  end
+  
+  it "should be successful" do
+    response.should be_success
+  end
+  
+  it "should return the appropriate MIME type for a PDF file" do
+    response.headers['type'].should =~ %r{^application/pdf}
+  end
+end
+
 describe EventsController, "change_status" do
   fixtures :users, :events, :commitments
   
