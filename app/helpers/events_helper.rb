@@ -144,7 +144,7 @@ module EventsHelper
     # generate a sort link
     my_class = options[:class]
     my_class ||= 'sort'
-    link_to h(_(title)), url_for(:controller => 'events', :action => 'index', :order => field, :direction => direction), :class => my_class
+    link_to h(_(title)), url_for(:overwrite_params => {:order => field, :direction => direction}), :class => my_class
   end
   
   class StringVar < Ym4r::GmPlugin::Variable
