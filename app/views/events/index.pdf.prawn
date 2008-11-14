@@ -1,9 +1,7 @@
 pdf.font 'Times-Roman'
 data = @users.collect do |u|
-  row = []
   name = [u.lastname, u.firstname].compact
-  row << (name.blank? ? u.email : name.join(', '))
-  row = row + @events.collect do |e|
+  row = [(name.blank? ? u.email : name.join(', '))] + @events.collect do |e|
     case attendance_status(e, u)
       when :yes
         _('Y')
