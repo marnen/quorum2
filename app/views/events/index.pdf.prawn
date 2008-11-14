@@ -13,4 +13,5 @@ data = @users.collect do |u|
   end
   row
 end
-pdf.table data, :headers => [''] + @events.collect{|x| x.name}, :align_headers => :center, :font_size => 10, :border_width => 0.5, :border_style => :grid
+
+pdf.table data, :headers => [''] + @events.collect{|x| [x.name, [x.city, x.state.code].compact.join(', '), x.date.to_s(:rfc822)].compact.join("\n")}, :align => :left, :align_headers => :center, :font_size => 10, :border_width => 0.5, :border_style => :grid
