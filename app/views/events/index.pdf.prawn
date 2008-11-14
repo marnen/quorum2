@@ -1,4 +1,16 @@
-pdf.font 'Times-Roman'
+begin
+  FONT_ROOT = "#{RAILS_ROOT}/fonts/dejavu-fonts-ttf-2.26/ttf"
+  pdf.font_families.update('DejaVu' => {
+    :normal => "#{FONT_ROOT}/DejaVuSerif.ttf",
+    :bold => "#{FONT_ROOT}/DejaVuSerif-Bold.ttf",
+    :italic => "#{FONT_ROOT}/DejaVuSerif-Italic.ttf",
+    :bold_italic => "#{FONT_ROOT}/DejaVuSerif-BoldItalic.ttf",
+  })
+  
+  pdf.font 'DejaVu'
+rescue
+  pdf.font 'Times-Roman'
+end
 data = @users.collect do |u|
   name = [u.lastname, u.firstname].compact
   row = [(name.blank? ? u.email : name.join(', '))] + @events.collect do |e|
@@ -14,4 +26,31 @@ data = @users.collect do |u|
   row
 end
 
-pdf.table data, :headers => [''] + @events.collect{|x| [x.name, [x.city, x.state.code].compact.join(', '), x.date.to_s(:rfc822)].compact.join("\n")}, :align => :left, :align_headers => :center, :font_size => 10, :border_width => 0.5, :border_style => :grid
+title = _("Attendance Report for %{calendar}") % {:calendar => @events.first.calendar.name}
+subtitle = _('Generated %{date}') % {:date => Time.zone.now.to_formatted_s(:rfc822)}
+
+pdf.header pdf.margin_box.top_left do
+  if pdf.page_count > 1
+    pdf.font.size(8) do
+      left = subtitle
+      center = title
+      right = _('page %{page}') % {:page => pdf.page_count}
+      pdf.text left, :align => :left
+      pdf.move_up(pdf.font.height_of(left, :line_width => pdf.margin_box.width))
+      pdf.text center, :align => :center
+      pdf.move_up(pdf.font.height_of(center, :line_width => pdf.margin_box.width))
+      pdf.text right, :align => :right
+    end
+  end
+end
+  
+headers = [''] + @events.collect do |x|
+  [x.name, [x.city, x.state.code].compact.join(', '), x.date.to_s(:rfc822)].compact.join("\n")
+end
+
+pdf.pad_bottom(4) do
+  pdf.text title, :align => :center, :size => 14, :style => :bold
+  pdf.text subtitle, :align => :center, :size => 12
+end
+
+pdf.table data, :headers => headers, :align => :left, :align_headers => :center, :font_size => 9, :border_width => 0.5, :border_style => :grid
