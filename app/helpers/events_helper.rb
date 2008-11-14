@@ -48,7 +48,7 @@ module EventsHelper
   end
   
   # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
-  def event_map(event, host)
+  def event_map(event, hostname)
     return nil if event.nil?
     
     map = GMap.new(:map)
@@ -64,7 +64,7 @@ module EventsHelper
     map.control_init :large_map => true, :map_type => true
     map.record_init marker.open_info_window_html(html)
     @extra_headers = @extra_headers.to_s 
-    @extra_headers << GMap.header(:host => host).to_s << map.to_html.to_s
+    @extra_headers << GMap.header(:host => hostname).to_s << map.to_html.to_s
 
     map.div :width => 500, :height => 400
 =begin
