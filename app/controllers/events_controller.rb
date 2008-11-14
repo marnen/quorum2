@@ -31,7 +31,11 @@ class EventsController < ApplicationController
       
     response_for :index do |format|
       format.html
-      format.pdf {render :layout => false}
+      format.pdf do
+        @users = current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)} # TODO: fix for multiple calendars
+        prawnto :prawn => {:page_layout => :landscape}
+        render :layout => false
+      end
     end
    
     before :new do

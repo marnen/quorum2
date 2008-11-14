@@ -160,22 +160,31 @@ describe EventsController, "feed.rss (login)" do
 end
 
 describe EventsController, 'index.pdf' do
-  integrate_views
-  
   before(:each) do
     @user = mock_model(User, :null_object => true)
     User.stub!(:current_user).and_return(@user)
     controller.stub!(:login_required).and_return(true)
-    controller.stub!(:current_objects).and_return([mock_model(Event)])
-    get :index, :format => 'pdf'
+    controller.stub!(:current_objects).and_return([mock_model(Event, :null_object => true)])
   end
   
   it "should be successful" do
+    get :index, :format => 'pdf'
     response.should be_success
   end
   
   it "should return the appropriate MIME type for a PDF file" do
+    get :index, :format => 'pdf'
     response.headers['type'].should =~ %r{^application/pdf}
+  end
+  
+  it "should set assigns[:users]" do
+    @perms = [mock_model(Permission)]
+    @perms.should_receive(:find_all_by_show_in_report).with(true, :include => :user).and_return(@perms)
+    @perms[0].should_receive(:user).and_return(mock_model(User))
+    @event = mock_model(Event, :calendar => mock_model(Calendar, :permissions => @perms))
+    controller.current_objects.should_receive(:[]).and_return(@event)
+    get :index, :format => 'pdf'
+    assigns[:users].should_not be_nil
   end
 end
 
