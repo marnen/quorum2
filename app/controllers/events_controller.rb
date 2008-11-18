@@ -190,6 +190,8 @@ class EventsController < ApplicationController
             raise "Illegal value for search[:#{date}_preset]: #{search[:"#{date}_preset"]}"
         end
       end
+
+      calendars = search[:calendar_id].blank? ? nil : search[:calendar_id]
     end
     
     user = params[:feed_user] || User.current_user
@@ -197,6 +199,7 @@ class EventsController < ApplicationController
     from_date = params[:from_date] || Time.zone.today
     to_date = params[:to_date]
     direction = params[:direction] || 'asc'
+    calendars ||= user.calendars.collect{|c| c.id}
     
     if to_date == nil
       date_query = 'date >= :from_date'
@@ -204,7 +207,7 @@ class EventsController < ApplicationController
       date_query = 'date BETWEEN :from_date AND :to_date'
     end
     
-    @current_objects || current_model.find(:all, :conditions => ['deleted is distinct from true AND calendar_id IN (:calendars) AND ' + date_query, {:calendars => user.calendars.collect{|c| c.id}, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
+    @current_objects || current_model.find(:all, :conditions => ['deleted is distinct from true AND calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
   end
   
  protected

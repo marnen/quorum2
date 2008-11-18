@@ -10,8 +10,7 @@
   - fields_for :search do |s|
     %table.search
       %tr
-        %th
-          &= _('From:')
+        %th&= _('From:')
         %td
           %label
             = s.radio_button :from_date_preset, 'today', :checked => true
@@ -26,8 +25,7 @@
             &= _('Other date:')
             = s.date_select(:from_date, :order => [:day, :month, :year])
       %tr
-        %th
-          &= _('To:')
+        %th&= _('To:')
         %td
           &nbsp;
           / blank
@@ -40,6 +38,10 @@
             = s.radio_button :to_date_preset, 'other'
             &= _('Other date:')
           = s.date_select(:to_date, :order => [:day, :month, :year])
+      - if User.current_user.calendars.size > 1
+        %tr
+          %th&= _('Calendar:')
+          %td= s.select(:calendar_id, User.current_user.calendars.collect{|c| [c, c.id.to_s]}, {:include_blank => _('[All calendars]')})
   = submit_tag(h(_('Search')), :name => nil)
 %table.events
   = render :partial => 'table_header'

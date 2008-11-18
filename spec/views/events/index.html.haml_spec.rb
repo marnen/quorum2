@@ -45,8 +45,18 @@ describe "/events/index" do
         (1..3).each do |x|
           selects.should have_tag(name_selector "search[from_date(#{x}i)]")
           selects.should have_tag(name_selector "search[to_date(#{x}i)]")
+          selects.should_not have_tag(name_selector "search[calendar_id]")
         end
       end
+    end
+  end
+  
+  it "should have a calendar option on the limiting form iff user has multiple calendars" do
+    User.current_user.stub!(:calendars).and_return([mock_model(Calendar, :name => 'one', :id => 1), mock_model(Calendar, :name => 'two', :id => 2)])
+    render 'events/index'
+    form = "form[action=#{events_path}][method=get]"
+    response.should have_tag("#{form} select") do |selects|
+      selects.should have_tag(name_selector "search[calendar_id]")
     end
   end
   
