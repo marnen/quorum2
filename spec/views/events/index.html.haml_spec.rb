@@ -24,7 +24,7 @@ describe "/events/index" do
   
   it "should have a date limiting form" do
     render 'events/index'
-    form = "form[action=#{url_for(:overwrite_params => {}, :escape => false)}][method=get]"
+    form = "form[action=#{events_path}][method=get]"
     response.should have_tag("#{form}") do |e|
       e.should have_tag('input') do |inputs|
         inputs.should have_tag('[type=radio]') do |radios|
