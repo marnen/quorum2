@@ -26,7 +26,7 @@ data = @users.collect do |u|
   row
 end
 
-title = _("Attendance Report for %{calendar}") % {:calendar => Calendar.find(@search.calendar_id)}
+title = _("Attendance Report for %{calendar}") % {:calendar => @events[0].calendar} # we only ever have events from one calendar, so this is sufficient
 subtitle = _('Generated %{date}') % {:date => Time.zone.now.to_formatted_s(:rfc822)}
 
 pdf.header pdf.margin_box.top_left do

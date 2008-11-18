@@ -98,8 +98,27 @@ describe "/events/index" do
     response.should have_tag(".rss a[href=#{regenerate_key_path}]")
   end
   
-  it "should contain a link for PDF export" do
+  it "should contain a link for PDF export if the current events belong to exactly one calendar" do
+    @one = mock_model(Calendar, :name => 'one', :id => 1)
+    @events.each do |e|
+      e.stub!(:calendar).and_return(@one)
+    end
     render "events/index"
     response.should have_tag("a[href=#{url_for(:overwrite_params => {:format => :pdf}, :escape => false)}]")
+  end
+  
+  it "should not contain a link for PDF export if the current events belong to more than one calendar" do
+    @one = mock_model(Calendar, :name => 'one', :id => 1)
+    @two = mock_model(Calendar, :name => 'two', :id => 2)
+    @events.each_index do |i|
+      e = @events[i]
+      if i % 2 == 0
+        e.stub!(:calendar).and_return(@one)
+      else
+        e.stub!(:calendar).and_return(@two)
+      end
+    end
+    render "events/index"
+    response.should_not have_tag("a[href=#{url_for(:overwrite_params => {:format => :pdf}, :escape => false)}]")
   end
 end
