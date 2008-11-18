@@ -10,7 +10,7 @@
     = @extra_headers
 
   %body
-    %p
+    %p#navbar
       = content_tag(:span, h(SITE_TITLE), :class => :siteName) + ' | '
       = link_to(h(_("List events")), events_path) + ' | '
       = link_to(h(_("Add event")), new_event_path) + ' | '
