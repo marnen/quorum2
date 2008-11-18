@@ -18,7 +18,10 @@ class EventsController < ApplicationController
       @direction = params[:direction]
       @search = params[:search]
       class << @search # NOTE: should we refactor this into a regular class?
-        def method_missing(name)
+        def method_missing(name, *args)
+          if (args.size > 0)
+            return super(name, args)
+          end
           s = name.to_s
           if s =~ /_date$/
             return Date.civil(self[:"#{s}(1i)"].to_i, self[:"#{s}(2i)"].to_i, self[:"#{s}(3i)"].to_i)
@@ -32,7 +35,7 @@ class EventsController < ApplicationController
     response_for :index do |format|
       format.html
       format.pdf do
-        @users = current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)} # TODO: fix for multiple calendars
+        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)} # TODO: fix for multiple calendars
         prawnto :prawn => {:page_layout => :landscape}
         render :layout => false
       end
@@ -182,6 +185,9 @@ class EventsController < ApplicationController
   
   # Return non-deleted events between params[:from_date] and params[:to_date], optionally ordered as specified by params[:order] and [:direction]. Provided for use with make_resourceful[http://mr.hamptoncatlin.com].
   def current_objects
+    user = params[:feed_user] || User.current_user
+
+    # Process parameters from the search form, if it was submitted.
     if !params[:search].nil?
       search = params[:search]
       ['to', 'from'].each do |s|
@@ -202,8 +208,7 @@ class EventsController < ApplicationController
 
       calendars = search[:calendar_id].blank? ? nil : search[:calendar_id]
     end
-    
-    user = params[:feed_user] || User.current_user
+      
     order = params[:order] || 'date'
     from_date = params[:from_date] || Time.zone.today
     to_date = params[:to_date]

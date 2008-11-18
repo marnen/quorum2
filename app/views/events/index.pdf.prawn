@@ -26,7 +26,7 @@ data = @users.collect do |u|
   row
 end
 
-title = _("Attendance Report for %{calendar}") % {:calendar => @events.first.calendar.name}
+title = _("Attendance Report for %{calendar}") % {:calendar => Calendar.find(@search.calendar_id)}
 subtitle = _('Generated %{date}') % {:date => Time.zone.now.to_formatted_s(:rfc822)}
 
 pdf.header pdf.margin_box.top_left do
@@ -44,13 +44,17 @@ pdf.header pdf.margin_box.top_left do
   end
 end
   
-headers = [''] + @events.collect do |x|
-  [x.name, [x.city, x.state.code].compact.join(', '), x.date.to_s(:rfc822)].compact.join("\n")
-end
-
 pdf.pad_bottom(4) do
   pdf.text title, :align => :center, :size => 14, :style => :bold
   pdf.text subtitle, :align => :center, :size => 12
 end
 
-pdf.table data, :headers => headers, :align => :left, :align_headers => :center, :font_size => 9, :border_width => 0.5, :border_style => :grid
+if data == []
+  pdf.text _('No events found.'), :align => :center, :size => 14
+else
+  headers = [''] + @events.collect do |x|
+    [x.name, [x.city, x.state.code].compact.join(', '), x.date.to_s(:rfc822)].compact.join("\n")
+  end
+  
+  pdf.table data, :headers => headers, :align => :left, :align_headers => :center, :font_size => 9, :border_width => 0.5, :border_style => :grid
+end
