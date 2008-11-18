@@ -24,7 +24,7 @@ describe "/events/index" do
   
   it "should have a date limiting form" do
     render 'events/index'
-    form = "form[action=#{events_path}][method=get]"
+    form = "form[action=#{url_for(:overwrite_params => {}, :escape => false)}][method=get]"
     response.should have_tag("#{form}") do |e|
       e.should have_tag('input') do |inputs|
         inputs.should have_tag('[type=radio]') do |radios|
@@ -53,7 +53,7 @@ describe "/events/index" do
   it "should have a calendar option on the limiting form iff user has multiple calendars" do
     User.current_user.stub!(:calendars).and_return([mock_model(Calendar, :name => 'one', :id => 1), mock_model(Calendar, :name => 'two', :id => 2)])
     render 'events/index'
-    form = "form[action=#{events_path}][method=get]"
+    form = "form[action=#{url_for(:overwrite_params => {}, :escape => false)}][method=get]"
     response.should have_tag("#{form} select") do |selects|
       selects.should have_tag(name_selector "search[calendar_id]")
     end
