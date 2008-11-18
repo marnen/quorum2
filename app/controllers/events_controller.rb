@@ -35,7 +35,7 @@ class EventsController < ApplicationController
     response_for :index do |format|
       format.html
       format.pdf do
-        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)} # TODO: fix for multiple calendars
+        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort{|x, y| s = ((x.lastname || x.email) <=> (y.lastname || y.email)); return s == 0 ? ((x.firstname || x.email) <=> (y.firstname || y.email)) : s} # TODO: fix for multiple calendars
         prawnto :prawn => {:page_layout => :landscape}
         render :layout => false
       end
