@@ -1,11 +1,16 @@
+!title_blue = #3333ff
+
 // margin around icons
 !icon_margin = 3px
 
 body
   :color black
-  :font-size 12px
-  :font-family Helvetica, Arial, Geneva, sans-serif
+  :font
+    :size 12px
+    :family Helvetica, Arial, Geneva, sans-serif
   :background-color white
+  :margin 0px
+  
   
 .name
   :color red
@@ -23,11 +28,24 @@ body
 .footer
   :border-top 1px solid black
   :padding-top 2px
+  
+#navbar, #navbar *
+  :color white
+  :background-color = !title_blue
+#navbar
+  :margin
+    :top 0px
+    :left 0px
+    :right 0px
+  :padding .25em
+    
+#content
+  :margin .5em
 
 td
   :background-color #ccc
 th, th a.sort
-  :background-color #666
+  :background-color = !title_blue
   :color white
 
 .map
