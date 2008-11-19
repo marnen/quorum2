@@ -16,20 +16,7 @@ class EventsController < ApplicationController
       @page_title = _("Upcoming events")
       @order = params[:order]
       @direction = params[:direction]
-      @search = params[:search]
-      class << @search # NOTE: should we refactor this into a regular class?
-        def method_missing(name, *args)
-          if (args.size > 0)
-            return super(name, args)
-          end
-          s = name.to_s
-          if s =~ /_date$/
-            return Date.civil(self[:"#{s}(1i)"].to_i, self[:"#{s}(2i)"].to_i, self[:"#{s}(3i)"].to_i)
-          else
-            return self[name]
-          end
-        end
-      end
+      @search = Search.new(params[:search])
     end
       
     response_for :index do |format|

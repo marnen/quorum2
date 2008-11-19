@@ -7,7 +7,7 @@
   %br
   = h(_("If you'd like to change that URL and disable any previous access, we can %{regenerate_it}.")) % {:regenerate_it => link_to(h(_('regenerate it')), regenerate_key_path)}
 - form_tag url_for(:overwrite_params => {}), :method => :get do
-  - fields_for :search do |s|
+  - fields_for @search do |s|
     %table.search
       %tr
         %th&= _('From:')
