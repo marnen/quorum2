@@ -2,6 +2,7 @@
 # Deals with #Date construction and #ActiveRecord-style hash-value accessors.
 
 module Search
+ private
   def method_missing(name)
     s = name.to_s
     if s =~ /_date$/
