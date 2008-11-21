@@ -1,3 +1,6 @@
+// margin around icons
+!icon_margin = 3px
+
 body
   :color black
   :font-size 12px
@@ -77,7 +80,7 @@ a.ical
     :repeat no-repeat
     :image = !rss_icon_url
   :min-height = !rss_icon_size
-  :padding-left = !rss_icon_size + 3px
+  :padding-left = !rss_icon_size + !icon_margin
 
 .url
   :font-weight bolder
@@ -90,7 +93,7 @@ a.ical
     :repeat no-repeat
     :image = !pdf_icon_url
   :min-height = !pdf_icon_size
-  :padding-left = !pdf_icon_size + 3px
+  :padding-left = !pdf_icon_size + !icon_margin
 
 
 .fieldWithErrors
