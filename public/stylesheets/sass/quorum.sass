@@ -78,15 +78,15 @@ td.yes, td.no, td.maybe
 td.actions
   :background-color transparent
   :font-size 90%
+  a
+    :display inline-block
+    :background-repeat no-repeat
   
 !edit_icon_url = "url('../images/pencil.png')"
 !edit_icon_size = 16px
 
 a.edit
-  :display inline-block
-  :background
-    :repeat no-repeat
-    :image = !edit_icon_url
+  :background-image = !edit_icon_url
   :min-height = !edit_icon_size + !icon_margin
   :padding-left = !edit_icon_size + !icon_margin
 
@@ -94,10 +94,7 @@ a.edit
 !delete_icon_size = 16px
 
 a.delete
-  :display inline-block
-  :background
-    :repeat no-repeat
-    :image = !delete_icon_url
+  :background-image = !delete_icon_url
   :min-height = !delete_icon_size + !icon_margin
   :padding-left = !delete_icon_size + !icon_margin
 
@@ -105,10 +102,7 @@ a.delete
 !ical_icon_size = 16px
 
 a.ical
-  :display inline-block
-  :background
-    :repeat no-repeat
-    :image = !ical_icon_url
+  :background-image = !ical_icon_url
   :min-height = !ical_icon_size + !icon_margin
   :padding-left = !ical_icon_size + !icon_margin
 
