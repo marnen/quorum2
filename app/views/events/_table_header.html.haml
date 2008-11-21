@@ -1,6 +1,6 @@
 - sortlinks = true if sortlinks.nil?
 %tr
-  %td.edit
+  %td.actions
     / blank
   %th
     = sortlinks ? sort_link("Date", :date, (@order == 'date' and @direction == 'asc') ? :desc : :asc) : h(_("Date"))
