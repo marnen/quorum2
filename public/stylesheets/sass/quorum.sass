@@ -103,17 +103,17 @@ a.delete
   :min-height = !delete_icon_size + !icon_margin
   :padding-left = !delete_icon_size + !icon_margin
 
+!ical_icon_url = "url('../images/date.png')"
+!ical_icon_size = 16px
+
 a.ical
-  :color white
-  :font
-    :size 9px
-    :family Verdana, Tahoma, Arial, Geneva, sans-serif
-    :weight bold
-  :text
-    :decoration none
-    :transform uppercase
-  :background-color red
-  :border outset 1px #900
+  :display inline-block
+  :margin 0px
+  :background
+    :repeat no-repeat
+    :image = !ical_icon_url
+  :min-height = !ical_icon_size + !icon_margin
+  :padding-left = !ical_icon_size + !icon_margin
 
 
 !rss_icon_url = "url('../images/feed-icon-14x14.png')"
