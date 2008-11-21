@@ -78,6 +78,30 @@ td.yes, td.no, td.maybe
 td.actions
   :background-color transparent
   :font-size 90%
+  
+!edit_icon_url = "url('../images/pencil.png')"
+!edit_icon_size = 16px
+
+a.edit
+  :display inline-block
+  :margin 0px
+  :background
+    :repeat no-repeat
+    :image = !edit_icon_url
+  :min-height = !edit_icon_size + !icon_margin
+  :padding-left = !edit_icon_size + !icon_margin
+
+!delete_icon_url = "url('../images/cross.png')"
+!delete_icon_size = 16px
+
+a.delete
+  :display inline-block
+  :margin 0px
+  :background
+    :repeat no-repeat
+    :image = !delete_icon_url
+  :min-height = !delete_icon_size + !icon_margin
+  :padding-left = !delete_icon_size + !icon_margin
 
 a.ical
   :color white

@@ -26,7 +26,7 @@ module EventsHelper
   
   # Generates a delete link for #Event.
   def delete_link(event)
-    link_to h(_("delete")), url_for(:controller => 'events', :action => 'delete', :id => event.id)
+    link_to h(_("delete")), url_for(:controller => 'events', :action => 'delete', :id => event.id), :class => :delete
   end
   
   # Returns the distance from #Event to #User's address, in a #String of the form <tt>"35.2 miles"</tt>.
@@ -44,7 +44,7 @@ module EventsHelper
   
   # Generates an edit link for #Event.
   def edit_link(event)
-    link_to h(_("edit")), url_for(:controller => 'events', :action => 'edit', :id => event.id)
+    link_to h(_("edit")), url_for(:controller => 'events', :action => 'edit', :id => event.id), :class => :edit
   end
   
   # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
