@@ -1,2 +1,8 @@
 Use this README file to introduce your application and point to useful places in the API for learning more.
 Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+
+Icon sources:
+feed-icon-14x14.png:: http://www.feedicons.com
+pdf-icon-16x16.png:: ??? I no longer remember where this icon came from.
+progress.gif:: http://mentalized.net/activity-indicators/ (specifically, indicators/pascal_germroth/indicator.white.gif)
+Others:: http://www.famfamfam.com/lab/icons/silk
