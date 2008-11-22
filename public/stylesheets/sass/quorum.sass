@@ -69,9 +69,22 @@ span.maybe
   :color #ff0
   :font-weight bolder
 
+!circle_size = 12px
+!green_circle_url = "url('../images/circle_0f0.png')"
+!red_circle_url = "url('../images/circle_f00.png')"
+!yellow_circle_url = "url('../images/circle_ff0.png')"
+td.yes p
+  :background-image = !green_circle_url
+td.no p
+  :background-image = !red_circle_url
+td.maybe p
+  :background-image = !yellow_circle_url
 td.yes, td.no, td.maybe
   :background-color black
   :color white
+  p
+    :padding-left = !circle_size + !icon_margin
+    :background-repeat no-repeat
 
 td.actions
   :background-color transparent
