@@ -54,8 +54,6 @@ th, th a.sort
   :background-color = !title_blue
   :color white
 
-.map
-  :font-size 90%
 .hint
   :font
     :size 90%
@@ -105,6 +103,14 @@ a.ical
   :background-image = !ical_icon_url
   :min-height = !ical_icon_size + !icon_margin
   :padding-left = !ical_icon_size + !icon_margin
+
+!map_icon_url = "url('../images/map.png')"
+!map_icon_size = 16px
+
+a.map
+  :background-image = !map_icon_url
+  :min-height = !map_icon_size + !icon_margin
+  :padding-left = !map_icon_size + !icon_margin
 
 
 !rss_icon_url = "url('../images/feed-icon-14x14.png')"

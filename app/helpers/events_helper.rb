@@ -36,9 +36,9 @@ module EventsHelper
       meters = event.coords.ellipsoidal_distance(user.coords)
       miles = meters / 1609.344
       
-      content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance) << h(' •')
+      content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance)
     rescue
-      content_tag(:span, h(_("%.1f miles" % 0)), :class => :distance) << h(' •')
+      content_tag(:span, h(_("%.1f miles" % 0)), :class => :distance)
     end
   end
   
@@ -118,7 +118,7 @@ module EventsHelper
 
   # Generates a link to a map of #Event.
   def map_link(event)
-    link_to h(_("map")), url_for(:controller => 'events', :action => 'map', :id => event.id), :target => 'map'
+    link_to h(_("map")), url_for(:controller => 'events', :action => 'map', :id => event.id), :class => 'map', :target => 'map'
   end
   
   # Generates a hint to use Markdown for formatting.
