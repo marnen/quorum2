@@ -15,11 +15,14 @@
     #content
       %p= h(_("Welcome, %{user}!")) % {:user => content_tag(:span, h(current_user), :class => :name)}
       - if !flash[:notice].nil?
-        .flash.notice= flash[:notice]
+        #flash.notice
+          %p= flash[:notice]
       - if !flash[:warning].nil?
-        .flash.warning= flash[:warning]
+        #flash.warning
+          %p= flash[:warning]
       - if !flash[:error].nil?
-        .flash.error= flash[:error]
+        #flash.error
+          %p= flash[:error]
       %h1&= @page_title
       = yield
       

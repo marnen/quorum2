@@ -164,13 +164,27 @@ a.map
     :background-color #fcc
     :color black
 
-.flash
+!notice_icon_url = "url('../images/accept.png')"
+!warning_icon_url = "url('../images/star.png')"
+!error_icon_url = "url('../images/exclamation.png')"
+#flash
+  :background
+    :position 2px 2px
+    :repeat no-repeat
+  :min-height = !silk_icon_size + 4px
+  :min-width = !silk_icon_size + 4px
+  :padding-left = !silk_icon_size + !icon_margin
   &.notice
+    :background-image = !notice_icon_url
     :background-color #cfc
   &.warning
+    :background-image = !warning_icon_url
     :background-color #ffc
   &.error
+    :background-image = !error_icon_url
     :background-color #fcc
+  p
+    :padding 0.25em
 
 /* Some hCalendar properties...
 abbr
