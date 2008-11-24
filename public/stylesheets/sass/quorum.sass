@@ -1,5 +1,8 @@
 !title_blue = #3333ff
 
+// size of icons from Silk set
+!silk_icon_size = 16px
+
 // margin around icons
 !icon_margin = 3px
 
@@ -97,7 +100,7 @@ td.actions
 // Toolbar links with icons
 
 !edit_icon_url = "url('../images/pencil.png')"
-!edit_icon_size = 16px
+!edit_icon_size = !silk_icon_size
 
 a.edit
   :background-image = !edit_icon_url
@@ -105,7 +108,7 @@ a.edit
   :padding-left = !edit_icon_size + !icon_margin
 
 !delete_icon_url = "url('../images/cross.png')"
-!delete_icon_size = 16px
+!delete_icon_size = !silk_icon_size
 
 a.delete
   :background-image = !delete_icon_url
@@ -113,7 +116,7 @@ a.delete
   :padding-left = !delete_icon_size + !icon_margin
 
 !ical_icon_url = "url('../images/date.png')"
-!ical_icon_size = 16px
+!ical_icon_size = !silk_icon_size
 
 a.ical
   :background-image = !ical_icon_url
@@ -121,7 +124,7 @@ a.ical
   :padding-left = !ical_icon_size + !icon_margin
 
 !map_icon_url = "url('../images/map.png')"
-!map_icon_size = 16px
+!map_icon_size = !silk_icon_size
 
 a.map
   :background-image = !map_icon_url
@@ -161,12 +164,13 @@ a.map
     :background-color #fcc
     :color black
 
-.flash_notice
-  :background-color #cfc
-.flash_warning
-  :background-color #ffc
-.flash_error
-  :background-color #fcc
+.flash
+  &.notice
+    :background-color #cfc
+  &.warning
+    :background-color #ffc
+  &.error
+    :background-color #fcc
 
 /* Some hCalendar properties...
 abbr
