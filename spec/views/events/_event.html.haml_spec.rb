@@ -146,6 +146,10 @@ describe 'events/_event' do
       event.should_receive(:find_committed).with(:no).once
     end
   end
+  
+  it "should show the number of users attending and not attending each event" do
+    pending "not sure how to spec this"
+  end
 
   it "should wrap the whole response in a form" do
     render_view
