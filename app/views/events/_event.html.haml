@@ -26,7 +26,7 @@
     %br
     = distance_string(event, current_user)
   %td
-    %span.description
+    %div.description
       :markdown
         #{h event.description}
   = render :partial => 'attendance', :locals => {:event => event}
