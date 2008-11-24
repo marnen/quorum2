@@ -42,18 +42,19 @@ body
   :padding .25em
   *
     :color inherit
-  a
-    :font-weight bolder
-    &:hover
-      :background-color white
-      :color = !title_blue
+#navbar a, th a
+  :color inherit
+  :font-weight bolder
+  &:hover
+    :background-color white
+    :color = !title_blue
     
 #content
   :margin .5em
 
 td
   :background-color #ccc
-th, th a.sort
+th
   :background-color = !title_blue
   :color white
 
