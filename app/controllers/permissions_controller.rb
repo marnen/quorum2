@@ -27,6 +27,11 @@ class PermissionsController < ApplicationController
       flash[:notice] = _('You were successfully unsubscribed.')
       go_back
     end
+    
+    response_for :destroy_fails do
+      flash[:error] = _("Something went wrong. Please try again.")
+      go_back
+    end
   end
   
   def subscribe
