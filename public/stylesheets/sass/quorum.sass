@@ -4,7 +4,7 @@
 !silk_icon_size = 16px
 
 // margin around icons
-!icon_margin = 3px
+!default_icon_margin = 3px
 
 body
   :color black
@@ -87,7 +87,7 @@ td.yes, td.no, td.maybe
   :background-color black
   :color white
   p
-    :padding-left = !circle_size + !icon_margin
+    :padding-left = !circle_size + !default_icon_margin
     :background-repeat no-repeat
 
 td.actions
@@ -96,58 +96,46 @@ td.actions
   :min-width 6em
   a
     :display inline-block
-    :background-repeat no-repeat
 
     
 // Toolbar links with icons
 
+=icon(!icon_url, !icon_size = !silk_icon_size, !icon_margin = !default_icon_margin)
+  :background
+    :image = !icon_url
+    :repeat no-repeat
+  :min-height = !icon_size + !icon_margin
+  :padding-left = !icon_size + !icon_margin
+
 !edit_icon_url = "url('../images/pencil.png')"
-!edit_icon_size = !silk_icon_size
 
 a.edit
-  :background-image = !edit_icon_url
-  :min-height = !edit_icon_size + !icon_margin
-  :padding-left = !edit_icon_size + !icon_margin
+  +icon(!edit_icon_url)
 
 !delete_icon_url = "url('../images/cross.png')"
-!delete_icon_size = !silk_icon_size
 
 a.delete
-  :background-image = !delete_icon_url
-  :min-height = !delete_icon_size + !icon_margin
-  :padding-left = !delete_icon_size + !icon_margin
+  +icon(!delete_icon_url)
 
 !ical_icon_url = "url('../images/date.png')"
-!ical_icon_size = !silk_icon_size
 
 a.ical
-  :background-image = !ical_icon_url
-  :min-height = !ical_icon_size + !icon_margin
-  :padding-left = !ical_icon_size + !icon_margin
+  +icon(!ical_icon_url)
 
 !map_icon_url = "url('../images/map.png')"
-!map_icon_size = !silk_icon_size
 
 a.map
-  :background-image = !map_icon_url
-  :min-height = !map_icon_size + !icon_margin
-  :padding-left = !map_icon_size + !icon_margin
+  +icon(!map_icon_url)
 
 !subscribe_icon_url = "url('../images/add.png')"
-!subscribe_icon_size = !silk_icon_size
 
 a.subscribe
-  :background-image = !subscribe_icon_url
-  :min-height = !subscribe_icon_size + !icon_margin
-  :padding-left = !subscribe_icon_size + !icon_margin
+  +icon(!subscribe_icon_url)
 
 !unsubscribe_icon_url = "url('../images/delete.png')"
-!unsubscribe_icon_size = !silk_icon_size
 
 a.unsubscribe
-  :background-image = !unsubscribe_icon_url
-  :min-height = !unsubscribe_icon_size + !icon_margin
-  :padding-left = !unsubscribe_icon_size + !icon_margin
+  +icon(!unsubscribe_icon_url)
 
 // Other links with icons
 
@@ -156,11 +144,7 @@ a.unsubscribe
   
 .rss
   :font-size 90%
-  :background
-    :repeat no-repeat
-    :image = !rss_icon_url
-  :min-height = !rss_icon_size
-  :padding-left = !rss_icon_size + !icon_margin
+  +icon(!rss_icon_url, !rss_icon_size)
 
 .url
   :font-weight bolder
@@ -169,11 +153,7 @@ a.unsubscribe
 !pdf_icon_size = 16px
 
 .pdf
-  :background
-    :repeat no-repeat
-    :image = !pdf_icon_url
-  :min-height = !pdf_icon_size
-  :padding-left = !pdf_icon_size + !icon_margin
+  +icon(!pdf_icon_url, !pdf_icon_size, 0px)
 
 
 .fieldWithErrors
@@ -191,7 +171,7 @@ a.unsubscribe
     :repeat no-repeat
   :min-height = !silk_icon_size + 4px
   :min-width = !silk_icon_size + 4px
-  :padding-left = !silk_icon_size + !icon_margin
+  :padding-left = !silk_icon_size + !default_icon_margin
   &.notice
     :background-image = !notice_icon_url
     :background-color #cfc
