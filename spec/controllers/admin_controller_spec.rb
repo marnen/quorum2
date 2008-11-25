@@ -20,8 +20,8 @@ describe AdminController, "(index)" do
     @two = mock_model(Calendar, :name => 'Calendar 2', :id => 2)
     @user = mock_model(Role, :name => 'user', :id => 27)
     @permissions = [mock_model(Permission, :calendar => @one, :role => @user), mock_model(Permission, :calendar => @two, :role => @admin)]
-    @permissions.should_receive(:find_all_by_role_id).with(user_role, anything).any_number_of_times.and_return(@permissions[0])
-    @permissions.should_receive(:find_all_by_role_id).with(admin_role, anything).any_number_of_times.and_return(@permissions[1])
+    @permissions.should_receive(:find_all_by_role_id).with(user_role, anything).any_number_of_times.and_return([@permissions[0]])
+    @permissions.should_receive(:find_all_by_role_id).with(admin_role, anything).any_number_of_times.and_return([@permissions[1]])
     @current_user = mock_model(User, :permissions => @permissions, :admin? => true)
     User.stub!(:current_user).and_return(@current_user)
     controller.stub!(:admin?).and_return(true)
