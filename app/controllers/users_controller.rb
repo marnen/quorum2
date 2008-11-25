@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   layout :get_layout
   before_filter :login_required, :only => [:edit, :regenerate_key]
-  # render new.rhtml
+  # render new.html.haml
   def new
   end
 
