@@ -32,12 +32,6 @@
   = render :partial => 'attendance', :locals => {:event => event}
   - yes = event.find_committed(:yes)
   - no = event.find_committed(:no)
-  %td
-    - if !yes.blank?
-      %strong&= n_('1 person:', '%{num} people:', yes.size) % {:num => yes.size}
-      &= list_names(yes)
-  %td
-    - if !no.blank?
-      %strong&= n_('1 person:', '%{num} people:', no.size) % {:num => no.size}
-      &= list_names(no)
+  %td= render :partial => 'names', :object => yes
+  %td= render :partial => 'names', :object => no
 
