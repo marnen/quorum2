@@ -24,6 +24,21 @@ class PermissionsController < ApplicationController
     end
   end
   
+  def subscribe
+    begin
+      current_model.create! do |p|
+        p.calendar_id = params[:calendar_id]
+        p.user = User.current_user
+        p.role = Role.find_by_name('user')
+      end
+    rescue
+      flash[:error] = _("Something went wrong. Please try again.")
+      go_back
+    end
+    flash[:notice] = _("Your subscription has been saved.")
+    go_back
+  end
+  
  protected
   def go_back
     begin

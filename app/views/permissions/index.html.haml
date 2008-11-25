@@ -9,14 +9,15 @@
       %td[p.calendar]&= p.calendar
       %td&= p.role
       
-%p&= _('You may also subscribe to these calendars.')
+- if !@unsubscribed.empty?
+  %p&= _('You may also subscribe to these calendars.')
 
-%table.unsubscribed
-  %tr
-    %td.actions
-    %th&= _('Name')
-  - @unsubscribed.each do |c|
-    %tr[c]
-      %td.actions= link_to(h(_('subscribe')), subscribe_path(:calendar_id => c.id), :class => :subscribe)
-      %td[c]&= c
-        
+  %table.unsubscribed
+    %tr
+      %td.actions
+      %th&= _('Name')
+    - @unsubscribed.each do |c|
+      %tr[c]
+        %td.actions= link_to(h(_('subscribe')), subscribe_path(:calendar_id => c.id), :class => :subscribe)
+        %td[c]&= c
+          
