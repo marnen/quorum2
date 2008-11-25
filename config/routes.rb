@@ -50,6 +50,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :calendars
   
   map.subscriptions 'subscriptions', :controller => 'permissions', :action => 'index'
+  map.subscribe 'subscribe/:calendar_id', :controller => 'permissions', :action => 'subscribe'
 
   # Some stuff for sorting the event list
   map.connect 'events/index/:order/:direction', :controller => 'events', :action => 'index', :direction => /(a|de)sc/, :defaults => {:order => 'date', :direction => 'asc'}
