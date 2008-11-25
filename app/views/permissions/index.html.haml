@@ -2,10 +2,14 @@
 
 %table.subscriptions
   %tr
+    %td.actions
     %th&= _('Name')
     %th&= _('Role')
   - @permissions.each do |p|
     %tr[p]
+      %td.actions
+        - if p.role.name != 'admin'
+          = link_to(h(_('unsubscribe')), url_for(:action => 'destroy', :id => p.id), :class => :unsubscribe)
       %td[p.calendar]&= p.calendar
       %td&= p.role
       

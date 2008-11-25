@@ -1,5 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
+include ActionView::Helpers::UrlHelper
+
 describe PermissionsController do
 
   #Delete this example and add some real ones
@@ -64,6 +66,12 @@ describe PermissionsController, 'index' do
     @permissions.each do |p|
       response.should have_tag("tr#permission_#{p.id} td", %r{#{Regexp.escape(ERB::Util::html_escape(p.role))}})
     end
+  end
+  
+  it 'should have an unsubscribe link for each non-admin subscription' do
+    get :index
+    response.should have_tag("tr#permission_#{@permissions[0].id} td.actions a.unsubscribe[href=#{url_for(:action => 'destroy', :id => @permissions[0].id, :escape => false)}]")
+    response.should_not have_tag("tr#permission_#{@permissions[1].id} td.actions a.unsubscribe[href=#{url_for(:action => 'destroy', :id => @permissions[1].id, :escape => false)}]")
   end
   
   it 'should show a list of unsubscribed calendars to subscribe to' do
