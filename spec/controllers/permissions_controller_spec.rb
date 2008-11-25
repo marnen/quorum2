@@ -118,4 +118,26 @@ describe PermissionsController, 'subscribe' do
   end
 end
 
+describe PermissionsController, 'destroy' do
+  before(:each) do
+    controller.stub!(:login_required).and_return(true)
+    controller.stub!(:check_admin).and_return(false)
+    User.stub!(:current_user).and_return(@current_user)
+    request.env['HTTP_REFERER'] = 'referer'
+  end
+  
+  it 'should be a valid non-admin action' do
+    Permission.stub!(:find).and_return(mock_model(Permission, :null_object => true))
+    get :destroy, :id => 1
+    response.should be_redirect
+  end
+  
+  it 'should delete the Permission given by the id parameter' do
+    @perm = mock_model(Permission, :null_object => true)
+    @perm.should_receive(:destroy)
+    Permission.stub!(:find).and_return(@perm)
+    get :destroy, :id => 17
+  end
+end
+
 

@@ -1,11 +1,11 @@
 class PermissionsController < ApplicationController
-  @@nonadmin = :index
+  @@nonadmin = :index, :subscribe
   before_filter :check_admin, :except => @@nonadmin
   before_filter :login_required, :only => @@nonadmin
   layout 'standard'
   
   make_resourceful do
-    actions :index, :edit, :update
+    actions :index, :edit, :update, :destroy
     
     response_for :index do
       @page_title = _('Subscriptions')
@@ -20,6 +20,11 @@ class PermissionsController < ApplicationController
     
     response_for :update_fails do
       flash[:error] = _("Couldn't save changes!")
+      go_back
+    end
+    
+    response_for :destroy do
+      flash[:notice] = _('You were successfully unsubscribed.')
       go_back
     end
   end
