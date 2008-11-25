@@ -64,7 +64,7 @@ Rails::Initializer.run do |config|
   config.active_record.observers = :user_observer
   
   # Gem versions can go here.
-  config.gem 'haml', :version => '= 2.0.0'
+  config.gem 'haml', :version => '= 2.1.0'
   
   # Set app to Eastern time for now -- we'll have configurable time zones soon enough
   config.time_zone = 'Eastern Time (US & Canada)'

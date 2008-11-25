@@ -18,8 +18,6 @@
 defaults:
   install_options: --include-dependencies
 gems:
-- name: BlueCloth
-  version: 1.0.0
 - name: GeoRuby
   version: 1.3.2
 - name: ZenTest
@@ -28,10 +26,10 @@ gems:
   version: 1.1.2
 - name: geminstaller
   version: 0.4.5
+- name: gemsonrails
+  version: 0.7.2
 - name: gettext
   version: 1.93.0
-- name: haml
-  version: 2.0.0
 - name: hoe # testing
   version: 1.8.2
 - name: postgres
@@ -44,6 +42,8 @@ gems:
   version: 0.8.1
 - name: rcov # testing
   version: 0.8.1.2.0
+- name: rdiscount
+  version: 1.2.11
 - name: rspec # testing
   version: 1.1.9
 - name: rspec-rails # testing
