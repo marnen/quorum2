@@ -73,7 +73,7 @@ describe "/events/index" do
   end
   
   it "should render _event for each event" do
-    template.expect_render(:partial => 'event', :collection => @events)
+    template.should_receive(:render).with(:partial => 'event', :collection => @events)
     render 'events/index'
   end
   

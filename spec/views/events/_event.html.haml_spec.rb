@@ -45,7 +45,7 @@ describe 'events/_event' do
   end
   
   it "should have a control to set the current user's attendance for the event" do
-    template.expect_render(:partial => 'attendance', :locals => {:event => @event})
+    template.should_receive(:render).with(:partial => 'attendance', :locals => {:event => @event})
     render_view
   end
   
