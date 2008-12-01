@@ -12,7 +12,7 @@ set :user, "capistrano"
 # set :scm, :subversion
 # set :scm_user, "capistrano"
 set :scm, :git
-set :branch, :master
+set :branch, :password
 set :deploy_via, :remote_cache
 set :git_enable_submodules, 1
 
