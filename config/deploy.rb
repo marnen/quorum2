@@ -1,10 +1,10 @@
 set :application, "quorum2"
-set :repository,  "gitosis@ebon-askavi.homedns.org:quorum2.git"
+set :repository,  "REPOSITORY_URL" # CONFIG: use a Git clone URL or SVN repo spec here.
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
 # via the :deploy_to variable:
-set :deploy_to, "/var/vhosts/#{application}"
+set :deploy_to, "PATH" # CONFIG: set the deploy path
 set :user, "capistrano"
 
 # If you aren't using Subversion to manage your source code, specify
@@ -12,7 +12,7 @@ set :user, "capistrano"
 # set :scm, :subversion
 # set :scm_user, "capistrano"
 set :scm, :git
-set :branch, :deploy
+set :branch, :master
 set :deploy_via, :remote_cache
 set :git_enable_submodules, 1
 
@@ -23,9 +23,10 @@ set :repository, Proc.new { "--username #{scm_user} --password
 #{scm_password} --no-auth-cache #{repository}" }
 =end
 
-role :app, "ebon-askavi.homedns.org"
-role :web, "ebon-askavi.homedns.org"
-role :db,  "ebon-askavi.homedns.org", :primary => true
+# CONFIG: normally this will be the name of your application server.
+role :app, "HOST"
+role :web, "HOST"
+role :db,  "HOST", :primary => true
 
 # set process runner
 set :runner, "capistrano" # might want to change this
