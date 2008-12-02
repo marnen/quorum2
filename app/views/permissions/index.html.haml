@@ -9,6 +9,7 @@
     %tr[p]
       %td.actions
         - if p.role.name != 'admin'
+          -# TODO: put link into a partial
           = link_to(h(_('unsubscribe')), url_for(:action => 'destroy', :id => p.id), :class => :unsubscribe)
       %td[p.calendar]&= p.calendar
       %td&= p.role
@@ -22,6 +23,7 @@
       %th&= _('Name')
     - @unsubscribed.each do |c|
       %tr[c]
+        -# TODO: put link into a partial
         %td.actions= link_to(h(_('subscribe')), subscribe_path(:calendar_id => c.id), :class => :subscribe)
         %td[c]&= c
           
