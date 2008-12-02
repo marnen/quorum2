@@ -20,9 +20,9 @@ defaults:
 gems:
 - name: GeoRuby
   version: 1.3.2
-- name: ZenTest
+- name: ZenTest # testing
   version: 3.9.1
-- name: diff-lcs
+- name: diff-lcs # testing
   version: 1.1.2
 - name: geminstaller
   version: 0.4.5
@@ -52,6 +52,6 @@ gems:
   version: 1.0.1
 - name: rubygems-update
   version: 1.0.1
-- name: spicycode-rcov
+- name: spicycode-rcov # testing
   version: 0.8.1.3.0
   install_options: --source=http://gems.github.com
