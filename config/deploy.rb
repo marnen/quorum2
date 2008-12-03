@@ -36,7 +36,7 @@ set :use_sudo, false
 
 namespace :deploy do
   
-  # Comment out task :restart block unless you're using Phusion Passenger -- it won't work with other servers
+  # CONFIG: Comment out task :restart block unless you're using Phusion Passenger -- it won't work with other servers
   task :restart, :roles => :app do
     run "if test ! -d #{current_path}/tmp; then mkdir #{current_path}/tmp; fi"
     run "/usr/bin/touch #{current_path}/tmp/restart.txt"
