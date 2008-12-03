@@ -1,4 +1,6 @@
 production:
+  domain: 'quorum2.ebon-askavi.homedns.org:8080'
+  email: quorum@marnen.org
   smtp:
     address: SMTP_SERVER_NAME
     port: 25

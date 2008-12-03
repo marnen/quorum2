@@ -3,10 +3,9 @@ require 'gettext/rails'
 
 SITE_TITLE = "Quorum" # Name of site as it appears in <title> element
 
-# CONFIG: replace DOMAIN and EMAIL with reasonable values.
-DOMAIN = "DOMAIN" # Domain on which the site is hosted
+DOMAIN = APP_CONFIG['domain'] # Domain on which the site is hosted
 
-EMAIL = "EMAIL" # Address that application-generated e-mail will come from.
+EMAIL = APP_CONFIG['email'] # Address that application-generated e-mail will come from.
 
 GeoRuby::SimpleFeatures::DEFAULT_SRID = 4326
 
