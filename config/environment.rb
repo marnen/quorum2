@@ -13,6 +13,11 @@ RAILS_GEM_VERSION = '2.1.2' unless defined? RAILS_GEM_VERSION
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
+# Can't put this in config/initializers because production.rb depends on it.
+# TODO: refactor so that we can use initializers.
+require 'yaml'
+APP_CONFIG = YAML.load_file("#{RAILS_ROOT}/config/config.yml")[RAILS_ENV]
+
 Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
@@ -69,3 +74,4 @@ Rails::Initializer.run do |config|
   # Set app to Eastern time for now -- we'll have configurable time zones soon enough
   config.time_zone = 'Eastern Time (US & Canada)'
 end
+
