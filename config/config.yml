@@ -1,0 +1,6 @@
+production:
+  smtp:
+    address: SMTP_SERVER_NAME
+    port: 25
+    user_name: SMTP_USER_NAME
+    password: SMTP_PASSWORD

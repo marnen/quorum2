@@ -15,14 +15,14 @@ config.action_view.cache_template_loading            = true
 # Enable serving of images, stylesheets, and javascripts from an asset server
 # config.action_controller.asset_host                  = "http://assets.example.com"
 
-# CONFIG: use your own SMTP settings!
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
 config.action_mailer.delivery_method = :smtp
+smtp = APP_CONFIG['smtp']
 config.action_mailer.smtp_settings = {
-  :address => 'outgoing.verizon.net',
-  :port => 25,
-  :user_name => 'marnen',
-  :password => 'PASSWORD',
+  :address => smtp['address'],
+  :port => smtp['port'],
+  :user_name => smtp['user_name'],
+  :password => smtp['password'],
   :authentication => :plain
 }
