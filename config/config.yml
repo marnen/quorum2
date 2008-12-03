@@ -11,3 +11,14 @@ production:
     port: 25
     user_name: SMTP_USER_NAME
     password: SMTP_PASSWORD
+    
+development: &local
+  domain: localhost
+  email: test@localhost
+  smtp:
+    address: localhost
+    port: 25
+    user_name: USER_NAME
+    password: PASSWORD
+    
+test: *local # just a copy of dev environment
