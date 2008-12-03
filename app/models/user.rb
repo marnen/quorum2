@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   end
   
   def country
-    return self.state.country
+    return self.state.nil? ? nil : self.state.country
   end
   
   def to_s

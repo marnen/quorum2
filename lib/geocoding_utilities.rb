@@ -1,7 +1,9 @@
 module GeocodingUtilities
   # Returns the current object's address in a form suitable for feeding to a geocoder (perhaps through coords_from_string).
   def address_for_geocoding
-    "#{street}, #{city}, #{state.code}, #{zip}, #{country.code}"
+    state_code = state.nil? ? nil : state.code
+    country_code = country.nil? ? nil : country.code
+    "#{street}, #{city}, #{state_code}, #{zip}, #{country_code}"
   end
 
   # Sends the address contained in _string_ to a geocoder, and returns a #Point object with the resulting coordinates.

@@ -172,6 +172,15 @@ describe User, "(geographical features)" do
     @user.should_not_receive(:save)
     @user.coords
   end
+  
+  it "should provide a valid string for address_for_geocoding, even if the user's address is invalid" do
+    lambda {@user.address_for_geocoding}.should_not raise_error
+    @user.address_for_geocoding.should be_a_kind_of(String)
+    @blank = User.new # invalid address, since it's blank!
+    lambda {@blank.address_for_geocoding}.should_not raise_error
+    @blank.address_for_geocoding.should be_a_kind_of(String)
+    @blank.address_for_geocoding.should =~ /^[\s,]*$/ # just spaces and commas
+  end
 end
 
 describe User, "(authentication structure)" do
