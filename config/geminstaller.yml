@@ -38,8 +38,6 @@ gems:
   version: 0.7.9.2008.01.28
 - name: prawn
   version: 0.2.3
-- name: rails
-  version: 2.1.2
 - name: rake
   version: 0.8.1
 - name: rcov # testing
