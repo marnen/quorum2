@@ -44,10 +44,11 @@ namespace :deploy do
   end
   
   task :after_update_code do
-    # Remove config/database.yml and config/config.yml and link to shared directory.
-    ['database.yml', 'config.yml'].each do |file|
-      run "rm -f #{current_path}/config/#{file}"
-      run "ln -s #{deploy_to}/shared/#{file} #{current_path}/config/#{file}"
+    # Remove some unversioned YAML config files and link to shared directory.
+    rpath = File.expand_path(release_path)
+    ['database.yml', 'config.yml', 'gmaps_api_key.yml'].each do |file|
+      run "rm -f #{rpath}/config/#{file}"
+      run "ln -s #{deploy_to}/shared/config/#{file} #{rpath}/config/#{file}"
     end
     
     #run "chown www-data #{current_path}/config/environment.rb"
