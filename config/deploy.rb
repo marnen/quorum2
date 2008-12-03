@@ -37,12 +37,19 @@ set :use_sudo, false
 namespace :deploy do
   
   # CONFIG: Comment out task :restart block unless you're using Phusion Passenger -- it won't work with other servers
+  desc 'Restart the application server.'
   task :restart, :roles => :app do
     run "if test ! -d #{current_path}/tmp; then mkdir #{current_path}/tmp; fi"
     run "/usr/bin/touch #{current_path}/tmp/restart.txt"
   end
   
   task :after_update_code do
+    # Remove config/database.yml and config/config.yml and link to shared directory.
+    ['database.yml', 'config.yml'].each do |file|
+      run "rm -f #{current_path}/config/#{file}"
+      run "ln -s #{deploy_to}/shared/#{file} #{current_path}/config/#{file}"
+    end
+    
     #run "chown www-data #{current_path}/config/environment.rb"
     ############# Begin GemInstaller config - see http://geminstaller.rubyforge.org
     require "rubygems" 
