@@ -1,6 +1,11 @@
 production:
-  domain: 'quorum2.ebon-askavi.homedns.org:8080'
-  email: quorum@marnen.org
+  # Domain on which the site is hosted.
+  domain: DOMAIN
+  
+  # Address that application-generated e-mail will come from.
+  email: EMAIL
+  
+  # SMTP settings for outgoing mail.
   smtp:
     address: SMTP_SERVER_NAME
     port: 25
