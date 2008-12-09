@@ -107,7 +107,7 @@ module EventsHelper
     to = event.address_for_geocoding.nil? ? nil : "daddr=#{u event.address_for_geocoding}"
     params = [from, to].compact.join('&')
     result << content_tag(:p, link_to(_('Get directions'), 'http://maps.google.com?' + params.to_s))
-    result
+    content_tag(:div, result, :id => :info)
   end
   
   # Given an #Array (or similar) of #User objects, returns an #Array of their full names as #Strings.
