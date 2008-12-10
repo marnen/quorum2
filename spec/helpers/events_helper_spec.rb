@@ -84,18 +84,19 @@ describe EventsHelper, "event_map" do
   
   it "should set up a GMap with all the options" do
     event = events(:one)
-    EventsHelper::StringVar.stub!(:new).with(an_instance_of(String)).and_return(mock("StringVar", :null_object => true))
+    EventsHelper::ElementVar.stub!(:new).with(an_instance_of(String)).and_return(mock("StringVar", :null_object => true))
 
-    gmap = GMap.new(:foo)
+    gmap = GMap.new(:gmap)
+    gmap_div = '<div id="gmap">GMap div</div>'
     marker = GMarker.new([1.0, 2.0])
     gmap_header = "[Stubbed header for #{DOMAIN}]"
     GMap.should_receive(:header).with(:host => DOMAIN).at_least(:once).and_return(gmap_header)
     GMap.should_receive(:new).and_return(gmap)
     GMarker.stub!(:new).and_return(marker)
-    gmap.should_receive(:div)
+    gmap.should_receive(:div).and_return(gmap_div)
     gmap.should_receive(:center_zoom_init)
     gmap.should_receive(:overlay_init).with(marker)
-    marker.should_receive(:open_info_window_html).with(EventsHelper::StringVar.new(helper.info(event)))
+    marker.should_receive(:open_info_window).with(EventsHelper::ElementVar.new(helper.info(event)))
     gmap.should_receive(:control_init) do |opts|
       opts.should be_a_kind_of(Hash)
       opts.should have_key(:large_map)
@@ -105,7 +106,12 @@ describe EventsHelper, "event_map" do
     end
     gmap.should_receive(:to_html).at_least(:once)
     
-    helper.event_map(event, DOMAIN)
+    info_div = '<div id="info">Event info</div>'
+    helper.should_receive(:info).with(event).at_least(:once).and_return(info_div)
+    
+    map = helper.event_map(event, DOMAIN)
+    map.should have_tag('#gmap')
+    map.should have_tag('#info')
     assigns[:extra_headers].should_not be_nil
     assigns[:extra_headers].should include(gmap_header)
     assigns[:extra_headers].should include(gmap.to_html.to_s)

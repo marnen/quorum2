@@ -51,22 +51,25 @@ module EventsHelper
   def event_map(event, hostname)
     return nil if event.nil?
     
+    result = ''
+    
     map = GMap.new(:map)
     latlng = [event.coords.lat, event.coords.lng]
     map.center_zoom_init(latlng, 14)
     marker = GMarker.new(latlng)
-    html = StringVar.new(info(event).dump)
-    map.record_init html.declare('html')
+    event_info = ElementVar.new('info')
+    map.record_init event_info.declare('info')
     map.declare_init(marker, 'marker')
     # map.record_init html.declare('foo')
-    map.record_init marker.bind_info_window_html(html)
+    map.record_init marker.bind_info_window(event_info)
     map.overlay_init(marker)
     map.control_init :large_map => true, :map_type => true
-    map.record_init marker.open_info_window_html(html)
+    map.record_init marker.open_info_window(event_info)
     @extra_headers = @extra_headers.to_s 
     @extra_headers << GMap.header(:host => hostname).to_s << map.to_html.to_s
 
-    map.div :width => 500, :height => 400
+    result << info(event)
+    result << map.div(:width => 500, :height => 400)
 =begin
     @map = GMap.new(:map)
     @map.center_zoom_init(latlng, 14)
@@ -75,6 +78,7 @@ module EventsHelper
     @page_title = _("Map for %s" % @event.name)
 
 =end
+    result
   end
   
   # Escapes characters in <em>string</em> that would be illegal in iCalendar format.
@@ -147,9 +151,9 @@ module EventsHelper
     link_to h(_(title)), url_for(:overwrite_params => {:order => field, :direction => direction}), :class => my_class
   end
   
-  class StringVar < Ym4r::GmPlugin::Variable
+  class ElementVar < Ym4r::GmPlugin::Variable
     def declare(name)
-      result = "var #{name} = #{to_javascript};"
+      result = "var #{name} = document.getElementById('#{to_javascript}');"
       @variable = name
       return result
     end
