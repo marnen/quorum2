@@ -69,6 +69,8 @@ module EventsHelper
     @extra_headers << GMap.header(:host => hostname).to_s << map.to_html.to_s
 
     result << info(event)
+    result << content_tag(:div, h(event.coords.lat), :id => :lat, :class => :hidden)
+    result << content_tag(:div, h(event.coords.lng), :id => :lng, :class => :hidden)
     result << map.div(:width => 500, :height => 400)
 =begin
     @map = GMap.new(:map)

@@ -110,8 +110,9 @@ describe EventsHelper, "event_map" do
     helper.should_receive(:info).with(event).at_least(:once).and_return(info_div)
     
     map = helper.event_map(event, DOMAIN)
-    map.should have_tag('#gmap')
-    map.should have_tag('#info')
+    {'#gmap' => nil, '#info' => nil, '#lat' => ERB::Util::h(event.coords.lat), '#lng' => ERB::Util::h(event.coords.lng)}.each do |k, v|
+      map.should have_tag(k, v)
+    end
     assigns[:extra_headers].should_not be_nil
     assigns[:extra_headers].should include(gmap_header)
     assigns[:extra_headers].should include(gmap.to_html.to_s)
