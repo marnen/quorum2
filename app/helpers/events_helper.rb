@@ -88,11 +88,11 @@ module EventsHelper
     city = [h(event.city), h(event.state.code), h(event.state.country.code)].compact.join(', ')
     result << content_tag(:p, [h(event.street), h(event.street2), city].compact.join(tag(:br)))
     
-    url = 'http://maps.google.com'
+    gmaps = 'http://maps.google.com'
     from = User.current_user.address_for_geocoding.nil? ? nil : "saddr=#{u User.current_user.address_for_geocoding}"
     to = event.address_for_geocoding.nil? ? nil : "daddr=#{u event.address_for_geocoding}"
     params = [from, to].compact.join('&')
-    result << content_tag(:p, link_to(_('Get directions'), 'http://maps.google.com?' + params.to_s))
+    result << content_tag(:p, link_to(_('Get directions'), "#{gmaps}?#{params}"))
     content_tag(:div, result, :id => :info)
   end
   
