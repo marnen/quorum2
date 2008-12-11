@@ -6,6 +6,7 @@ describe "/events/show" do
   before(:each) do
     @event = Event.find(:first)
     template.stub!(:current_object).and_return(@event)
+    User.stub!(:current_user).and_return(mock_model(User, :null_object => true))
   end
   
   it "should render the event and table_header partials" do
