@@ -14,6 +14,9 @@
   %td
     %span.uid&= ical_uid(event)
     = date_element(event)
+  - if User.current_user.calendars.size > 1
+    %td.calendar
+      &= event.calendar
   %td
     %h3.summary&= event.name
     %span.location.vcard

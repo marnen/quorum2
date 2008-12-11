@@ -6,6 +6,8 @@
     = sortlinks ? sort_link("Date", :date, (@order == 'date' and @direction == 'asc') ? :desc : :asc) : h(_("Date"))
     - if @order == 'date'
       &= @direction == 'asc' ? '↑' : '↓'
+  - if User.current_user.calendars.size > 1
+    %th.calendar&= _('Calendar')
   %th
     = sortlinks ? sort_link("Event", :name, (@order == 'name' and @direction == 'asc') ? :desc : :asc) : h(_("Event"))
     - if @order == 'name'

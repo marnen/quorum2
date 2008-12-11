@@ -23,7 +23,7 @@ describe 'events/_event' do
     role = mock_model(Role, :name => 'admin')
     admin_p = [mock_model(Permission, :calendar_id => cal, :role => role)]
     admin_p.stub!(:find_by_calendar_id).with(cal).and_return(admin_p[0])
-    admin = mock_model(User, :permissions => admin_p)
+    admin = mock_model(User, :permissions => admin_p, :null_object => true)
     User.stub!(:current_user).and_return(admin)
     
     render_view
@@ -36,12 +36,30 @@ describe 'events/_event' do
     role = mock_model(Role, :name => 'admin')
     admin_p = [mock_model(Permission, :calendar_id => cal, :role => role)]
     admin_p.stub!(:find_by_calendar_id).with(cal).and_return(admin_p[0])
-    admin = mock_model(User, :permissions => admin_p)
+    admin = mock_model(User, :permissions => admin_p, :null_object => true)
     User.stub!(:current_user).and_return(admin)
     
     render_view
     url = url_for(:controller => 'events', :action => 'delete', :id => @event.id, :escape => false)
     response.should have_tag("#event_#{@event.id} a[href=" << url << "]")
+  end
+  
+  it 'should contain calendar names for events, if the current user has more than one calendar' do
+    @one = mock_model(Calendar, :id => 1, :name => 'one')
+    @user.stub!(:calendars).and_return([@one, mock_model(Calendar, :id => 2, :name => 'two')])
+    @event.stub!(:calendar).and_return(@one)
+    
+    render_view
+    response.should have_tag("#event_#{@event.id} .calendar", /#{Regexp.escape(h @one)}/)
+  end
+  
+  it 'should not contain calendar names for events, if the current user has only one calendar' do
+    @one = mock_model(Calendar, :id => 1, :name => 'one')
+    @user.stub!(:calendars).and_return([@one])
+    @event.stub!(:calendar).and_return(@one)
+    
+    render_view
+    response.should_not have_tag("#event_#{@event.id} .calendar")
   end
   
   it "should have a control to set the current user's attendance for the event" do
