@@ -128,10 +128,14 @@ describe 'events/_event' do
     response.should have_tag("#event_#{@event.id} a.ical[href=" << url << "]")
   end
   
-  it "should show a date for the event in RFC 822 format, wrapped in an <abbr> of class 'dtstart' with ical-style date as the title" do
+  it "should show a date for the event, wrapped in an <abbr> of class 'dtstart' with ical-style date as the title" do
     render_view
     date = @event.date
-    response.should have_tag("#event_#{@event.id} abbr.dtstart[title=" << date.to_formatted_s(:ical) << "]", date.to_formatted_s(:rfc822))
+    response.should have_tag("#event_#{@event.id} abbr.dtstart[title=" << date.to_formatted_s(:ical) << "]") do |tag|
+      date.to_formatted_s(:rfc822).split(' ').each do |s|
+        tag.should have_tag('*', %r{#{s}})
+      end
+    end
   end
   
   it "should have an element of class 'uid' for each event, containing an iCal unique ID for the event" do

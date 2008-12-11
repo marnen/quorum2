@@ -10,20 +10,6 @@ module EventsHelper
     end
   end
   
-  # Generates an HTML date element for #Event, including hCalendar[http://microformats.org/wiki/hcalendar] annotation.
-  #
-  # Usage:
-  #
-  # <tt>@event.date = today</tt>
-  #
-  # <tt>date_element(@event) # -> something like '<abbr class="dtstart" title="20080924">24 Sep 2008</abbr>'</tt>
-  def date_element(event)
-    # generate a microformat HTML date element
-    ical_date = h event.date.to_formatted_s(:ical)
-    full_date = h event.date.to_formatted_s(:rfc822)
-    content_tag :abbr, full_date, :class => :dtstart, :title => ical_date
-  end
-  
   # Generates a delete link for #Event.
   def delete_link(event)
     link_to h(_("delete")), url_for(:controller => 'events', :action => 'delete', :id => event.id), :class => :delete

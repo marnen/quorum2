@@ -13,7 +13,7 @@
       = delete_link(event)
   %td
     %span.uid&= ical_uid(event)
-    = date_element(event)
+    = render :partial => 'date', :locals => {:event => event}
   - if User.current_user.calendars.size > 1
     %td.calendar
       &= event.calendar

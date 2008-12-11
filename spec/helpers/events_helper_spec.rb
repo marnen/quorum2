@@ -29,10 +29,6 @@ describe EventsHelper do
     helper.map_link(@event).should be_a_kind_of(String)
   end
   
-  it "should generate a microformat HTML date element as a String" do
-    @event.date = Time.now # arbitrary value
-    helper.date_element(@event).should be_a_kind_of(String)
-  end
 =begin
   #Delete this example and add some real ones or delete this file
   it "should include the EventsHelper" do
