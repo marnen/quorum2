@@ -84,6 +84,28 @@ describe PermissionsController, 'index' do
     end
   end
 end
+
+describe PermissionsController, 'index (no subscribed calendars)' do  
+  integrate_views
+  
+  before(:each) do
+    controller.stub!(:login_required).and_return(true)
+  end
+  
+  it 'should show all available calendars under "unsubscribed"' do
+    @blank = []
+    @blank.should_receive(:find).and_return([])
+    @current_user = mock_model(User, :id => 20, :email => 'no_permissions@gmail.com', :admin? => false)
+    @current_user.should_receive(:permissions).and_return(@blank)
+    @calendars = [mock_model(Calendar, :id => 1), mock_model(Calendar, :id => 2)]
+    Calendar.should_receive(:find).with(:all).and_return(@calendars)
+    User.stub!(:current_user).and_return(@current_user)
+    get :index
+    assigns[:permissions].should == @blank
+    
+    response.should have_tag('table.unsubscribed')
+  end
+end
   
 describe PermissionsController, 'index (no unsubscribed calendars)' do
   it 'should not show the list of unsubscribed calendars if there are none' do
