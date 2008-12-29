@@ -22,6 +22,4 @@
 [submodule "vendor/plugins/exception_notification"]
 	path = vendor/plugins/exception_notification
 	url = git://github.com/rails/exception_notification.git
-[submodule "vendor/rails"]
-	path = vendor/rails
-	url = git://github.com/rails/rails.git
+
