@@ -143,22 +143,31 @@ end
 describe PermissionsController, 'destroy' do
   before(:each) do
     controller.stub!(:login_required).and_return(true)
-    controller.stub!(:check_admin).and_return(false)
+    @current_user = mock_model(User, :id => 12, :email => 'johndoe@example.com', :admin? => false)
     User.stub!(:current_user).and_return(@current_user)
     request.env['HTTP_REFERER'] = 'referer'
   end
   
   it 'should be a valid non-admin action' do
     Permission.stub!(:find).and_return(mock_model(Permission, :null_object => true))
+    controller.should_not_receive(:check_admin)
     get :destroy, :id => 1
-    response.should be_redirect
   end
   
-  it 'should delete the Permission given by the id parameter' do
-    @perm = mock_model(Permission, :null_object => true)
-    @perm.should_receive(:destroy)
-    Permission.stub!(:find).and_return(@perm)
-    get :destroy, :id => 17
+  it 'should delete the Permission given by the id parameter if it belongs to the current user' do
+    @mine = mock_model(Permission, :id => 90, :null_object => true, :user_id => @current_user.id)
+    @mine.should_receive(:destroy)
+    Permission.should_receive(:find).with(@mine.id.to_param).and_return(@mine)
+    get :destroy, :id => @mine.id
+  end
+  
+  it 'should not delete the Permission given by the id parameter if it does not belong to the current user' do
+    @notmine = mock_model(Permission, :id => 91, :null_object => true, :user_id => @current_user.id + 3)
+    @notmine.should_not_receive(:destroy)
+    Permission.should_receive(:find).with(@notmine.id.to_param).and_return(@notmine)
+    get :destroy, :id => @notmine.id
+    response.should be_redirect
+    flash[:error].should_not be_blank
   end
 end
 

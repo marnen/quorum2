@@ -1,11 +1,25 @@
 class PermissionsController < ApplicationController
-  @@nonadmin = :index, :subscribe
+  @@nonadmin = :index, :subscribe, :destroy
   before_filter :check_admin, :except => @@nonadmin
   before_filter :login_required, :only => @@nonadmin
   layout 'standard'
   
+  class NotDeletableError < RuntimeError
+  end
+  
+  rescue_from NotDeletableError do |e|
+    flash[:error] = _("Couldn't delete that subscription!")
+    go_back
+  end
+  
   make_resourceful do
     actions :index, :edit, :update, :destroy
+    
+    before :destroy do
+      if current_object.user_id != User.current_user.id # TODO: should maybe create Permission#allow? and use it here, as we did on Events
+        raise NotDeletableError.new
+      end
+    end
     
     response_for :index do
       @page_title = _('Subscriptions')
