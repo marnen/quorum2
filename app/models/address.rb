@@ -31,6 +31,9 @@ class Address
         eval "@#{f.to_s} = opts[:#{f.to_s}]"
       end
     end
+    if !@state.blank? and !@state.kind_of?(State)
+      @state = State.find(@state)
+    end
   end
   
   # Returns the #Country that the address belongs to.

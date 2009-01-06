@@ -45,9 +45,12 @@ describe Event, "(general properties)" do
   it "should be composed_of an Address" do
     aggr = Event.reflect_on_aggregation(:address)
     aggr.should_not be_nil
-    aggr.options[:mapping].should == %w(street street2 city state zip).collect{|i| [i, i]}
-    e = Event.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => mock_model(State, :code => 'NY', :country => mock_model(Country, :code => 'US')))
-    e.address.should be_a_kind_of(Address)
+    aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip)]
+    state = mock_model(State, :id => 15, :code => 'NY', :country => mock_model(Country, :code => 'US'))
+    a = Address.new
+    Address.should_receive(:new).and_return(a)
+    e = Event.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state)
+    e.address.should == a
   end
   
   it "should have a deleted property" do

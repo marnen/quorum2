@@ -58,6 +58,15 @@ describe Address do
       a.state.should == @state
       a.zip.should == zip
     end
+    
+    it "should treat the state argument as a state_id -- and retrieve a State object -- if it wasn't passed a State object in the first place" do
+      ny = mock_model(State, :id => 12, :code => 'NY', :name => 'New York', :country => mock_model(Country, :code => 'US'))
+      State.should_receive(:find).with(ny.id).exactly(:once).and_return(ny)
+      a = Address.new(:state => ny.id)
+      a.state.should == ny
+      b = Address.new(:state => ny)
+      b.state.should == ny
+    end
   end
   
   describe '(methods)' do
