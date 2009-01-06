@@ -1,0 +1,6 @@
+%abbr.dtstart{:title => event.date.to_formatted_s(:ical)}
+  .date
+    .wday&= _ event.date.strftime('%a')
+    .month&= _ event.date.strftime('%b')
+    .day&= event.date.day
+    .year&= event.date.year
