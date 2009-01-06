@@ -107,5 +107,13 @@ describe Address do
         Address.new(:state => mock_model(State, :country => country)).country.should == country
       end
     end
+    
+    describe '(geographical features)' do
+      it "should create a string for the geocodable address parts" do
+        a = Address.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :state => mock_model(State, :code => 'NY', :country => mock_model(Country, :code => 'US')), :zip => '12345', :coords => nil)
+        addr = a.to_s(:geo)
+        addr.should == "#{a.street}, #{a.city}, #{a.state.code}, #{a.zip}, #{a.country.code}"
+      end
+    end
   end
 end

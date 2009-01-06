@@ -6,7 +6,7 @@ class Event < ActiveRecord::Base
   belongs_to :calendar
   has_many :commitments
   has_many :users, :through => :commitments
-  composed_of :address, :mapping => [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip)]
+  composed_of :address, :mapping => [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
   # validates_presence_of :city
   validates_presence_of :calendar_id
   validates_presence_of :name
@@ -82,7 +82,7 @@ class Event < ActiveRecord::Base
     c = self[:coords]
     if c.nil?
       begin
-        c = coords_from_string(address_for_geocoding)
+        c = coords_from_string(address.to_s(:geo))
         self[:coords] = c
         self.save
       rescue

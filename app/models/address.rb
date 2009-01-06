@@ -38,10 +38,21 @@ class Address
   
   # Returns the #Country that the address belongs to.
   def country
-    if @state.nil?
-      nil
-    else
-      @state.country
+    state.nil? ? nil : state.country
+  end
+  
+  # Converts #Address to a #String.
+  #
+  # Valid values of +format+:
+  # <tt>:geo</tt>:: Address in comma-separated format for feeding to geocoder.
+  def to_s(format = :geo)
+    case format
+      when :geo
+        state_code = state.nil? ? nil : state.code
+        country_code = country.nil? ? nil : country.code
+        "#{street}, #{city}, #{state_code}, #{zip}, #{country_code}"
+      else
+        raise ArgumentError, "unknown format parameter: #{format}"
     end
   end
   

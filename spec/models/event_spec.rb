@@ -45,7 +45,7 @@ describe Event, "(general properties)" do
   it "should be composed_of an Address" do
     aggr = Event.reflect_on_aggregation(:address)
     aggr.should_not be_nil
-    aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip)]
+    aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
     state = mock_model(State, :id => 15, :code => 'NY', :country => mock_model(Country, :code => 'US'))
     a = Address.new
     Address.should_receive(:new).and_return(a)
@@ -240,8 +240,8 @@ describe Event, "(geographical features)" do
   
   it "should create a string for the geocodable address parts" do
     @event.should respond_to(:address_for_geocoding)
+    @event.address.should_receive(:to_s).with(:geo)
     addr = @event.address_for_geocoding
-    addr.should == "#{@event.street}, #{@event.city}, #{@event.state.code}, #{@event.zip}, #{@event.country.code}"
   end
 
 
