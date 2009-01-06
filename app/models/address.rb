@@ -2,7 +2,7 @@
 
 class Address
   # List of readable attributes.
-  FIELDS = [:street, :street2, :city, :state, :zip]
+  FIELDS = [:street, :street2, :city, :state, :zip, :coords]
   FIELDS.each do |f|
     attr_reader f
   end

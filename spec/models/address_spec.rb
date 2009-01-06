@@ -23,20 +23,26 @@ describe Address do
     it "should have a zip field" do
       @address.should respond_to(:zip)
     end
+
+    it "should have a coords field" do
+      @address.should respond_to(:coords)
+    end
   end
   
   describe '(constructor)' do
     before(:each) do
+      @point = mock(Point)
       @state = mock_model(State, :code => 'NY', :country => mock_model(Country, :code => 'US'))
     end
     
     it "should set all options passed in on legitimate field keys in a Hash" do
-      a = Address.new(:street => '123 Main Street', :street2 => 'Apt. 1', :city => 'Anytown', :state => @state, :zip => '12345')
+      a = Address.new(:street => '123 Main Street', :street2 => 'Apt. 1', :city => 'Anytown', :state => @state, :zip => '12345', :coords => @point)
       a.street.should == '123 Main Street'
       a.street2.should == 'Apt. 1'
       a.city.should == 'Anytown'
       a.state.should == @state
       a.zip.should == '12345'
+      a.coords.should == @point
     end
     
     it "should ignore bogus fields in the constructor" do
@@ -45,18 +51,19 @@ describe Address do
       @a.should_not respond_to(:bogus)
     end
     
-    it "should accept 5 separate arguments for street, street2, city, state, and zip" do
+    it "should accept 6 separate arguments for street, street2, city, state, zip, and coords" do
       street = '123 Main Street'
       street2 = 'Apt. 1'
       city = 'Anytown'
       zip = '12345'
       
-      a = Address.new(street, street2, city, @state, zip)
+      a = Address.new(street, street2, city, @state, zip, @point)
       a.street.should == street
       a.street2.should == street2
       a.city.should == city
       a.state.should == @state
       a.zip.should == zip
+      a.coords.should == @point
     end
     
     it "should treat the state argument as a state_id -- and retrieve a State object -- if it wasn't passed a State object in the first place" do
