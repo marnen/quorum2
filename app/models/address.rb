@@ -1,6 +1,7 @@
 # Value object for addresses.
 
 class Address
+  # List of readable attributes.
   FIELDS = [:street, :street2, :city, :state, :zip]
   FIELDS.each do |f|
     attr_reader f
@@ -32,6 +33,16 @@ class Address
     end
   end
   
+  # Returns the #Country that the address belongs to.
+  def country
+    if @state.nil?
+      nil
+    else
+      @state.country
+    end
+  end
+  
+  # Compares two Addresses by value.
   def ==(other)
     if other.kind_of?(Address)
       FIELDS.each do |f|

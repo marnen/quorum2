@@ -76,5 +76,20 @@ describe Address do
         a.should_not == b
       end
     end
+    
+    describe 'country' do
+      it "should be a valid instance method" do
+        Address.new.should respond_to(:country)
+      end
+      
+      it "should return nil if self.state is nil" do
+        Address.new.country.should be_nil
+      end
+      
+      it "should return self.state.country if self.state is not nil" do
+        country = mock_model(Country, :name => 'US')
+        Address.new(:state => mock_model(State, :country => country)).country.should == country
+      end
+    end
   end
 end
