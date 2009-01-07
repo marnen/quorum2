@@ -109,10 +109,22 @@ describe Address do
     end
     
     describe '(geographical features)' do
+      before(:each) do
+        @a = Address.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :state => mock_model(State, :code => 'NY', :country => mock_model(Country, :code => 'US')), :zip => '12345', :coords => nil)
+      end
+      
       it "should create a string for the geocodable address parts" do
-        a = Address.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :state => mock_model(State, :code => 'NY', :country => mock_model(Country, :code => 'US')), :zip => '12345', :coords => nil)
-        addr = a.to_s(:geo)
-        addr.should == "#{a.street}, #{a.city}, #{a.state.code}, #{a.zip}, #{a.country.code}"
+        addr = @a.to_s(:geo)
+        addr.should == "#{@a.street}, #{@a.city}, #{@a.state.code}, #{@a.zip}, #{@a.country.code}"
+      end
+      
+      it "should provide a valid string for geocoding, even if the address is invalid" do
+        lambda {@a.to_s(:geo)}.should_not raise_error
+        @blank = Address.new # invalid address, since it's blank!
+        lambda {@blank.to_s(:geo)}.should_not raise_error
+        geo = @blank.to_s(:geo)
+        geo.should be_a_kind_of(String)
+        geo.should =~ /^[\s,]*$/ # just spaces and commas
       end
     end
   end

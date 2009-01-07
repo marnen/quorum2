@@ -30,6 +30,17 @@ describe User, "(general properties)" do
     reflection.options[:through].should == :permissions
   end
   
+  it "should be composed_of an Address" do
+    aggr = User.reflect_on_aggregation(:address)
+    aggr.should_not be_nil
+    aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
+    state = mock_model(State, :id => 15, :code => 'NY', :country => mock_model(Country, :code => 'US'))
+    a = Address.new
+    Address.should_receive(:new).and_return(a)
+    u = User.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state)
+    u.address.should == a
+  end
+  
   it "should have a writable flag controlling display of personal information on contact list" do
     u = User.new
     u.should respond_to(:show_contact)
@@ -173,13 +184,10 @@ describe User, "(geographical features)" do
     @user.coords
   end
   
-  it "should provide a valid string for address_for_geocoding, even if the user's address is invalid" do
-    lambda {@user.address_for_geocoding}.should_not raise_error
-    @user.address_for_geocoding.should be_a_kind_of(String)
-    @blank = User.new # invalid address, since it's blank!
-    lambda {@blank.address_for_geocoding}.should_not raise_error
-    @blank.address_for_geocoding.should be_a_kind_of(String)
-    @blank.address_for_geocoding.should =~ /^[\s,]*$/ # just spaces and commas
+  it "should create a string for the geocodable address parts" do
+    @user.should respond_to(:address_for_geocoding)
+    @user.address.should_receive(:to_s).with(:geo)
+    addr = @user.address_for_geocoding
   end
 end
 

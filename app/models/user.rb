@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :permissions
   has_many :calendars, :through => :permissions
   # validates_presence_of :permissions
+  composed_of :address, :mapping => [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
   
   validates_presence_of :email
   validates_presence_of     :password,                   :if => :password_required?
@@ -48,7 +49,7 @@ class User < ActiveRecord::Base
         return nil
       end
       begin
-        c = coords_from_string("#{self.street}, #{self.city}, #{self.state.code}, #{self.zip}, #{self.state.country.code}")
+        c = coords_from_string(address.to_s(:geo))
         self[:coords] = c
         self.save
       rescue
