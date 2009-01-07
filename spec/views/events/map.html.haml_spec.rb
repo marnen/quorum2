@@ -8,7 +8,9 @@ describe "/events/map" do
   end
   
   it "should render the map in @map" do
-    User.stub!(:current_user).and_return(mock_model(User, :address_for_geocoding => 'Arbitrary Address, Somewhere, NY, US'))
+    address = Address.new
+    address.should_receive(:to_s).with(:geo).and_return('Arbitrary Address, Somewhere, NY, US')
+    User.stub!(:current_user).and_return(mock_model(User, :address => address ))
     render 'events/map'
     response.should have_tag("#map")
   end

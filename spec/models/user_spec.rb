@@ -183,12 +183,6 @@ describe User, "(geographical features)" do
     @user.should_not_receive(:save)
     @user.coords
   end
-  
-  it "should create a string for the geocodable address parts" do
-    @user.should respond_to(:address_for_geocoding)
-    @user.address.should_receive(:to_s).with(:geo)
-    addr = @user.address_for_geocoding
-  end
 end
 
 describe User, "(authentication structure)" do

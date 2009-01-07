@@ -238,13 +238,6 @@ describe Event, "(geographical features)" do
     @event = events(:one)
   end
   
-  it "should create a string for the geocodable address parts" do
-    @event.should respond_to(:address_for_geocoding)
-    @event.address.should_receive(:to_s).with(:geo)
-    addr = @event.address_for_geocoding
-  end
-
-
   it "should have coords (Point)" do
     @event.should respond_to(:coords)
     @event.coords.should_not be_nil

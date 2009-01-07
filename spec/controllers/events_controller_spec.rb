@@ -74,8 +74,12 @@ describe EventsController, "feed.rss" do
   integrate_views
   
   before(:each) do
-    @one = mock_model(Event, :name => 'Event 1', :date => Date.civil(2008, 7, 4), :description => 'The first event.', :address_for_geocoding => '719 State Street, Albany, NY 12203, US', :created_at => 1.week.ago)
-    @two = mock_model(Event, :name => 'Event 2', :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :address_for_geocoding => '1600 Pennsylvania Avenue, Washington, DC 20500, US', :created_at => 2.days.ago)
+    one_addr = mock("Address 1")
+    one_addr.should_receive(:to_s).with(:geo).at_least(:once).and_return('719 State Street, Albany, NY 12203, US')
+    @one = mock_model(Event, :name => 'Event 1', :date => Date.civil(2008, 7, 4), :description => 'The first event.', :address => one_addr, :created_at => 1.week.ago)
+    two_addr = mock("Address 2")
+    two_addr.should_receive(:to_s).with(:geo).at_least(:once).and_return('1600 Pennsylvania Avenue, Washington, DC 20500, US')
+    @two = mock_model(Event, :name => 'Event 2', :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :address => two_addr, :created_at => 2.days.ago)
     @events = [@one, @two]
     controller.stub!(:current_objects).and_return(@events)
     get :feed, :format => 'rss', :key => 'c' * 32 # arbitrary key
@@ -129,7 +133,7 @@ describe EventsController, "feed.rss" do
   it "should contain an entry for every event, with <title>, <description> (with address and description), <link>, <guid>, and <pubDate> elements" do
     @events.each do |e|
       response.should have_tag('item title',ERB::Util::html_escape(e.name)) # actually, this is XML escape, but close enough
-      response.should have_tag('item description', /#{ERB::Util::html_escape(e.date.to_s(:rfc822))}.*#{ERB::Util::html_escape(e.address_for_geocoding)}.*#{ERB::Util::html_escape(BlueCloth::new(ERB::Util::html_escape(e.description)).to_html)}/m) # kinky but accurate
+      response.should have_tag('item description', /#{ERB::Util::html_escape(e.date.to_s(:rfc822))}.*#{ERB::Util::html_escape(e.address.to_s(:geo))}.*#{ERB::Util::html_escape(BlueCloth::new(ERB::Util::html_escape(e.description)).to_html)}/m) # kinky but accurate
       response.should have_tag('item link', event_url(e))
       response.should have_tag('item guid', event_url(e))
       response.should have_tag('item pubDate', e.created_at.to_s(:rfc822))
