@@ -92,7 +92,7 @@ module EventsHelper
     from = User.current_user.address_for_geocoding.nil? ? nil : "saddr=#{u User.current_user.address_for_geocoding}"
     to = event.address_for_geocoding.nil? ? nil : "daddr=#{u event.address_for_geocoding}"
     params = [from, to].compact.join('&')
-    result << content_tag(:p, link_to(_('Get directions'), "#{gmaps}?#{params}"))
+    result << content_tag(:p, link_to(_('Get directions'), h("#{gmaps}?#{params}")))
     content_tag(:div, result, :id => :info)
   end
   
