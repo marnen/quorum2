@@ -16,9 +16,6 @@
 [submodule "vendor/plugins/restful_authentication"]
 	path = vendor/plugins/restful_authentication
 	url = git://github.com/technoweenie/restful-authentication.git
-[submodule "vendor/plugins/prawnto"]
-	path = vendor/plugins/prawnto
-	url = git://github.com/thorny-sun/prawnto.git
 [submodule "vendor/plugins/exception_notification"]
 	path = vendor/plugins/exception_notification
 	url = git://github.com/rails/exception_notification.git
