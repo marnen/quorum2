@@ -37,7 +37,9 @@ gems:
 - name: postgres
   version: 0.7.9.2008.01.28
 - name: prawn
-  version: 0.2.3
+  version: 0.4.0
+- name: prawn-layout
+  version: 0.1.0
 - name: rake
   version: 0.8.1
 - name: rcov # testing

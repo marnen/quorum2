@@ -1,5 +1,4 @@
 begin
-  FONT_ROOT = "#{RAILS_ROOT}/fonts/dejavu-fonts-ttf-2.26/ttf"
   pdf.font_families.update('DejaVu' => {
     :normal => "#{FONT_ROOT}/DejaVuSerif.ttf",
     :bold => "#{FONT_ROOT}/DejaVuSerif-Bold.ttf",
