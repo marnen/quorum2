@@ -30,14 +30,14 @@ subtitle = _('Generated %{date}') % {:date => Time.zone.now.to_formatted_s(:rfc8
 
 pdf.header pdf.margin_box.top_left do
   if pdf.page_count > 1
-    pdf.font.size(8) do
+    pdf.font_size(8) do
       left = subtitle
       center = title
       right = _('page %{page}') % {:page => pdf.page_count}
       pdf.text left, :align => :left
-      pdf.move_up(pdf.font.height_of(left, :line_width => pdf.margin_box.width))
+      pdf.move_up(pdf.height_of(left, pdf.margin_box.width))
       pdf.text center, :align => :center
-      pdf.move_up(pdf.font.height_of(center, :line_width => pdf.margin_box.width))
+      pdf.move_up(pdf.height_of(center, pdf.margin_box.width))
       pdf.text right, :align => :right
     end
   end
