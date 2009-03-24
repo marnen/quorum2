@@ -3,6 +3,7 @@
 require 'gettext/rails'
 
 class ApplicationController < ActionController::Base
+  filter_parameter_logging :password
   include AuthenticatedSystem # for restful_authentication
   
   # see http://www.ruby-forum.com/topic/51782
