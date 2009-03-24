@@ -59,8 +59,7 @@ class User < ActiveRecord::Base
   # ['Smith', 'John', 'jsmith1@aol.com'] < ['Smith', 'John', 'jsmith2@aol.com']
   def <=>(other)
     attrs = [:lastname, :firstname, :email]
-    attrs.collect{|a| self.read_attribute a} <=> attrs.collect{|a| other.read_attribute a}
-    #[self.lastname, self.firstname, self.email] <=> [other.lastname, other.firstname, other.email]
+    attrs.collect{|a| self[a].downcase rescue nil}.compact <=> attrs.collect{|a| other[a].downcase rescue nil}.compact
   end
 
   # Returns the user's name as a string. Order can be :first_last (default) or :last_first. E-mail address will be returned if no name is specified.

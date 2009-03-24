@@ -117,10 +117,13 @@ describe User, "(instance properties)" do
     end
     
     it "should sort on last name, first name, and e-mail address in that order" do
-      smith = u(['Smith', 'John', 'jsmith1@aol.com'])
+      attrs = ['Smith', 'John', 'jsmith1@aol.com']
+      smith = u(attrs)
       (smith <=> u(['Smith', 'John', 'jsmith2@aol.com'])).should == -1
       (smith <=> u(['Jones', 'Robert', 'rj123@gmail.com'])).should == 1
       (smith <=> u(['Smith', 'Mary', 'aaa@aaa.com'])).should == -1
+      (smith <=> u([nil, nil, 'Smitty@aol.com'])).should == -1 # nil-safe
+      (smith <=> u(attrs.collect(&:downcase))).should == 0 # not case-sensitive
     end
     
     protected
