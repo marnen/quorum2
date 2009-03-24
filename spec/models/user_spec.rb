@@ -110,6 +110,25 @@ end
 describe User, "(instance properties)" do
   fixtures :users
   
+  describe "<=>" do
+    it "should be valid" do
+      User.new.should respond_to(:<=>)
+      User.method(:<=>).arity.should == 1
+    end
+    
+    it "should sort on last name, first name, and e-mail address in that order" do
+      smith = u(['Smith', 'John', 'jsmith1@aol.com'])
+      (smith <=> u(['Smith', 'John', 'jsmith2@aol.com'])).should == -1
+      (smith <=> u(['Jones', 'Robert', 'rj123@gmail.com'])).should == 1
+      (smith <=> u(['Smith', 'Mary', 'aaa@aaa.com'])).should == -1
+    end
+    
+    protected
+    def u(array)
+      User.new(:lastname => array[0], :firstname => array[1], :email => array[2])
+    end
+  end
+  
   describe "to_s" do
     it "should return firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
       @user = User.new
