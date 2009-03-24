@@ -58,7 +58,9 @@ class User < ActiveRecord::Base
   # Compares users by last name, first name, and e-mail address in that order.
   # ['Smith', 'John', 'jsmith1@aol.com'] < ['Smith', 'John', 'jsmith2@aol.com']
   def <=>(other)
-    [self.lastname, self.firstname, self.email] <=> [other.lastname, other.firstname, other.email]
+    attrs = [:lastname, :firstname, :email]
+    attrs.collect{|a| self.read_attribute a} <=> attrs.collect{|a| other.read_attribute a}
+    #[self.lastname, self.firstname, self.email] <=> [other.lastname, other.firstname, other.email]
   end
 
   # Returns the user's name as a string. Order can be :first_last (default) or :last_first. E-mail address will be returned if no name is specified.
