@@ -110,17 +110,44 @@ end
 describe User, "(instance properties)" do
   fixtures :users
   
-  it "should have a 'to_s' property returning firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
-    @user = User.new
-    @user.email = 'foo@bar.com' # arbitrary
-    @user.to_s.should == @user.email
-    @user.firstname = 'f' # arbitrary
-    @user.to_s.should == @user.firstname
-    @user.firstname = nil
-    @user.lastname = 'l' # arbitrary
-    @user.to_s.should == @user.lastname
-    @user.firstname = 'f'
-    @user.to_s.should == @user.firstname << ' ' << @user.lastname
+  describe "to_s" do
+    it "should return firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
+      @user = User.new
+      @user.email = 'foo@bar.com' # arbitrary
+      @user.to_s.should == @user.email
+      @user.firstname = 'f' # arbitrary
+      @user.to_s.should == @user.firstname
+      @user.firstname = nil
+      @user.lastname = 'l' # arbitrary
+      @user.to_s.should == @user.lastname
+      @user.firstname = 'f'
+      @user.to_s.should == @user.firstname << ' ' << @user.lastname
+    end
+    
+    it "should take an optional parameter, :first_last or :last_first" do
+      @user = User.new
+      lambda{@user.to_s}.should_not raise_error
+      lambda{@user.to_s :first_last}.should_not raise_error
+      lambda{@user.to_s :last_first}.should_not raise_error
+    end
+    
+    describe nil do
+      before(:each) do
+        @user = User.new(:email => 'foo@bar.com', :firstname => 'f', :lastname => 'l')
+      end
+      
+      it "should return lastname, firstname if :last_first is specified" do
+        @user.to_s(:last_first).should == 'l, f'
+      end
+      
+      it "should default to :first_last if no order is specified" do
+        @user.to_s.should == @user.to_s(:first_last)
+      end
+      
+      it "should raise an error if format is unrecognized" do
+        lambda{@user.to_s :bogus}.should raise_error
+      end
+    end
   end
   
   it "should have a 'feed_key' property initialized to a 32-character string" do

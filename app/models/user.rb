@@ -37,8 +37,16 @@ class User < ActiveRecord::Base
     return self.state.nil? ? nil : self.state.country
   end
   
-  def to_s
-    str = [self.firstname, self.lastname].delete_if {|e| e.blank?}.join(' ')
+  # Returns the user's name as a string. Order can be :first_last (default) or :last_first. E-mail address will be returned if no name is specified.
+  def to_s(format = :first_last)
+    case format
+    when :first_last
+      str = [self.firstname, self.lastname].delete_if {|e| e.blank?}.join(' ')
+    when :last_first
+      str = [self.lastname, self.firstname].delete_if {|e| e.blank?}.join(', ')
+    else
+      raise ArgumentError, "format must be :first_last, :last_first, or blank"
+    end
     str.blank? ? self.email : str
   end
 
