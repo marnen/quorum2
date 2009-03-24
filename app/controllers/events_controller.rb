@@ -22,7 +22,7 @@ class EventsController < ApplicationController
     response_for :index do |format|
       format.html
       format.pdf do
-        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort{|x, y| [x.lastname, x.firstname, x.email].compact <=> [y.lastname, y.firstname, y.email].compact} # TODO: fix for multiple calendars
+        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort # TODO: fix for multiple calendars
         prawnto :prawn => {:page_layout => :landscape}
         render :layout => false
       end
