@@ -4,7 +4,7 @@ describe EventsHelper do
   fixtures :users, :states, :countries
   
   before(:each) do
-    @event = Event.new
+    @event = Event.make
   end
   
   # refactor from list.html.erb_spec into here?
@@ -52,7 +52,6 @@ describe EventsHelper do
   end
   
   it "should generate a distance string from an event to a user's coords," do
-    @event.state = states(:ny) # required anyway, and makes testing easier
     marnen = users(:marnen)
     @event.coords = marnen.coords
     helper.distance_string(@event, marnen).should =~ /\D\d(\.\d+)? miles/
