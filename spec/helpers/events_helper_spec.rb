@@ -52,7 +52,7 @@ describe EventsHelper do
   end
   
   it "should generate a distance string from an event to a user's coords," do
-    marnen = users(:marnen)
+    marnen = User.make(:coords => Point.from_x_y(5, 10)) # arbitrary coordinates
     @event.coords = marnen.coords
     helper.distance_string(@event, marnen).should =~ /\D\d(\.\d+)? miles/
     user = User.new
