@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081111034201) do
+ActiveRecord::Schema.define(:version => 20090508200432) do
 
   create_table "calendars", :force => true do |t|
     t.column "name", :string, :null => false
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(:version => 20081111034201) do
     t.column "zip", :string
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :point
+    t.column "coords", :point, :srid => 4326
     t.column "created_by_id", :integer
     t.column "deleted", :boolean
     t.column "description", :text
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(:version => 20081111034201) do
     t.column "activated_at", :timestamp
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :point
+    t.column "coords", :point, :srid => 4326
     t.column "show_contact", :boolean, :default => true
     t.column "feed_key", :string, :limit => 32, :null => false
   end

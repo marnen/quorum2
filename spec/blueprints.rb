@@ -11,12 +11,12 @@ end
 State.blueprint do
   country {Country.make}
   name {Sham.generic_name}
-  code
+  code {Sham.code}
 end
 
 Country.blueprint do
   name {Sham.generic_name}
-  code
+  code {Sham.code}
 end
 
 Calendar.blueprint do
