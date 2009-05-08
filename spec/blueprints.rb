@@ -4,12 +4,12 @@ LETTERS = ('A'..'Z').to_a
 
 Event.blueprint do
   name {Sham.event_name}
-  state {State.make}
-  calendar {Calendar.make}
+  state
+  calendar
 end
 
 State.blueprint do
-  country {Country.make}
+  country
   name {Sham.generic_name}
   code
 end
