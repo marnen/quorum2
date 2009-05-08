@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsHelper do
-  fixtures :users, :states, :countries
-  
   before(:each) do
     @event = Event.make
   end
@@ -41,14 +39,15 @@ describe EventsHelper do
   end
 =end
   it "should generate a comma-separated list of names from an array of users" do
+    users = (1..5).map{User.make}
     names = helper.list_names users
-    for user in users do
-      names.should include(user.fullname)
+    users.each do |user|
+      names.should include(user.to_s)
     end
   end
   
   it "should get an attendance status for an event and a user" do
-    helper.attendance_status(@event, users(:quentin)).should == :maybe
+    helper.attendance_status(@event, User.make).should == :maybe
   end
   
   it "should generate a distance string from an event to a user's coords," do
@@ -75,14 +74,12 @@ describe EventsHelper do
 end
 
 describe EventsHelper, "event_map" do
-  fixtures :events, :states, :countries, :users, :states, :countries
-  
   before(:each) do
-    User.stub!(:current_user).and_return(users(:marnen))
+    User.stub!(:current_user).and_return(User.make)
   end
   
   it "should set up a GMap with all the options" do
-    event = events(:one)
+    event = Event.make
 
     # TODO: since this code is now in events/map.js , translate these specs into JavaScript!
 =begin
@@ -152,11 +149,10 @@ describe EventsHelper, "markdown_hint" do
 end
 
 describe EventsHelper, "rss_url" do
-  fixtures :users
-  
   it "should return the RSS feed URL for the current user" do
-    User.current_user = users(:marnen)
-    helper.rss_url.should == formatted_feed_events_url(:format => :rss, :key => users(:marnen).feed_key)
+    user = User.make
+    User.current_user = user
+    helper.rss_url.should == formatted_feed_events_url(:format => :rss, :key => user.feed_key)
   end
   
   it "should return nil if there is no current user" do
