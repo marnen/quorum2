@@ -2,6 +2,7 @@
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+require File.expand_path(File.dirname(__FILE__) + "/blueprints")
 require 'spec'
 require 'spec/rails'
 include AuthenticatedTestHelper # for restful_authentication
@@ -45,4 +46,7 @@ Spec::Runner.configure do |config|
   # == Notes
   # 
   # For more information take a look at Spec::Example::Configuration and Spec::Runner
+  
+  # Reset Shams for Machinist.
+  config.before(:each) {Sham.reset}
 end
