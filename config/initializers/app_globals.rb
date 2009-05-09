@@ -2,6 +2,7 @@
 #require 'gettext/rails'
 
 SITE_TITLE = "Quorum" # Name of site as it appears in <title> element
+FastGettext.add_text_domain SITE_TITLE, :path => 'locale'
 
 DOMAIN = APP_CONFIG['domain'] # Domain on which the site is hosted
 

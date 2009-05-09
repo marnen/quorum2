@@ -77,6 +77,3 @@ Rails::Initializer.run do |config|
   # Set app to Eastern time for now -- we'll have configurable time zones soon enough
   config.time_zone = 'Eastern Time (US & Canada)'
 end
-
-FastGettext.add_text_domain SITE_TITLE, :path => 'locale'
-
