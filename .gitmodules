@@ -1,6 +1,3 @@
-[submodule "vendor/plugins/ym4r_gm"]
-	path = vendor/plugins/ym4r_gm
-	url = git://github.com/ewildgoose/ym4r_gm.git
 [submodule "vendor/plugins/javascript_test"]
 	path = vendor/plugins/javascript_test
 	url = git://github.com/rails/javascript_test.git
