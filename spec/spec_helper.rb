@@ -50,3 +50,6 @@ Spec::Runner.configure do |config|
   # Reset Shams for Machinist.
   config.before(:each) {Sham.reset}
 end
+
+FastGettext.text_domain ||= SITE_TITLE
+FastGettext.available_locales ||= ['en']
