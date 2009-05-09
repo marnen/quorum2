@@ -1,10 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsController, "index" do
-  fixtures :users, :permissions, :calendars
-  
   before(:each) do
-    login_as(:quentin)
+    login_as User.make
   end
   
   it "should be successful" do
@@ -76,12 +74,10 @@ describe EventsController, "feed.rss" do
   integrate_views
   
   before(:each) do
-    one_addr = mock("Address 1")
-    one_addr.should_receive(:to_s).with(:geo).at_least(:once).and_return('719 State Street, Albany, NY 12203, US')
-    @one = mock_model(Event, :name => 'Event 1', :date => Date.civil(2008, 7, 4), :description => 'The first event.', :address => one_addr, :created_at => 1.week.ago)
-    two_addr = mock("Address 2")
-    two_addr.should_receive(:to_s).with(:geo).at_least(:once).and_return('1600 Pennsylvania Avenue, Washington, DC 20500, US')
-    @two = mock_model(Event, :name => 'Event 2', :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :address => two_addr, :created_at => 2.days.ago)
+    User.stub!(:current_user).and_return(User.make) # we need this for some of the callbacks on Calendar and Event
+    @calendar = Calendar.make
+    @one = Event.make(:name => 'Event 1', :calendar => @calendar, :date => Date.civil(2008, 7, 4), :description => 'The first event.', :created_at => 1.week.ago)
+    @two = Event.make(:name => 'Event 2', :calendar => @calendar, :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :created_at => 2.days.ago)
     @events = [@one, @two]
     controller.stub!(:current_objects).and_return(@events)
     get :feed, :format => 'rss', :key => 'c' * 32 # arbitrary key
@@ -144,7 +140,6 @@ describe EventsController, "feed.rss" do
 end
 
 describe EventsController, "feed.rss (login)" do
-  fixtures :events
   integrate_views
   
   it "should not list any events if given an invalid feed_key" do
@@ -195,19 +190,18 @@ describe EventsController, 'index.pdf' do
 end
 
 describe EventsController, "change_status" do
-  fixtures :users, :events, :commitments
-  
   before(:each) do
-    login_as :quentin
+    @user = User.make
+    login_as @user
   end
   
   it "should change attendance status for current user if called with a non-nil event id" do
-    event = events(:one)
-    commitment = commitments(:one)
+    event = Event.make
+    commitment = Commitment.make(:user => @user, :event => event, :status => true)
     id = event.id
     status = :yes # could also be :no or :maybe
     Event.should_receive(:find_by_id).with(id.to_s).once.and_return(event)
-    event.commitments.should_receive(:find_or_create_by_user_id).with(users(:quentin).id).once.and_return(commitment)
+    event.commitments.should_receive(:find_or_create_by_user_id).with(@user.id).once.and_return(commitment)
     commitment.should_receive(:status=).with(true).once.and_return(true)
     commitment.should_receive(:save!).once.and_return(true)
     get "change_status", :id => id, :status => status
@@ -219,18 +213,16 @@ describe EventsController, "change_status" do
   end
   
   it "should render an event row on an Ajax request" do
-    event = events(:one)
+    event = Event.make
     request.stub!(:xhr?).and_return(true)
-    get "change_status", :id => event.id, :status => :yes # status could also be :no or :maybe
+    get "change_status", :id => event.id, :status => 'yes' # status could also be :no or :maybe
     response.should render_template('_event') # with :locals => {:event => event}, but I can't figure out how to test for that
   end
 end
 
 describe EventsController, "new" do
-  fixtures :users, :states, :countries, :commitments
-  
   before(:each) do
-    login_as :quentin
+    login_as User.make
   end
   
   it "should require login" do
@@ -276,10 +268,8 @@ describe EventsController, "new" do
 end
 
 describe EventsController, "create" do
-  fixtures :users, :states, :countries, :commitments
-  
   before(:each) do
-    login_as :quentin
+    login_as User.make
   end
   
   it "should save an Event object" do
@@ -297,27 +287,25 @@ describe EventsController, "create" do
 end
 
 describe EventsController, "edit" do
-  fixtures :users, :events
-  
   before(:each) do
-    login_as :marnen # admin
-    User.stub!(:current_user).and_return(users(:marnen))
+    @event = Event.make
+    @admin = admin_user(@event.calendar)
+    login_as @admin
+    User.stub!(:current_user).and_return(@admin)
   end
   
   it "should redirect to list with an error if the user does not own the event and is not an admin" do
-    event = Event.find(:first)
-    event.should_receive(:allow?).with(:edit).and_return(false)
-    Event.should_receive(:find).and_return(event)
-    get 'edit', :id => event.id
+    @event.should_receive(:allow?).with(:edit).and_return(false)
+    Event.should_receive(:find).and_return(@event)
+    get 'edit', :id => @event.id
     flash[:error].should_not be_nil
     response.should redirect_to(:action => :index)
   end
   
   it 'should allow editing if the user is authorized to edit the event' do
-    event = Event.find(:first)
-    event.should_receive(:allow?).with(:edit).and_return(true)
-    Event.should_receive(:find).and_return(event)
-    get 'edit', :id => event.id
+    @event.should_receive(:allow?).with(:edit).and_return(true)
+    Event.should_receive(:find).and_return(@event)
+    get 'edit', :id => @event.id
     flash[:error].should be_nil
     response.should_not redirect_to(:action => :index)
   end
@@ -329,21 +317,18 @@ describe EventsController, "edit" do
   end
   
   it "should reuse the new-event form" do
-    event = Event.find(:first)
-    get 'edit', :id => event.id
+    get 'edit', :id => @event.id
     response.should render_template(:new)
   end
   
   it "should set the page title" do
-    event = Event.find(:first)
-    get 'edit', :id => event.id
+    get 'edit', :id => @event.id
     assigns[:page_title].should_not be_nil
   end
   
   it "should set the event" do
-    event = Event.find(:first)
-    get 'edit', :id => event.id
-    assigns[:event].should == event
+    get 'edit', :id => @event.id
+    assigns[:event].should == @event
   end
   
 =begin
@@ -389,15 +374,13 @@ describe EventsController, "edit" do
 end
 
 describe EventsController, "show" do
-  fixtures :users, :permissions, :calendars
-  
   before(:each) do
-    login_as :quentin
+    login_as User.make
     controller.stub!(:login_required).and_return(true)
   end
   
   it "should set the page title" do
-    @event = mock_model(Event, :id => 3, :name => 'Name of event', :calendar_id => calendars(:one).id)
+    @event = Event.make
     @event.should_receive(:allow?).with(:show).at_least(:once).and_return(true)
     Event.should_receive(:find).at_least(:once).and_return(@event)
     get :show, :id => @event.id
@@ -416,23 +399,21 @@ describe EventsController, "show" do
 end
 
 describe EventsController, "delete" do
-  fixtures :users, :permissions, :calendars, :roles, :events
-  
   before(:each) do
-    @event = Event.find(:first)
+    @calendar = Calendar.make
+    @event = Event.make(:calendar => @calendar)
     @id = @event.id
   end
   
   it "should not work from non-admin account" do
-    login_as :quentin
+    login_as User.make
     @event.should_not_receive(:hide)
     post 'delete', :id => @id
-    User.current_user.permissions.find_by_calendar_id(@event.calendar_id).role.name.should_not == 'admin'
     flash[:error].should_not be_nil
   end
   
   it "should work from admin account" do
-    login_as :marnen
+    login_as admin_user(@event.calendar)
     Event.should_receive(:find).with(@id.to_i).and_return(@event)
     @event.should_receive(:hide)
     post 'delete', :id => @id
@@ -442,11 +423,9 @@ describe EventsController, "delete" do
 end
 
 describe EventsController, "map" do
-  fixtures :users, :events, :states, :countries
-  
   before(:each) do
-    login_as :marnen
-    @one = events(:one)
+    login_as User.make
+    @one = Event.make
   end
   
   it "should use the map view" do
@@ -488,16 +467,11 @@ describe EventsController, "map" do
 end
 
 describe EventsController, "export" do
-  fixtures :events, :users, :states, :countries
-  
   before(:each) do
-    login_as :quentin
-    @my_event = Event.new do |e| # arbitrary values
-      e.id = 63
-      e.name = "Test"
-      e.date = Time.now
-      e.state = states(:ny)
-    end
+    user = User.make
+    User.stub!(:current_user).and_return user
+    login_as user
+    @my_event = Event.make
     Event.should_receive(:find).with(@my_event.id.to_i).and_return(@my_event)
   end
   
@@ -514,6 +488,13 @@ describe EventsController, "export" do
   it "should set a MIME type of text/calendar" do
     get :export, :id => @my_event.id
     response.headers['type'].should =~ (%r{^text/calendar})
+  end
+end
+
+# Returns a User with admin permissions on the specified Calendar.
+def admin_user(calendar)
+  User.make do |user|
+    user.permissions.make(:role => Role.make(:admin), :calendar => calendar)
   end
 end
 
