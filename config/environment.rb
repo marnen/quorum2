@@ -78,3 +78,5 @@ Rails::Initializer.run do |config|
   config.time_zone = 'Eastern Time (US & Canada)'
 end
 
+FastGettext.add_text_domain SITE_TITLE, :path => 'locale'
+

@@ -30,8 +30,6 @@ gems:
   version: 0.4.5
 - name: gemsonrails
   version: 0.7.2
-- name: gettext
-  version: 1.93.0
 - name: hoe # testing
   version: 1.8.2
 - name: postgres

@@ -15,3 +15,6 @@ config.action_controller.perform_caching             = false
 
 # Don't care if the mailer can't send
 config.action_mailer.raise_delivery_errors = false
+
+# Only for creating po/mo files
+config.gem "gettext", :lib => false, :version => '>=1.9.3'

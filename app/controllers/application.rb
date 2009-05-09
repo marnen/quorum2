@@ -1,10 +1,10 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
-require 'gettext/rails'
-
 class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   include AuthenticatedSystem # for restful_authentication
+  
+  before_filter :set_gettext_locale
   
   # see http://www.ruby-forum.com/topic/51782
   before_filter :login_from_cookie
@@ -40,10 +40,7 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => 'efb0994fc16e17d478432d89deb46862'
   
-  # Add gettext code for i18n, from http://manuals.rubyonrails.com/read/chapter/105
-  init_gettext "quorum", "UTF-8", "text/html"
-  
- protected
+protected
   def admin
     @admin ||= Role.find_by_name('admin')
     @admin
@@ -51,5 +48,15 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     User.current_user = self.current_user
+  end
+  
+  def set_gettext_locale
+    FastGettext.text_domain = SITE_TITLE
+    FastGettext.available_locales = ['en','de'] #all you want to allow
+    begin
+      super
+    rescue NoMethodError
+      # don't worry about it
+    end
   end
 end
