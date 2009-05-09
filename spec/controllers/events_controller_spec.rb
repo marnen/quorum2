@@ -162,8 +162,7 @@ end
 
 describe EventsController, 'index.pdf' do
   before(:each) do
-    @user = mock_model(User, :null_object => true)
-    User.stub!(:current_user).and_return(@user)
+    login_as User.make
     controller.stub!(:login_required).and_return(true)
     controller.stub!(:current_objects).and_return([mock_model(Event, :null_object => true)])
   end
@@ -277,7 +276,6 @@ describe EventsController, "create" do
     my_event.should_not be_nil
     my_event.created_by_id.should be_nil
     Event.stub!(:new).and_return(my_event)
-    User.current_user.stub!(:id).and_return(3) # arbitrary value
     my_event.should_receive(:save)
     post :create, :event => my_event.attributes
     # assigns[:event].name.should == my_event.name
@@ -291,7 +289,6 @@ describe EventsController, "edit" do
     @event = Event.make
     @admin = admin_user(@event.calendar)
     login_as @admin
-    User.stub!(:current_user).and_return(@admin)
   end
   
   it "should redirect to list with an error if the user does not own the event and is not an admin" do
@@ -469,7 +466,6 @@ end
 describe EventsController, "export" do
   before(:each) do
     user = User.make
-    User.stub!(:current_user).and_return user
     login_as user
     @my_event = Event.make
     Event.should_receive(:find).with(@my_event.id.to_i).and_return(@my_event)
