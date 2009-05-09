@@ -46,7 +46,7 @@ describe Event, "(general properties)" do
     aggr = Event.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = mock_model(State, :id => 15, :code => 'NY', :country => mock_model(Country, :code => 'US'))
+    state = State.make(:code => 'NY', :country => Country.make(:code => 'US'))
     a = Address.new
     Address.should_receive(:new).and_return(a)
     e = Event.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state)
@@ -66,7 +66,10 @@ end
 
 describe Event, "(allow?)" do
   before(:each) do
-    @event = Event.new(:calendar_id => 27)
+    @event = Event.new(:calendar => mock_model(Calendar, :id => 27))
+    @alien = User.make{|u| u.permissions.make(:calendar => mock_model(Calendar, :id => 999))}
+    @nonadmin = User.make{|u| u.permissions.make(:calendar => @event.calendar)}
+    @admin = User.make{|u| u.permissions.make(:calendar => @event.calendar, :role => Role.make(:admin))}
   end
   
   it "should exist with one argument" do
@@ -75,43 +78,25 @@ describe Event, "(allow?)" do
   end
   
   it "should return true for :delete iff current user has a role of admin for the event's calendar, false otherwise" do
-    @notallowed = [mock_model(Permission, :calendar_id => 999)]
-    @notallowed.should_receive(:find_by_calendar_id).with(27).and_return(nil)
-    @admin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
-    @admin.should_receive(:find_by_calendar_id).with(27).and_return(@admin[0])
-    
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @notallowed))
+    User.stub!(:current_user).and_return(@alien)
     @event.allow?(:delete).should == false
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @admin))
+    User.stub!(:current_user).and_return(@admin)
     @event.allow?(:delete).should == true
   end
   
   it "should return true for :edit iff current user has a role of admin for the event's calendar or created the event" do
-    @nonadmin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'foo'))]
-    @nonadmin.should_receive(:find_by_calendar_id).with(27).and_return(@nonadmin[0])
-    @admin_p = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
-    @admin_p.should_receive(:find_by_calendar_id).with(27).and_return(@admin_p[0])
-    
-    @two = mock_model(User, :id => 2, :permissions => @nonadmin) # arbitrary non-admin role
-    @admin = mock_model(User, :id => 3, :permissions => @admin_p)
-    @event.created_by = @two
-    User.stub!(:current_user).and_return(@two)
+    @event.created_by = @nonadmin
+    User.stub!(:current_user).and_return(@nonadmin)
     @event.allow?(:edit).should == true
     User.stub!(:current_user).and_return(@admin)
     @event.allow?(:edit).should == true
   end
   
   it "should return true for :show iff current user has any role for the event's calendar" do
-    @user_p = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'anything'))]
-    @user_p.should_receive(:find_by_calendar_id).with(27).and_return(@user_p[0])
-    @onr = mock_model(User, :permissions => @user_p)
-    User.stub!(:current_user).and_return(@onr)
+    User.stub!(:current_user).and_return(User.make{|u| u.permissions.make(:calendar => @event.calendar, :role => Role.make(:name => 'anything'))})
     @event.allow?(:show).should == true
 
-    @user_p = [mock_model(Permission, :calendar_id => 37, :role => mock_model(Role, :name => 'anything'))]
-    @user_p.should_receive(:find_by_calendar_id).with(27).and_return(nil)
-    @two = mock_model(User, :permissions => @user_p)
-    User.stub!(:current_user).and_return(@two)
+    User.stub!(:current_user).and_return(User.make{|u| u.permissions.make(:calendar => mock_model(Calendar, :id => 37), :role => Role.make(:name => 'anything'))})
     @event.allow?(:show).should == false
   end
   
@@ -121,9 +106,7 @@ describe Event, "(allow?)" do
   end
   
   it "should return nil for any operation it doesn't know about" do
-    @admin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
-    @admin.should_receive(:find_by_calendar_id).with(27).and_return(@admin[0])
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @admin))
+    User.stub!(:current_user).and_return(@admin)
     
     @event.allow?(:foobar).should be_nil
   end
@@ -175,9 +158,7 @@ describe Event, "(hide)" do
   end
 end
 
-describe Event, "(validations)" do
-  fixtures :users
-  
+describe Event, "(validations)" do 
   before(:each) do
     @event = Event.new
     @event.state_id = 23 # arbitrary; should be able to use any value
@@ -214,16 +195,15 @@ describe Event, "(validations)" do
 =end
 
   it "should assign current_user to created_by" do
+    user = User.make
+    User.stub!(:current_user).and_return user
     @event.created_by_id = nil
-    User.should_receive(:current_user).and_return(users(:marnen))
     @event.save!
-    @event.created_by.should == users(:marnen)
+    @event.created_by.should == user
   end
 end
 
 describe Event, "(geographical features)" do
-  fixtures :events, :calendars, :states, :countries
-  
   before(:each) do
     @placemark = Geocoding::Placemark.new
     @placemark.stub!(:latlon).and_return([1.0, 2.0])
@@ -235,7 +215,7 @@ describe Event, "(geographical features)" do
     Geocoding.stub!(:get).and_return(@placemarks)
     Point.stub!(:from_coordinates).and_return(mock_model(Point))
 
-    @event = events(:one)
+    @event = Event.new
   end
   
   it "should have coords (Point)" do
@@ -256,6 +236,8 @@ describe Event, "(geographical features)" do
   end 
   
   it "should clear coords on update" do
+    User.stub!(:current_user).and_return(User.make)
+    @event.update_attributes(Event.plan)
     @event.should_receive(:coords=)
     @event.update_attributes(:name => 'foo')
     # @event.should_not_receive(:coords=)

@@ -164,7 +164,7 @@ class User < ActiveRecord::Base
     
     def set_calendar
       if Calendar.count == 1
-        self.permissions << Permission.create(:user => self, :calendar => Calendar.find(:first), :role => Role.find_by_name('user'))
+        self.permissions << Permission.create(:user => self, :calendar => Calendar.find(:first), :role => Role.find_or_create_by_name('user'))
       end
     end
 end

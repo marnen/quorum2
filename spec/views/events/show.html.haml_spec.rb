@@ -4,9 +4,9 @@ describe "/events/show" do
   fixtures :events
   
   before(:each) do
-    @event = Event.find(:first)
+    User.stub!(:current_user).and_return(User.make)
+    @event = Event.make
     template.stub!(:current_object).and_return(@event)
-    User.stub!(:current_user).and_return(mock_model(User, :null_object => true))
   end
   
   it "should render the event and table_header partials" do

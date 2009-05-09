@@ -5,14 +5,8 @@ include ActionView::Helpers::UrlHelper
 include EventsHelper
 
 describe 'events/_attendance' do
-  fixtures :events, :countries, :states, :commitments, :users
-
-  before(:all) do
-    @event_orig = Event.find(:first).clone
-  end
-  
   before(:each) do
-    render :partial => 'events/attendance', :locals => {:event => @event_orig}
+    render :partial => 'events/attendance', :locals => {:event => Event.make}
   end
   
   it "should have a select element for event" do

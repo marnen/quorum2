@@ -4,7 +4,12 @@ LETTERS = ('A'..'Z').to_a
 
 Event.blueprint do
   name {Sham.event_name}
+  description
+  street
+  street2
+  city
   state
+  zip
   date
   calendar
   created_by {User.make}
@@ -31,6 +36,16 @@ User.blueprint do
   email
   password
   password_confirmation {self.password}
+  street
+  street2
+  city
+  state
+  zip
+  activated_at {Time.now.utc}
+end
+
+User.blueprint(:inactive) do
+  activated_at {nil}
 end
 
 Commitment.blueprint do
@@ -40,8 +55,13 @@ Commitment.blueprint do
 end
 
 Permission.blueprint do
+  user
   role
   calendar
+end
+
+Permission.blueprint(:admin) do
+  role {Role.make :admin}
 end
 
 Role.blueprint do
@@ -54,12 +74,17 @@ end
 
 Sham.define do
   calendar_name {Faker::Name.name + "'s calendar"}
+  city {Faker::Address.city}
   date(:unique => false) {Date.civil(rand(10) + 2000, rand(12) + 1, rand(28) + 1)}
+  description {Faker::Lorem.paragraph}
   email {Faker::Internet.email}
   firstname {Faker::Name.first_name}
   lastname {Faker::Name.last_name}
   generic_name {Faker::Name.last_name}
   password {(1..(rand(15) + 2)).map{(32..127).to_a.rand.chr}.join}
+  street {Faker::Address.street_address}
+  street2 {Faker::Address.secondary_address}
+  zip {Faker::Address.zip_code}
   code {LETTERS.rand + LETTERS.rand} # 2 random letters
   event_name {Faker::Lorem.words(3).join(' ')}
 end

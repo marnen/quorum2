@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SessionsController do
   it 'logins and redirects' do
-    post :create, :email => 'quentin@example.com', :password => 'test'
+    user = User.make
+    post :create, :email => user.email, :password => user.password
     session[:user_id].should_not be_nil
     response.should be_redirect
   end
@@ -21,12 +22,14 @@ describe SessionsController do
   end
 
   it 'remembers me' do
-    post :create, :email => 'quentin@example.com', :password => 'test', :remember_me => "1"
+    user = User.make
+    post :create, :email => user.email, :password => user.password, :remember_me => "1"
     response.cookies["auth_token"].should_not be_nil
   end
   
   it 'does not remember me' do
-    post :create, :email => 'quentin@example.com', :password => 'test', :remember_me => "0"
+    user = User.make
+    post :create, :email => user.email, :password => user.password, :remember_me => "0"
     response.cookies["auth_token"].should be_nil
   end
 

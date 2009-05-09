@@ -6,3 +6,4 @@ html:spec-results/index.html
 --loadby
 mtime
 --reverse
+--debugger

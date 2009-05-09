@@ -1,12 +1,16 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/events/new" do
-  fixtures :users, :events
-  
   before(:each) do
-    login_as :quentin
-    User.stub!(:current_user).and_return(users(:quentin))
-    assigns[:current_object] = events(:one)
+    login_as User.make # just for Calendar callback
+    c = Calendar.make
+    user = User.make do |u|
+      u.permissions.make do |p|
+        p.calendar = c
+      end
+    end
+    login_as user
+    assigns[:current_object] = Event.make
     render 'events/new'
   end
   
@@ -65,21 +69,26 @@ end
 
 describe "/events/new (multiple calendars)" do
   before(:each) do
-    @one = mock_model(Calendar, :id => 1, :name => 'Calendar 1')
-    @two = mock_model(Calendar, :id => 2, :name => 'Calendar 2')
-    assigns[:current_object] = mock_model(Event, :null_object => true, :date => Time.now, :calendar => @one)
+    login_as User.make
+    @one = Calendar.make(:id => 1, :name => 'Calendar 1')
+    @two = Calendar.make(:id => 2, :name => 'Calendar 2')
+    assigns[:current_object] = Event.make(:date => Time.now, :calendar => @one)
   end
   
   it "should display a calendar selector if current user has multiple calendars" do
-    @quentin = mock_model(User, :id => 5, :calendars => [@one, @two])
-    User.stub!(:current_user).and_return(@quentin)
+    @quentin = User.make do |u|
+      [@one, @two].each{|c| u.permissions.make(:calendar => c)}
+    end
+    login_as(@quentin)
     render '/events/new'
     response.should have_tag('select#event_calendar_id')
   end
   
   it "should not display a calendar selector if current user only has one calendar" do
-    @jim = mock_model(User, :id => 6, :calendars => [@one])
-    User.stub!(:current_user).and_return(@jim)
+    @jim = User.make do |u|
+      u.permissions.make(:calendar => @one)
+    end
+    login_as(@jim)
     render '/events/new'
     response.should_not have_tag('select#event_calendar_id')
     response.should have_tag("input[type=hidden][value=#{@one.id}]#event_calendar_id")

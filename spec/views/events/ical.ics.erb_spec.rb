@@ -2,9 +2,8 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 include EventsHelper
 
 describe "/events/ical.ics" do
-  fixtures :events, :countries, :states
   before(:each) do
-    @event = events(:one)
+    @event = Event.make
     assigns[:event] = @event
     render 'events/ical.ics.erb'
   end

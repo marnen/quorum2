@@ -83,8 +83,6 @@ describe User, "(admin?)" do
 end
 
 describe User, "(validations)" do
-  fixtures :users, :roles, :calendars, :permissions
-  
 =begin
   it "should require at least one permission" do
     user = users(:marnen)
@@ -95,21 +93,19 @@ describe User, "(validations)" do
 =end
 
   it 'should create a user permission for the calendar, when there\'s only one calendar' do
-    Calendar.delete(calendars(:two).id) # so we only have one calendar
+    User.stub!(:current_user).and_return(User.make)
+    calendar = Calendar.make
     Calendar.count.should == 1
-    user = User.new(:email => 'johndoe@example.com', :password => 'foo', :password_confirmation => 'foo')
-    user.save!
+    user = User.create!(User.plan)
     user.permissions.should_not be_nil
     user.permissions.should_not be_empty
     user.permissions[0].user.should == user
-    user.permissions[0].calendar.should == calendars(:one)
-    user.permissions[0].role.should == roles(:user)
+    user.permissions[0].calendar.should == calendar
+    user.permissions[0].role.name.should == 'user'
   end
 end
   
 describe User, "(instance properties)" do
-  fixtures :users
-  
   describe "<=>" do
     it "should be valid" do
       User.new.should respond_to(:<=>)
@@ -173,25 +169,24 @@ describe User, "(instance properties)" do
   end
   
   it "should have a 'feed_key' property initialized to a 32-character string" do
-    User.find(:first).feed_key.length.should == 32
+    User.make.feed_key.length.should == 32
   end
   
   it "should set feed_key on save" do
-    @u = User.find(:first)
+    @u = User.make
     @u.feed_key = nil
     @u.reload.feed_key.length.should == 32
   end
   
   it "should not overwrite feed_key if already set" do
-    @u = User.find(:first)
+    @u = User.make
     fk = @u.feed_key
     @u.reload.feed_key.should == fk
   end
   
   it "should properly deal with regenerating feed_key if it's a duplicate" do
-    @users = User.find(:all)
-    @one = @users[0]
-    @two = @users[1]
+    @one = User.make
+    @two = User.make
     fk = @two.feed_key
     @one.feed_key = fk
     @one.reload.feed_key.should_not == fk
@@ -200,8 +195,6 @@ describe User, "(instance properties)" do
 end
 
 describe User, "(geographical features)" do
-  fixtures :users, :states, :countries
-  
   before(:each) do
     @placemark = Geocoding::Placemark.new
     @placemark.stub!(:latlon).and_return([1.0, 2.0])
@@ -213,7 +206,7 @@ describe User, "(geographical features)" do
     Geocoding.stub!(:get).and_return(@placemarks)
     Point.stub!(:from_coordinates).and_return(mock_model(Point))
 
-    @user = users(:marnen)
+    @user = User.new(User.plan)
   end
   
   it "should save coords when successfully encoded" do
@@ -235,8 +228,6 @@ describe User, "(geographical features)" do
 end
 
 describe User, "(authentication structure)" do
-  fixtures :users, :roles, :permissions
-
 =begin
   describe 'being created' do
     before do
@@ -280,56 +271,65 @@ describe User, "(authentication structure)" do
   end
 
   it 'resets password' do
-    users(:quentin).update_attributes(:password => 'new password', :password_confirmation => 'new password')
-    User.authenticate('quentin@example.com', 'new password').should == users(:quentin)
+    user = User.make
+    user.update_attributes(:password => 'new password', :password_confirmation => 'new password')
+    User.authenticate(user.email, 'new password').should == user
   end
 
   it 'does not rehash password' do
-    users(:quentin).update_attributes(:email => 'quentin2@example.com')
-    User.authenticate('quentin2@example.com', 'test').should == users(:quentin)
+    user = User.make
+    password = user.password
+    user.update_attributes(:email => 'quentin2@example.com')
+    User.authenticate('quentin2@example.com', password).should == user
   end
 
   it 'authenticates user' do
-    User.authenticate('quentin@example.com', 'test').should == users(:quentin)
+    user = User.make
+    User.authenticate(user.email, user.password).should == user
   end
 
   it 'sets remember token' do
-    users(:quentin).remember_me
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
+    user = User.make
+    user.remember_me
+    user.remember_token.should_not be_nil
+    user.remember_token_expires_at.should_not be_nil
   end
 
   it 'unsets remember token' do
-    users(:quentin).remember_me
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).forget_me
-    users(:quentin).remember_token.should be_nil
+    user = User.make
+    user.remember_me
+    user.remember_token.should_not be_nil
+    user.forget_me
+    user.remember_token.should be_nil
   end
 
   it 'remembers me for one week' do
+    user = User.make
     before = 1.week.from_now.utc
-    users(:quentin).remember_me_for 1.week
+    user.remember_me_for 1.week
     after = 1.week.from_now.utc
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.between?(before, after).should be_true
+    user.remember_token.should_not be_nil
+    user.remember_token_expires_at.should_not be_nil
+    user.remember_token_expires_at.between?(before, after).should be_true
   end
 
   it 'remembers me until one week' do
+    user = User.make
     time = 1.week.from_now.utc
-    users(:quentin).remember_me_until time
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.should == time
+    user.remember_me_until time
+    user.remember_token.should_not be_nil
+    user.remember_token_expires_at.should_not be_nil
+    user.remember_token_expires_at.should == time
   end
 
   it 'remembers me default two weeks' do
+    user = User.make
     before = 2.weeks.from_now.utc
-    users(:quentin).remember_me
+    user.remember_me
     after = 2.weeks.from_now.utc
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.between?(before, after).should be_true
+    user.remember_token.should_not be_nil
+    user.remember_token_expires_at.should_not be_nil
+    user.remember_token_expires_at.between?(before, after).should be_true
   end
 
 protected

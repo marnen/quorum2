@@ -9,20 +9,15 @@ describe "/events/index" do
     HTML::Selector.new('[name=?]', string)
   end
 
-  fixtures :states, :countries, :events, :users, :commitments
   before(:each) do
-    @events = Event.find(:all)
+    @events = (1..10).map{Event.make}
     assigns[:events] = @events
-    assigns[:current_user] = users(:marnen)
-    User.stub!(:current_user).and_return(assigns[:current_user])
+    @user = User.make
+    assigns[:current_user] = @user
+    login_as @user
   end
   
-  it "should have loaded at least one event" do
-    render 'events/index'
-    @events.size.should > 0
-  end
-  
-  it "should have a date limiting form" do
+ it "should have a date limiting form" do
     render 'events/index'
     form = "form[action=#{url_for(:overwrite_params => {}, :escape => false)}][method=get]"
     response.should have_tag("#{form}") do |e|
@@ -51,7 +46,7 @@ describe "/events/index" do
   end
   
   it "should have a calendar option on the limiting form iff user has multiple calendars" do
-    User.current_user.stub!(:calendars).and_return([mock_model(Calendar, :name => 'one', :id => 1), mock_model(Calendar, :name => 'two', :id => 2)])
+    User.current_user.stub!(:calendars).and_return((1..2).map{Calendar.make})
     render 'events/index'
     form = "form[action=#{url_for(:overwrite_params => {}, :escape => false)}][method=get]"
     response.should have_tag("#{form} select") do |selects|

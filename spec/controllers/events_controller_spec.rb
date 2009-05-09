@@ -74,13 +74,14 @@ describe EventsController, "feed.rss" do
   integrate_views
   
   before(:each) do
-    User.stub!(:current_user).and_return(User.make) # we need this for some of the callbacks on Calendar and Event
+    user = User.make
+    User.stub!(:current_user).and_return(user) # we need this for some of the callbacks on Calendar and Event
     @calendar = Calendar.make
     @one = Event.make(:name => 'Event 1', :calendar => @calendar, :date => Date.civil(2008, 7, 4), :description => 'The first event.', :created_at => 1.week.ago)
     @two = Event.make(:name => 'Event 2', :calendar => @calendar, :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :created_at => 2.days.ago)
     @events = [@one, @two]
     controller.stub!(:current_objects).and_return(@events)
-    get :feed, :format => 'rss', :key => 'c' * 32 # arbitrary key
+    get :feed, :format => 'rss', :key => user.feed_key
   end
   
   it "should be successful" do
@@ -150,9 +151,10 @@ describe EventsController, "feed.rss (login)" do
   end
   
   it "should list events if given a valid feed_key" do
-    @events = Event.find(:all)
-    @events.size.should_not == 0
-    @user = mock_model(User, :feed_key => 'foo', :fullname => 'John Smith', :calendars => [mock_model(Calendar, :id => 1, :name => 'Calendar 1')])
+    @user = User.make
+    login_as @user
+    calendar = Calendar.make # @user will be subscribed to
+    @events = (1..5).map{Event.make(:calendar => calendar)}
     User.stub!(:find_by_feed_key).and_return(@user)
     Event.should_receive(:find).and_return(@events)
     get :feed, :format => 'rss', :key => @user.feed_key
@@ -490,7 +492,8 @@ end
 # Returns a User with admin permissions on the specified Calendar.
 def admin_user(calendar)
   User.make do |user|
-    user.permissions.make(:role => Role.make(:admin), :calendar => calendar)
+    user.permissions.destroy_all
+    user.permissions.make(:admin, :calendar => calendar)
   end
 end
 
