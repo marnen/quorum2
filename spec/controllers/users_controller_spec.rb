@@ -4,7 +4,7 @@ describe UsersController do
   fixtures :users
 
   it 'allows signup' do
-    @user = User.new
+    @user = User.make
     User.should_receive(:new).and_return(@user)
     @user.should_receive(:save).at_least(:once).and_return(true)
     create_user
@@ -69,10 +69,9 @@ describe UsersController do
 end
 
 describe UsersController, "edit" do
-  fixtures :users
-  
-  before(:each) do
-    login_as :marnen
+ before(:each) do
+    @user = User.make
+    login_as @user
     get :edit
   end
   
@@ -85,43 +84,37 @@ describe UsersController, "edit" do
   end
   
   it "should not require password validation if both password fields are nil" do
-    marnen = users(:marnen)
-    my_attr = marnen.attributes
+    test_user = User.make
+    my_attr = test_user.attributes
     my_attr[:password] = nil
     my_attr[:password_confirmation] = nil
-    User.stub!(:current_user).and_return(users(:marnen))
+    User.stub!(:current_user).and_return(test_user)
     post :edit, :user => my_attr
-    marnen.errors.should be_empty
+    test_user.errors.should be_empty
   end
   
   it "should validate password if at least one password field is supplied" do
-    User.stub!(:current_user).and_return(users(:marnen))
-    marnen = users(:marnen)
- 
-    my_attr = marnen.attributes
+    my_attr = @user.attributes
     my_attr[:password] = 'a'
     my_attr[:password_confirmation] = nil
     my_attr.should_not be_nil
     post :edit, :user => my_attr
-    marnen.errors.should_not be_empty
+    @user.errors.should_not be_empty
 
+    @user = User.make
+    login_as @user
     get :edit
-    marnen = users(:marnen)
-    my_attr = marnen.attributes
+    my_attr = @user.attributes
     my_attr[:password] = nil
     my_attr[:password_confirmation] = 'a'
     my_attr.should_not be_nil
     post :edit, :user => my_attr
-    marnen.errors.should_not be_empty
+    @user.errors.should_not be_empty
   end
   
   it "should set coords to nil" do
-    marnen = users(:marnen)
-    User.stub!(:current_user).and_return(marnen)
-    post :edit, :user => marnen.attributes
-    marnen.should_receive(:coords_from_string)
-    marnen.coords
-    # pending "Not sure if this spec is working properly."
+    post :edit, :user => @user.attributes
+    @user.coords.should be_nil
   end
 end
 
@@ -191,13 +184,13 @@ describe UsersController, '(reset/POST)' do
   end
   
   it "should reset password if e-mail is valid" do
-    @user = mock_model(User, :email => 'quentin@example.com')
+    @user = User.make
     @user.should_receive(:password=)
     @user.should_receive(:password_confirmation=)
     @user.should_receive(:save!).and_return(true)
     User.should_receive(:find_by_email).and_return(@user)
     UserMailer.should_receive(:deliver_reset).with(@user, an_instance_of(String)).at_least(:once).and_return(true)
-    post :reset, :email => 'quentin@example.com'
+    post :reset, :email => @user.email
     flash[:error].should be_nil
     flash[:notice].should_not be_nil
   end
