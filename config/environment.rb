@@ -72,6 +72,8 @@ Rails::Initializer.run do |config|
   config.gem 'haml', :version => '= 2.1.0'
   config.gem 'GeoRuby', :lib => 'geo_ruby'
   
+  config.gem 'grosser-fast_gettext', :lib => 'fast_gettext', :source => 'http://gems.github.com'
+  
   # Set app to Eastern time for now -- we'll have configurable time zones soon enough
   config.time_zone = 'Eastern Time (US & Canada)'
 end
