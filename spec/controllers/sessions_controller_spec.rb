@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SessionsController do
-  fixtures :users
-
   it 'logins and redirects' do
     post :create, :email => 'quentin@example.com', :password => 'test'
     session[:user_id].should_not be_nil
@@ -16,7 +14,7 @@ describe SessionsController do
   end
 
   it 'logs out' do
-    login_as :quentin
+    login_as User.make
     get :destroy
     session[:user_id].should be_nil
     response.should be_redirect
@@ -33,28 +31,30 @@ describe SessionsController do
   end
 
   it 'deletes token on logout' do
-    login_as :quentin
+    login_as User.make
     get :destroy
     response.cookies["auth_token"].should == []
   end
 
   it 'logs in with cookie' do
-    users(:quentin).remember_me
-    request.cookies["auth_token"] = cookie_for(:quentin)
+    user = User.make
+    user.remember_me
+    request.cookies["auth_token"] = cookie_for(user)
     get :new
     controller.send(:logged_in?).should be_true
   end
   
   it 'fails expired cookie login' do
-    users(:quentin).remember_me
-    users(:quentin).update_attribute :remember_token_expires_at, 5.minutes.ago
-    request.cookies["auth_token"] = cookie_for(:quentin)
+    user = User.make
+    user.remember_me
+    user.update_attribute :remember_token_expires_at, 5.minutes.ago
+    request.cookies["auth_token"] = cookie_for(user)
     get :new
     controller.send(:logged_in?).should_not be_true
   end
   
   it 'fails cookie login' do
-    users(:quentin).remember_me
+    User.make.remember_me
     request.cookies["auth_token"] = auth_token('invalid_auth_token')
     get :new
     controller.send(:logged_in?).should_not be_true
@@ -65,7 +65,7 @@ describe SessionsController do
   end
     
   def cookie_for(user)
-    auth_token users(user).remember_token
+    auth_token user.remember_token
   end
 end
 
