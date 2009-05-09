@@ -52,6 +52,15 @@ describe Calendar, '(validations)' do
     @calendar.permissions.should == [@perm]
   end
   
+  it 'should not set admin when no one is logged in' do
+    [false, :false, nil].each do |v|
+      User.stub!(:current_user).and_return(v)
+      @calendar = Calendar.new(Calendar.plan)
+      @calendar.permissions.should_not_receive(:create)
+      @calendar.save!
+    end
+  end
+  
   it 'should not create permissions when the calendar is invalid' do
     @calendar.name = nil
     @calendar.permissions.should_not_receive(:create)

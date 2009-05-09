@@ -98,6 +98,8 @@ class Event < ActiveRecord::Base
   end
  
   def set_created_by_id
-    self.created_by = User.current_user
+    if User.current_user and User.current_user != :false
+      self.created_by = User.current_user
+    end
   end
 end

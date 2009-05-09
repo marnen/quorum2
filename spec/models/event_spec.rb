@@ -201,6 +201,15 @@ describe Event, "(validations)" do
     @event.save!
     @event.created_by.should == user
   end
+  
+  it "should not try to set created_by if there's no current user" do
+    [false, :false].each do |v|
+      User.stub!(:current_user).and_return(v)
+      @event.created_by_id = nil
+      @event.should_not_receive(:created_by=)
+      @event.save!
+    end
+  end
 end
 
 describe Event, "(geographical features)" do

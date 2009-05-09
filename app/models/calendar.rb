@@ -14,6 +14,8 @@ class Calendar < ActiveRecord::Base
   
  protected
   def set_admin
-    self.permissions.create(:user => User.current_user, :role => Role.find_by_name('admin'))
+    if User.current_user and User.current_user != :false # TODO: can't we refactor this condition elsewhere?
+      self.permissions.create(:user => User.current_user, :role => Role.find_by_name('admin'))
+    end
   end
 end
