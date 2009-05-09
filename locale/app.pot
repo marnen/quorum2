@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
-"POT-Creation-Date: 2009-05-09 16:50-0400\n"
-"PO-Revision-Date: 2009-05-09 16:50-0400\n"
+"POT-Creation-Date: 2009-05-09 19:37-0400\n"
+"PO-Revision-Date: 2009-05-09 19:37-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -280,20 +280,14 @@ msgid "Show on commitment reports?"
 msgstr ""
 
 #: app/views/events/_attendance.html.haml:1 app/views/events/_event.html.haml:1
-#: app/views/events/_event.html.haml.BASE.64890.haml:1 app/views/events/_event.html.haml.LOCAL.64890.haml:1
-#: app/views/events/_event.html.haml.REMOTE.64890.haml:1
 msgid "attending"
 msgstr ""
 
 #: app/views/events/_attendance.html.haml:1 app/views/events/_event.html.haml:1
-#: app/views/events/_event.html.haml.BASE.64890.haml:1 app/views/events/_event.html.haml.LOCAL.64890.haml:1
-#: app/views/events/_event.html.haml.REMOTE.64890.haml:1
 msgid "not attending"
 msgstr ""
 
 #: app/views/events/_attendance.html.haml:1 app/views/events/_event.html.haml:1
-#: app/views/events/_event.html.haml.BASE.64890.haml:1 app/views/events/_event.html.haml.LOCAL.64890.haml:1
-#: app/views/events/_event.html.haml.REMOTE.64890.haml:1
 msgid "uncommitted"
 msgstr ""
 
