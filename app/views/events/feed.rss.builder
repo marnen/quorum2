@@ -1,7 +1,7 @@
 xml.instruct! :xml, :version => "1.0"
 xml.rss :version => '2.0', %s{xmlns:atom} => "http://www.w3.org/2005/Atom" do
   xml.channel do
-    xml.tag! 'atom:link', :href => formatted_feed_events_url(:format => :rss, :key => @key), :rel => :self
+    xml.tag! 'atom:link', :href => feed_events_url(:fmt => :rss, :key => @key), :rel => :self
     xml.title _("%{Quorum} Events") % {:Quorum => SITE_TITLE}
     xml.link events_url
     xml.description do

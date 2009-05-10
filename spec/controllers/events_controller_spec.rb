@@ -145,7 +145,7 @@ describe EventsController, "feed.rss (login)" do
   
   it "should not list any events if given an invalid feed_key" do
     User.stub!(:find_by_feed_key).and_return(nil)
-    get :feed, :format => 'rss', :key => 'fake key'
+    get :feed, :fmt => 'rss', :key => 'fake key'
     Event.should_not_receive(:find)
     response.should_not have_tag('item')
   end

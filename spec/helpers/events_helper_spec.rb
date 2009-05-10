@@ -152,7 +152,7 @@ describe EventsHelper, "rss_url" do
   it "should return the RSS feed URL for the current user" do
     user = User.make
     User.current_user = user
-    helper.rss_url.should == formatted_feed_events_url(:format => :rss, :key => user.feed_key)
+    helper.rss_url.should == feed_events_url(:fmt => :rss, :key => user.feed_key)
   end
   
   it "should return nil if there is no current user" do
