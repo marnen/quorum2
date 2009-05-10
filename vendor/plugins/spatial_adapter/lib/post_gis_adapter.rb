@@ -57,8 +57,12 @@ ActiveRecord::Base.class_eval do
             "#{table_name}.#{connection.quote_column_name(attr)} && ? " 
           end
         else
-          "#{table_name}.#{connection.quote_column_name(attr)} #{attribute_condition(value)}"
-        end
+        begin # this works in AR 2.3.2 and later versions, it might work in earlier versions - this way of checking avoids using version numbers
+         attribute_condition("#{table_name}.#{connection.quote_column_name(attr)}", "#{value}") 
+         rescue ArgumentError # for some earlier versions of AR it definitely breaks
+          "#{table_name}.#{connection.quote_column_name(attr)} #{attribute_condition(value)}" 
+         end 
+       end   
       end.join(' AND ')
     end
     if ActiveRecord::VERSION::STRING == "1.15.1"
@@ -102,8 +106,12 @@ ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.class_eval do
 
   alias :original_tables :tables
   def tables(name = nil) #:nodoc:
+    original_tables(name) + views(name)
+  end
+  
+  def views(name = nil) #:nodoc:
     schemas = schema_search_path.split(/,/).map { |p| quote(p.strip) }.join(',')
-    original_tables(name) + query(<<-SQL, name).map { |row| row[0] }
+    query(<<-SQL, name).map { |row| row[0] }
       SELECT viewname
         FROM pg_views
         WHERE schemaname IN (#{schemas})
@@ -243,7 +251,7 @@ ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.class_eval do
     #Pete Deffendol's patch
     alias :original_disable_referential_integrity :disable_referential_integrity
     def disable_referential_integrity(&block) #:nodoc:
-      ignore_tables = %w{ geometry_columns spatial_ref_sys }
+      ignore_tables = %w{ geometry_columns spatial_ref_sys } + views
       execute(tables.select { |name| !ignore_tables.include?(name) }.collect { |name| "ALTER TABLE #{quote_table_name(name)} DISABLE TRIGGER ALL" }.join(";"))
       yield
     ensure
