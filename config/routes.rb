@@ -42,8 +42,8 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'events'
   
   map.connect 'events/index', :controller => 'events', :action => 'index'
-
-  map.formatted_feed_events 'events/feed.:format/:key', :controller => 'events', :action => 'feed'
+  
+  map.feed_events 'events/feed.:fmt/:key', :controller => 'events', :action => 'feed' # can't use :format with this URL syntax
   map.resources :events
   
   map.resources :permissions, :member => {:destroy => :get}
