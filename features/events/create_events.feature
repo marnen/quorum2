@@ -5,6 +5,7 @@ Feature: Create events
   
   Scenario: Create events on subscribed calendar when there's only one subscription
     Given I am logged in
+    And I am on the homepage
     And I am subscribed to "Calendar 1"
     When I follow "Add event"
     And I fill in "Event name" with "My event"

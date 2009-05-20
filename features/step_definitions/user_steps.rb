@@ -1,3 +1,7 @@
+Given /^I am logged in$/ do
+  User.current_user = User.make
+end
+
 Given /^I am not logged in$/ do
   User.current_user = false
 end
