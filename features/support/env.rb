@@ -15,3 +15,6 @@ end
 
 require 'cucumber/rails/rspec'
 require 'webrat/core/matchers'
+
+# Require spec_helper so we can use blueprints.
+require "#{RAILS_ROOT}/spec/spec_helper"
