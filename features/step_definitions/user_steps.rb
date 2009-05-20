@@ -1,5 +1,9 @@
 Given /^I am logged in$/ do
-  User.current_user = User.make
+  user = User.make
+  visit login_path
+  fill_in(:email, :with => user.email)
+  fill_in(:password, :with => user.password)
+  click_button
 end
 
 Given /^I am not logged in$/ do
