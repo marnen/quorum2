@@ -1,8 +1,8 @@
 Given /^I am logged in$/ do
-  user = User.make
+  user = User.make(:password => 'passw0rd')
   visit login_path
   fill_in(:email, :with => user.email)
-  fill_in(:password, :with => user.password)
+  fill_in(:password, :with => 'passw0rd')
   click_button
 end
 
