@@ -1,4 +1,4 @@
-Feature: Create events
+Feature: Edit events
   In order to keep content current
   any administrator OR the author of an event should be able to
   edit events already created.
