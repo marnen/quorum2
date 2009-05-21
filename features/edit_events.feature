@@ -16,3 +16,10 @@ Feature: Create events
     And someone else has an event called "Someone else's event" in "Calendar 1"
     When I am on the event list
     Then I should not see "edit"
+    
+  Scenario: Admin subscribers can edit others' events
+    Given I am logged in
+    And I am an admin of "Calendar 1"
+    And someone else has an event called "Someone else's event" in "Calendar 1"
+    When I am on the event list
+    Then I should see "edit"
