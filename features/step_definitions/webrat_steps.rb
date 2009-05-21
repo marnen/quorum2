@@ -106,6 +106,14 @@ Then /^I should not see something matching "([^\"]*)"$/ do |pattern|
   response.should_not contain(/#{pattern}/)
 end
 
+Then /^I should see the word "([^\"]*)"$/ do |word|
+  Then %Q{I should see something matching "\\b#{word}\\b"}
+end
+
+Then /^I should not see the word "([^\"]*)"$/ do |word|
+  Then %Q{I should not see something matching "\\b#{word}\\b"}
+end
+
 Then /^the "([^\"]*)" field should contain "([^\"]*)"$/ do |field, value|
       field_labeled(field).value.should =~ /#{value}/
   end

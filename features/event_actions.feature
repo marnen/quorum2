@@ -8,7 +8,7 @@ Feature: Map and iCal links
     And I am subscribed to "Calendar 1"
     And someone else has an event called "Someone else's event" in "Calendar 1"
     When I am on the event list
-    Then I should see something matching "\b<action>\b"
+    Then I should see the word "<action>"
     
     Examples:
     | action |
