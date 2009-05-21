@@ -10,7 +10,8 @@ end
 
 describe 'uses_login', :shared => true do
   before(:each) do
-    @current_user = mock_model(User, :admin? => false)
+    @current_user = User.make
+    @current_user.stub!(:admin?).and_return(false)
     User.stub!(:current_user).and_return(@current_user)
     controller.stub!(:login_required).and_return(true)
   end

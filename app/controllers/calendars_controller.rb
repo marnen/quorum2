@@ -16,6 +16,14 @@ class CalendarsController < ApplicationController
       @page_title = _('Edit calendar')
     end
     
+    after :create do
+      p = User.current_user.permissions
+      @admin ||= Role.find_or_create_by_name('admin')
+      if !p.find_by_calendar_id_and_role_id(current_object.id, @admin.id)
+        p << Permission.create!(:user => User.current_user, :calendar => current_object, :role => @admin)
+      end
+    end
+    
     response_for :create do
       flash[:notice] = _('Your calendar was successfully created.')
       redirect_to '/admin'
