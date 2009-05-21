@@ -10,13 +10,16 @@ module NavigationHelpers
     
     when /the homepage/
       '/'
-    
+      
     # Add more mappings here.
     # Here is a more fancy example:
     #
     #   when /^(.*)'s profile page$/i
     #     user_profile_path(User.find_by_login($1))
     
+    when /\bevent list/
+      events_path
+      
     when /\blogin page/
       login_path
 
