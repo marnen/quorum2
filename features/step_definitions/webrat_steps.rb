@@ -94,6 +94,14 @@ Then /^I should see "([^\"]*)"$/ do |text|
   response.should contain(text)
 end
 
+Then /^I should see something matching "([^\"]*)"$/ do |pattern|
+  response.should have_text(/#{pattern}/)
+end
+
+Then /^I should not see something matching "([^\"]*)"$/ do |pattern|
+  response.should_not have_text(/#{pattern}/)
+end
+
 Then /^I should not see "([^\"]*)"$/ do |text|
   response.should_not contain(text)
 end
