@@ -113,7 +113,7 @@ describe EventsController, "feed.rss" do
       @m = css_select(rss, 'channel')[0].to_s[%r{<\s*atom:link(\s*[^>]*)?>}]
     end
     @m.should_not be_blank
-    @m.should =~ /href=(["'])#{formatted_feed_events_url(:rss)}\1/
+    @m.should =~ /href=(["'])#{feed_events_url(:rss, params[:key])}\1/
     @m.should =~ /rel=(["'])self\1/
   end
   
