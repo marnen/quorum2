@@ -74,12 +74,12 @@ describe "/events/index" do
   
   it "should include events/index.js for JavaScript enhancements" do
     render 'events/index'
-    response[:javascript].should =~ %r{<script[^>]*events/index\.js}
+    response.capture(:javascript).should =~ %r{<script[^>]*events/index\.js}
   end
 
   it "should contain an autodiscovery link for the RSS feed" do
     render 'events/index'
-    response[:head].should have_tag("link[title=RSS][href=#{rss_url}]")
+    response.capture(:head).should have_tag("link[title=RSS][href=#{rss_url}]")
   end
   
   it "should contain a link and a URL for the RSS feed" do
