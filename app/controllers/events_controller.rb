@@ -47,6 +47,11 @@ class EventsController < ApplicationController
       redirect_to :action => :index
     end
     
+    response_for :update_fails, :create_fails do
+      flash[:error] = _("We couldn't process that request. Please try again.")
+      render :new
+    end
+    
     response_for :show do
       if !current_object.allow?(:show)
         flash[:error] = _("You are not authorized to view that event.")
