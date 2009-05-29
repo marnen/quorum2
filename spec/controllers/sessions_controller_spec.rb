@@ -36,7 +36,7 @@ describe SessionsController do
   it 'deletes token on logout' do
     login_as User.make
     get :destroy
-    response.cookies["auth_token"].should == []
+    response.cookies["auth_token"].should be_blank
   end
 
   it 'logs in with cookie' do
