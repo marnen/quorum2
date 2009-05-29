@@ -132,7 +132,7 @@ describe EventsController, "feed.rss" do
   it "should contain an entry for every event, with <title>, <description> (with address and description), <link>, <guid>, and <pubDate> elements" do
     @events.each do |e|
       response.should have_tag('item title',ERB::Util::html_escape(e.name)) # actually, this is XML escape, but close enough
-      response.should have_tag('item description', /#{ERB::Util::html_escape(e.date.to_s(:rfc822))}.*#{ERB::Util::html_escape(e.address.to_s(:geo))}.*#{ERB::Util::html_escape(BlueCloth::new(ERB::Util::html_escape(e.description)).to_html)}/m) # kinky but accurate
+      response.should have_tag('item description', /#{ERB::Util::html_escape(e.date.to_s(:rfc822))}.*#{ERB::Util::html_escape(e.address.to_s(:geo))}.*#{ERB::Util::html_escape(RDiscount.new(ERB::Util::html_escape(e.description)).to_html)}/m) # kinky but accurate
       response.should have_tag('item link', event_url(e))
       response.should have_tag('item guid', event_url(e))
       response.should have_tag('item pubDate', e.created_at.to_s(:rfc822))

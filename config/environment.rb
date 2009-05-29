@@ -74,6 +74,8 @@ Rails::Initializer.run do |config|
   
   config.gem 'grosser-fast_gettext', :lib => 'fast_gettext', :source => 'http://gems.github.com'
   
+  config.gem 'rdiscount', :version => '>= 1.2.11'
+  
   # Set app to Eastern time for now -- we'll have configurable time zones soon enough
   config.time_zone = 'Eastern Time (US & Canada)'
 end

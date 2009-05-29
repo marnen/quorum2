@@ -10,6 +10,8 @@ class ApplicationController < ActionController::Base
   before_filter :login_from_cookie
   before_filter :set_current_user 
   
+  ActionView::Helpers::TextHelper::BlueCloth = RDiscount
+  
   helper :all # include all helpers, all the time
 
   # Check to see if the current user is an admin of at least one calendar.
