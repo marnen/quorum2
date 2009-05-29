@@ -89,7 +89,7 @@ describe EventsController, "feed.rss" do
   end
   
   it "should set a MIME type of application/rss+xml" do
-    response.headers['type'].should =~ (%r{^application/rss\+xml})
+    response.content_type.should =~ (%r{^application/rss\+xml})
   end
   
   it "should set RSS version 2.0 and declare the Atom namespace" do
@@ -176,7 +176,7 @@ describe EventsController, 'index.pdf' do
   
   it "should return the appropriate MIME type for a PDF file" do
     get :index, :format => 'pdf'
-    response.headers['type'].should =~ %r{^application/pdf}
+    response.content_type.should =~ %r{^application/pdf}
   end
   
   it "should set assigns[:users]" do
@@ -485,7 +485,7 @@ describe EventsController, "export" do
   
   it "should set a MIME type of text/calendar" do
     get :export, :id => @my_event.id
-    response.headers['type'].should =~ (%r{^text/calendar})
+    response.content_type.should =~ (%r{^text/calendar})
   end
 end
 
