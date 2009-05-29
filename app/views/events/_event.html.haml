@@ -24,7 +24,7 @@
       %span.street-address= [h(event.street), h(event.street2)].join(tag(:br))
       %br
       :erb
-        <span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span> <span class="postal-code"><%= h event.zip %></span><br/>
+        <span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span> <span class="postal-code"><%= h event.zip %></span><br>
         <span class="country-name"><%= h event.state.country.code %></span>
     %br
     = distance_string(event, current_user)
