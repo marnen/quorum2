@@ -50,6 +50,9 @@ namespace :deploy do
       run "rm -f #{rpath}/config/#{file}"
       run "ln -s #{deploy_to}/shared/config/#{file} #{rpath}/config/#{file}"
     end
+
+    # Remove image source files.
+    run "rm -rf #{rpath}/public/images/sources"
     
     #run "chown www-data #{current_path}/config/environment.rb"
     ############# Begin GemInstaller config - see http://geminstaller.rubyforge.org
