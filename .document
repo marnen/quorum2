@@ -1,3 +1,3 @@
 README
-app
-lib
+app/**/*.rb
+lib/**/*.rb
