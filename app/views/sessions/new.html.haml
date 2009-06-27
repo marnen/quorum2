@@ -1,5 +1,5 @@
 %h1= h(_('Welcome to %{Quorum}!')) % {:Quorum => content_tag(:span, h(SITE_TITLE), :class => :siteName)}
-%p= h(_('This is %{Quorum}, an invitation and scheduling system. If you have an account, please log in here; otherwise, please %{link}register%{/link}.')) % {:Quorum => content_tag(:span, h(SITE_TITLE), :class => :siteName), :link => "<a href='#{register_url}'>", :'/link' => '</a>'}
+%p= h(_('This is %{Quorum}, an invitation and scheduling system. If you have an account, please log in here; otherwise, please %{link}register%{_link}.')) % {:Quorum => content_tag(:span, h(SITE_TITLE), :class => :siteName), :link => "<a href='#{register_url}'>", :'_link' => '</a>'}
 - form_tag session_path do
   %table.login
     %tr
