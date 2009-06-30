@@ -134,6 +134,7 @@ class EventsController < ApplicationController
     user = params[:feed_user] || User.current_user
 
     # Process parameters from the search form, if it was submitted.
+    # TODO: Move this into a model, probably the Search module.
     if !params[:search].nil?
       search = params[:search]
       ['to', 'from'].each do |s|
