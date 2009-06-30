@@ -134,23 +134,12 @@ class EventsController < ApplicationController
     user = params[:feed_user] || User.current_user
 
     # Process parameters from the search form, if it was submitted.
-    # TODO: Move this into a model, probably the Search module.
     if !params[:search].nil?
       search = params[:search]
+      search.extend(Search)
       ['to', 'from'].each do |s|
         date = "#{s}_date"
-        params[:"#{date}"] = case search[:"#{date}_preset"]
-          when 'today'
-            Time.zone.today
-          when 'earliest'
-            Date.civil(1, 1, 1) # do we really need an earlier date? :)
-          when 'latest'
-            nil
-          when 'other'
-            Date.civil(search[:"#{date}(1i)"].to_i, search[:"#{date}(2i)"].to_i, search[:"#{date}(3i)"].to_i)
-          else
-            raise "Illegal value for search[:#{date}_preset]: #{search[:"#{date}_preset"]}"
-        end
+        params[:"#{date}"] = search.send(date.to_sym)
       end
 
       calendars = search[:calendar_id].blank? ? nil : search[:calendar_id]
