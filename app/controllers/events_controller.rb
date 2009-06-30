@@ -72,28 +72,6 @@ class EventsController < ApplicationController
       end
     end
   end
-  
-=begin  
-  def list
-    params[:order] ||= 'date' # isn't it enough to define this in routes.rb?
-    params[:direction] ||= 'asc' # and this?
-    @events = Event.find(:all, :order => "#{params[:order]} #{params[:direction]}", :conditions => 'deleted is distinct from true')
-    @page_title = _("Upcoming events")
-    @order = params[:order]
-    @direction = params[:direction]
-  end
-
-  def new
-    @event = Event.new(params[:event])
-    @page_title = _("Add event")
-    if request.post?
-      if @event.save
-        flash[:notice] = _("Your event has been saved.")
-        redirect_to :action => :list
-      end
-    end
-  end
-=end
 
 # Delete an #Event, subject to #Event#allow?.
   def delete
@@ -111,31 +89,6 @@ class EventsController < ApplicationController
     redirect_to(:action => :index) and return
   end
 
-=begin
-  def edit
-    begin
-      @event ||= Event.find(params[:id].to_i)
-    rescue
-      flash[:error] = _("Couldn't find any event to edit!")
-      redirect_to(:action => :list) and return
-    end
-      
-    if User.current_user.role.name != 'admin' and User.current_user != @event.created_by
-      flash[:error] = _("You are not authorized to edit that event.")
-      redirect_to :action => :list and return
-    else
-      @page_title = _("Edit event")
-      if request.post?
-        if @event.update_attributes(params[:event]) and @event.update_attribute(:coords, nil)
-          flash[:notice] = _("Your event has been saved.")
-          redirect_to :action => :list and return
-        end
-      end
-      render :action => :new
-    end
-  end
-=end
-  
   # Export #Event to iCalendar format.
   def export
     begin
