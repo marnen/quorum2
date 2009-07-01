@@ -188,11 +188,9 @@ describe UsersController, '(reset/POST)' do
   
   it "should reset password if e-mail is valid" do
     @user = User.make
-    @user.should_receive(:password=)
-    @user.should_receive(:password_confirmation=)
-    @user.should_receive(:save!).and_return(true)
+    @user.should_receive(:reset_password!).and_return(true)
     User.should_receive(:find_by_email).and_return(@user)
-    UserMailer.should_receive(:deliver_reset).with(@user, an_instance_of(String)).at_least(:once).and_return(true)
+    UserMailer.should_receive(:deliver_reset).with(@user).at_least(:once).and_return(true)
     post :reset, :email => @user.email
     flash[:error].should be_nil
     flash[:notice].should_not be_nil

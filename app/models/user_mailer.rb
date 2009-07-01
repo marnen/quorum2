@@ -14,10 +14,10 @@ class UserMailer < ActionMailer::Base
   end
   
   # Sends an e-mail message to the #User with the supplied password.
-  def reset(user, password)
+  def reset(user)
     setup_email(user)
     @subject += _('Password Reset')
-    @body[:password] = password
+    @body[:password] = user.password
   end
 
   protected

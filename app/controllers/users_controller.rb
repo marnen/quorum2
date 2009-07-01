@@ -80,12 +80,9 @@ class UsersController < ApplicationController
         flash[:error] = _("Couldn't find that e-mail address!")
         return
       end
-      password = Digest::MD5.hexdigest(Time.now.to_s.split(//).sort_by {rand}.join)[0, 10]
-      user.password = password
-      user.password_confirmation = password
       begin
-        user.save!
-        UserMailer.deliver_reset(user, password)
+        user.reset_password!
+        UserMailer.deliver_reset(user)
         flash[:notice] = _("Password reset for %{email}. Please check your e-mail for your new password.") % {:email => params[:email]}
       #rescue
         #flash[:error] = _("Couldn't reset password. Please try again.")

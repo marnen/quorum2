@@ -61,6 +61,14 @@ class User < ActiveRecord::Base
     attrs = [:lastname, :firstname, :email]
     attrs.collect{|a| self[a].downcase rescue nil}.compact <=> attrs.collect{|a| other[a].downcase rescue nil}.compact
   end
+  
+  # Resets the user's password and password_confirmation to a random string. Designed to be used for password resets.
+  def reset_password!
+    new_password = Digest::MD5.hexdigest(Time.now.to_s.split(//).sort_by {rand}.join)[0, 10]
+    self.password = new_password
+    self.password_confirmation = new_password
+    save!
+  end
 
   # Returns the user's name as a string. Order can be :first_last (default) or :last_first. E-mail address will be returned if no name is specified.
   def to_s(format = :first_last)

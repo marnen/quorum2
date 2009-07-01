@@ -190,7 +190,32 @@ describe User, "(instance properties)" do
     fk = @two.feed_key
     @one.feed_key = fk
     @one.reload.feed_key.should_not == fk
-
+  end
+  
+  describe "reset_password!" do
+    it "should be a valid instance method" do
+      User.new.should respond_to(:reset_password!)
+    end
+    
+    it "should reset the user's password and password_confirmation to identical strings" do
+      old_password = 'old password'
+      user = User.make(:password => old_password)
+      lambda {user.reset_password!}.should_not raise_error(ActiveRecord::RecordInvalid) # should set password_confirmation
+      new_password = user.password
+      new_password.should_not == old_password
+    end
+    
+    it "should reset password to a random hex string of length 10 (MD5 digest or similar)" do
+      pattern = /^[a-f\d]{10}$/
+      user = User.make
+      user.reset_password!
+      password1 = user.password
+      password1.should =~ pattern
+      user.reset_password!
+      password2 = user.password
+      password2.should =~ pattern
+      password2.should_not == password1
+    end
   end
 end
 
