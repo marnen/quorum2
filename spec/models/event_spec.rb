@@ -58,6 +58,14 @@ describe Event, "(general properties)" do
     event.should respond_to(:deleted)
   end
   
+  it "should exclude deleted events on find" do
+    undeleted = Event.make
+    deleted = Event.make(:deleted => true)
+    all = Event.find :all
+    all.should include(undeleted)
+    all.should_not include(deleted)
+  end
+  
   it "should have a description" do
     event = Event.new
     event.should respond_to(:description)
