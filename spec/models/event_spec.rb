@@ -112,6 +112,33 @@ describe Event, "(allow?)" do
   end
 end
 
+describe Event, "(change_status!)" do
+  before(:each) do
+    @event = Event.make
+    @user = User.make
+  end
+  
+  it "should be valid" do
+    @event.should respond_to(:change_status!)
+  end
+  
+  it "should change the status on the already existing commitment if one exists" do
+    commitment = @event.commitments.make(:user => @user, :status => true)
+    id = commitment.id
+    [false, nil, true].each do |status|
+      @event.change_status!(@user, status)
+      commitment = Commitment.find(id)
+      commitment.status.should == status
+    end
+  end
+  
+  it "should create a new commitment if there isn't one" do
+    @event.commitments.find_all_by_user_id(@user.id).should be_empty
+    @event.change_status!(@user, nil) # somewhat arbitrary choice of status
+    @event.commitments.find_all_by_user_id(@user.id).should_not be_empty
+  end
+end
+
 describe Event, "(find_committed)" do
   before(:each) do
     @event = Event.new

@@ -47,6 +47,13 @@ class Event < ActiveRecord::Base
     end
   end
   
+  # Sets the #User's attendance status on the Event, where status is one of true (attending), false (not attending), or nil (uncommitted).
+  def change_status!(user, status)
+    commitment = commitments.find_or_create_by_user_id(user.id)
+    commitment.status = status
+    commitment.save!
+  end
+  
   # Returns an #Array of #User objects with commitment status (for the current #Event) of <i>status</i>,
   # where <i>status</i> may be <tt>:yes</tt> or <tt>:no</tt>.
   def find_committed(status)

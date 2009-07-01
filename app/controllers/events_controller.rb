@@ -106,9 +106,7 @@ class EventsController < ApplicationController
     status_map = {'yes' => true, 'no' => false, 'maybe' => nil}
     if !id.nil? then
       event = Event.find_by_id(id)
-      commitment = event.commitments.find_or_create_by_user_id(current_user.id)
-      commitment.status = status_map[params[:status].to_s]
-      commitment.save!
+      event.change_status!(current_user, status_map[params[:status].to_s])
     end
     if request.xhr?
       render :partial => 'event', :locals => {:event => event}
