@@ -6,7 +6,7 @@ class Event < ActiveRecord::Base
   belongs_to :calendar
   has_many :commitments
   has_many :users, :through => :commitments
-  composed_of :address, :mapping => [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
+  composed_of :address, :mapping => %w(street street2 city state_id zip coords).collect{|x| [x, x.gsub(/_id$/, '')]}
   # validates_presence_of :city
   validates_presence_of :calendar_id
   validates_presence_of :name
