@@ -21,11 +21,7 @@ class Event < ActiveRecord::Base
     if !u.kind_of? User
       return nil
     else
-      p = u.permissions.find_by_calendar_id(self.calendar_id)
-      if p.nil?
-        return false
-      end
-      role = p.role
+      role = role_of u
       if role.nil?
         return false
       else
@@ -102,6 +98,14 @@ class Event < ActiveRecord::Base
  protected
   def clear_coords
     self.coords = nil
+  end
+  
+  # TODO: should this method be public?
+  # Returns the #Role of the #User for the #Event.
+  def role_of(user)
+    # TODO: use joins to make one DB query, not two.
+    p = user.permissions.find_by_calendar_id(self.calendar_id)
+    p.nil? ? nil : p.role
   end
  
   def set_created_by_id
