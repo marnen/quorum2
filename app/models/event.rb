@@ -21,24 +21,10 @@ class Event < ActiveRecord::Base
     if !u.kind_of? User
       return nil
     else
-      role = role_of u
-      if role.nil?
-        return false
-      else
-        case operation
-          when :delete
-            return role.name == 'admin'
-          when :edit
-            if self.created_by == u or role.name == 'admin'
-              return true
-            else
-              return false
-            end
-          when :show
-            return true # yes, this actually works, since we take care of the case where the user has no permissions above
-          else
-            return nil
-        end
+      begin
+        send(['allow_', operation, '?'].join.to_sym, u)
+      rescue NoMethodError
+        return nil
       end
     end
   end
@@ -96,6 +82,25 @@ class Event < ActiveRecord::Base
   end
 
  protected
+  # TODO: allow_* methods should probably be public. Keeping them protected mainly so as not to change the class interface just yet.
+  def allow_delete?(user)
+    role = role_of user
+    !role.nil? and role.name == 'admin'
+  end
+  
+  def allow_edit?(user)
+    if created_by == user
+      return true
+    else
+      role = role_of user
+      return role.name == 'admin'
+    end
+  end
+  
+  def allow_show?(user)
+    !(role_of user).nil?
+  end
+ 
   def clear_coords
     self.coords = nil
   end
