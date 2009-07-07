@@ -10,6 +10,20 @@ describe Commitment, "(general properties)" do
   end
 end
 
+describe Commitment, "(named scopes)" do
+  # TODO: implement have_named_scope as described at http://evolve.st/articles/11-testing-named-scope-with-rspec
+
+  it "should have a named scope for attending" do
+    Commitment.should respond_to(:attending)
+    Commitment.attending.proxy_options.should == {:conditions => {:status => true}}
+  end
+  
+  it "should have a named scope for not attending" do
+    Commitment.should respond_to(:not_attending)
+    Commitment.not_attending.proxy_options.should == {:conditions => {:status => false}}
+  end
+end
+
 describe Commitment, "(validations)" do
   before(:each) do
     @commitment = Commitment.new
