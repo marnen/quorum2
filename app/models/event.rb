@@ -39,16 +39,12 @@ class Event < ActiveRecord::Base
   # Returns an #Array of #User objects with commitment status (for the current #Event) of <i>status</i>,
   # where <i>status</i> may be <tt>:yes</tt> or <tt>:no</tt>.
   def find_committed(status)
-    temp = self.commitments.clone
-    if status == :yes then
-      temp.delete_if {|e| e.status != true}
-      temp.collect{|e| e.user }.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)}
-    elsif status == :no then
-      temp.delete_if {|e| e.status != false}
-      temp.collect{|e| e.user }.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)}
-    else
+    if ![:yes, :no].include? status
       raise "Invalid status: " << status
     end
+    scope = {:yes => :attending, :no => :not_attending}[status]
+    c = commitments.send(scope)
+    c.collect{|e| e.user }.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)}
   end
   
   # Hides the current #Event. This has the effect of deleting it, since hidden Events will not show up in the main list.

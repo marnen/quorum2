@@ -162,12 +162,21 @@ describe Event, "(find_committed)" do
   end
   
   it 'should sort the Users on lastname or, failing that, email' do
-    @array = []
-    @array.should_receive(:sort).twice # need to figure out a way to specify the sort block
-    @temp = mock('temp', :collect => @array, :null_object => true)
-    @event.should_receive(:commitments).twice.and_return(mock('commitments', :clone => @temp))
-    @find[:yes]
-    @find[:no]
+    [true, false].each do |status|  
+      a = User.make(:lastname => 'a')
+      b = User.make(:email => 'b@b.com', :lastname => nil)
+      c = User.make(:lastname => 'c')
+      users = [c, a, b]
+      users.each do |u|
+        u.commitments.make(:event => @event, :status => status)
+      end
+  
+      @find[status ? :yes : :no].should == [a, b, c]
+      
+      users.each do |u|
+        u.destroy
+      end
+    end
   end
 end
 
