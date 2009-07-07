@@ -141,7 +141,7 @@ end
 
 describe Event, "(find_committed)" do
   before(:each) do
-    @event = Event.new
+    @event = Event.make
     @find = @event.method(:find_committed)
   end
   
@@ -151,16 +151,14 @@ describe Event, "(find_committed)" do
   end
   
   it "should get a collection of Users when called with :yes or :no" do
-    yes = @find[:yes]
-    yes.should be_a_kind_of(Array)
-    if !yes[0].nil? then
-      yes[0].should be_a_kind_of(User)
+    @attending = User.make do |u|
+      u.commitments.make(:event => @event, :status => true)
     end
-    no = @find[:no]
-    no.should be_a_kind_of(Array)
-    if !no[0].nil? then
-      no[0].should be_a_kind_of(User)
+    @not_attending = User.make do |u|
+      u.commitments.make(:event => @event, :status => false)
     end
+    @find[:yes].should == [@attending]
+    @find[:no].should == [@not_attending]
   end
   
   it 'should sort the Users on lastname or, failing that, email' do
