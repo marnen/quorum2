@@ -1,4 +1,6 @@
 # Object blueprints for Machinist.
+require 'machinist/active_record'
+require 'sham'
 require 'faker'
 LETTERS = ('A'..'Z').to_a
 

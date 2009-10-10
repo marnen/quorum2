@@ -28,4 +28,5 @@ config.gem "webrat", :lib => false, :version => ">=0.4.3"
 config.gem "cucumber", :lib => false, :version => ">=0.2.2"
 
 # For Machinist...
+config.gem 'notahat-machinist', :lib => 'machinist', :version => ">=1.0.3"
 config.gem 'faker'
