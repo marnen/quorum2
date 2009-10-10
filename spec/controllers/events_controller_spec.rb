@@ -20,7 +20,6 @@ describe EventsController, "index" do
       arg1.should == :all
       opts.should be_a_kind_of(Hash)
       opts[:order].should == 'date asc'
-      opts[:conditions][0].should match(/^deleted is distinct from true/)
     end.once
     get :index
   end

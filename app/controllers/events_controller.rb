@@ -155,7 +155,7 @@ class EventsController < ApplicationController
       date_query = 'date BETWEEN :from_date AND :to_date'
     end
     
-    @current_objects || current_model.find(:all, :conditions => ['deleted is distinct from true AND calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
+    @current_objects || current_model.find(:all, :conditions => ['calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
   end
   
  protected
