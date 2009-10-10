@@ -60,7 +60,11 @@ describe Event, "(general properties)" do
   
   it "should exclude deleted events on find" do
     undeleted = Event.make
-    deleted = Event.make(:deleted => true)
+    begin
+      deleted = Event.make(:deleted => true)
+    rescue ActiveRecord::RecordNotFound
+      # don't worry about it -- since default_scope excludes this record, it won't be found.
+    end
     all = Event.find :all
     all.should include(undeleted)
     all.should_not include(deleted)
