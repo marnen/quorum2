@@ -229,7 +229,6 @@ describe User, "(geographical features)" do
     @placemarks.stub!(:[]).and_return(@placemark)
     Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
     Geocoding.stub!(:get).and_return(@placemarks)
-    Point.stub!(:from_coordinates).and_return(mock_model(Point))
 
     @user = User.new(User.plan)
   end
