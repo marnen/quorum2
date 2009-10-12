@@ -1,7 +1,7 @@
 class PermissionsController < ApplicationController
   @@nonadmin = :index, :subscribe, :destroy
   before_filter :check_admin, :except => @@nonadmin
-  before_filter :login_required, :only => @@nonadmin
+  before_filter :require_user, :only => @@nonadmin
   layout 'standard'
   
   class NotDeletableError < RuntimeError

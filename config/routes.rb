@@ -26,11 +26,11 @@ ActionController::Routing::Routes.draw do |map|
 
   # For restful_authentication:
   map.resources :users
-  map.resource :session
+  map.resource :user_session
   
   # And some prettification...
-  map.login 'login', :controller => 'sessions', :action => 'new'
-  map.logout 'logout', :controller => 'sessions', :action => 'destroy'
+  map.login 'login', :controller => 'user_sessions', :action => 'new'
+  map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
   map.register 'register', :controller => 'users', :action => 'new'
   map.reset_password 'reset', :controller => 'users', :action => 'reset'
   map.regenerate_key 'regenerate_key', :controller => 'users', :action => 'regenerate_key'
