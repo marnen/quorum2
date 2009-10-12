@@ -5,10 +5,6 @@ class ApplicationController < ActionController::Base
   
   before_filter :set_gettext_locale
   
-  # see http://www.ruby-forum.com/topic/51782
-  before_filter :login_from_cookie
-  before_filter :set_current_user 
-  
   ActionView::Helpers::TextHelper::BlueCloth = RDiscount
   
   helper :all # include all helpers, all the time
