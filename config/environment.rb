@@ -76,6 +76,8 @@ Rails::Initializer.run do |config|
   
   config.gem 'rdiscount', :version => '>= 1.2.11'
   
+  config.gem 'authlogic', :version => '>= 2.1.2'
+  
   # Set app to Eastern time for now -- we'll have configurable time zones soon enough
   config.time_zone = 'Eastern Time (US & Canada)'
 end
