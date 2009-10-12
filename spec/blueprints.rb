@@ -43,7 +43,6 @@ User.blueprint do
   city
   state
   zip
-  activated_at {Time.now.utc}
 end
 
 User.blueprint(:inactive) do
