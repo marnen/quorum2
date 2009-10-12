@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe SessionsController do
+describe UserSessionsController do
   it 'logins and redirects' do
     user = User.make
     post :create, :email => user.email, :password => user.password
@@ -72,7 +72,7 @@ describe SessionsController do
   end
 end
 
-describe SessionsController, 'new (login)' do
+describe UserSessionsController, 'new (login)' do
   before(:each) do
     get :new
   end
