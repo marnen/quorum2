@@ -2,7 +2,6 @@
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
   filter_parameter_logging :password
-  include AuthenticatedSystem # for restful_authentication
   
   before_filter :set_gettext_locale
   
