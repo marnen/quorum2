@@ -18,6 +18,11 @@ class TransitionToAuthlogic < ActiveRecord::Migration
     add_column :users, :perishable_token, :string, :null => false, :default => ''
     add_index :users, :perishable_token
 
+    add_column :users, :active, :boolean, :default => false, :null => false
+    
+    User.reset_column_information
+    User.update_all("active = true", "activation_code is null")
+    
     remove_column :users, :activation_code
     remove_column :users, :remember_token
     remove_column :users, :remember_token_expires_at

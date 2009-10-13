@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20091012223503) do
     t.column "persistence_token", :string, :default => "", :null => false
     t.column "single_access_token", :string, :default => "", :null => false
     t.column "perishable_token", :string, :default => "", :null => false
+    t.column "active", :boolean, :default => false, :null => false
   end
 
   add_index "users", ["feed_key"], :name => "index_users_on_feed_key", :unique => true
