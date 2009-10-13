@@ -43,10 +43,11 @@ User.blueprint do
   city
   state
   zip
+  active {true}
 end
 
 User.blueprint(:inactive) do
-  activated_at {nil}
+  active {false}
 end
 
 Commitment.blueprint do
@@ -82,7 +83,7 @@ Sham.define do
   firstname {Faker::Name.first_name}
   lastname {Faker::Name.last_name}
   generic_name {Faker::Name.last_name}
-  password {(1..(rand(15) + 2)).map{(32..127).to_a.rand.chr}.join}
+  password {(1..(rand(15) + 4)).map{(32..127).to_a.rand.chr}.join}
   street {Faker::Address.street_address}
   street2 {Faker::Address.secondary_address}
   zip {Faker::Address.zip_code}
