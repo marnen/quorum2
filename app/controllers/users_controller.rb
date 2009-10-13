@@ -6,16 +6,11 @@ class UsersController < ApplicationController
   end
 
   def create
-    cookies.delete :auth_token
-    # protects against session fixation attacks, wreaks havoc with 
-    # request forgery protection.
-    # uncomment at your own risk
-    # reset_session
     @user = User.new(params[:user])
     @user.save
     if @user.errors.empty?
       @user.activate # so we don't have to go through activation right now
-      self.current_user = @user
+      UserSession.create @user
       redirect_back_or_default('/login')
       # The next line should be uncommented when we go through e-mail activation.
       # flash[:notice] = "Thanks for signing up! Please check your e-mail for activation instructions."
