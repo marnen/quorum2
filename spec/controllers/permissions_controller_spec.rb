@@ -79,10 +79,6 @@ end
 describe PermissionsController, 'index (no subscribed calendars)' do  
   integrate_views
   
-  before(:each) do
-    controller.stub!(:login_required).and_return(true)
-  end
-  
   it 'should show all available calendars under "unsubscribed"' do
     @current_user = User.make(:id => 20, :email => 'no_permissions@gmail.com')
     2.times do
@@ -130,7 +126,6 @@ end
 
 describe PermissionsController, 'destroy' do
   before(:each) do
-    controller.stub!(:login_required).and_return(true)
     @current_user = User.make(:id => 12, :email => 'johndoe@example.com')
     @current_user.stub!(:admin?).and_return false
     UserSession.create @current_user

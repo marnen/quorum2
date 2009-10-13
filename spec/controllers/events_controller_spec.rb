@@ -164,7 +164,6 @@ end
 describe EventsController, 'index.pdf' do
   before(:each) do
     UserSession.create User.make
-    controller.stub!(:login_required).and_return(true)
     controller.stub!(:current_objects).and_return([mock_model(Event, :null_object => true)])
   end
   
@@ -373,7 +372,6 @@ end
 describe EventsController, "show" do
   before(:each) do
     UserSession.create User.make
-    controller.stub!(:login_required).and_return(true)
   end
   
   it "should set the page title" do

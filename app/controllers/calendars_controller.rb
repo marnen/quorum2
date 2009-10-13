@@ -1,7 +1,7 @@
 class CalendarsController < ApplicationController
   @@nonadmin = [:new, :create]
   before_filter :check_admin, :except => @@nonadmin
-  before_filter :login_required, :only => @@nonadmin
+  before_filter :require_user, :only => @@nonadmin
   layout 'standard'
   
   make_resourceful do

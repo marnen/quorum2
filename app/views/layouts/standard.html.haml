@@ -10,7 +10,7 @@
 
   %body
     %p#navbar
-      = ([content_tag(:span, h(SITE_TITLE), :class => :siteName)] + [link_to(h(_("List events")), events_path), link_to(h(_("Add event")), new_event_path), link_to(h(_("User profile")), profile_path), link_to(h(_("Create calendar")), new_calendar_path), link_to(h(_("Subscriptions")), subscriptions_path), User.current_user.admin? ? link_to(h(_("Admin tools")), url_for(:controller => :admin, :action => :index)) : nil, link_to(h(_("Log out")), logout_path)].compact).join(' | ')
+      = ([content_tag(:span, h(SITE_TITLE), :class => :siteName)] + [link_to(h(_("List events")), events_path), link_to(h(_("Add event")), new_event_path), link_to(h(_("User profile")), profile_path), link_to(h(_("Create calendar")), new_calendar_path), link_to(h(_("Subscriptions")), subscriptions_path), current_user.admin? ? link_to(h(_("Admin tools")), url_for(:controller => :admin, :action => :index)) : nil, link_to(h(_("Log out")), logout_path)].compact).join(' | ')
     #content
       %p= h(_("Welcome, %{user}!")) % {:user => content_tag(:span, h(current_user), :class => :name)}
       - if !flash[:notice].nil?
