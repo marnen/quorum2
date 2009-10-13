@@ -1,7 +1,7 @@
-- if !logged_in?
+- if !current_user
   %h1&= _("Register")
 = error_messages_for :user
-- form_for :user, :url => logged_in? ? edit_user_path(current_user) : users_path do |f|
+- form_for :user, :url => current_user ? edit_user_path(current_user) : users_path do |f|
   %h2&= _("Who are you?")
   %table.edit
     %tr
@@ -49,4 +49,4 @@
       = f.check_box :show_contact
       &= _('Make my address visible in the contact list (available to administrators only)')
 
-  = submit_tag(logged_in? ? _('Save') : _('Sign up'))
+  = submit_tag(current_user ? _('Save') : _('Sign up'))
