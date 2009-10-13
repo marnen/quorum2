@@ -308,7 +308,7 @@ describe User, "(authentication structure)" do
   
 protected
   def create_user(options = {})
-    record = User.make({:email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire'}.merge(options))
+    record = User.make_unsaved({:email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire'}.merge(options))
     record.save
     record
   end
