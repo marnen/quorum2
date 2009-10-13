@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsController, "index" do
   before(:each) do
-    login_as User.make
+    UserSession.create User.make
   end
   
   it "should be successful" do
@@ -151,7 +151,7 @@ describe EventsController, "feed.rss (login)" do
   
   it "should list events if given a valid feed_key" do
     @user = User.make
-    login_as @user
+    UserSession.create @user
     calendar = Calendar.make # @user will be subscribed to
     @events = (1..5).map{Event.make(:calendar => calendar)}
     User.stub!(:find_by_feed_key).and_return(@user)
@@ -163,7 +163,7 @@ end
 
 describe EventsController, 'index.pdf' do
   before(:each) do
-    login_as User.make
+    UserSession.create User.make
     controller.stub!(:login_required).and_return(true)
     controller.stub!(:current_objects).and_return([mock_model(Event, :null_object => true)])
   end
@@ -192,7 +192,7 @@ end
 describe EventsController, "change_status" do
   before(:each) do
     @user = User.make
-    login_as @user
+    UserSession.create @user
   end
   
   it "should change attendance status for current user if called with a non-nil event id" do
@@ -222,14 +222,13 @@ end
 
 describe EventsController, "new" do
   before(:each) do
-    login_as User.make
+    @session = UserSession.create User.make
   end
   
   it "should require login" do
     get :new
     response.should be_success
-    login_as nil
-    controller.stub!(:login_required).and_return(nil)
+    @session.destroy
     get :new
     response.body.should be_blank # not sure why this works and nothing else does...
   end
@@ -269,7 +268,7 @@ end
 
 describe EventsController, "create" do
   before(:each) do
-    login_as User.make
+    UserSession.create User.make
   end
   
   it "should save an Event object" do
@@ -289,7 +288,7 @@ describe EventsController, "edit" do
   before(:each) do
     @event = Event.make
     @admin = admin_user(@event.calendar)
-    login_as @admin
+    UserSession.create @admin
   end
   
   it "should redirect to list with an error if the user does not own the event and is not an admin" do
@@ -373,7 +372,7 @@ end
 
 describe EventsController, "show" do
   before(:each) do
-    login_as User.make
+    UserSession.create User.make
     controller.stub!(:login_required).and_return(true)
   end
   
@@ -404,14 +403,14 @@ describe EventsController, "delete" do
   end
   
   it "should not work from non-admin account" do
-    login_as User.make
+    UserSession.create User.make
     @event.should_not_receive(:hide)
     post 'delete', :id => @id
     flash[:error].should_not be_nil
   end
   
   it "should work from admin account" do
-    login_as admin_user(@event.calendar)
+    UserSession.create admin_user(@event.calendar)
     Event.should_receive(:find).with(@id.to_i).and_return(@event)
     @event.should_receive(:hide)
     post 'delete', :id => @id
@@ -422,7 +421,7 @@ end
 
 describe EventsController, "map" do
   before(:each) do
-    login_as User.make
+    UserSession.create User.make
     @one = Event.make
   end
   
@@ -467,7 +466,7 @@ end
 describe EventsController, "export" do
   before(:each) do
     user = User.make
-    login_as user
+    UserSession.create user
     @my_event = Event.make
     Event.should_receive(:find).with(@my_event.id.to_i).and_return(@my_event)
   end

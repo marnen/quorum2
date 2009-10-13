@@ -72,7 +72,7 @@ end
 describe UsersController, "edit" do
  before(:each) do
     @user = User.make
-    login_as @user
+    UserSession.create @user
     get :edit
   end
   
@@ -103,7 +103,7 @@ describe UsersController, "edit" do
     @user.errors.should_not be_empty
 
     @user = User.make
-    login_as @user
+    UserSession.create @user
     get :edit
     my_attr = @user.attributes
     my_attr[:password] = nil

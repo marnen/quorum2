@@ -15,7 +15,7 @@ describe UserSessionsController do
   end
 
   it 'logs out' do
-    login_as User.make
+    UserSession.create User.make
     get :destroy
     session[:user_id].should be_nil
     response.should be_redirect
@@ -34,7 +34,7 @@ describe UserSessionsController do
   end
 
   it 'deletes token on logout' do
-    login_as User.make
+    UserSession.create User.make
     get :destroy
     response.cookies["auth_token"].should be_blank
   end

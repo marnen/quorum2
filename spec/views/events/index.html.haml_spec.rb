@@ -14,7 +14,7 @@ describe "/events/index" do
     assigns[:events] = @events
     @user = User.make
     assigns[:current_user] = @user
-    login_as @user
+    UserSession.create @user
   end
   
  it "should have a date limiting form" do

@@ -2,14 +2,14 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/events/new" do
   before(:each) do
-    login_as User.make # just for Calendar callback
+    UserSession.create User.make # just for Calendar callback
     c = Calendar.make
     user = User.make do |u|
       u.permissions.make do |p|
         p.calendar = c
       end
     end
-    login_as user
+    UserSession.create user
     assigns[:current_object] = Event.make
     render 'events/new'
   end
@@ -69,7 +69,7 @@ end
 
 describe "/events/new (multiple calendars)" do
   before(:each) do
-    login_as User.make
+    UserSession.create User.make
     @one = Calendar.make(:id => 1, :name => 'Calendar 1')
     @two = Calendar.make(:id => 2, :name => 'Calendar 2')
     assigns[:current_object] = Event.make(:date => Time.now, :calendar => @one)
@@ -79,7 +79,7 @@ describe "/events/new (multiple calendars)" do
     @quentin = User.make do |u|
       [@one, @two].each{|c| u.permissions.make(:calendar => c)}
     end
-    login_as(@quentin)
+    UserSession.create(@quentin)
     render '/events/new'
     response.should have_tag('select#event_calendar_id')
   end
@@ -88,7 +88,7 @@ describe "/events/new (multiple calendars)" do
     @jim = User.make do |u|
       u.permissions.make(:calendar => @one)
     end
-    login_as(@jim)
+    UserSession.create(@jim)
     render '/events/new'
     response.should_not have_tag('select#event_calendar_id')
     response.should have_tag("input[type=hidden][value=#{@one.id}]#event_calendar_id")
