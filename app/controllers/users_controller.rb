@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   layout :get_layout
-  before_filter :login_required, :only => [:edit, :regenerate_key]
+  before_filter :require_user, :only => [:edit, :regenerate_key]
   # render new.html.haml
   def new
   end
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
         form[:password] = ''
         form[:password_confirmation] = ''
       end
-      @user = User.current_user # User.find(params[:id].to_i)
+      @user = current_user # User.find(params[:id].to_i)
       @user.update_attributes(form)
       @user.update_attribute(:coords, nil)
       if @user.errors.empty?
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
         render :action => 'new'
       end
     else
-      @user = User.current_user # params[:id].nil? ? User.current_user : User.find(params[:id].to_i)
+      @user = current_user # params[:id].nil? ? User.current_user : User.find(params[:id].to_i)
       @page_title = _("Edit profile")
       render :action => 'new'
     end
@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   
   # Regenerates #feed_key of #User.current_user, then redirects to previous page.
   def regenerate_key
-    u = User.current_user
+    u = current_user
     begin
       u.feed_key = nil
       u.save!
@@ -96,6 +96,6 @@ class UsersController < ApplicationController
  protected
   # Returns the name of the layout we should be using. This enables us to have different layouts depending on whether a user is logged in.
   def get_layout
-    logged_in? ? "standard" : "unauthenticated"
+    current_user ? "standard" : "unauthenticated"
   end
 end
