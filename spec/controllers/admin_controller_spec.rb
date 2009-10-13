@@ -16,16 +16,17 @@ describe AdminController, "(index)" do
   integrate_views
   
   before(:each) do
-    login_as User.make
+    session = UserSession.create User.make
     @one = Calendar.make(:id => 1)
     @two = Calendar.make(:id => 2)
+    session.destroy
+
     @current_user = User.make do |u|
       u.permissions.make(:calendar => @one)
       u.permissions.make(:admin, :calendar => @two)
     end
     
-    login_as @current_user
-    controller.stub!(:admin?).and_return(true)
+    UserSession.create @current_user
     get :index
   end
   
