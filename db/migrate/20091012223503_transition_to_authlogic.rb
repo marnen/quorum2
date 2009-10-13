@@ -5,6 +5,10 @@ class TransitionToAuthlogic < ActiveRecord::Migration
     change_column :users, :salt, :string, :limit => 128, :null => false, :default => ""
     rename_column :users, :salt, :password_salt
 
+    remove_index :users, :feed_key
+    rename_column :users, :feed_key, :single_access_token
+    add_index :users, :single_access_token
+
     add_column :users, :login_count, :integer, :null => false, :default => 0
     add_column :users, :failed_login_count, :integer, :null => false, :default => 0
     add_column :users, :last_request_at, :datetime
@@ -14,7 +18,6 @@ class TransitionToAuthlogic < ActiveRecord::Migration
     add_column :users, :last_login_ip, :string
  
     add_column :users, :persistence_token, :string, :null => false, :default => ''
-    add_column :users, :single_access_token, :string, :null => false, :default => ''
     add_column :users, :perishable_token, :string, :null => false, :default => ''
     add_index :users, :perishable_token
 
@@ -33,13 +36,18 @@ class TransitionToAuthlogic < ActiveRecord::Migration
     add_column :users, :remember_token, :string
     add_column :users, :remember_token_expires_at, :timestamp
     
+    remove_column :users, :active
+    
     remove_column :users, :perishable_token
-    remove_column :users, :single_access_token
     remove_column :users, :persistence_token
     
     [:login_count, :failed_login_count, :last_request_at, :current_login_at, :last_login_at, :current_login_ip, :last_login_ip].each do |col|
       remove_column :users, col
     end
+    
+    remove_index :users, :single_access_token
+    rename_column :users, :single_access_token, :feed_key
+    add_index :users, :feed_key
     
     rename_column :users, :password_salt, :salt
     change_column :users, :crypted_password, :string, :limit => 40, :null => false, :default => ""
