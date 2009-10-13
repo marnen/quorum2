@@ -8,7 +8,7 @@ describe 'events/_event' do
   before(:each) do
     @event = Event.make(:description => 'Testing use of *Markdown*.')
     @user = User.make
-    UserSession.create @user
+    User.stub!(:current_user).and_return @user
   end
   
   it "should contain edit and delete links for the event, if the current user is an admin" do
@@ -16,7 +16,7 @@ describe 'events/_event' do
       u.permissions.destroy_all
       u.permissions.make(:admin, :calendar => @event.calendar)
     end
-    UserSession.create admin
+    User.stub!(:current_user).and_return admin
     
     render_view
     edit_url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
