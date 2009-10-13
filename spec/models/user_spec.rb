@@ -105,7 +105,7 @@ describe User, "(validations)" do
   end
 end
   
-describe User, "(instance properties)" do
+describe User, "(instance methods)" do
   describe "<=>" do
     it "should be valid" do
       User.new.should respond_to(:<=>)
@@ -165,6 +165,18 @@ describe User, "(instance properties)" do
       it "should raise an error if format is unrecognized" do
         lambda{@user.to_s :bogus}.should raise_error
       end
+    end
+  end
+  
+  describe "activate" do
+    it "should be valid" do
+      User.make.should respond_to(:activate)
+    end
+    
+    it "should set the active flag to true" do
+      u = User.make(:inactive)
+      u.activate
+      u.active?.should be_true
     end
   end
   
