@@ -1,18 +1,4 @@
 class UserMailer < ActionMailer::Base
-  def signup_notification(user)
-    setup_email(user)
-    @subject    += _('Please activate your new account')
-  
-    @body[:url]  = "http://#{DOMAIN}/activate/#{user.activation_code}"
-  
-  end
-  
-  def activation(user)
-    setup_email(user)
-    @subject    += _('Your account has been activated!')
-    @body[:url]  = "http://#{DOMAIN}/"
-  end
-  
   # Sends an e-mail message to the #User with the supplied password.
   def reset(user)
     setup_email(user)
