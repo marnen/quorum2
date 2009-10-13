@@ -115,7 +115,7 @@ module EventsHelper
   # Generates an RSS URL for the current user's events feed.
   def rss_url
     if User.current_user
-      feed_events_url(:fmt => :rss, :key => User.current_user.feed_key)
+      feed_events_url(:fmt => :rss, :key => User.current_user.single_access_token)
     else
       nil
     end

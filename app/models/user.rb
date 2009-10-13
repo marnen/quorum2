@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password,                   :if => :password_required?
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :email, :case_sensitive => false
-  before_save :make_feed_key
+  before_save :make_single_access_token
   after_create :set_calendar
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -96,9 +96,9 @@ class User < ActiveRecord::Base
       crypted_password.blank? || !password.blank? || !password_confirmation.blank?
     end
     
-    def make_feed_key
-      if self.feed_key.blank?
-        self.feed_key = Digest::MD5.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+    def make_single_access_token
+      if single_access_token.blank?
+        reset_single_access_token!
       end
     end
     

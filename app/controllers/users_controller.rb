@@ -53,12 +53,11 @@ class UsersController < ApplicationController
     redirect_back_or_default('/login')
   end
   
-  # Regenerates #feed_key of #User.current_user, then redirects to previous page.
+  # Regenerates #single_access_token of current_user, then redirects to previous page.
   def regenerate_key
     u = current_user
     begin
-      u.feed_key = nil
-      u.save!
+      u.reset_single_access_token!
       flash[:notice] = _('Your RSS URL has been regenerated.')
     rescue Exception
       flash[:error] = _("Couldn't regenerate the URL! Please try again.")

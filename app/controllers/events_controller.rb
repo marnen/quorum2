@@ -164,9 +164,9 @@ class EventsController < ApplicationController
     headers['Content-Type'] = 'text/calendar'
   end
   
-  # Log user in based on feed_key.
+  # Log user in based on single_access_token.
   def login_from_key
-    params[:feed_user] = User.find_by_feed_key(params[:key])
+    params[:feed_user] = User.find_by_single_access_token(params[:key])
   end
   
   # Handler for #RecordNotFound.

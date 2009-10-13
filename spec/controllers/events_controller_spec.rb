@@ -80,7 +80,7 @@ describe EventsController, "feed.rss" do
     @two = Event.make(:name => 'Event 2', :calendar => @calendar, :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :created_at => 2.days.ago)
     @events = [@one, @two]
     controller.stub!(:current_objects).and_return(@events)
-    get :feed, :format => 'rss', :key => user.feed_key
+    get :feed, :format => 'rss', :key => user.single_access_token
   end
   
   it "should be successful" do
@@ -104,7 +104,7 @@ describe EventsController, "feed.rss" do
   end
   
   it "should set params[:feed_user] to the user whom the key belongs to" do
-    params[:feed_user].should == User.find_by_feed_key(params[:key])
+    params[:feed_user].should == User.find_by_single_access_token(params[:key])
   end
   
   it "should have an <atom:link rel='self'> tag" do
@@ -142,21 +142,21 @@ end
 describe EventsController, "feed.rss (login)" do
   integrate_views
   
-  it "should not list any events if given an invalid feed_key" do
-    User.stub!(:find_by_feed_key).and_return(nil)
+  it "should not list any events if given an invalid single_access_token" do
+    User.stub!(:find_by_single_access_token).and_return(nil)
     get :feed, :fmt => 'rss', :key => 'fake key'
     Event.should_not_receive(:find)
     response.should_not have_tag('item')
   end
   
-  it "should list events if given a valid feed_key" do
+  it "should list events if given a valid single_access_token" do
     @user = User.make
     UserSession.create @user
     calendar = Calendar.make # @user will be subscribed to
     @events = (1..5).map{Event.make(:calendar => calendar)}
-    User.stub!(:find_by_feed_key).and_return(@user)
+    User.stub!(:find_by_single_access_token).and_return(@user)
     Event.should_receive(:find).and_return(@events)
-    get :feed, :format => 'rss', :key => @user.feed_key
+    get :feed, :format => 'rss', :key => @user.single_access_token
     response.should have_tag('item')
   end
 end

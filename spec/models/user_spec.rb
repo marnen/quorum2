@@ -180,28 +180,29 @@ describe User, "(instance methods)" do
     end
   end
   
-  it "should have a 'feed_key' property initialized to a 32-character string" do
-    User.make.feed_key.length.should == 32
+  it "should have a 'single_access_token' property initialized to a string" do
+    User.make.single_access_token.should_not be_blank
   end
   
-  it "should set feed_key on save" do
+  it "should set single_access_token on save" do
     @u = User.make
-    @u.feed_key = nil
-    @u.reload.feed_key.length.should == 32
+    @u.single_access_token = nil
+    @u.reload.single_access_token.should_not be_blank
   end
   
-  it "should not overwrite feed_key if already set" do
+  it "should not overwrite single_access_token if already set" do
     @u = User.make
-    fk = @u.feed_key
-    @u.reload.feed_key.should == fk
+    token = @u.single_access_token
+    @u.reload.single_access_token.should == token
   end
   
-  it "should properly deal with regenerating feed_key if it's a duplicate" do
+  it "should properly deal with regenerating single_access_token if it's a duplicate" do
     @one = User.make
     @two = User.make
-    fk = @two.feed_key
-    @one.feed_key = fk
-    @one.reload.feed_key.should_not == fk
+    token = @two.single_access_token
+    @one.single_access_token = token
+    # TODO: Does this properly test what's being asserted here?
+    @one.reload.single_access_token.should_not == token
   end
   
   describe "reset_password!" do

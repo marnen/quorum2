@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(:version => 20091012223503) do
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
     t.column "show_contact", :boolean, :default => true
-    t.column "feed_key", :string, :limit => 32, :null => false
+    t.column "single_access_token", :string, :limit => 32, :null => false
     t.column "coords", :point, :srid => 4326
     t.column "login_count", :integer, :default => 0, :null => false
     t.column "failed_login_count", :integer, :default => 0, :null => false
@@ -90,12 +90,11 @@ ActiveRecord::Schema.define(:version => 20091012223503) do
     t.column "current_login_ip", :string
     t.column "last_login_ip", :string
     t.column "persistence_token", :string, :default => "", :null => false
-    t.column "single_access_token", :string, :default => "", :null => false
     t.column "perishable_token", :string, :default => "", :null => false
     t.column "active", :boolean, :default => false, :null => false
   end
 
-  add_index "users", ["feed_key"], :name => "index_users_on_feed_key", :unique => true
   add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
+  add_index "users", ["single_access_token"], :name => "index_users_on_single_access_token"
 
 end
