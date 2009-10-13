@@ -293,72 +293,10 @@ describe User, "(authentication structure)" do
       u.errors.on(:email).should_not be_nil
     end.should_not change(User, :count)
   end
-
-  it 'resets password' do
-    user = User.make
-    user.update_attributes(:password => 'new password', :password_confirmation => 'new password')
-    User.authenticate(user.email, 'new password').should == user
-  end
-
-  it 'does not rehash password' do
-    user = User.make
-    password = user.password
-    user.update_attributes(:email => 'quentin2@example.com')
-    User.authenticate('quentin2@example.com', password).should == user
-  end
-
-  it 'authenticates user' do
-    user = User.make
-    User.authenticate(user.email, user.password).should == user
-  end
-
-  it 'sets remember token' do
-    user = User.make
-    user.remember_me
-    user.remember_token.should_not be_nil
-    user.remember_token_expires_at.should_not be_nil
-  end
-
-  it 'unsets remember token' do
-    user = User.make
-    user.remember_me
-    user.remember_token.should_not be_nil
-    user.forget_me
-    user.remember_token.should be_nil
-  end
-
-  it 'remembers me for one week' do
-    user = User.make
-    before = 1.week.from_now.utc
-    user.remember_me_for 1.week
-    after = 1.week.from_now.utc
-    user.remember_token.should_not be_nil
-    user.remember_token_expires_at.should_not be_nil
-    user.remember_token_expires_at.between?(before, after).should be_true
-  end
-
-  it 'remembers me until one week' do
-    user = User.make
-    time = 1.week.from_now.utc
-    user.remember_me_until time
-    user.remember_token.should_not be_nil
-    user.remember_token_expires_at.should_not be_nil
-    user.remember_token_expires_at.should == time
-  end
-
-  it 'remembers me default two weeks' do
-    user = User.make
-    before = 2.weeks.from_now.utc
-    user.remember_me
-    after = 2.weeks.from_now.utc
-    user.remember_token.should_not be_nil
-    user.remember_token_expires_at.should_not be_nil
-    user.remember_token_expires_at.between?(before, after).should be_true
-  end
-
+  
 protected
   def create_user(options = {})
-    record = User.new({ :id => 1, :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+    record = User.make({:email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire'}.merge(options))
     record.save
     record
   end
