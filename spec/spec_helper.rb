@@ -5,6 +5,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require File.expand_path(File.dirname(__FILE__) + "/blueprints")
 require 'spec'
 require 'spec/rails'
+include Authlogic::TestCase
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
@@ -46,8 +47,12 @@ Spec::Runner.configure do |config|
   # 
   # For more information take a look at Spec::Example::Configuration and Spec::Runner
   
-  # Reset Shams for Machinist.
-  config.before(:each) {Sham.reset}
+  config.before(:each) do
+    # Reset Shams for Machinist.
+    Sham.reset
+    # Activate Authlogic.
+    activate_authlogic
+  end
 end
 
 FastGettext.text_domain ||= SITE_TITLE
