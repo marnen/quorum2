@@ -41,26 +41,31 @@ describe UsersController do
     end.should_not change(User, :count)
   end
   
-  
   it 'activates user' do
-    email = 'aaron@example.com'
-    password = 'test'
-    aaron = User.make(:inactive, :email => email, :password => password)
-    User.authenticate(email, password).should be_nil
-    get :activate, :activation_code => aaron.activation_code
-    response.should redirect_to('/login')
-    flash[:notice].should_not be_nil
-    User.authenticate(email, password).should == aaron
+    pending "meaningless until we start doing activation" do
+      email = 'aaron@example.com'
+      password = 'test'
+      aaron = User.make(:inactive, :email => email, :password => password)
+      User.authenticate(email, password).should be_nil
+      get :activate, :activation_code => aaron.activation_code
+      response.should redirect_to('/login')
+      flash[:notice].should_not be_nil
+      User.authenticate(email, password).should == aaron
+    end
   end
   
   it 'does not activate user without key' do
-    get :activate
-    flash[:notice].should be_nil
+    pending "meaningless until we start doing activation" do
+      get :activate
+      flash[:notice].should be_nil
+    end
   end
   
   it 'does not activate user with blank key' do
-    get :activate, :activation_code => ''
-    flash[:notice].should be_nil
+    pending "meaningless until we start doing activation" do
+      get :activate, :activation_code => ''
+      flash[:notice].should be_nil
+    end
   end
   
   def create_user(options = {})
