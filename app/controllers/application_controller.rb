@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   # Check to see if the current user is an admin of at least one calendar.
   def admin?
-    u = User.current_user
+    u = current_user
     if u.nil? or u == false
       return nil
     else
