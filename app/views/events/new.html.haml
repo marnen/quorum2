@@ -1,6 +1,6 @@
 - form_for @current_object do |f|
   %table.edit
-    - if User.current_user.calendars.size > 1
+    - if current_user.calendars.size > 1
       %tr
         %th&= _("Calendar")
         %td
