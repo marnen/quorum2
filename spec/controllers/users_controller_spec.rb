@@ -141,13 +141,11 @@ describe UsersController, '(regenerate_key)' do
   end
   
   it "should reset the current user's single_access_token" do
-    pending "spec fails, but app works -- why?" do
-      @user = User.make
-      token = @user.single_access_token
-      UserSession.create @current_user
-      get :regenerate_key
-      User.find(UserSession.find.record.id).single_access_token.should_not == token
-    end
+    @user = User.make
+    token = @user.single_access_token
+    UserSession.create @current_user
+    get :regenerate_key
+    User.find(UserSession.find.record.id).single_access_token.should_not == token
   end
   
   it 'should set flash[:notice] on success' do

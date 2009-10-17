@@ -5,8 +5,6 @@ class User < ActiveRecord::Base
   end
   
   include GeocodingUtilities
-  # Virtual attribute for the unencrypted password
-  attr_accessor :password
   cattr_accessor :current_user
 
   belongs_to :state

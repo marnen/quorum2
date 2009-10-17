@@ -6,7 +6,7 @@ end
 
 Given /^I am an admin(?:istrator)? of "([^\"]*)"$/ do |calendar|
   cal = Calendar.find_by_name(calendar) || Calendar.make(:name => calendar)
-  Permission.make :user => User.current_user, :calendar => cal, :role => Role.make(:admin)
+  Permission.make :user => UserSession.find.record, :calendar => cal, :role => Role.make(:admin)
 end
 
 Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|

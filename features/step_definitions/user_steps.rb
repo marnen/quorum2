@@ -1,9 +1,10 @@
 Given /^I am logged in$/ do
   user = User.make(:password => 'passw0rd')
   visit login_path
-  fill_in(:email, :with => user.email)
-  fill_in(:password, :with => 'passw0rd')
+  fill_in('user_session[email]', :with => user.email)
+  fill_in('user_session[password]', :with => 'passw0rd')
   click_button
+  UserSession.find.record.should == user
 end
 
 Given /^I am not logged in$/ do
