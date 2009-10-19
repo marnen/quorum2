@@ -114,8 +114,10 @@ describe Address do
       end
       
       it "should return the state if there is one" do
-        state = State.make
-        Address.new(:state => state).state.should == state
+        state = State.make(:code => 'NY')
+        a = Address.new(:state => state)
+        a.state.should == state
+        a.state.code.should == 'NY'
       end
       
       it "should not complain if methods are called on it, even if nil" do

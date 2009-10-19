@@ -30,7 +30,7 @@ class Address
     
   # Returns the #Country that the address belongs to.
   def country
-    state.nil? ? nil : state.country
+    state.country
   end
   
   # Returns the #State that the address belongs to, or a #QuietNil if there is no state.
@@ -45,9 +45,7 @@ class Address
   def to_s(format = :geo)
     case format
       when :geo
-        state_code = state.nil? ? nil : state.code
-        country_code = country.nil? ? nil : country.code
-        "#{street}, #{city}, #{state_code}, #{zip}, #{country_code}"
+        "#{street}, #{city}, #{state.code}, #{zip}, #{country.code}"
       else
         raise ArgumentError, "unknown format parameter: #{format}"
     end

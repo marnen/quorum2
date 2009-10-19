@@ -47,10 +47,9 @@ describe Event, "(general properties)" do
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
     state = State.make(:code => 'NY', :country => Country.make(:code => 'US'))
-    a = Address.new
-    Address.should_receive(:new).and_return(a)
-    e = Event.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state)
-    e.address.should == a
+    opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
+    e = Event.new(opts)
+    e.address.should == Address.new(opts)
   end
   
   it "should have a deleted property" do

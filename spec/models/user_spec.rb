@@ -34,11 +34,10 @@ describe User, "(general properties)" do
     aggr = User.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = mock_model(State, :id => 15, :code => 'NY', :country => mock_model(Country, :code => 'US'))
-    a = Address.new
-    Address.should_receive(:new).and_return(a)
-    u = User.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state)
-    u.address.should == a
+    state = State.make(:code => 'NY', :country => Country.make(:code => 'US'))
+    opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
+    u = User.make(opts)
+    u.address.should == Address.new(opts)
   end
   
   it "should have a writable flag controlling display of personal information on contact list" do
