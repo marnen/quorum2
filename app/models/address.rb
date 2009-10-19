@@ -27,10 +27,15 @@ class Address
       @state = State.find(@state)
     end
   end
-  
+    
   # Returns the #Country that the address belongs to.
   def country
     state.nil? ? nil : state.country
+  end
+  
+  # Returns the #State that the address belongs to, or a #QuietNil if there is no state.
+  def state
+    @state || QuietNil.instance
   end
   
   # Converts #Address to a #String.

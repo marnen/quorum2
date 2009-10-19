@@ -108,6 +108,23 @@ describe Address do
       end
     end
     
+    describe 'state' do
+      it "should be a valid instance method" do
+        Address.new.should respond_to(:state)
+      end
+      
+      it "should return the state if there is one" do
+        state = State.make
+        Address.new(:state => state).state.should == state
+      end
+      
+      it "should not complain if methods are called on it, even if nil" do
+        a = Address.new
+        a.state.should be_nil
+        lambda{a.state.code}.should_not raise_error
+      end
+    end
+    
     describe '(geographical features)' do
       before(:each) do
         @a = Address.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :state => mock_model(State, :code => 'NY', :country => mock_model(Country, :code => 'US')), :zip => '12345', :coords => nil)
