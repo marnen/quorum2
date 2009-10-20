@@ -1,4 +1,5 @@
 # This is just like NilClass, but when methods are called on a QuietNil, they just return the QuietNil without raising an exception.
+#
 # WARNING: This class is easy to abuse. Please resist temptation!
 
 class QuietNil < ActiveSupport::BasicObject
