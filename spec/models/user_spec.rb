@@ -36,7 +36,7 @@ describe User, "(general properties)" do
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
     state = State.make(:code => 'NY', :country => Country.make(:code => 'US'))
     opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
-    u = User.make(opts)
+    u = User.new(opts)
     u.address.should == Address.new(opts)
   end
   
