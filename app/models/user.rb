@@ -43,24 +43,6 @@ class User < ActiveRecord::Base
     return self.state.nil? ? nil : self.state.country
   end
   
-  def coords
-    c = self[:coords]
-    if c.nil?
-      if self.state_id.nil? then
-        return nil
-      end
-      begin
-        c = coords_from_string(address.to_s(:geo))
-        self[:coords] = c
-        self.save
-      rescue
-        c = Point.from_x_y(0, 0)   
-      else
-      end
-    end
-    c
-  end
-  
   # Compares users by last name, first name, and e-mail address in that order.
   # ['Smith', 'John', 'jsmith1@aol.com'] < ['Smith', 'John', 'jsmith2@aol.com']
   def <=>(other)

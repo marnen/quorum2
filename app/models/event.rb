@@ -63,21 +63,6 @@ class Event < ActiveRecord::Base
     end
   end
   
-  # Returns a #Point with the coordinates of the #Event's address, or with (0, 0) if all else fails, and caches the coordinates so we don't hit the geocoder every time.
-  def coords
-    c = self[:coords]
-    if c.nil?
-      begin
-        c = coords_from_string(address.to_s(:geo))
-        self[:coords] = c
-        self.save
-      rescue
-        c = Point.from_x_y(0, 0)   
-      end
-    end
-    c
-  end
-
  protected
   # TODO: allow_* methods should probably be public. Keeping them protected mainly so as not to change the class interface just yet.
   def allow_delete?(user)

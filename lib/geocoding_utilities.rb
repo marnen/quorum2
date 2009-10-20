@@ -3,6 +3,21 @@ module GeocodingUtilities
     klass.before_update :clear_coords
   end
   
+  # Returns a #Point with the coordinates of the model's address, or with (0, 0) if all else fails, and caches the coordinates so we don't hit the geocoder every time.
+  def coords
+    c = self[:coords]
+    if c.nil?
+      begin
+        c = coords_from_string(address.to_s(:geo))
+        self[:coords] = c
+        self.save
+      rescue
+        c = Point.from_x_y(0, 0)   
+      end
+    end
+    c
+  end
+
   # Sends the address contained in _string_ to a geocoder, and returns a #Point object with the resulting coordinates.
   #
   # _String_ is assumed to be in the format output by address_for_geocoding
