@@ -91,10 +91,6 @@ class User < ActiveRecord::Base
   end
 
   protected
-    def clear_coords
-      self.coords = nil
-    end
-  
     def password_required?
       crypted_password.blank? || !password.blank? || !password_confirmation.blank?
     end

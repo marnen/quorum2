@@ -14,4 +14,9 @@ module GeocodingUtilities
       raise "Geocoding failed with code #{geo.status} for #{string}"
     end
   end
+  
+  # Clears the coordinates of the model so they will refresh themselves next time Model.coords is called
+  def clear_coords
+    self.coords = nil
+  end
 end

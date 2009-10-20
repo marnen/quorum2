@@ -99,10 +99,6 @@ class Event < ActiveRecord::Base
     !(role_of user).nil?
   end
  
-  def clear_coords
-    self.coords = nil
-  end
-  
   # TODO: should this method be public?
   # Returns the #Role of the #User for the #Event.
   def role_of(user)
