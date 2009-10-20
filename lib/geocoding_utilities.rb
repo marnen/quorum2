@@ -20,7 +20,7 @@ module GeocodingUtilities
 
   # Sends the address contained in _string_ to a geocoder, and returns a #Point object with the resulting coordinates.
   #
-  # _String_ is assumed to be in the format output by address_for_geocoding
+  # _String_ is assumed to be in the format output by #Address#to_s(:geo)
   # (currently <tt>"#{street}, #{city}, #{state.code}, #{zip}, #{country.code}"</tt>),
   # but depending on the geocoder, other string formats are likely to work as well.
   def coords_from_string(string)
