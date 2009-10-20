@@ -262,6 +262,13 @@ describe User, "(geographical features)" do
     @user.should_not_receive(:save)
     @user.coords
   end
+  
+  it "should clear coords on update" do
+    User.stub!(:current_user).and_return(User.make)
+    @user.update_attributes(User.plan)
+    @user.should_receive(:coords=)
+    @user.update_attributes(:name => 'foo')
+  end
 end
 
 describe User, "(authentication structure)" do

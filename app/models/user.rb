@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :email, :case_sensitive => false
   before_save :make_single_access_token
+  before_update :clear_coords
   after_create :set_calendar
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -90,6 +91,10 @@ class User < ActiveRecord::Base
   end
 
   protected
+    def clear_coords
+      self.coords = nil
+    end
+  
     def password_required?
       crypted_password.blank? || !password.blank? || !password_confirmation.blank?
     end
