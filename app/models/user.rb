@@ -13,7 +13,6 @@ class User < ActiveRecord::Base
   has_many :permissions
   has_many :calendars, :through => :permissions
   # validates_presence_of :permissions
-  composed_of :address, :mapping => %w(street street2 city state_id zip coords).collect{|x| [x, x.gsub(/_id$/, '')]}
   
   validates_presence_of :email
   validates_presence_of     :password,                   :if => :password_required?
