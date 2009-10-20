@@ -106,6 +106,12 @@ describe Address do
         country = mock_model(Country, :name => 'US')
         Address.new(:state => mock_model(State, :country => country)).country.should == country
       end
+      
+      it "should not complain if methods are called on it, even if nil" do
+        a = Address.new
+        a.country.should be_nil
+        lambda{a.country.code}.should_not raise_error
+      end
     end
     
     describe 'state' do
