@@ -16,10 +16,7 @@ end
 
 describe Permission, "(validations)" do
   before(:each) do
-    @permission = Permission.new
-    @permission.calendar_id = 1 # arbitrary
-    @permission.user_id = 5 # arbitrary
-    @permission.role_id = 'foo' # arbitrary
+    @permission = Permission.make
   end
 
   it "should not be valid without a calendar" do
