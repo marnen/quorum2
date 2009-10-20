@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  include GeocodingUtilities
+  include GeocodingUtilities, AddressUtilities
   
   belongs_to :created_by, :class_name => "User"
   belongs_to :state, :include => :country
@@ -52,15 +52,6 @@ class Event < ActiveRecord::Base
   def hide
     self.deleted = true
     self.save
-  end
-  
-  # Nil-safe country accessor.
-  def country
-    if self.state.nil?  
-      nil
-    else
-      self.state.country
-    end
   end
   
  protected

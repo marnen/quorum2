@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
     c.transition_from_restful_authentication = true
   end
   
-  include GeocodingUtilities
+  include GeocodingUtilities, AddressUtilities
   cattr_accessor :current_user
 
   belongs_to :state
@@ -37,10 +37,6 @@ class User < ActiveRecord::Base
   def admin?
     @admin ||= Role.find_by_name('admin')
     !(self.permissions.find_by_role_id(@admin).nil?)
-  end
-  
-  def country
-    return self.state.nil? ? nil : self.state.country
   end
   
   # Compares users by last name, first name, and e-mail address in that order.
