@@ -12,7 +12,6 @@ class Event < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :state_id
   before_create :set_created_by_id
-  before_update :clear_coords
   
   default_scope :conditions => 'deleted is distinct from true'
   

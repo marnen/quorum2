@@ -1,4 +1,8 @@
 module GeocodingUtilities
+  def self.included(klass)
+    klass.before_update :clear_coords
+  end
+  
   # Sends the address contained in _string_ to a geocoder, and returns a #Point object with the resulting coordinates.
   #
   # _String_ is assumed to be in the format output by address_for_geocoding
