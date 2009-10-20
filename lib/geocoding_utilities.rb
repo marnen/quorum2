@@ -25,7 +25,7 @@ module GeocodingUtilities
   # but depending on the geocoder, other string formats are likely to work as well.
   def coords_from_string(string)
     host = @request.nil? ? nil : @request.host_with_port
-    host = host.nil? ? DOMAIN : host
+    host ||= DOMAIN
     geo = Geocoding::get(string, :host => host)
     if geo.status == Geocoding::GEO_SUCCESS
       return Point.from_coordinates(geo[0].lonlat)
