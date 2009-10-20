@@ -6,4 +6,5 @@ class Permission < ActiveRecord::Base
   validates_presence_of :user_id
   validates_presence_of :calendar_id
   validates_presence_of :role_id
+  validates_uniqueness_of :calendar_id, :scope => [:role_id, :user_id]
 end

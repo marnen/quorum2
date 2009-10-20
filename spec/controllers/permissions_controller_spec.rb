@@ -116,11 +116,21 @@ describe PermissionsController, 'subscribe' do
     response.should be_redirect
   end
   
-  it 'should create a new permission for the current user and the given calendar' do
+  it "should create a new permission for the current user and the given calendar, if there isn't one already" do
+    conditions = {:calendar_id => @calendar.id, :user_id => @current_user.id, :role_id => @user.id}
+    Permission.destroy(Permission.find(:all, :conditions => conditions).collect{|p| p.id})
     @pcount = Permission.count
     get :subscribe, :calendar_id => @calendar.id
     Permission.count.should == @pcount + 1
-    Permission.find(:first, :conditions => {:calendar_id => @calendar.id, :user_id => @current_user.id, :role_id => @user.id}).should_not be_nil
+    Permission.find(:first, :conditions => conditions).should_not be_nil
+  end
+  
+  it "should not create a new permission if there's already one (at user level) for the current user and given calendar" do
+    opts = {:calendar_id => @calendar.id, :user_id => @current_user.id, :role_id => @user.id}
+    Permission.create opts
+    @pcount = Permission.count
+    get :subscribe, :calendar_id => @calendar.id
+    Permission.count.should == @pcount
   end
 end
 

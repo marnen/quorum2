@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091012223503) do
+ActiveRecord::Schema.define(:version => 20091020154940) do
 
   create_table "calendars", :force => true do |t|
     t.column "name", :string, :null => false
@@ -52,6 +52,8 @@ ActiveRecord::Schema.define(:version => 20091012223503) do
     t.column "role_id", :integer, :null => false
     t.column "show_in_report", :boolean, :default => true, :null => false
   end
+
+  add_index "permissions", ["user_id", "calendar_id", "role_id"], :name => "index_permissions_on_user_id_and_calendar_id_and_role_id", :unique => true
 
   create_table "roles", :force => true do |t|
     t.column "name", :string

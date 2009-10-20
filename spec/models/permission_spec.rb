@@ -36,5 +36,19 @@ describe Permission, "(validations)" do
     @permission.role_id = nil
     @permission.should_not be_valid
   end
+  
+  it "should be unique across all three attributes" do
+    opts = Permission.plan
+    @one = Permission.new opts
+    @one.should be_valid
+    @one.save!
+    @two = Permission.new opts
+    @two.should_not be_valid
+    [:calendar_id, :user_id, :role_id].each do |attr|
+      @three = Permission.new opts
+      @three[attr] += 1
+      @three.should be_valid
+    end
+  end
 end
 
