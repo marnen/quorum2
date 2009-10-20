@@ -61,10 +61,10 @@ class PermissionsController < ApplicationController
       end
     rescue
       flash[:error] = _("Something went wrong. Please try again.")
-      go_back
+      go_back and return
     end
     flash[:notice] = _("Your subscription has been saved.")
-    go_back
+    go_back and return
   end
   
  protected
