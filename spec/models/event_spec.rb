@@ -42,6 +42,11 @@ describe Event, "(general properties)" do
     event.country.should == event.state.country
   end
   
+  it "should be nil-safe on country" do
+    event = Event.new(:state => nil)
+    lambda{event.country}.should_not raise_error
+  end
+
   it "should be composed_of an Address" do
     aggr = Event.reflect_on_aggregation(:address)
     aggr.should_not be_nil

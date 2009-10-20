@@ -54,6 +54,10 @@ describe User, "(general properties)" do
     user.country.should == state.country
   end
   
+  it "should be nil-safe on country" do
+    user = User.make(:state => nil)
+    lambda{user.country}.should_not raise_error
+  end
 end
 
 describe User, "(admin?)" do
