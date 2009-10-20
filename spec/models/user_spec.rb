@@ -47,12 +47,11 @@ describe User, "(general properties)" do
   end
   
   it "should have country referred through state" do
-    country = mock_model(Country, :name => 'Ruritania', :code => 'RU')
-    state = mock_model(State, :name => 'Federal District', :country => country)
+    state = State.make
     user = User.new
     user.should respond_to(:country)
     user.state = state
-    user.country.should == user.state.country
+    user.country.should == state.country
   end
   
 end
