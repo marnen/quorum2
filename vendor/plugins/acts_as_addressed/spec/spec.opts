@@ -1,0 +1,9 @@
+--colour
+--format
+progress
+--format
+html:spec-results/index.html
+--loadby
+mtime
+--reverse
+--debugger
