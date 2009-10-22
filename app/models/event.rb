@@ -1,5 +1,6 @@
 class Event < ActiveRecord::Base
-  include GeocodingUtilities, AddressUtilities
+  acts_as_addressed
+  include GeocodingUtilities
   
   belongs_to :created_by, :class_name => "User"
   belongs_to :state, :include => :country

@@ -4,6 +4,10 @@ describe Event, "(general properties)" do
   before(:each) do
   end
   
+  it "should act_as_addressed" do
+    Event.included_modules.should include(Acts::Addressed::InstanceMethods)
+  end
+  
   it "should belong to a State" do
     Event.reflect_on_association(:state).macro.should == :belongs_to
   end
