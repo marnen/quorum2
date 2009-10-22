@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
 describe Acts::Addressed, "inclusion" do
-  it "should include ClassMethods" do
+  it "should extend ClassMethods when module is included" do
     @class = Class.new
     @class.should_receive(:extend).with(Acts::Addressed::ClassMethods)
     @class.send :include, Acts::Addressed
