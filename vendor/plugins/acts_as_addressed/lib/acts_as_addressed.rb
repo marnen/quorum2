@@ -2,10 +2,11 @@
 module Acts #:nodoc:
   module Addressed #:nodoc:
     def self.included(base)
-      base.extend ClassMethods
+      base.extend SingletonMethods
     end
     
-    module ClassMethods
+    # These methods extend ActiveRecord::Base.
+    module SingletonMethods
       # Includes the acts_as_addressed structure in the model it's called on.
       def acts_as_addressed
         composed_of :address, :mapping => %w(street street2 city state_id zip coords).collect{|x| [x, x.gsub(/_id$/, '')]}
@@ -13,6 +14,7 @@ module Acts #:nodoc:
       end
     end
     
+    # These methods are available as instance methods on any model for which acts_as_addressed has been called.
     module InstanceMethods
       # Nil-safe country accessor.
       def country
