@@ -1,7 +1,7 @@
 ActsAsAddressed
 ===============
 
-Introduction goes here.
+This plugin abstracts some common functionality for dealing with models that contain street addresses.
 
 
 Example
@@ -10,4 +10,4 @@ Example
 Example goes here.
 
 
-Copyright (c) 2009 [name of plugin creator], released under the MIT license
+Copyright (c) 2009 Marnen E. Laibow-Koser <marnen@marnen.org>, released under the BSD license
