@@ -42,7 +42,7 @@ describe Event, "(general properties)" do
   
   it "should have a country property referred through state" do
     event = Event.new
-    event.state = State.new
+    event.state = Acts::Addressed::State.new
     event.country.should == event.state.country
   end
   
@@ -55,10 +55,10 @@ describe Event, "(general properties)" do
     aggr = Event.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = State.make(:code => 'NY', :country => Country.make(:code => 'US'))
+    state = Acts::Addressed::State.make
     opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
     e = Event.new(opts)
-    e.address.should == Address.new(opts)
+    e.address.should == Acts::Addressed::Address.new(opts)
   end
   
   it "should have a deleted property" do

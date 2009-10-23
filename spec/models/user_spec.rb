@@ -38,10 +38,10 @@ describe User, "(general properties)" do
     aggr = User.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = State.make(:code => 'NY', :country => Country.make(:code => 'US'))
+    state = Acts::Addressed::State.make
     opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
     u = User.new(opts)
-    u.address.should == Address.new(opts)
+    u.address.should == Acts::Addressed::Address.new(opts)
   end
   
   it "should have a writable flag controlling display of personal information on contact list" do
@@ -51,7 +51,7 @@ describe User, "(general properties)" do
   end
   
   it "should have country referred through state" do
-    state = State.make
+    state = Acts::Addressed::State.make
     user = User.new
     user.should respond_to(:country)
     user.state = state

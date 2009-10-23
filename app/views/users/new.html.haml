@@ -40,7 +40,7 @@
       %td= f.text_field :city
     %tr
       %th&= _("State")
-      %td= f.collection_select(:state_id, State.find(:all, :order => :name), :id, :name, :include_blank => true)
+      %td= f.collection_select(:state_id, Acts::Addressed::State.find(:all, :order => :name), :id, :name, :include_blank => true)
     %tr
       %th&= _("ZIP code")
       %td= f.text_field :zip

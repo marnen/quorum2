@@ -38,7 +38,7 @@
     %tr
       %th&= _("State")
       %td
-        = f.collection_select :state_id, State.find(:all), :id, :name
+        = f.collection_select :state_id, Acts::Addressed::State.find(:all), :id, :name
         = _(error_message_on :event, :state)
     %tr
       %th&= _("Zip")

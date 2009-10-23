@@ -17,13 +17,13 @@ Event.blueprint do
   created_by {User.make}
 end
 
-State.blueprint do
+Acts::Addressed::State.blueprint do
   country
   name {Sham.generic_name}
   code
 end
 
-Country.blueprint do
+Acts::Addressed::Country.blueprint do
   name {Sham.generic_name}
   code
 end
