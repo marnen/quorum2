@@ -1,8 +1,17 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Country, "(validations)" do
+require 'acts/addressed/country'
+
+describe Acts::Addressed::Country, "(associations)" do
+  it "should have many states" do
+    assoc = Acts::Addressed::Country.reflect_on_association(:states)
+    assoc.should_not be_nil
+    assoc.macro.should == :has_many
+  end
+end
+describe Acts::Addressed::Country, "(validations)" do
   before(:each) do
-    @country = Country.new
+    @country = Acts::Addressed::Country.new
     @country.code = "AA" # arbitrary value of length 2
     @country.name = "x" # arbitrary value
   end
