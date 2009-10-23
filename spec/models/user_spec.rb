@@ -4,6 +4,10 @@ describe User, "(general properties)" do
   before(:each) do
   end
   
+  it "should act_as_addressed" do
+    User.included_modules.should include(Acts::Addressed::InstanceMethods)
+  end
+  
   it "should belong to a State" do
     User.reflect_on_association(:state).macro.should == :belongs_to
   end

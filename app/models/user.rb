@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
     c.transition_from_restful_authentication = true
   end
   
-  include GeocodingUtilities, AddressUtilities
+  acts_as_addressed
+  include GeocodingUtilities
   cattr_accessor :current_user
 
   belongs_to :state
