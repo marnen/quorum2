@@ -52,6 +52,11 @@ def setup_db
         t.column "code", :string, :limit => 10, :null => false
         t.column "name", :string, :null => false
       end
+      
+      create_table "dummies", :force => true do |t|
+        # so we have something to use for dummy classes
+        t.column 'fake', :string
+      end
     end
   end
 end

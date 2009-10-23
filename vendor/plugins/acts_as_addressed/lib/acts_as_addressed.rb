@@ -9,7 +9,8 @@ module Acts #:nodoc:
     module SingletonMethods
       # Includes the acts_as_addressed structure in the model it's called on.
       def acts_as_addressed
-        composed_of :address, :mapping => %w(street street2 city state_id zip coords).collect{|x| [x, x.gsub(/_id$/, '')]}
+        belongs_to :state, :class_name => "Acts::Addressed::State"
+        composed_of :address, :class_name => "Acts::Addressed::Address", :mapping => %w(street street2 city state_id zip coords).collect{|x| [x, x.gsub(/_id$/, '')]}
         include InstanceMethods
       end
     end

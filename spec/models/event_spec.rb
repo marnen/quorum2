@@ -13,9 +13,11 @@ describe Event, "(general properties)" do
   end
   
   it "should belong to a Country" do
-    opts = Event.reflect_on_association(:state).options
-    opts.should have_key(:include)
-    opts[:include].should == :country
+    pending ":include doesn't seem to be a good idea at all -- must investigate" do
+      opts = Event.reflect_on_association(:state).options
+      opts.should have_key(:include)
+      opts[:include].should == :country
+    end
   end
     
   it "should belong to a Calendar" do

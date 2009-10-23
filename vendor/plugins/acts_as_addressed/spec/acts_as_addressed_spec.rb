@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/spec_helper'
 
 describe Acts::Addressed, "inclusion" do
   it "should extend SingletonMethods when module is included" do
-    @active_record = Class.new
+    @active_record = ActiveRecord::Base
     @active_record.should_receive(:extend).with(Acts::Addressed::SingletonMethods)
     @active_record.send :include, Acts::Addressed
   end
@@ -16,20 +16,26 @@ describe Acts::Addressed::SingletonMethods do
     
     describe "effects on model" do
       before :each do
-        @active_record = Class.new
+        @active_record = ActiveRecord::Base
         @active_record.send :include, Acts::Addressed
         @model = Class.new @active_record
-        @model.stub!(:composed_of)
+      end
+      
+      it "should create a State association" do
+        @model.should_receive(:belongs_to).with(:state, :class_name => "Acts::Addressed::State")
       end
       
       it "should create an Address aggregation" do
-        @model.should_receive(:composed_of).with(:address, :mapping => %w(street street2 city state_id zip coords).collect{|x| [x, x.gsub(/_id$/, '')]})
-        @model.acts_as_addressed
+        @model.should_receive(:composed_of).with(:address, :class_name => "Acts::Addressed::Address", :mapping => %w(street street2 city state_id zip coords).collect{|x| [x, x.gsub(/_id$/, '')]})
       end
       
       it "should include InstanceMethods in the model" do
         im = Acts::Addressed::InstanceMethods
         @model.should_receive(:include).with(im)
+        
+      end
+      
+      after :each do
         @model.acts_as_addressed
       end
     end
@@ -38,10 +44,9 @@ end
 
 describe Acts::Addressed::InstanceMethods do
   before :each do
-    @active_record = Class.new
-    @active_record.send :include, Acts::Addressed
-    @model = Class.new @active_record
-    @model.stub!(:composed_of)
+    ActiveRecord::Base.send :include, Acts::Addressed
+    @model = Class.new ActiveRecord::Base
+    @model.set_table_name 'dummies'
     @model.acts_as_addressed
     @instance = @model.new
   end

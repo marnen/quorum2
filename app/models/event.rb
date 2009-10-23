@@ -3,7 +3,6 @@ class Event < ActiveRecord::Base
   include GeocodingUtilities
   
   belongs_to :created_by, :class_name => "User"
-  belongs_to :state, :include => :country
   belongs_to :calendar
   has_many :commitments
   has_many :users, :through => :commitments

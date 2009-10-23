@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
   include GeocodingUtilities
   cattr_accessor :current_user
 
-  belongs_to :state
   has_many :commitments
   has_many :events, :through => :commitments
   has_many :permissions
