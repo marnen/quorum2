@@ -1,6 +1,6 @@
-# Value object for addresses.
-
 module Acts::Addressed
+  # Value object for addresses.
+
   class Address
     # List of readable attributes.
     FIELDS = [:street, :street2, :city, :state, :zip, :coords]
