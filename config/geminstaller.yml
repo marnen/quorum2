@@ -44,6 +44,8 @@ gems:
   version: 0.8.1
 # - name: rcov # testing
 #  version: 0.8.1.2.0
+- name: rdiscount
+  version: >=1.2.11
 # - name: rspec # testing
 #  version: 1.1.9
 # - name: rspec-rails # testing
