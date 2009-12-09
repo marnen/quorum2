@@ -26,6 +26,8 @@ gems:
 #  version: 0.1.11
 # - name: diff-lcs # testing
 #  version: 1.1.2
+- name: fast_gettext
+  version: >=0.2.10
 - name: geminstaller
   version: 0.4.5
 - name: gemsonrails
