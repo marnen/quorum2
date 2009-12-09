@@ -69,7 +69,7 @@ Rails::Initializer.run do |config|
   config.gem 'haml', :version => '= 2.1.0'
   config.gem 'GeoRuby', :lib => 'geo_ruby'
   
-  config.gem 'grosser-fast_gettext', :lib => 'fast_gettext', :source => 'http://gems.github.com'
+  config.gem 'fast_gettext', :lib => 'fast_gettext'
   
   config.gem 'rdiscount', :version => '>= 1.2.11'
   
