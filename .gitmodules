@@ -1,9 +1,6 @@
 [submodule "vendor/plugins/javascript_test"]
 	path = vendor/plugins/javascript_test
 	url = git://github.com/rails/javascript_test.git
-[submodule "vendor/plugins/transactional_migrations"]
-	path = vendor/plugins/transactional_migrations
-	url = git://github.com/harukizaemon/transactional_migrations.git
 [submodule "vendor/plugins/make_resourceful"]
 	path = vendor/plugins/make_resourceful
 	url = git://github.com/hcatlin/make_resourceful.git
