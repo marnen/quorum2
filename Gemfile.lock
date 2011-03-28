@@ -11,6 +11,7 @@ GEM
     activeresource (2.3.10)
       activesupport (= 2.3.10)
     activesupport (2.3.10)
+    postgres (0.7.9.2008.01.28)
     rack (1.1.0)
     rails (2.3.10)
       actionmailer (= 2.3.10)
@@ -25,4 +26,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  postgres
   rails (~> 2.3.5)
