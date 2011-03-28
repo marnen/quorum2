@@ -13,6 +13,9 @@ GEM
     activesupport (2.3.10)
     fast_gettext (0.4.17)
     postgres (0.7.9.2008.01.28)
+    prawn (0.4.0)
+      prawn-layout
+    prawn-layout (0.1.0)
     rack (1.1.0)
     rails (2.3.10)
       actionmailer (= 2.3.10)
@@ -29,4 +32,5 @@ PLATFORMS
 DEPENDENCIES
   fast_gettext
   postgres
+  prawn
   rails (~> 2.3.5)
