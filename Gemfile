@@ -1,5 +1,4 @@
-#source 'http://rubygems.org'
-source 'http://localhost:8808'
+source 'http://rubygems.org'
 
 gem 'rails', '~> 2.3.5'
 gem 'postgres'
