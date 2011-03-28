@@ -11,6 +11,7 @@ GEM
     activeresource (2.3.10)
       activesupport (= 2.3.10)
     activesupport (2.3.10)
+    fast_gettext (0.4.17)
     postgres (0.7.9.2008.01.28)
     rack (1.1.0)
     rails (2.3.10)
@@ -26,5 +27,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  fast_gettext
   postgres
   rails (~> 2.3.5)
