@@ -19,8 +19,11 @@ group :test, :development do
 end
 
 group :test do
-  gem 'autotest'
-  gem 'autotest-rails'
-  gem 'rspec-rails', '~> 1.3.2'
-  gem 'cucumber', '~> 0.1.11'
+  gem 'autotest', :require => false
+  gem 'autotest-rails', :require => false
+  gem 'rspec-rails', '~> 1.3.2', :require => false
+  gem 'cucumber', '~> 0.2.2', :require => false
+  gem 'webrat', '>= 0.4.3', :require => false
+  gem 'machinist', '>= 1.0.3'
+  gem 'faker'
 end
