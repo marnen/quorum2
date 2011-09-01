@@ -1,5 +1,6 @@
 coverage
 log/*
+tmp/*
 doc
 spec-results
 features_report.html
