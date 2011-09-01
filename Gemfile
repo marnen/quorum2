@@ -12,6 +12,10 @@ group :development do
   gem 'gettext', '>= 1.9.3'
 end
 
+group :test, :development do
+  gem 'ruby-debug'
+end
+
 group :test do
   gem 'autotest'
   gem 'autotest-rails'
