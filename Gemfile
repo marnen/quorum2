@@ -11,3 +11,10 @@ gem 'authlogic', '>= 2.1.2'
 group :development do
   gem 'gettext', '>= 1.9.3'
 end
+
+group :test do
+  gem 'autotest'
+  gem 'autotest-rails'
+  gem 'rspec-rails', '~> 1.3.2'
+  gem 'cucumber', '~> 0.1.11'
+end
