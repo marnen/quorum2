@@ -10,7 +10,7 @@ gem 'rdiscount', '>= 1.2.11'
 gem 'authlogic', '>= 2.1.2'
 
 group :development do
-  gem 'gettext', '>= 1.9.3'
+  gem 'gettext', '>= 1.9.3', :require => false
 end
 
 group :test, :development do
