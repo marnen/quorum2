@@ -1,24 +1,32 @@
 # Sets up the Rails environment for Cucumber
-ENV["RAILS_ENV"] ||= "test"
+ENV["RAILS_ENV"] ||= "cucumber"
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 require 'cucumber/rails/world'
-require 'cucumber/formatter/unicode' # Comment out this line if you don't want Cucumber Unicode support
-Cucumber::Rails.use_transactional_fixtures
-Cucumber::Rails.bypass_rescue # Comment out this line if you want Rails own error handling 
-                              # (e.g. rescue_action_in_public / rescue_responses / rescue_from)
+
+# Whether or not to run each scenario within a database transaction.
+#
+# If you leave this to true, you can turn off traqnsactions on a
+# per-scenario basis, simply tagging it with @no-txn
+Cucumber::Rails::World.use_transactional_fixtures = true
+
+# Whether or not to allow Rails to rescue errors and render them on
+# an error page. Default is false, which will cause an error to be
+# raised.
+#
+# If you leave this to false, you can turn on Rails rescuing on a
+# per-scenario basis, simply tagging it with @allow-rescue
+ActionController::Base.allow_rescue = false
+
+# Comment out the next line if you don't want Cucumber Unicode support
+require 'cucumber/formatter/unicode'
 
 require 'webrat'
+require 'cucumber/webrat/element_locator' # Lets you do table.diff!(element_at('#my_table_or_dl_or_ul_or_ol').to_table)
 
 Webrat.configure do |config|
   config.mode = :rails
+  config.open_error_files = false # Set to true if you want error pages to pop up in the browser
 end
 
 require 'cucumber/rails/rspec'
 require 'webrat/core/matchers'
-
-# Require spec_helper so we can use blueprints.
-require "#{RAILS_ROOT}/spec/blueprints"
-
-# Set Gettext stuff so we can load Web pages.
-FastGettext.text_domain ||= SITE_TITLE
-FastGettext.available_locales ||= ['en']

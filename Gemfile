@@ -21,8 +21,8 @@ end
 group :test do
   gem 'autotest', :require => false
   gem 'autotest-rails', :require => false
-  gem 'rspec-rails', '~> 1.3.2', :require => false
-  gem 'cucumber', '~> 0.2.2', :require => false
+  gem 'rspec-rails', :require => false
+  gem "cucumber", "~> 0.3.101", :require => false
   gem 'webrat', '>= 0.4.3', :require => false
   gem 'machinist', '>= 1.0.3'
   gem 'faker'
