@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
 gem 'rails', '~> 2.3.5'
-gem 'haml', '>= 2.1.0'
-gem 'sass'
+gem 'haml', '~> 3.0.0'
+# gem 'sass'
 gem 'postgres'
 gem 'fast_gettext'
 gem 'prawn'
