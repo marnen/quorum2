@@ -3,6 +3,7 @@
 class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   helper_method :current_user_session, :current_user
+  include ExceptionNotifiable
   
   before_filter :set_gettext_locale
   

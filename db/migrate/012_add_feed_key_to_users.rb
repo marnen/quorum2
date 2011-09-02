@@ -1,7 +1,7 @@
 class AddFeedKeyToUsers < ActiveRecord::Migration
   def self.up
     # This is a unique key for each user's RSS feeds
-    execute 'ALTER TABLE users ADD COLUMN feed_key char(32) NOT NULL DEFAULT md5(random())' # can't do computed defaults in Rails migrations yet :(
+    execute "ALTER TABLE users ADD COLUMN feed_key char(32) NOT NULL DEFAULT md5(random() || '')" # can't do computed defaults in Rails migrations yet :(
     add_index :users, :feed_key, :unique => true
   end
 

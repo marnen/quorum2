@@ -19,9 +19,10 @@ config.action_controller.perform_caching             = true
 config.action_mailer.delivery_method = :smtp
 smtp = APP_CONFIG['smtp']
 config.action_mailer.smtp_settings = {
+  :enable_starttls_auto => true,
   :address => smtp['address'],
   :port => smtp['port'],
   :user_name => smtp['user_name'],
   :password => smtp['password'],
-  :authentication => :plain
+  :authentication => (smtp['authentication'] || :plain)
 }

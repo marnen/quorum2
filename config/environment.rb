@@ -73,3 +73,6 @@ end
 
 # Now set up Haml properties.
 Haml::Template.options[:format] = :html4
+
+# Set up ExceptionNotifier.
+ExceptionNotifier.exception_recipients = APP_CONFIG['exception_recipients']
