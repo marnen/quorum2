@@ -1,5 +1,7 @@
 coverage
+.bundle/*
 log/*
+tmp/*
 doc
 spec-results
 features_report.html

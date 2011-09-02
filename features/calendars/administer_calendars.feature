@@ -32,8 +32,8 @@ Feature: Administer calendars
     And I fill in "calendar[name]" with "New name"
     And I press "Save"
     Then I should be on the admin page
-    And I should not see something matching "My calendar\s*\(properties \| users\)"
-    And I should see something matching "New name\s*\(properties \| users\)"
+    And I should not see /My calendar\s*\(properties \| users\)/
+    And I should see /New name\s*\(properties \| users\)/
     
   Scenario: Admin users should be able to see user lists for calendars they control
     Given I am logged in

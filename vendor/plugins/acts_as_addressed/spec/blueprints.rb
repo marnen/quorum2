@@ -1,7 +1,7 @@
 # Object blueprints for Machinist.
 require 'machinist/active_record'
 require 'sham'
-require 'faker'
+require 'ffaker'
 LETTERS = ('A'..'Z').to_a
 
 module Acts::Addressed
