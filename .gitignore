@@ -1,0 +1,11 @@
+coverage
+.bundle/*
+log/*
+tmp/*
+doc
+spec-results
+features_report.html
+config/config.yml
+config/deploy.rb
+config/database.yml
+*~
