@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'uses_admin', :shared => true do
+shared_examples_for 'uses_admin' do
   before(:each) do
     controller.stub!(:check_admin).and_return(true)
     @current_user = User.make
@@ -9,7 +9,7 @@ describe 'uses_admin', :shared => true do
   end
 end
 
-describe 'uses_login', :shared => true do
+shared_examples_for 'uses_login' do
   before(:each) do
     @current_user = User.make
     @current_user.stub!(:admin?).and_return(false)
