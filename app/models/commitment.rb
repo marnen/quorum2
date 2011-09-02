@@ -4,6 +4,6 @@ class Commitment < ActiveRecord::Base
   validates_presence_of :event_id
   validates_presence_of :user_id
   
-  named_scope :attending, :conditions => {:status => true}
-  named_scope :not_attending, :conditions => {:status => false}
+  scope :attending, :conditions => {:status => true}
+  scope :not_attending, :conditions => {:status => false}
 end
