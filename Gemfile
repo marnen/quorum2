@@ -23,7 +23,7 @@ gem 'rails', '3.0.10'
 
 gem 'haml'
 gem 'sass'
-gem 'postgres'
+gem 'pg'
 gem 'fast_gettext'
 gem 'prawn'
 gem 'GeoRuby'
