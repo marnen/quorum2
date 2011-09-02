@@ -6,7 +6,7 @@
   = h(_("Your personal %{RSS_feed} for this page is available at %{URL}")) % {:RSS_feed => link_to(h(_('RSS feed')), rss_url), :URL => content_tag(:span, h(rss_url), :class => :url)}
   %br
   = h(_("If you'd like to change that URL and disable any previous access, we can %{regenerate_it}.")) % {:regenerate_it => link_to(h(_('regenerate it')), regenerate_key_path)}
-- form_tag url_for(:overwrite_params => {}), :method => :get do
+- form_tag url_for(params), :method => :get do
   - fields_for :search do |s|
     %table.search
       %tr
@@ -44,7 +44,7 @@
           %td= s.select(:calendar_id, User.current_user.calendars.collect{|c| [c, c.id.to_s]}, {:include_blank => _('[All calendars]')})
   = submit_tag(h(_('Search')), :name => nil)
   - if @events.collect{|e| e.calendar}.uniq.size == 1
-    %p.pdf= h(_("Generate attendance report for these events (%{PDF})")) % {:PDF => link_to(h(_('PDF')), "#{url_for(:overwrite_params => {:format => :pdf})}")}
+    %p.pdf= h(_("Generate attendance report for these events (%{PDF})")) % {:PDF => link_to(h(_('PDF')), "#{url_for(params.merge :format => :pdf)}")}
 %table.events
   = render :partial => 'table_header'
   = render :partial => 'event', :collection => @events

@@ -45,7 +45,7 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :session_key => '_quorum2_session',
+    :key => '_quorum2_session',
     :secret      => 'e48efe5e6da0b774cbb06907a8f9862c4f2a670abf5b631208622f4cf3c84be0eb61f0b2f33849c08d8d8f4cf322259583e2d92aa40f13003c3aecd30cacc338'
   }
 

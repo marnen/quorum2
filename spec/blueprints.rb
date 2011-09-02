@@ -83,10 +83,10 @@ Sham.define do
   firstname {Faker::Name.first_name}
   lastname {Faker::Name.last_name}
   generic_name {Faker::Name.last_name}
-  password {(1..(rand(15) + 4)).map{(32..127).to_a.rand.chr}.join}
+  password {(1..(rand(15) + 4)).map{(32..127).to_a.sample.chr}.join}
   street {Faker::Address.street_address}
   street2 {Faker::Address.secondary_address}
   zip {Faker::Address.zip_code}
-  code {LETTERS.rand + LETTERS.rand} # 2 random letters
+  code {LETTERS.sample + LETTERS.sample} # 2 random letters
   event_name {Faker::Lorem.words(3).join(' ')}
 end
