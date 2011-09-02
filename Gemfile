@@ -25,5 +25,5 @@ group :test do
   gem "cucumber", "~> 0.3.101", :require => false
   gem 'webrat', '>= 0.4.3', :require => false
   gem 'machinist', '>= 1.0.3'
-  gem 'faker'
+  gem 'ffaker'
 end

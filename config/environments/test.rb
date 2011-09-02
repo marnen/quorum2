@@ -29,4 +29,4 @@ config.gem "cucumber", :lib => false, :version => ">=0.2.2"
 
 # For Machinist...
 config.gem 'machinist', :version => ">=1.0.3"
-config.gem 'faker'
+config.gem 'ffaker'
