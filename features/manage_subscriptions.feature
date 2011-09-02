@@ -30,5 +30,5 @@ Feature: Manage subscriptions
     And I am subscribed to "Someone else's calendar"
     And I am on the homepage
     When I follow "Subscriptions"
-    Then I should see something matching "\bunsubscribe\W+Someone else's calendar"
+    Then I should see /\bunsubscribe\W+Someone else's calendar/
     
