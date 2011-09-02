@@ -70,7 +70,7 @@ describe EventsController, "index" do
 end
 
 describe EventsController, "feed.rss" do
-  integrate_views
+  render_views
   
   before(:each) do
     user = User.make
@@ -140,7 +140,7 @@ describe EventsController, "feed.rss" do
 end
 
 describe EventsController, "feed.rss (login)" do
-  integrate_views
+  render_views
   
   it "should not list any events if given an invalid single_access_token" do
     User.stub!(:find_by_single_access_token).and_return(nil)

@@ -12,7 +12,7 @@ describe PermissionsController do
 end
 
 describe PermissionsController, 'index' do
-  integrate_views
+  render_views
   
   before(:each) do
     @user = Role.make(:name => 'user')
@@ -77,7 +77,7 @@ describe PermissionsController, 'index' do
 end
 
 describe PermissionsController, 'index (no subscribed calendars)' do  
-  integrate_views
+  render_views
   
   it 'should show all available calendars under "unsubscribed"' do
     @current_user = User.make(:id => 20, :email => 'no_permissions@gmail.com')

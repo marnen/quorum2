@@ -166,7 +166,7 @@ describe UsersController, '(regenerate_key)' do
 end
 
 describe UsersController, '(reset)' do
-  integrate_views
+  render_views
   
   before(:each) do
     get :reset
@@ -187,7 +187,7 @@ describe UsersController, '(reset)' do
 end
 
 describe UsersController, '(reset/POST)' do
-  integrate_views
+  render_views
   
   it "should give an error message if e-mail isn't valid" do
     User.should_receive(:find_by_email).and_return(nil)

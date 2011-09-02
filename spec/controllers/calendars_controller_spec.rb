@@ -65,7 +65,7 @@ end
 
 describe CalendarsController, 'edit' do
   it_should_behave_like 'uses_admin'
-  integrate_views
+  render_views
   
   before(:each) do
     @calendar = mock_model(Calendar, :id => 1, :name => 'Calendar 1')

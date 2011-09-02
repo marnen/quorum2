@@ -13,7 +13,7 @@ def admin_role
 end
 
 describe AdminController, "(index)" do
-  integrate_views
+  render_views
   
   before(:each) do
     session = UserSession.create User.make
