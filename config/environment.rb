@@ -65,15 +65,7 @@ Rails::Initializer.run do |config|
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
   
-  # Gem versions can go here.
-  config.gem 'haml', :version => '= 2.1.0'
-  config.gem 'GeoRuby', :lib => 'geo_ruby'
-  
-  config.gem 'fast_gettext', :lib => 'fast_gettext'
-  
-  config.gem 'rdiscount', :version => '>= 1.2.11'
-  
-  config.gem 'authlogic', :version => '>= 2.1.2'
+  # No more config.gem; we're using Bundler now!
   
   # Set app to Eastern time for now -- we'll have configurable time zones soon enough
   config.time_zone = 'Eastern Time (US & Canada)'
