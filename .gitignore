@@ -1,4 +1,5 @@
 coverage
+.bundle/*
 log/*
 tmp/*
 doc
