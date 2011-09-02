@@ -47,39 +47,48 @@ Quorum2::Application.routes.draw do
   #   end
 
   # For restful_authentication:
-  map.resources :users
-  map.resource :user_session
+  resources :users
+  resource :user_session
   
   # And some prettification...
-  map.login 'login', :controller => 'user_sessions', :action => 'new'
-  map.logout 'logout', :controller => 'user_sessions', :action => 'destroy'
-  map.register 'register', :controller => 'users', :action => 'new'
-  map.reset_password 'reset', :controller => 'users', :action => 'reset'
-  map.regenerate_key 'regenerate_key', :controller => 'users', :action => 'regenerate_key'
-  
-  map.profile 'profile', :controller => 'users', :action => 'edit'
+  match 'login' => 'user_sessions#new', :as => :login
+  match 'logout' => 'user_sessions#destroy', :as => :logout
+  match 'register' => 'users#new', :as => :register
+  match 'reset' => 'users#reset', :as => :reset_password
+  match 'regenerate_key' => 'users#regenerate_key', :as => :regenerate_key
+
+  match 'profile' => 'users#edit', :as => :profile
+
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   # root :to => "welcome#index"
 
-  map.root :controller => 'events'
+  match '/' => 'events#index'
+
+  match 'events/index' => 'events#index'
   
-  map.connect 'events/index', :controller => 'events', :action => 'index'
+  match 'events/feed.:fmt/:key' => 'events#feed', :as => :feed_events
+  resources :events
+
+  resources :permissions do
+    member do
+      get :destroy
+    end
+  end
+  resources :calendars
   
-  map.feed_events 'events/feed.:fmt/:key', :controller => 'events', :action => 'feed' # can't use :format with this URL syntax
-  map.resources :events
-  
-  map.resources :permissions, :member => {:destroy => :get}
-  map.resources :calendars
-  
-  map.subscriptions 'subscriptions', :controller => 'permissions', :action => 'index'
-  map.subscribe 'subscribe/:calendar_id', :controller => 'permissions', :action => 'subscribe'
+  match 'subscriptions' => 'permissions#index', :as => :subscriptions
+  match 'subscribe/:calendar_id' => 'permissions#subscribe', :as => :subscribe
   
   # Some stuff for sorting the event list
-  map.connect 'events/index/:order/:direction', :controller => 'events', :action => 'index', :direction => /(a|de)sc/, :defaults => {:order => 'date', :direction => 'asc'}
+  match 'events/index/:order/:direction' => 'events#index', :direction => /(a|de)sc/, :defaults => { :order => 'date', :direction => 'asc' }
   
-  map.connect ':controller', :action => 'index'
+  match ':controller' => '#index'
+
+  match ':controller/:id/:action' => '#index'
+  match '/:controller(/:action(/:id))'
+  match ':controller/:action' => '#index'
 
   # See how all your routes lay out with "rake routes"
 
