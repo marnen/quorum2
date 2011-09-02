@@ -48,8 +48,8 @@ describe CalendarsController, 'create' do
   it_should_behave_like 'uses_login'
   
   before(:each) do
-    @plan = Calendar.plan(:name => 'Test calendar')
-    post :create, :calendar => @plan
+    @calendar = Calendar.make(:name => 'Test calendar')
+    post :create, :calendar => @calendar
   end
   
   it 'should not require admin permissions' do
@@ -57,7 +57,7 @@ describe CalendarsController, 'create' do
   end
   
   it 'should create admin permissions on the new calendar' do
-    cal = Calendar.find_by_name(@plan[:name])
+    cal = Calendar.find_by_name(@calendar[:name])
     cal.should_not be_nil
     Permission.find_by_calendar_id_and_user_id(cal.id, @current_user.id).should_not be_nil
   end
