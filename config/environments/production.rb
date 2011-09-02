@@ -51,14 +51,4 @@ Quorum2::Application.configure do
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :smtp
-  smtp = APP_CONFIG['smtp']
-  config.action_mailer.smtp_settings = {
-    :enable_starttls_auto => true,
-    :address => smtp['address'],
-    :port => smtp['port'],
-    :user_name => smtp['user_name'],
-    :password => smtp['password'],
-    :authentication => (smtp['authentication'] || :plain)
-  }
-
 end
