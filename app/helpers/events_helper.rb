@@ -48,11 +48,12 @@ module EventsHelper
   end
   
   # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
+  # TODO: figure out how to make this html_safe!
   def event_map(event, hostname)
     return nil if event.nil?
     
-    @extra_headers = @extra_headers.to_s 
-    @extra_headers << GMap.header(:host => hostname).to_s << javascript_include_tag('events/map')
+    @extra_headers ||= ''.html_safe
+    @extra_headers << GMap.header(:host => hostname).to_s.html_safe << javascript_include_tag('events/map').html_safe
 
     map = GMap.new(:map)
     result = ''
@@ -108,8 +109,9 @@ module EventsHelper
   end
   
   # Generates a hint to use Markdown for formatting.
+  # TODO: make this work as html_safe properly.
   def markdown_hint
-    content_tag(:span, h(_('(use %{Markdown} for formatting)')) % {:Markdown => link_to(h(_('Markdown')), 'http://daringfireball.net/projects/markdown/basics', :target => 'markdown')}, :class => :hint)
+    content_tag(:span, _('(use %{Markdown} for formatting)') % {:Markdown => link_to(_('Markdown'), 'http://daringfireball.net/projects/markdown/basics', :target => 'markdown')}, :class => :hint)
   end
   
   # Generates an RSS URL for the current user's events feed.
