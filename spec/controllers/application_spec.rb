@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe ApplicationController, "(admin?)" do
   it "should return nil if current user is nil or false" do

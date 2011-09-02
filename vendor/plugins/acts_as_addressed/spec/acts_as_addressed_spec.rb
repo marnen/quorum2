@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require 'spec_helper'
 
 describe Acts::Addressed, "inclusion" do
   it "should extend SingletonMethods when module is included" do

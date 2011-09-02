@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe Commitment, "(general properties)" do
   it "should belong to an Event" do

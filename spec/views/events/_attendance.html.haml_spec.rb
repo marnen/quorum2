@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../spec_helper'
+require 'spec_helper'
 
 include ERB::Util
 include ActionView::Helpers::UrlHelper

@@ -1,4 +1,4 @@
-require File.expand_path("../spec_helper", File.dirname(__FILE__))
+require 'spec_helper'
 
 FastGettext.silence_errors
 require 'gettext_i18n_rails/haml_parser'
