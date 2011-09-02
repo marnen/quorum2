@@ -49,7 +49,6 @@ protected
   end
   
   def set_gettext_locale
-    FastGettext.text_domain = SITE_TITLE
     FastGettext.available_locales = ['en'] #all you want to allow
     begin
       super
