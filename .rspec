@@ -2,8 +2,5 @@
 --format
 progress
 --format
-html:spec-results/index.html
---loadby
-mtime
---reverse
+html --out spec-results/index.html
 --debugger
