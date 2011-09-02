@@ -16,7 +16,6 @@ set :user, "capistrano"
 set :scm, :git
 set :branch, :master
 set :deploy_via, :remote_cache
-set :git_enable_submodules, 1
 
 =begin
 set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN 
