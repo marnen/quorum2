@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UserSessionsController do
   it 'logins and redirects' do
-    user = User.make
+    user = User.make!
     post :create, :user_session => {:email => user.email, :password => user.password}
     UserSession.find.should_not be_nil
     response.should be_redirect
@@ -15,7 +15,7 @@ describe UserSessionsController do
   end
 
   it 'logs out' do
-    UserSession.create User.make
+    UserSession.create User.make!
     delete :destroy
     UserSession.find.should be_nil
     response.should be_redirect

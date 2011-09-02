@@ -16,14 +16,14 @@ describe AdminController, "(index)" do
   render_views
   
   before(:each) do
-    session = UserSession.create User.make
-    @one = Calendar.make(:id => 1)
-    @two = Calendar.make(:id => 2)
+    session = UserSession.create User.make!
+    @one = Calendar.make!(:id => 1)
+    @two = Calendar.make!(:id => 2)
     session.destroy
 
-    @current_user = User.make do |u|
-      u.permissions.make(:calendar => @one)
-      u.permissions.make(:admin, :calendar => @two)
+    @current_user = User.make! do |u|
+      u.permissions.make!(:calendar => @one)
+      u.permissions.make!(:admin, :calendar => @two)
     end
     
     UserSession.create @current_user

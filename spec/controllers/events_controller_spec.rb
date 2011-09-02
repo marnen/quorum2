@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe EventsController, "index" do
   before(:each) do
-    UserSession.create User.make
+    UserSession.create User.make!
   end
   
   it "should be successful" do
@@ -73,11 +73,11 @@ describe EventsController, "feed.rss" do
   render_views
   
   before(:each) do
-    user = User.make
+    user = User.make!
     User.stub!(:current_user).and_return(user) # we need this for some of the callbacks on Calendar and Event
-    @calendar = Calendar.make
-    @one = Event.make(:name => 'Event 1', :calendar => @calendar, :date => Date.civil(2008, 7, 4), :description => 'The first event.', :created_at => 1.week.ago)
-    @two = Event.make(:name => 'Event 2', :calendar => @calendar, :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :created_at => 2.days.ago)
+    @calendar = Calendar.make!
+    @one = Event.make!(:name => 'Event 1', :calendar => @calendar, :date => Date.civil(2008, 7, 4), :description => 'The first event.', :created_at => 1.week.ago)
+    @two = Event.make!(:name => 'Event 2', :calendar => @calendar, :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :created_at => 2.days.ago)
     @events = [@one, @two]
     controller.stub!(:current_objects).and_return(@events)
     get :feed, :format => 'rss', :key => user.single_access_token
@@ -150,10 +150,10 @@ describe EventsController, "feed.rss (login)" do
   end
   
   it "should list events if given a valid single_access_token" do
-    @user = User.make
+    @user = User.make!
     UserSession.create @user
-    calendar = Calendar.make # @user will be subscribed to
-    @events = (1..5).map{Event.make(:calendar => calendar)}
+    calendar = Calendar.make! # @user will be subscribed to
+    @events = (1..5).map{Event.make!(:calendar => calendar)}
     User.stub!(:find_by_single_access_token).and_return(@user)
     Event.should_receive(:find).and_return(@events)
     get :feed, :format => 'rss', :key => @user.single_access_token
@@ -163,7 +163,7 @@ end
 
 describe EventsController, 'index.pdf' do
   before(:each) do
-    UserSession.create User.make
+    UserSession.create User.make!
     controller.stub!(:current_objects).and_return([mock_model(Event, :null_object => true)])
   end
   
@@ -190,13 +190,13 @@ end
 
 describe EventsController, "change_status" do
   before(:each) do
-    @user = User.make
+    @user = User.make!
     UserSession.create @user
   end
   
   it "should change attendance status for current user if called with a non-nil event id" do
-    event = Event.make
-    commitment = Commitment.make(:user => @user, :event => event, :status => true)
+    event = Event.make!
+    commitment = Commitment.make!(:user => @user, :event => event, :status => true)
     id = event.id
     status = :yes # could also be :no or :maybe
     Event.should_receive(:find_by_id).with(id.to_s).once.and_return(event)
@@ -212,7 +212,7 @@ describe EventsController, "change_status" do
   end
   
   it "should render an event row on an Ajax request" do
-    event = Event.make
+    event = Event.make!
     request.stub!(:xhr?).and_return(true)
     get "change_status", :id => event.id, :status => 'yes' # status could also be :no or :maybe
     response.should render_template('_event') # with :locals => {:event => event}, but I can't figure out how to test for that
@@ -221,7 +221,7 @@ end
 
 describe EventsController, "new" do
   before(:each) do
-    @session = UserSession.create User.make
+    @session = UserSession.create User.make!
   end
   
   it "should require login" do
@@ -267,7 +267,7 @@ end
 
 describe EventsController, "create" do
   before(:each) do
-    UserSession.create User.make
+    UserSession.create User.make!
   end
   
   it "should save an Event object" do
@@ -285,7 +285,7 @@ end
 
 describe EventsController, "edit" do
   before(:each) do
-    @event = Event.make
+    @event = Event.make!
     @admin = admin_user(@event.calendar)
     UserSession.create @admin
   end
@@ -371,11 +371,11 @@ end
 
 describe EventsController, "show" do
   before(:each) do
-    UserSession.create User.make
+    UserSession.create User.make!
   end
   
   it "should set the page title" do
-    @event = Event.make
+    @event = Event.make!
     @event.should_receive(:allow?).with(:show).at_least(:once).and_return(true)
     Event.should_receive(:find).at_least(:once).and_return(@event)
     get :show, :id => @event.id
@@ -395,13 +395,13 @@ end
 
 describe EventsController, "delete" do
   before(:each) do
-    @calendar = Calendar.make
-    @event = Event.make(:calendar => @calendar)
+    @calendar = Calendar.make!
+    @event = Event.make!(:calendar => @calendar)
     @id = @event.id
   end
   
   it "should not work from non-admin account" do
-    UserSession.create User.make
+    UserSession.create User.make!
     @event.should_not_receive(:hide)
     post 'delete', :id => @id
     flash[:error].should_not be_nil
@@ -419,8 +419,8 @@ end
 
 describe EventsController, "map" do
   before(:each) do
-    UserSession.create User.make
-    @one = Event.make
+    UserSession.create User.make!
+    @one = Event.make!
   end
   
   it "should use the map view" do
@@ -463,9 +463,9 @@ end
 
 describe EventsController, "export" do
   before(:each) do
-    user = User.make
+    user = User.make!
     UserSession.create user
-    @my_event = Event.make
+    @my_event = Event.make!
     Event.should_receive(:find).with(@my_event.id.to_i).and_return(@my_event)
   end
   
@@ -487,9 +487,9 @@ end
 
 # Returns a User with admin permissions on the specified Calendar.
 def admin_user(calendar)
-  User.make do |user|
+  User.make! do |user|
     user.permissions.destroy_all
-    user.permissions.make(:admin, :calendar => calendar)
+    user.permissions.make!(:admin, :calendar => calendar)
   end
 end
 

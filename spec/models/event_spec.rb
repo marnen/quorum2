@@ -57,7 +57,7 @@ describe Event, "(general properties)" do
     aggr = Event.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = Acts::Addressed::State.make
+    state = Acts::Addressed::State.make!
     opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
     e = Event.new(opts)
     e.address.should == Acts::Addressed::Address.new(opts)
@@ -69,9 +69,9 @@ describe Event, "(general properties)" do
   end
   
   it "should exclude deleted events on find" do
-    undeleted = Event.make
+    undeleted = Event.make!
     begin
-      deleted = Event.make(:deleted => true)
+      deleted = Event.make!(:deleted => true)
     rescue ActiveRecord::RecordNotFound
       # don't worry about it -- since default_scope excludes this record, it won't be found.
     end
@@ -89,9 +89,9 @@ end
 describe Event, "(allow?)" do
   before(:each) do
     @event = Event.new(:calendar => mock_model(Calendar, :id => 27))
-    @alien = User.make{|u| u.permissions.make(:calendar => mock_model(Calendar, :id => 999))}
-    @nonadmin = User.make{|u| u.permissions.make(:calendar => @event.calendar)}
-    @admin = User.make{|u| u.permissions.make(:calendar => @event.calendar, :role => Role.make(:admin))}
+    @alien = User.make!{|u| u.permissions.make!(:calendar => mock_model(Calendar, :id => 999))}
+    @nonadmin = User.make!{|u| u.permissions.make!(:calendar => @event.calendar)}
+    @admin = User.make!{|u| u.permissions.make!(:calendar => @event.calendar, :role => Role.make!(:admin))}
   end
   
   it "should exist with one argument" do
@@ -115,10 +115,10 @@ describe Event, "(allow?)" do
   end
   
   it "should return true for :show iff current user has any role for the event's calendar" do
-    User.stub!(:current_user).and_return(User.make{|u| u.permissions.make(:calendar => @event.calendar, :role => Role.make(:name => 'anything'))})
+    User.stub!(:current_user).and_return(User.make!{|u| u.permissions.make!(:calendar => @event.calendar, :role => Role.make!(:name => 'anything'))})
     @event.allow?(:show).should == true
 
-    User.stub!(:current_user).and_return(User.make{|u| u.permissions.make(:calendar => mock_model(Calendar, :id => 37), :role => Role.make(:name => 'anything'))})
+    User.stub!(:current_user).and_return(User.make!{|u| u.permissions.make!(:calendar => mock_model(Calendar, :id => 37), :role => Role.make!(:name => 'anything'))})
     @event.allow?(:show).should == false
   end
   
@@ -136,8 +136,8 @@ end
 
 describe Event, "(change_status!)" do
   before(:each) do
-    @event = Event.make
-    @user = User.make
+    @event = Event.make!
+    @user = User.make!
   end
   
   it "should be valid" do
@@ -145,7 +145,7 @@ describe Event, "(change_status!)" do
   end
   
   it "should change the status on the already existing commitment if one exists" do
-    commitment = @event.commitments.make(:user => @user, :status => true)
+    commitment = @event.commitments.make!(:user => @user, :status => true)
     id = commitment.id
     [false, nil, true].each do |status|
       @event.change_status!(@user, status)
@@ -163,7 +163,7 @@ end
 
 describe Event, "(find_committed)" do
   before(:each) do
-    @event = Event.make
+    @event = Event.make!
     @find = @event.method(:find_committed)
   end
   
@@ -173,11 +173,11 @@ describe Event, "(find_committed)" do
   end
   
   it "should get a collection of Users when called with :yes or :no" do
-    @attending = User.make do |u|
-      u.commitments.make(:event => @event, :status => true)
+    @attending = User.make! do |u|
+      u.commitments.make!(:event => @event, :status => true)
     end
-    @not_attending = User.make do |u|
-      u.commitments.make(:event => @event, :status => false)
+    @not_attending = User.make! do |u|
+      u.commitments.make!(:event => @event, :status => false)
     end
     @find[:yes].should == [@attending]
     @find[:no].should == [@not_attending]
@@ -185,12 +185,12 @@ describe Event, "(find_committed)" do
   
   it 'should sort the Users on lastname or, failing that, email' do
     [true, false].each do |status|  
-      a = User.make(:lastname => 'a')
-      b = User.make(:email => 'b@b.com', :lastname => nil)
-      c = User.make(:lastname => 'c')
+      a = User.make!(:lastname => 'a')
+      b = User.make!(:email => 'b@b.com', :lastname => nil)
+      c = User.make!(:lastname => 'c')
       users = [c, a, b]
       users.each do |u|
-        u.commitments.make(:event => @event, :status => status)
+        u.commitments.make!(:event => @event, :status => status)
       end
   
       @find[status ? :yes : :no].should == [a, b, c]
@@ -251,7 +251,7 @@ describe Event, "(validations)" do
 =end
 
   it "should assign current_user to created_by" do
-    user = User.make
+    user = User.make!
     User.stub!(:current_user).and_return user
     @event.created_by_id = nil
     @event.save!
@@ -301,7 +301,7 @@ describe Event, "(geographical features)" do
   end 
   
   it "should clear coords on update" do
-    User.stub!(:current_user).and_return(User.make)
+    User.stub!(:current_user).and_return(User.make!)
     @event.update_attributes(Event.plan)
     @event.should_receive(:coords=)
     @event.update_attributes(:name => 'foo')

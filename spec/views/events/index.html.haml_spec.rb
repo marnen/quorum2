@@ -10,9 +10,9 @@ describe "/events/index" do
   end
 
   before(:each) do
-    @events = (1..10).map{Event.make}
+    @events = (1..10).map{Event.make!}
     assigns[:events] = @events
-    @user = User.make
+    @user = User.make!
     assigns[:current_user] = @user
     User.stub!(:current_user).and_return @user
   end
@@ -46,7 +46,7 @@ describe "/events/index" do
   end
   
   it "should have a calendar option on the limiting form iff user has multiple calendars" do
-    User.current_user.stub!(:calendars).and_return((1..2).map{Calendar.make})
+    User.current_user.stub!(:calendars).and_return((1..2).map{Calendar.make!})
     render 'events/index'
     form = "form[action=#{url_for(params.merge :escape => false)}][method=get]"
     response.should have_tag("#{form} select") do |selects|

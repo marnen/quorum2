@@ -6,7 +6,7 @@ include EventsHelper
 
 describe 'events/_attendance' do
   before(:each) do
-    render :partial => 'events/attendance', :locals => {:event => Event.make}
+    render :partial => 'events/attendance', :locals => {:event => Event.make!}
   end
   
   it "should have a select element for event" do

@@ -1,6 +1,5 @@
 RSpec.configure do |config|
   config.before(:each) do
-    # Reset Shams for Machinist.
-    Sham.reset
+    Machinist.reset_before_test
   end
 end

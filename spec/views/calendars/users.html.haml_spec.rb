@@ -21,7 +21,7 @@ describe "/calendars/users" do
     @all_users.each do |u|
       p = u.permissions[0]
       u.permissions.stub!(:find_by_calendar_id).and_return(p)
-      u.stub!(:state).and_return Acts::Addressed::State.make
+      u.stub!(:state).and_return Acts::Addressed::State.make!
       u.stub!(:street).and_return('123 Main Street')
       u.stub!(:street2).and_return('x')
       u.stub!(:city).and_return('Somewhere')

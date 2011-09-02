@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe EventsHelper do
   before(:each) do
-    @event = Event.make
+    @event = Event.make!
   end
   
   # refactor from list.html.erb_spec into here?
@@ -39,7 +39,7 @@ describe EventsHelper do
   end
 =end
   it "should generate a comma-separated list of names from an array of users" do
-    users = (1..5).map{User.make}
+    users = (1..5).map{User.make!}
     names = helper.list_names users
     users.each do |user|
       names.should include(user.to_s)
@@ -47,11 +47,11 @@ describe EventsHelper do
   end
   
   it "should get an attendance status for an event and a user" do
-    helper.attendance_status(@event, User.make).should == :maybe
+    helper.attendance_status(@event, User.make!).should == :maybe
   end
   
   it "should generate a distance string from an event to a user's coords," do
-    marnen = User.make(:coords => Point.from_x_y(5, 10)) # arbitrary coordinates
+    marnen = User.make!(:coords => Point.from_x_y(5, 10)) # arbitrary coordinates
     @event.coords = marnen.coords
     helper.distance_string(@event, marnen).should =~ /\D\d(\.\d+)? miles/
     user = User.new
@@ -75,11 +75,11 @@ end
 
 describe EventsHelper, "event_map" do
   before(:each) do
-    User.stub!(:current_user).and_return(User.make)
+    User.stub!(:current_user).and_return(User.make!)
   end
   
   it "should set up a GMap with all the options" do
-    event = Event.make
+    event = Event.make!
 
     # TODO: since this code is now in events/map.js , translate these specs into JavaScript!
 =begin
@@ -120,7 +120,7 @@ describe EventsHelper, "event_map" do
 end
 
 describe EventsHelper, "ical_escape" do
-  it "should make newlines into '\n'" do
+  it "should make! newlines into '\n'" do
     helper.ical_escape("a\na").should == 'a\\na'
   end
   
@@ -150,7 +150,7 @@ end
 
 describe EventsHelper, "rss_url" do
   it "should return the RSS feed URL for the current user" do
-    user = User.make
+    user = User.make!
     User.current_user = user
     helper.rss_url.should == feed_events_url(:fmt => :rss, :key => user.single_access_token)
   end

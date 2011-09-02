@@ -6,15 +6,15 @@ include EventsHelper
 
 describe 'events/_event' do
   before(:each) do
-    @event = Event.make(:description => 'Testing use of *Markdown*.')
-    @user = User.make
+    @event = Event.make!(:description => 'Testing use of *Markdown*.')
+    @user = User.make!
     User.stub!(:current_user).and_return @user
   end
   
   it "should contain edit and delete links for the event, if the current user is an admin" do
-    admin = User.make do |u|
+    admin = User.make! do |u|
       u.permissions.destroy_all
-      u.permissions.make(:admin, :calendar => @event.calendar)
+      u.permissions.make!(:admin, :calendar => @event.calendar)
     end
     User.stub!(:current_user).and_return admin
     
@@ -27,8 +27,8 @@ describe 'events/_event' do
   end
 
   it 'should contain calendar names for events, if the current user has more than one calendar' do
-    @one = Calendar.make
-    @user.stub!(:calendars).and_return([@one, Calendar.make])
+    @one = Calendar.make!
+    @user.stub!(:calendars).and_return([@one, Calendar.make!])
     @event.stub!(:calendar).and_return(@one)
     
     render_view
@@ -36,7 +36,7 @@ describe 'events/_event' do
   end
   
   it 'should not contain calendar names for events, if the current user has only one calendar' do
-    @one = Calendar.make
+    @one = Calendar.make!
     @user.stub!(:calendars).and_return([@one])
     @event.stub!(:calendar).and_return(@one)
     
@@ -130,7 +130,7 @@ describe 'events/_event' do
       response.should have_tag("#event_#{event.id} a[href=" << url << "]")
     end
 =end
-    @user.permissions.make(:calendar => @event.calendar)
+    @user.permissions.make!(:calendar => @event.calendar)
     @event.created_by = @user
     render_view
     url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
@@ -138,8 +138,8 @@ describe 'events/_event' do
   end
   
   it "should not contain an edit link for events that the current (non-admin) user created" do
-    @user.permissions.make(:calendar => @event.calendar)
-    @event.created_by = User.make # some other guy
+    @user.permissions.make!(:calendar => @event.calendar)
+    @event.created_by = User.make! # some other guy
     render_view
     url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
     response.should_not have_tag("#event_#{@event.id} a[href=" << url << "]")

@@ -35,7 +35,7 @@ module Acts::Addressed
     describe '(constructor)' do
       before(:each) do
         @point = mock('Point')
-        @state = State.make
+        @state = State.make!
       end
       
       it "should set all options passed in on legitimate field keys in a Hash" do
@@ -70,7 +70,7 @@ module Acts::Addressed
       end
       
       it "should treat the state argument as a state_id -- and retrieve a State object -- if it wasn't passed a State object in the first place" do
-        ny = State.make
+        ny = State.make!
         State.should_receive(:find).with(ny.id).exactly(:once).and_return(ny)
         a = Address.new(:state => ny.id)
         a.state.should == ny
@@ -82,7 +82,7 @@ module Acts::Addressed
     describe '(methods)' do
       describe '==' do
         it "should only compare value, not object identity" do
-          opts = {:street => 'street', :zip => 'zip', :state => State.make}
+          opts = {:street => 'street', :zip => 'zip', :state => State.make!}
           a = Address.new(opts)
           b = Address.new(opts)
           a.should_not equal b # object identity
@@ -106,8 +106,8 @@ module Acts::Addressed
         end
         
         it "should return self.state.country if self.state is not nil" do
-          country = Country.make
-          Address.new(:state => country.states.make).country.should == country
+          country = Country.make!
+          Address.new(:state => country.states.make!).country.should == country
         end
         
         it "should not complain if methods are called on it, even if nil" do
@@ -123,7 +123,7 @@ module Acts::Addressed
         end
         
         it "should return the state if there is one" do
-          state = State.make
+          state = State.make!
           a = Address.new(:state => state)
           a.state.should == state
         end
@@ -137,7 +137,7 @@ module Acts::Addressed
       
       describe '(geographical features)' do
         before(:each) do
-          @a = Address.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :state => State.make, :zip => '12345', :coords => nil)
+          @a = Address.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :state => State.make!, :zip => '12345', :coords => nil)
         end
         
         it "should create a string for the geocodable address parts" do

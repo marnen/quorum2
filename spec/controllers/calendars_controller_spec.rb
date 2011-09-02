@@ -3,7 +3,7 @@ require 'spec_helper'
 shared_examples_for 'uses_admin' do
   before(:each) do
     controller.stub!(:check_admin).and_return(true)
-    @current_user = User.make
+    @current_user = User.make!
     @current_user.stub!(:admin?).and_return(true)
     UserSession.create @current_user
   end
@@ -11,7 +11,7 @@ end
 
 shared_examples_for 'uses_login' do
   before(:each) do
-    @current_user = User.make
+    @current_user = User.make!
     @current_user.stub!(:admin?).and_return(false)
     UserSession.create @current_user
   end
