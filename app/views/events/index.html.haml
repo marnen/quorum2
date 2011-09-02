@@ -3,48 +3,48 @@
 - content_for :javascript do
   = javascript_include_tag :defaults, 'lowpro/lowpro', 'events/index'
 %p.rss
-  = h(_("Your personal %{RSS_feed} for this page is available at %{URL}")) % {:RSS_feed => link_to(h(_('RSS feed')), rss_url), :URL => content_tag(:span, h(rss_url), :class => :url)}
+  != _("Your personal %{RSS_feed} for this page is available at %{URL}") % {:RSS_feed => link_to(_('RSS feed'), rss_url), :URL => content_tag(:span, h(rss_url), :class => :url)}
   %br
-  = h(_("If you'd like to change that URL and disable any previous access, we can %{regenerate_it}.")) % {:regenerate_it => link_to(h(_('regenerate it')), regenerate_key_path)}
-- form_tag url_for(params), :method => :get do
-  - fields_for :search do |s|
+  != _("If you'd like to change that URL and disable any previous access, we can %{regenerate_it}.") % {:regenerate_it => link_to(_('regenerate it'), regenerate_key_path)}
+= form_tag url_for(params), :method => :get do
+  = fields_for :search do |s|
     %table.search
       %tr
-        %th&= _('From:')
+        %th= _('From:')
         %td
           %label
             = s.radio_button :from_date_preset, 'today', :checked => true
-            &= _('Today')
+            = _('Today')
         %td
           %label
             = s.radio_button :from_date_preset, 'earliest'
-            &= _('Earliest event')
+            = _('Earliest event')
         %td
           %label
             = s.radio_button :from_date_preset, 'other'
-            &= _('Other date:')
+            = _('Other date:')
             = s.date_select(:from_date, :order => [:day, :month, :year])
       %tr
-        %th&= _('To:')
+        %th= _('To:')
         %td
           &nbsp;
           / blank
         %td
           %label
             = s.radio_button :to_date_preset, 'latest', :checked => true
-            &= _('Latest event')
+            = _('Latest event')
         %td
           %label
             = s.radio_button :to_date_preset, 'other'
-            &= _('Other date:')
+            = _('Other date:')
           = s.date_select(:to_date, :order => [:day, :month, :year])
       - if User.current_user.calendars.size > 1
         %tr
-          %th&= _('Calendar:')
+          %th= _('Calendar:')
           %td= s.select(:calendar_id, User.current_user.calendars.collect{|c| [c, c.id.to_s]}, {:include_blank => _('[All calendars]')})
-  = submit_tag(h(_('Search')), :name => nil)
+  = submit_tag(_('Search'), :name => nil)
   - if @events.collect{|e| e.calendar}.uniq.size == 1
-    %p.pdf= h(_("Generate attendance report for these events (%{PDF})")) % {:PDF => link_to(h(_('PDF')), "#{url_for(params.merge :format => :pdf)}")}
+    %p.pdf!= _("Generate attendance report for these events (%{PDF})") % {:PDF => link_to(_('PDF'), "#{url_for(params.merge :format => :pdf)}")}
 %table.events
   = render :partial => 'table_header'
   = render :partial => 'event', :collection => @events
