@@ -12,6 +12,7 @@ gem 'authlogic', '>= 2.1.2'
 
 group :development do
   gem 'gettext', '>= 1.9.3', :require => false
+  gem 'capistrano', :require => false
 end
 
 group :test, :development do
