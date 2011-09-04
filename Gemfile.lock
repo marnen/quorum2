@@ -34,8 +34,6 @@ GEM
     authlogic (3.0.3)
       activerecord (>= 3.0.7)
       activerecord (>= 3.0.7)
-    autotest (4.4.6)
-      ZenTest (>= 4.4.1)
     autotest-rails (4.1.0)
       ZenTest
     builder (2.1.2)
@@ -154,7 +152,6 @@ PLATFORMS
 DEPENDENCIES
   GeoRuby
   authlogic (~> 3.0.3)
-  autotest
   autotest-rails
   cucumber-rails
   ffaker
