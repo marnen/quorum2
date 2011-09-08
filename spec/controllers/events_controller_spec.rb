@@ -165,26 +165,34 @@ end
 
 describe EventsController, 'index.pdf' do
   before(:each) do
-    UserSession.create FactoryGirl.create(:user)
-    controller.stub!(:current_objects).and_return([mock_model(Event, :null_object => true)])
+    @user = Factory(:user)
+    UserSession.create @user
+    User.stub(:current_user).and_return @user
+    request.env["SERVER_PROTOCOL"] = "http" # see http://iain.nl/prawn-and-controller-tests
   end
   
-  it "should be successful" do
-    get :index, :format => 'pdf'
-    response.should be_success
-  end
+  context 'generic events' do
+    before :each do
+      event = Factory :event
+      Factory(:permission, :calendar => event.calendar, :user => @user)
+      controller.stub!(:current_objects).and_return([event])
+    end
   
-  it "should return the appropriate MIME type for a PDF file" do
-    get :index, :format => 'pdf'
-    response.content_type.should =~ %r{^application/pdf}
+    it "should be successful" do
+      get :index, :format => 'pdf'
+      response.should be_success
+    end
+    
+    it "should return the appropriate MIME type for a PDF file" do
+      get :index, :format => 'pdf'
+      response.content_type.should =~ %r{^application/pdf}
+    end
   end
   
   it "should set assigns[:users]" do
-    @perms = [mock_model(Permission)]
-    @perms.should_receive(:find_all_by_show_in_report).with(true, :include => :user).and_return(@perms)
-    @perms[0].should_receive(:user).and_return(mock_model(User))
-    @event = mock_model(Event, :calendar => mock_model(Calendar, :permissions => @perms))
-    controller.current_objects.should_receive(:[]).and_return(@event)
+    @perms = [Factory(:permission, :user => @user)]
+    @event = Factory :event, :calendar => Factory(:calendar, :permissions => @perms)
+    controller.stub(:current_objects).and_return([@event])
     get :index, :format => 'pdf'
     assigns[:users].should_not be_nil
   end
@@ -489,7 +497,10 @@ end
 
 # Returns a User with admin permissions on the specified Calendar.
 def admin_user(calendar)
-  FactoryGirl.create :user, :permissions => [FactoryGirl.create(:admin_permissions, :calendar => calendar)]
+  FactoryGirl.create(:user).tap do |u|
+    u.permissions = [FactoryGirl.create(:admin_permission, :calendar => calendar, :user => u)]
+    u.save!
+  end
 end
 
 =begin
