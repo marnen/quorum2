@@ -473,7 +473,7 @@ describe EventsController, "export" do
   
   it "should use the ical view" do
     get :export, :id => @my_event.id
-    response.should render_template('events/ical.ics.erb')
+    response.should render_template('events/ical')
   end
   
   it "should get an event" do
