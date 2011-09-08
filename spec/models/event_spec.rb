@@ -91,7 +91,9 @@ describe Event, "(allow?)" do
     @event = FactoryGirl.create :event
     @alien = FactoryGirl.create :user, :permissions => [FactoryGirl.create :permission]
     @nonadmin = FactoryGirl.create :user, :permissions => [FactoryGirl.create :permission, :calendar => @event.calendar]
-    @admin = FactoryGirl.create :user, :permissions => [FactoryGirl.create :admin_permission, :calendar => @event.calendar]
+    @admin = FactoryGirl.create(:user).tap do |u|
+      u.permissions << Factory(:admin_permission, :calendar => @event.calendar, :user => u)
+    end
   end
   
   it "should exist with one argument" do
@@ -115,7 +117,10 @@ describe Event, "(allow?)" do
   end
   
   it "should return true for :show iff current user has any role for the event's calendar" do
-    User.stub!(:current_user).and_return FactoryGirl.create(:user, :permissions => [FactoryGirl.create(:permission, :calendar => @event.calendar, :role => FactoryGirl.create(:role, :name => Faker::Lorem.word))])
+    user = Factory(:user).tap do |u|
+      u.permissions << Factory(:permission, :user => u, :calendar => @event.calendar, :role => Factory(:role, :name => Faker::Lorem.word))
+    end
+    User.stub!(:current_user).and_return user
     @event.allow?(:show).should == true
 
     User.stub!(:current_user).and_return Factory(:user, :permissions => [Factory(:permission, :role => Factory(:role, :name => Faker::Lorem.word))])
@@ -173,8 +178,12 @@ describe Event, "(find_committed)" do
   end
   
   it "should get a collection of Users when called with :yes or :no" do
-    @attending = Factory :user, :commitments => [Factory(:commitment, :event => @event, :status => true)]
-    @not_attending = Factory :user, :commitments => [Factory(:commitment, :event => @event, :status => false)]
+    @attending = Factory(:user).tap do |u|
+      u.commitments << Factory(:commitment, :user => u, :event => @event, :status => true)
+    end
+    @not_attending = Factory(:user).tap do |u|
+      u.commitments << Factory(:commitment, :user => u, :event => @event, :status => false)
+    end
     @find[:yes].should == [@attending]
     @find[:no].should == [@not_attending]
   end
@@ -186,7 +195,7 @@ describe Event, "(find_committed)" do
       c = Factory :user, :lastname => 'c'
       users = [c, a, b]
       users.each do |u|
-        u.commitments << Factory(:commitment, :event => @event, :status => status)
+        u.commitments << Factory(:commitment, :user => u, :event => @event, :status => status)
       end
   
       @find[status ? :yes : :no].should == [a, b, c]
@@ -270,13 +279,13 @@ describe Event, "(geographical features)" do
     @placemark.stub!(:latlon).and_return([1.0, 2.0])
     Geocoding::Placemark.stub!(:new).and_return(@placemark)
     
+    # TODO: Use Webmock here.
     @placemarks = Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS)
     @placemarks.stub!(:[]).and_return(@placemark)
     Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
     Geocoding.stub!(:get).and_return(@placemarks)
-    Point.stub!(:from_coordinates).and_return(mock_model(Point))
 
-    @event = Event.new
+    @event = Factory.build :event
   end
   
   it "should have coords (Point)" do
@@ -298,7 +307,7 @@ describe Event, "(geographical features)" do
   
   it "should clear coords on update" do
     User.stub!(:current_user).and_return(Factory :user)
-    @event.update_attributes(Event.plan)
+    @event.update_attributes(Factory.attributes_for :event)
     @event.should_receive(:coords=)
     @event.update_attributes(:name => 'foo')
     # @event.should_not_receive(:coords=)
