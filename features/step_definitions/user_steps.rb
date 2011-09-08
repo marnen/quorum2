@@ -1,5 +1,5 @@
 Given /^I am logged in$/ do
-  user = User.make!(:password => 'passw0rd')
+  user = FactoryGirl.create :user, :password => 'passw0rd'
   visit login_path
   fill_in('user_session[email]', :with => user.email)
   fill_in('user_session[password]', :with => 'passw0rd')

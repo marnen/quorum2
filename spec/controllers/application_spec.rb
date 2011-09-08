@@ -9,17 +9,13 @@ describe ApplicationController, "(admin?)" do
   end
   
   it "should return true if current user is an admin" do
-    @admin = User.make! do |u|
-      u.permissions.make!(:role => Role.make!(:admin))
-    end
+    @admin = FactoryGirl.create :user, :permissions => [FactoryGirl.create :admin_permission]
     UserSession.create @admin
     controller.admin?.should be_true
   end
   
   it "should return false if current user is not an admin" do
-    @user = User.make! do |u|
-      u.permissions.make!(:role => Role.make!)
-    end
+    @user = FactoryGirl.create :user, :permissions => [FactoryGirl.create :permission]
     UserSession.create @user
     controller.admin?.should be_false
   end

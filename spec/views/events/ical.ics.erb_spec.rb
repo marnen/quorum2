@@ -3,7 +3,7 @@ include EventsHelper
 
 describe "/events/ical.ics" do
   before(:each) do
-    @event = Event.make!
+    @event = Factory :event
     assigns[:event] = @event
     render 'events/ical.ics.erb'
   end

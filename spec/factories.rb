@@ -31,7 +31,7 @@ FactoryGirl.define do
     zip { Faker::Address.zip_code }
     date { Date.civil(rand(10) + 2000, rand(12) + 1, rand(28) + 1) }
     calendar
-    created_by { User.make }
+    association :created_by, :factory => :user
   end
   
   factory :state, :class => Acts::Addressed::State do

@@ -4,8 +4,8 @@ describe "/events/show" do
   fixtures :events
   
   before(:each) do
-    User.stub!(:current_user).and_return(User.make!)
-    @event = Event.make!
+    User.stub!(:current_user).and_return(Factory :user)
+    @event = Factory :event
     template.stub!(:current_object).and_return(@event)
   end
   

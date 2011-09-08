@@ -15,14 +15,14 @@ describe PermissionsController, 'index' do
   render_views
   
   before(:each) do
-    @user = Role.make!(:name => 'user')
-    @admin = Role.make!(:name => 'admin')
-    @current_user = User.make!(:email => 'johndoe@example.com')
-    @one = Calendar.make!(:name => 'Calendar 1')
-    @two = Calendar.make!(:name => 'Calendar 2')
-    @three = Calendar.make!(:name => 'Calendar 3')
+    @user = FactoryGirl.create :role, :name => 'user'
+    @admin = FactoryGirl.create :admin_role
+    @current_user = FactoryGirl.create :user, :email => 'johndoe@example.com'
+    @one = FactoryGirl.create :calendar, :name => 'Calendar 1'
+    @two = FactoryGirl.create :calendar, :name => 'Calendar 2'
+    @three = FactoryGirl.create :calendar, :name => 'Calendar 3'
     [{:role => @user, :calendar => @one}, {:role => @admin, :calendar => @two}].each do |opts|
-      @current_user.permissions.make! opts
+      @current_user.permissions << FactoryGirl.create(:permission, opts)
     end
     UserSession.create @current_user
   end
@@ -80,9 +80,9 @@ describe PermissionsController, 'index (no subscribed calendars)' do
   render_views
   
   it 'should show all available calendars under "unsubscribed"' do
-    @current_user = User.make!(:id => 20, :email => 'no_permissions@gmail.com')
+    @current_user = FactoryGirl.create :user, :id => 20, :email => 'no_permissions@gmail.com'
     2.times do
-      Calendar.make!
+      FactoryGirl.create :calendar
     end
     UserSession.create @current_user
     get :index
@@ -103,10 +103,10 @@ end
 
 describe PermissionsController, 'subscribe' do
   before(:each) do
-    @calendar = Calendar.make!
-    @user = Role.make!(:id => 20, :name => 'user')
+    @calendar = FactoryGirl.create :calendar
+    @user = FactoryGirl.create :role, :id => 20, :name => 'user'
     @params = {:calendar_id => @calendar.id}
-    @current_user = User.make!(:email => 'test@example.com', :id => 18)
+    @current_user = FactoryGirl.create :user, :email => 'test@example.com', :id => 18
     controller.stub!(:check_admin).and_return(false)
     UserSession.create @current_user
   end
@@ -136,7 +136,7 @@ end
 
 describe PermissionsController, 'destroy' do
   before(:each) do
-    @current_user = User.make!(:id => 12, :email => 'johndoe@example.com')
+    @current_user = FactoryGirl.create :user, :id => 12, :email => 'johndoe@example.com'
     @current_user.stub!(:admin?).and_return false
     UserSession.create @current_user
     request.env['HTTP_REFERER'] = 'referer'
@@ -149,14 +149,14 @@ describe PermissionsController, 'destroy' do
   end
   
   it 'should delete the Permission given by the id parameter if it belongs to the current user' do
-    @mine = @current_user.permissions.make!(:id => 90)
+    @mine = FactoryGirl.create :permission, :id => 90, :user => @current_user
     @mine.should_receive(:destroy)
     Permission.should_receive(:find).with(@mine.id.to_param).and_return(@mine)
     get :destroy, :id => @mine.id
   end
   
   it 'should not delete the Permission given by the id parameter if it does not belong to the current user' do
-    @notmine = User.make!.permissions.make!(:id => 91)
+    @notmine = FactoryGirl.create :user, :permissions => [FactoryGirl.create :permission, :id => 91]
     @notmine.should_not_receive(:destroy)
     Permission.should_receive(:find).with(@notmine.id.to_param).and_return(@notmine)
     get :destroy, :id => @notmine.id

@@ -2,15 +2,10 @@ require 'spec_helper'
 
 describe "/events/new" do
   before(:each) do
-    UserSession.create User.make! # just for Calendar callback
-    c = Calendar.make!
-    user = User.make! do |u|
-      u.permissions.make! do |p|
-        p.calendar = c
-      end
-    end
+    UserSession.create Factory(:user) # just for Calendar callback
+    user = Factory :user, :permissions => [Factory :permission]
     UserSession.create user
-    assigns[:current_object] = Event.make!
+    assigns[:current_object] = Factory :event
     render 'events/new'
   end
   
@@ -69,25 +64,21 @@ end
 
 describe "/events/new (multiple calendars)" do
   before(:each) do
-    UserSession.create User.make!
-    @one = Calendar.make!(:id => 1, :name => 'Calendar 1')
-    @two = Calendar.make!(:id => 2, :name => 'Calendar 2')
+    UserSession.create Factory(:user)
+    @one = Factory :calendar, :id => 1, :name => 'Calendar 1'
+    @two = Factory :calendar, :id => 2, :name => 'Calendar 2'
     assigns[:current_object] = Event.make!(:date => Time.now, :calendar => @one)
   end
   
   it "should display a calendar selector if current user has multiple calendars" do
-    @quentin = User.make! do |u|
-      [@one, @two].each{|c| u.permissions.make!(:calendar => c)}
-    end
+    @quentin = Factory :user, :permissions => [@one, @two].map {|c| Factory :permission, :calendar => c }
     UserSession.create(@quentin)
     render '/events/new'
     response.should have_tag('select#event_calendar_id')
   end
   
   it "should not display a calendar selector if current user only has one calendar" do
-    @jim = User.make! do |u|
-      u.permissions.make!(:calendar => @one)
-    end
+    @jim = Factory :user, :permissions => [Factory(:permission, :calendar => @one)]
     UserSession.create(@jim)
     render '/events/new'
     response.should_not have_tag('select#event_calendar_id')
