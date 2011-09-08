@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "/events/map" do
   before(:each) do
-    assigns[:event] = Event.make!
+    assigns[:event] = Factory :event
   end
   
   it "should render the map in @map" do

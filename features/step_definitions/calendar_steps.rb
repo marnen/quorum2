@@ -1,18 +1,18 @@
 Given /^I am subscribed to "([^\"]*)"$/ do |calendar|
-  cal = Calendar.find_by_name(calendar) || Calendar.make!(:name => calendar)
+  cal = Calendar.find_by_name(calendar) || FactoryGirl.create(:calendar, :name => calendar)
   Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make! sure we don't have any superfluous admin permissions hanging around
-  Permission.make! :user => User.current_user, :calendar => cal
+  FactoryGirl.create :permission, :user => User.current_user, :calendar => cal
 end
 
 Given /^I am an admin(?:istrator)? of "([^\"]*)"$/ do |calendar|
-  cal = Calendar.find_by_name(calendar) || Calendar.make!(:name => calendar)
-  Permission.make! :user => UserSession.find.record, :calendar => cal, :role => Role.make!(:admin)
+  cal = Calendar.find_by_name(calendar) || FactoryGirl.create(:calendar, :name => calendar)
+  FactoryGirl.create :permission, :user => UserSession.find.record, :calendar => cal, :role => FactoryGirl.create(:admin_role)
 end
 
 Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|
-  cal = Calendar.find_by_name(calendar) || Calendar.make!(:name => calendar)
+  cal = Calendar.find_by_name(calendar) || FactoryGirl.create(:calendar, :name => calendar)
   Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make! sure we don't have any superfluous admin permissions hanging around
-  Permission.make! :admin, :user => User.make!, :calendar => cal
+  FactoryGirl.create :admin_permission, :user => User.make!, :calendar => cal
 end
 
 Then /^I should have a calendar called "([^\"]*)"$/ do |calendar|

@@ -16,15 +16,15 @@ describe AdminController, "(index)" do
   render_views
   
   before(:each) do
-    session = UserSession.create User.make!
-    @one = Calendar.make!(:id => 1)
-    @two = Calendar.make!(:id => 2)
+    session = UserSession.create FactoryGirl.create(:user)
+    @one = FactoryGirl.create :calendar, :id => 1
+    @two = FactoryGirl.create :calendar, :id => 2
     session.destroy
 
-    @current_user = User.make! do |u|
-      u.permissions.make!(:calendar => @one)
-      u.permissions.make!(:admin, :calendar => @two)
-    end
+    @current_user = FactoryGirl.create :user, :permissions => [
+      FactoryGirl.create(:permission, :calendar => @one),
+      FactoryGirl.create(:admin_permission, :calendar => @two)
+    ]
     
     UserSession.create @current_user
     get :index

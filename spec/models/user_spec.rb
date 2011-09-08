@@ -38,7 +38,7 @@ describe User, "(general properties)" do
     aggr = User.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = Acts::Addressed::State.make!
+    state = Factory :state
     opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
     u = User.new(opts)
     u.address.should == Acts::Addressed::Address.new(opts)
@@ -51,7 +51,7 @@ describe User, "(general properties)" do
   end
   
   it "should have country referred through state" do
-    state = Acts::Addressed::State.make!
+    state = Factory :state
     user = User.new
     user.should respond_to(:country)
     user.state = state
@@ -59,7 +59,7 @@ describe User, "(general properties)" do
   end
   
   it "should be nil-safe on country" do
-    user = User.make!(:state => nil)
+    user = Factory :user, :state => nil
     lambda{user.country}.should_not raise_error
   end
 end
@@ -99,8 +99,8 @@ describe User, "(validations)" do
 =end
 
   it 'should create a user permission for the calendar, when there\'s only one calendar' do
-    User.stub!(:current_user).and_return(User.make!)
-    calendar = Calendar.make!
+    User.stub!(:current_user).and_return(Factory :user)
+    calendar = Factory :calendar
     Calendar.count.should == 1
     user = User.create!(User.plan)
     user.permissions.should_not be_nil
@@ -176,35 +176,35 @@ describe User, "(instance methods)" do
   
   describe "activate" do
     it "should be valid" do
-      User.make!.should respond_to(:activate)
+      Factory(:user).should respond_to(:activate)
     end
     
     it "should set the active flag to true" do
-      u = User.make!(:inactive)
+      u = Factory :inactive_user
       u.activate
       u.active?.should be_true
     end
   end
   
   it "should have a 'single_access_token' property initialized to a string" do
-    User.make!.single_access_token.should_not be_blank
+    Factory(:user).single_access_token.should_not be_blank
   end
   
   it "should set single_access_token on save" do
-    @u = User.make!
+    @u = Factory :user
     @u.single_access_token = nil
     @u.reload.single_access_token.should_not be_blank
   end
   
   it "should not overwrite single_access_token if already set" do
-    @u = User.make!
+    @u = Factory :user
     token = @u.single_access_token
     @u.reload.single_access_token.should == token
   end
   
   it "should properly deal with regenerating single_access_token if it's a duplicate" do
-    @one = User.make!
-    @two = User.make!
+    @one = Factory :user
+    @two = Factory :user
     token = @two.single_access_token
     @one.single_access_token = token
     # TODO: Does this properly test what's being asserted here?
@@ -218,7 +218,7 @@ describe User, "(instance methods)" do
     
     it "should reset the user's password and password_confirmation to identical strings" do
       old_password = 'old password'
-      user = User.make!(:password => old_password)
+      user = Factory :user, :password => old_password
       lambda {user.reset_password!}.should_not raise_error(ActiveRecord::RecordInvalid) # should set password_confirmation
       new_password = user.password
       new_password.should_not == old_password
@@ -226,7 +226,7 @@ describe User, "(instance methods)" do
     
     it "should reset password to a random hex string of length 10 (MD5 digest or similar)" do
       pattern = /^[a-f\d]{10}$/
-      user = User.make!
+      user = Factory :user
       user.reset_password!
       password1 = user.password
       password1.should =~ pattern
@@ -270,7 +270,7 @@ describe User, "(geographical features)" do
   end
   
   it "should clear coords on update" do
-    User.stub!(:current_user).and_return(User.make!)
+    User.stub!(:current_user).and_return(Factory :user)
     @user.update_attributes(User.plan)
     @user.should_receive(:coords=)
     @user.update_attributes(:name => 'foo')
@@ -322,7 +322,7 @@ describe User, "(authentication structure)" do
   
 protected
   def create_user(options = {})
-    record = User.make({:email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire'}.merge(options))
+    record = Factory :user, {:email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire'}.merge(options)
     record.save
     record
   end

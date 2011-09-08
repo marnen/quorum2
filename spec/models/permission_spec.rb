@@ -16,7 +16,7 @@ end
 
 describe Permission, "(validations)" do
   before(:each) do
-    @permission = Permission.make!
+    @permission = Factory :permission
   end
 
   it "should not be valid without a calendar" do

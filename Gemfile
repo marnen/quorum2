@@ -46,7 +46,7 @@ group :test, :development do
   gem 'autotest-rails', :require => false
   gem 'rspec-rails', '~> 2.6.1', :require => false
   gem 'cucumber-rails', :require => false
-  gem 'machinist', '>= 2.0.0beta1'
+  gem 'factory_girl_rails'
   gem 'ffaker'
 end
 
