@@ -28,7 +28,7 @@ describe EventsController, "index" do
     order = 'name'
     direction = 'desc'
     params = {:order => order, :direction => direction}
-    route_for(params.merge(:controller => 'events', :action => 'index')).should == "/events/index/#{order}/#{direction}"
+    {:get => "/events/index/#{order}/#{direction}"}.should route_to params.merge(:controller => 'events', :action => 'index')
     Event.should_receive(:find) do |arg1, arg2|
       arg1.should == :all
       arg2.should be_an_instance_of(Hash)
