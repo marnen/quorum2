@@ -79,7 +79,7 @@ FactoryGirl.define do
     calendar
     
     factory :admin_permission do
-      admin_role
+      association :role, :factory => :admin_role
     end
   end
     
