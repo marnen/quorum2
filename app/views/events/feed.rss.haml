@@ -1,0 +1,24 @@
+!!! XML
+%rss{:version => '2.0', %s{xmlns:atom} => "http://www.w3.org/2005/Atom"}
+  %channel
+    %atom:link{:href => feed_events_url(:fmt => :rss, :key => @key), :rel => :self}
+    %title= _("%{Quorum} Events") % {:Quorum => SITE_TITLE}
+    %link= events_url
+    %description
+      - if !params[:feed_user].blank?
+        = _("The latest events from %{Quorum}, generated for %{user}.") % {:Quorum => SITE_TITLE, :user => params[:feed_user]}
+    - if !params[:feed_user].blank?
+      - current_objects.each do |e|
+        %item
+          %title= e.name
+          %description
+            %p
+              = e.date.to_s(:rfc822)
+              %br<
+              e.address.to_s(:geo)
+            %p
+              :markdown
+                #{h e.description.to_s}
+          %link= event_url(e)
+          %guid= event_url(e)
+          %pubDate e.created_at.to_s(:rfc822)
