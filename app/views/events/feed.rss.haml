@@ -12,9 +12,9 @@
         %item
           %title= e.name
           %description
-            %p
+            %p<
               = e.date.to_s(:rfc822)
-              %br<
+              %br>
               e.address.to_s(:geo)
             %p
               :markdown
