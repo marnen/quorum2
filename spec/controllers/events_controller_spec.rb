@@ -223,8 +223,7 @@ describe EventsController, "change_status" do
   
   it "should render an event row on an Ajax request" do
     event = FactoryGirl.create :event
-    request.stub!(:xhr?).and_return(true)
-    get "change_status", :id => event.id, :status => 'yes' # status could also be :no or :maybe
+    xhr :get, "change_status", :id => event.id, :status => 'yes' # status could also be :no or :maybe
     response.should render_template('_event') # with :locals => {:event => event}, but I can't figure out how to test for that
   end
 end
