@@ -65,8 +65,7 @@ describe EventsHelper do
     @request.stub!(:path_parameters).and_return(:controller => 'events', :action => 'index')
     link = helper.sort_link("Date", :date)
     link.should be_a_kind_of(String)
-    link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'index', :order => :date, :direction => :asc}".*<\/a>\Z/i)
-    link.should have_tag("a.sort", "Date")
+    link.should have_selector("a.sort[href='#{url_for :controller => 'events', :action => 'index', :order => :date, :direction => :asc}']", :content => "Date")
     
     #link = sort_link("Date", :date, :desc)
     #link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'index', :order => :date, :direction => :desc}".*<\/a>\Z/i)
