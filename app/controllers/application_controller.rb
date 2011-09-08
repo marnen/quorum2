@@ -5,9 +5,7 @@ class ApplicationController < ActionController::Base
   include ExceptionNotifiable
   
   before_filter :set_gettext_locale
-  
-  ActionView::Helpers::TextHelper::BlueCloth = RDiscount
-  
+    
   helper :all # include all helpers, all the time
 
   # Check to see if the current user is an admin of at least one calendar.

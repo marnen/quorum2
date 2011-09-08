@@ -27,7 +27,7 @@ gem 'pg'
 gem 'gettext_i18n_rails'
 gem 'prawn'
 gem 'GeoRuby'
-gem 'rdiscount', '>= 1.2.11'
+gem 'prarupa'
 gem 'authlogic', '~> 3.0.3'
 
 # Bundle gems for the local environment. Make sure to
