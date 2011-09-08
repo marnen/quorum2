@@ -77,6 +77,7 @@ FactoryGirl.define do
     user
     role
     calendar
+    show_in_report {true}
     
     factory :admin_permission do
       association :role, :factory => :admin_role
