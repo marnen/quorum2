@@ -5,6 +5,7 @@ describe CalendarsController do
     before(:each) do
       @current_user = Factory :user
       UserSession.create @current_user
+      User.stub(:current_user).and_return @current_user
     end
   
     describe 'new' do
@@ -34,8 +35,7 @@ describe CalendarsController do
   
     describe 'create' do
       before(:each) do
-        @calendar = FactoryGirl.create :calendar, :name => 'Test calendar'
-        request.env['HTTP_REFERER'] = root_url
+        @calendar = FactoryGirl.attributes_for :calendar, :name => 'Test calendar'
         post :create, :calendar => @calendar
       end
       
