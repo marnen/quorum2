@@ -99,12 +99,12 @@ describe EventsController, "feed.rss" do
   end
   
   it "should set @key to params[:key]" do
-    params[:key].should_not be_nil
-    assigns[:key].should == params[:key]
+    controller.params[:key].should_not be_nil
+    assigns[:key].should == controller.params[:key]
   end
   
   it "should set params[:feed_user] to the user whom the key belongs to" do
-    params[:feed_user].should == User.find_by_single_access_token(params[:key])
+    controller.params[:feed_user].should == User.find_by_single_access_token(controller.params[:key])
   end
   
   it "should have an <atom:link rel='self'> tag" do
@@ -112,29 +112,31 @@ describe EventsController, "feed.rss" do
       @m = css_select(rss, 'channel')[0].to_s[%r{<\s*atom:link(\s*[^>]*)?>}]
     end
     @m.should_not be_blank
-    @m.should =~ /href=(["'])#{feed_events_url(:rss, params[:key])}\1/
+    @m.should =~ /href=(["'])#{feed_events_url(:rss, controller.params[:key])}\1/
     @m.should =~ /rel=(["'])self\1/
   end
   
   it "should have an appropriate <title> tag" do
-    response.should have_tag('channel > title', %r{#{SITE_TITLE}})
+    response.body.should have_selector('channel > title', :content => %r{#{SITE_TITLE}})
   end
   
   it "should link to the event list" do
-    response.should have_tag('channel > link', events_url)
+    response.body.should have_selector('channel > link', :content => events_url)
   end
   
   it "should contain a <description> element, including (among other things) the name of the user whose feed it is" do
-    response.should have_tag('channel > description', %r{#{ERB::Util::html_escape params[:feed_user]}})
+    response.body.should have_selector('channel > description', :content => %r{#{ERB::Util::html_escape controller.params[:feed_user]}})
   end
     
   it "should contain an entry for every event, with <title>, <description> (with address and description), <link>, <guid>, and <pubDate> elements" do
     @events.each do |e|
-      response.should have_tag('item title',ERB::Util::html_escape(e.name)) # actually, this is XML escape, but close enough
-      response.should have_tag('item description', /#{ERB::Util::html_escape(e.date.to_s(:rfc822))}.*#{ERB::Util::html_escape(e.address.to_s(:geo))}.*#{ERB::Util::html_escape(RDiscount.new(ERB::Util::html_escape(e.description)).to_html)}/m) # kinky but accurate
-      response.should have_tag('item link', event_url(e))
-      response.should have_tag('item guid', event_url(e))
-      response.should have_tag('item pubDate', e.created_at.to_s(:rfc822))
+      response.body.should have_selector('item title', :content => ERB::Util::html_escape(e.name)) # actually, this is XML escape, but close enough
+      response.body.should have_selector('item description', :content => /#{ERB::Util::html_escape(e.date.to_s(:rfc822))}.*#{ERB::Util::html_escape(e.address.to_s(:geo))}.*#{ERB::Util::html_escape(RDiscount.new(ERB::Util::html_escape(e.description)).to_html)}/m) # kinky but accurate
+      response.body.should have_selector('item link', :content => event_url(e))
+      response.body.should have_selector('item guid', :content => event_url(e))
+      pending "Capybara doesn't handle capital letters in selectors properly" do
+        response.body.should have_selector('item pubDate', :content => e.created_at.to_s(:rfc822))
+      end
     end
   end
 end
@@ -146,7 +148,7 @@ describe EventsController, "feed.rss (login)" do
     User.stub!(:find_by_single_access_token).and_return(nil)
     get :feed, :fmt => 'rss', :key => 'fake key'
     Event.should_not_receive(:find)
-    response.should_not have_tag('item')
+    response.should_not have_selector('item')
   end
   
   it "should list events if given a valid single_access_token" do
@@ -157,7 +159,7 @@ describe EventsController, "feed.rss (login)" do
     User.stub!(:find_by_single_access_token).and_return(@user)
     Event.should_receive(:find).and_return(@events)
     get :feed, :format => 'rss', :key => @user.single_access_token
-    response.should have_tag('item')
+    response.body.should have_selector('item')
   end
 end
 

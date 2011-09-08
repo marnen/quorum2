@@ -12,13 +12,8 @@
         %item
           %title= e.name
           %description
-            %p<
-              = e.date.to_s(:rfc822)
-              %br>
-              e.address.to_s(:geo)
-            %p
-              :markdown
-                #{h e.description.to_s}
+            == #{h '<p>'}#{'<>' + e.date.to_s(:rfc822)}#{h '<br/>'}#{e.address.to_s(:geo)}#{h '</p>'}
+            = RDiscount.new(h e.description.to_s).to_html
           %link= event_url(e)
           %guid= event_url(e)
-          %pubDate e.created_at.to_s(:rfc822)
+          %pubDate= e.created_at.to_s(:rfc822)
