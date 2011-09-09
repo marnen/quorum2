@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe Calendar do
   before(:each) do
@@ -29,7 +29,7 @@ end
 
 describe Calendar, '(validations)' do
   before(:each) do
-    @calendar = Calendar.new(:name => 'Calendar for testing')
+    @calendar = Factory.build :calendar
   end
   
   it 'should require a name' do
@@ -39,23 +39,18 @@ describe Calendar, '(validations)' do
   end
   
   it 'should set its creator as admin' do
-    @admin = mock_model(Role, :id => 2, :name => 'admin')
-    @user = mock_model(User, :id => 15, :name => 'creator')
+    @admin = Factory :admin_role
     Role.should_receive(:find_by_name).with('admin').and_return(@admin)
+    @user = Factory :user
     User.stub!(:current_user).and_return(@user)
-    @perm = mock_model(Permission, :null_object => true)
-    @calendar.permissions.should == []
-    @calendar.permissions.should_receive(:create) {
-      @calendar.permissions << @perm
-    }
     @calendar.save!
-    @calendar.permissions.should == [@perm]
+    @calendar.permissions(true).where(:user_id => @user, :role_id => @admin).count.should >= 1
   end
   
   it 'should not set admin when no one is logged in' do
     [false, :false, nil].each do |v|
       User.stub!(:current_user).and_return(v)
-      @calendar = Calendar.new(Calendar.plan)
+      @calendar = Factory.build :calendar
       @calendar.permissions.should_not_receive(:create)
       @calendar.save!
     end

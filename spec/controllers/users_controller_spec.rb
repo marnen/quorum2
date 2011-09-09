@@ -1,8 +1,8 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe UsersController do
   it 'allows signup' do
-    @user = User.make
+    @user = FactoryGirl.create :user
     User.should_receive(:new).and_return(@user)
     @user.should_receive(:save).at_least(:once).and_return(true)
     create_user
@@ -45,7 +45,7 @@ describe UsersController do
     pending "meaningless until we start doing activation" do
       email = 'aaron@example.com'
       password = 'test'
-      aaron = User.make(:inactive, :email => email, :password => password)
+      aaron = FactoryGirl.create :inactive_user, :email => email, :password => password
       User.authenticate(email, password).should be_nil
       get :activate, :activation_code => aaron.activation_code
       response.should redirect_to('/login')
@@ -76,7 +76,7 @@ end
 
 describe UsersController, "edit" do
  before(:each) do
-    @user = User.make
+    @user = FactoryGirl.create :user
     UserSession.create @user
     get :edit
   end
@@ -90,7 +90,7 @@ describe UsersController, "edit" do
   end
   
   it "should not require password validation if both password fields are nil" do
-    test_user = User.make
+    test_user = FactoryGirl.create :user
     my_attr = test_user.attributes
     my_attr[:password] = nil
     my_attr[:password_confirmation] = nil
@@ -108,7 +108,7 @@ describe UsersController, "edit" do
       post :edit, @user
       @user.errors.should_not be_empty
   
-      @user = User.make
+      @user = FactoryGirl.create :user
       UserSession.create @user
       get :edit
       my_attr = @user.attributes
@@ -135,13 +135,13 @@ describe UsersController, '(regenerate_key)' do
   end
   
   it "should be a valid action" do
-    UserSession.create User.make
+    UserSession.create FactoryGirl.create(:user)
     get :regenerate_key
     response.should redirect_to(:back)
   end
   
   it "should reset the current user's single_access_token" do
-    @user = User.make
+    @user = FactoryGirl.create :user
     token = @user.single_access_token
     UserSession.create @current_user
     get :regenerate_key
@@ -149,14 +149,14 @@ describe UsersController, '(regenerate_key)' do
   end
   
   it 'should set flash[:notice] on success' do
-    UserSession.create User.make
+    UserSession.create FactoryGirl.create(:user)
     get :regenerate_key
     flash[:notice].should_not be_nil
   end
 
   it 'should set flash[:error] on failure' do
     pending "does Authlogic handle errors and/or authentication strangely?" do
-      @current_user = User.make
+      @current_user = FactoryGirl.create :user
       @current_user.should_receive(:save!).and_raise(ActiveRecord::RecordInvalid.new(@current_user))
       UserSession.create @current_user
       get :regenerate_key
@@ -166,7 +166,7 @@ describe UsersController, '(regenerate_key)' do
 end
 
 describe UsersController, '(reset)' do
-  integrate_views
+  render_views
   
   before(:each) do
     get :reset
@@ -177,8 +177,8 @@ describe UsersController, '(reset)' do
   end
   
   it "should display a form asking for e-mail address, with a submit button" do
-    response.should have_tag('input[type=text]')
-    response.should have_tag('input[type=submit]')
+    response.body.should have_selector('input[type=text]')
+    response.body.should have_selector('input[type=submit]')
   end
   
   it "should set the page title" do
@@ -187,7 +187,7 @@ describe UsersController, '(reset)' do
 end
 
 describe UsersController, '(reset/POST)' do
-  integrate_views
+  render_views
   
   it "should give an error message if e-mail isn't valid" do
     User.should_receive(:find_by_email).and_return(nil)
@@ -196,7 +196,7 @@ describe UsersController, '(reset/POST)' do
   end
   
   it "should reset password if e-mail is valid" do
-    @user = User.make
+    @user = FactoryGirl.create :user
     @user.should_receive(:reset_password!).and_return(true)
     User.should_receive(:find_by_email).and_return(@user)
     UserMailer.should_receive(:deliver_reset).with(@user).at_least(:once).and_return(true)

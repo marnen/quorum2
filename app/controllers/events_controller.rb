@@ -16,7 +16,7 @@ class EventsController < ApplicationController
       @page_title = _("Upcoming events")
       @order = params[:order]
       @direction = params[:direction]
-      @search = params[:search].extend(Search)
+      @search = params[:search].extend(Search) if params[:search]
     end
       
     response_for :index do |format|

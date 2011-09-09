@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 def user_role
   simple_matcher('a user Role object') do |given|
@@ -13,17 +13,16 @@ def admin_role
 end
 
 describe AdminController, "(index)" do
-  integrate_views
+  render_views
   
   before(:each) do
-    session = UserSession.create User.make
-    @one = Calendar.make(:id => 1)
-    @two = Calendar.make(:id => 2)
-    session.destroy
+    @one = FactoryGirl.create :calendar, :id => 1
+    @two = FactoryGirl.create :calendar, :id => 2
+    Role.destroy_all(:name => 'admin')
 
-    @current_user = User.make do |u|
-      u.permissions.make(:calendar => @one)
-      u.permissions.make(:admin, :calendar => @two)
+    @current_user = Factory(:user).tap do |u|
+      u.permissions << Factory(:permission, :calendar => @one, :user => u)
+      u.permissions << Factory(:admin_permission, :calendar => @two, :user => u)
     end
     
     UserSession.create @current_user
@@ -38,6 +37,6 @@ describe AdminController, "(index)" do
     assigns[:calendars].should_not be_nil
     assigns[:calendars].should include(@two)
     assigns[:calendars].should_not include(@one)
-    response.should have_tag('li#calendar_2 a', /users/i)
+    response.body.should have_selector('li#calendar_2 a', :content => 'users')
   end
 end

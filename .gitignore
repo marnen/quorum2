@@ -1,7 +1,8 @@
 coverage
-.bundle/*
-log/*
-tmp/*
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/
 doc
 spec-results
 features_report.html

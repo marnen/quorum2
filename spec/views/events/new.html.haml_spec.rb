@@ -1,96 +1,89 @@
-require File.dirname(__FILE__) + '/../../spec_helper'
+require 'spec_helper'
 
 describe "/events/new" do
   before(:each) do
-    UserSession.create User.make # just for Calendar callback
-    c = Calendar.make
-    user = User.make do |u|
-      u.permissions.make do |p|
-        p.calendar = c
-      end
-    end
+    user = Factory(:user).tap {|u| u.permissions << Factory(:permission, :user => u) }
     UserSession.create user
-    assigns[:current_object] = Event.make
-    render 'events/new'
+    [User, view].each {|x| x.stub(:current_user).and_return user }
+    assign :current_object, Factory(:event)
+    render :file => 'events/new'
   end
   
   it "should have a form" do
-    response.should have_tag("form")
+    response.should have_selector("form")
   end
   
   it "should have a table of class edit in the form" do
-    response.should have_tag("form table.edit")
+    response.should have_selector("form table.edit")
   end
   
   it "should have a name field" do
-    response.should have_tag("table.edit input#event_name")
+    response.should have_selector("table.edit input#event_name")
   end
   
   it "should have a description field" do
-    response.should have_tag("table.edit textarea#event_description")
+    response.should have_selector("table.edit textarea#event_description")
   end
   
   it "should have a Markdown hint in the description field" do
     header = assert_select("table.edit th", /Description/)
     header.should_not be_nil
-    header.should have_tag("a", 'Markdown')
+    header.should have_selector("a", :content => 'Markdown')
   end
   
   it "should have a date selector" do
-    response.should have_tag("table.edit select#event_date_2i")
+    response.should have_selector("table.edit select#event_date_2i")
   end
 
   it "should have a site field" do
-    response.should have_tag("table.edit input#event_site")
+    response.should have_selector("table.edit input#event_site")
   end
   
   it "should have two address fields" do
-    response.should have_tag("table.edit input#event_street")
-    response.should have_tag("table.edit input#event_street2")
+    response.should have_selector("table.edit input#event_street")
+    response.should have_selector("table.edit input#event_street2")
   end
   
   it "should have a city field" do
-    response.should have_tag("table.edit input#event_city")
+    response.should have_selector("table.edit input#event_city")
   end
   
   it "should have a state field" do
-    response.should have_tag("table.edit select#event_state_id")
+    response.should have_selector("table.edit select#event_state_id")
   end
   
   it "should have a zip field" do
-    response.should have_tag("table.edit input#event_zip")
+    response.should have_selector("table.edit input#event_zip")
   end
   
   it "should have a submit button" do
-    response.should have_tag("form input[type=submit]")
+    response.should have_selector("form input[type=submit]")
   end
   
 end
 
 describe "/events/new (multiple calendars)" do
   before(:each) do
-    UserSession.create User.make
-    @one = Calendar.make(:id => 1, :name => 'Calendar 1')
-    @two = Calendar.make(:id => 2, :name => 'Calendar 2')
-    assigns[:current_object] = Event.make(:date => Time.now, :calendar => @one)
+    @one = Factory :calendar #, :id => 1, :name => 'Calendar 1'
+    @two = Factory :calendar #, :id => 2, :name => 'Calendar 2'
+    assign :current_object, Factory(:event, :date => Time.now, :calendar => @one)
+    @user = Factory :user, :permissions => []
+    UserSession.create @user
+    [User, view].each {|x| x.stub(:current_user).and_return @user }
   end
   
   it "should display a calendar selector if current user has multiple calendars" do
-    @quentin = User.make do |u|
-      [@one, @two].each{|c| u.permissions.make(:calendar => c)}
+    [@one, @two].each do |c|
+      @user.permissions << Factory(:permission, :user => @user, :calendar => c)
     end
-    UserSession.create(@quentin)
-    render '/events/new'
-    response.should have_tag('select#event_calendar_id')
+    render :file => '/events/new'
+    response.should have_selector('select#event_calendar_id')
   end
   
   it "should not display a calendar selector if current user only has one calendar" do
-    @jim = User.make do |u|
-      u.permissions.make(:calendar => @one)
-    end
-    UserSession.create(@jim)
-    render '/events/new'
-    response.should_not have_tag('select#event_calendar_id')
-    response.should have_tag("input[type=hidden][value=#{@one.id}]#event_calendar_id")
+    @user.permissions << Factory(:permission, :user => @user, :calendar => @one)
+    render :file => '/events/new'
+    response.should_not have_selector('select#event_calendar_id')
+    response.should have_selector("input[type=hidden][value='#{@one.id}']#event_calendar_id")
   end
 end
