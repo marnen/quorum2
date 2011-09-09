@@ -82,6 +82,8 @@ GEM
       json (>= 1.4.6)
     haml (3.0.25)
     highline (1.6.2)
+    hoe (2.12.3)
+      rake (~> 0.8)
     i18n (0.5.0)
     json (1.5.4)
     json_pure (1.5.4)
@@ -161,6 +163,8 @@ GEM
       rubyzip
     spruz (0.2.13)
     term-ansicolor (1.0.6)
+    test-unit (1.2.3)
+      hoe (>= 1.5.1)
     thor (0.14.6)
     treetop (1.4.10)
       polyglot
@@ -191,3 +195,4 @@ DEPENDENCIES
   rspec-rails (~> 2.6.1)
   ruby-debug19
   sass
+  test-unit (= 1.2.3)

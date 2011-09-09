@@ -46,6 +46,7 @@ group :test, :development do
   gem 'ruby-debug19'
   gem 'autotest-rails', :require => false
   gem 'rspec-rails', '~> 2.6.1', :require => false
+  gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
   gem 'factory_girl_rails'
