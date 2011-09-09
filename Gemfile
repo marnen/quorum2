@@ -38,6 +38,7 @@ gem 'authlogic', '~> 3.0.3'
 # end
 
 group :development do
+  gem 'capistrano'
   gem 'gettext', '>= 1.9.3', :require => false
 end
 
