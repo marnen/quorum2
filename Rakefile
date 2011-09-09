@@ -4,4 +4,6 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
+require "#{Rails.root}/config/initializers/fast_gettext"
+
 Quorum2::Application.load_tasks
