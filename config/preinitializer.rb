@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # This is for Bundler.
 # TODO: Remove when we upgrade to Rails 3!
 

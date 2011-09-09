@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class AddCreatedByIdToEvents < ActiveRecord::Migration
   def self.up
     add_column :events, :created_by_id, :integer

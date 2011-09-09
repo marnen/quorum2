@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class Permission < ActiveRecord::Base
   belongs_to :user
   belongs_to :calendar

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 require 'rubygems'
 
 # Set up gems listed in the Gemfile.

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class UserMailer < ActionMailer::Base
   # Sends an e-mail message to the #User with the supplied password.
   def reset(user)

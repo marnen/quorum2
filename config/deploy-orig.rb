@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 require 'bundler/capistrano'
 
 set :application, "quorum2"

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 module EventsHelper 
   # Returns #User's commitment status for #Event as a symbol -- :yes, :no, :or maybe.
   def attendance_status(event, user)

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # This is the controller for #Event instances. It supports the following make_resourceful[http://mr.hamptoncatlin.com] actions: :index, :create, :new, :edit, :update, :show.
 class EventsController < ApplicationController
   layout "standard", :except => [:export, :feed] # no layout needed on export, since it generates an iCal file

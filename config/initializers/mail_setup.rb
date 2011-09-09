@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # TODO: Consider using sendmail instead.
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false

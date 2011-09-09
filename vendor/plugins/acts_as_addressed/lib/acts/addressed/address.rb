@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 module Acts::Addressed
   # Value object for addresses.
 
