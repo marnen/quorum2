@@ -91,8 +91,8 @@ end
 describe Event, "(allow?)" do
   before(:each) do
     @event = FactoryGirl.create :event
-    @alien = FactoryGirl.create :user, :permissions => [FactoryGirl.create :permission]
-    @nonadmin = FactoryGirl.create :user, :permissions => [FactoryGirl.create :permission, :calendar => @event.calendar]
+    @alien = FactoryGirl.create :user, :permissions => [Factory(:permission)]
+    @nonadmin = FactoryGirl.create :user, :permissions => [Factory(:permission, :calendar => @event.calendar)]
     @admin = FactoryGirl.create(:user).tap do |u|
       u.permissions << Factory(:admin_permission, :calendar => @event.calendar, :user => u)
     end

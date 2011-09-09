@@ -7,7 +7,7 @@ module Acts::Addressed
 
   class QuietNil < ActiveSupport::BasicObject
     # Implementation is yanked from http://coderrr.wordpress.com/2007/09/15/the-ternary-destroyer/
-    include Singleton
+    include ::Singleton
   
     def method_missing(method, *args, &b)
       return self  unless nil.respond_to? method
