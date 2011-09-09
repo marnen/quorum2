@@ -102,6 +102,9 @@ GEM
       net-ssh (>= 1.99.1)
     nokogiri (1.5.0)
     pg (0.11.0)
+    pickle (0.4.8)
+      cucumber (>= 0.8)
+      rake
     polyglot (0.3.2)
     prawn (0.4.0)
       prawn-layout
@@ -180,6 +183,7 @@ DEPENDENCIES
   gettext_i18n_rails
   haml
   pg
+  pickle
   prawn
   rails (= 3.0.10)
   rdiscount
