@@ -7,4 +7,4 @@ Feature: Event map
     Given I am logged in
     And an event exists
     When I go to the event's map page
-    Then I should see an element matching "#map"
+    Then I should see a map of the event
