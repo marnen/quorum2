@@ -15,12 +15,12 @@ describe Commitment, "(named scopes)" do
 
   it "should have a named scope for attending" do
     Commitment.should respond_to(:attending)
-    Commitment.attending.proxy_options.should == {:conditions => {:status => true}}
+    Commitment.attending.where_values_hash.should == {:status => true}
   end
   
   it "should have a named scope for not attending" do
     Commitment.should respond_to(:not_attending)
-    Commitment.not_attending.proxy_options.should == {:conditions => {:status => false}}
+    Commitment.not_attending.where_values_hash.should == {:status => false}
   end
 end
 
