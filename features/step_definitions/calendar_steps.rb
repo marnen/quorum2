@@ -1,6 +1,6 @@
 Given /^I am subscribed to "([^\"]*)"$/ do |calendar|
   cal = Calendar.find_by_name(calendar) || FactoryGirl.create(:calendar, :name => calendar)
-  Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make! sure we don't have any superfluous admin permissions hanging around
+  Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
   FactoryGirl.create :permission, :user => User.current_user, :calendar => cal
 end
 
@@ -11,8 +11,8 @@ end
 
 Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|
   cal = Calendar.find_by_name(calendar) || FactoryGirl.create(:calendar, :name => calendar)
-  Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make! sure we don't have any superfluous admin permissions hanging around
-  FactoryGirl.create :admin_permission, :user => User.make!, :calendar => cal
+  Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
+  Factory :admin_permission, :calendar => cal
 end
 
 Then /^I should have a calendar called "([^\"]*)"$/ do |calendar|

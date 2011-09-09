@@ -3,7 +3,7 @@ Given /^I am logged in$/ do
   visit login_path
   fill_in('user_session[email]', :with => user.email)
   fill_in('user_session[password]', :with => 'passw0rd')
-  click_button
+  click_button 'Log in'
   UserSession.find.record.should == user
 end
 
