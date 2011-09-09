@@ -4,4 +4,6 @@ Autotest.add_hook :initialize do |at|
   at.add_exception '.git'
   at.add_exception 'spec-results/index.html'
   at.add_exception 'features_report.html'
+  at.add_exception /capybara-\d+\.html$/
+  at.add_exception /rerun\.txt$/
 end
