@@ -136,6 +136,26 @@ describe EventsHelper, "ical_escape" do
   end
 end
 
+describe EventsHelper, "info" do
+  before :each do
+    User.stub(:current_user).and_return(Factory :user)
+    @event = Factory :event
+    @info = helper.info(@event)
+  end
+  
+  it "should return a safe string" do
+    @info.should be_html_safe
+  end
+  
+  it "should display a <h3> with the site name" do
+    @info.should have_selector('h3', :content => @event.site)
+  end
+  
+  it "should display the address separated by line breaks" do
+    @info.should include([h(@event.street), h(@event.street2), h([@event.city, @event.state.code, @event.state.country.code].join(', '))].join(tag :br))
+  end
+end
+
 describe EventsHelper, "list_names" do
   it "should return an empty string when called with nil argument" do
     helper.list_names(nil).should == ''

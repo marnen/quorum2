@@ -83,11 +83,12 @@ module EventsHelper
   #
   # TODO: this should probably become a partial.
   def info(event)
+    # TODO: Switch this to the HTML 5 outline model.
     return nil if (event.nil? or !event.kind_of?(Event))
-    result = ""
-    result << content_tag(:h3, h(event.site || event.name))
-    city = [h(event.city), h(event.state.code), h(event.state.country.code)].compact.join(', ')
-    result << content_tag(:p, [h(event.street), h(event.street2), city].compact.join(tag(:br)))
+    result = ''.html_safe
+    result << content_tag(:h3, (event.site || event.name))
+    city = [event.city, event.state.code, event.state.country.code].compact.join(', ')
+    result << content_tag(:p, [h(event.street), h(event.street2), h(city)].compact.join(tag :br).html_safe)
     
     gmaps = 'http://maps.google.com'
     from = "saddr=#{u User.current_user.address.to_s(:geo)}"
