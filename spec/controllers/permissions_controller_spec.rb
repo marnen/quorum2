@@ -120,10 +120,9 @@ describe PermissionsController, 'subscribe' do
   
   it "should create a new permission for the current user and the given calendar, if there isn't one already" do
     conditions = {:calendar_id => @calendar.id, :user_id => @current_user.id, :role_id => @user_role.id}
-    @pcount = Permission.count
+    Permission.destroy_all(conditions)
     get :subscribe, :calendar_id => @calendar.id
-    Permission.count.should == @pcount + 1
-    Permission.where(conditions).first.should_not be_nil
+    Permission.where(conditions).count.should == 1
   end
   
   it "should not create a new permission if there's already one (at user level) for the current user and given calendar" do

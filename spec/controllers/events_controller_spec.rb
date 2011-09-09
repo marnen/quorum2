@@ -496,9 +496,10 @@ end
 
 # Returns a User with admin permissions on the specified Calendar.
 def admin_user(calendar)
-  FactoryGirl.create(:user).tap do |u|
-    u.permissions = [FactoryGirl.create(:admin_permission, :calendar => calendar, :user => u)]
-    u.save!
+  admin = Role.find_or_create_by_name('admin')
+  Factory(:user).tap do |u|
+    u.permissions.destroy_all
+    u.permissions << Factory(:permission, :calendar => calendar, :user => u, :role => admin)
   end
 end
 

@@ -10,12 +10,21 @@ describe "/calendars/users" do
     @admin_role = Factory :admin_role
     @user_role = Factory :role
     
-    @admin = Factory.attributes_for :permission, :calendar => @calendar, :role => @admin_role
-    @user = Factory.attributes_for :permission, :calendar => @calendar, :role => @user_role
+    @admin = Factory.attributes_for :permission, :calendar => @calendar, :role => @admin_role, :user => nil
+    @user = Factory.attributes_for :permission, :calendar => @calendar, :role => @user_role, :user => nil
     
-    @marnen = Factory(:user, :show_contact => true).tap {|u| u.permissions << Permission.create!(@admin.merge(:user => u)) }
-    @millie = Factory(:user, :show_contact => true).tap {|u| u.permissions << Permission.create!(@user.merge(:user => u)) }
-    @quentin = Factory(:user, :show_contact => false).tap {|u| u.permissions << Permission.create!(@user.merge(:user => u)) }
+    @marnen = Factory(:user, :show_contact => true).tap do |u|
+      u.permissions.destroy_all
+      u.permissions.create!(@admin.merge :user => u)
+    end
+    @millie = Factory(:user, :show_contact => true).tap do |u|
+      u.permissions.destroy_all
+      u.permissions.create!(@user.merge :user => u)
+    end
+    @quentin = Factory(:user, :show_contact => false).tap do |u|
+      u.permissions.destroy_all
+      u.permissions.create!(@user.merge :user => u)
+    end
     @all_users = [@millie, @marnen, @quentin]
     User.stub!(:current_user).and_return(@marnen)
 

@@ -13,7 +13,11 @@ describe 'events/_event' do
   end
   
   it "should contain edit and delete links for the event, if the current user is an admin" do
-    admin = Factory(:user).tap {|u| u.permissions << Factory(:admin_permission, :calendar => @event.calendar, :user => u) }
+    admin_role = Role.find_or_create_by_name 'admin'
+    admin = Factory(:user).tap do |u|
+      u.permissions.destroy_all
+      u.permissions << Factory(:permission, :role => admin_role, :calendar => @event.calendar, :user => u)
+    end
     [User, view].each {|x| x.stub!(:current_user).and_return admin }
     
     render_view
