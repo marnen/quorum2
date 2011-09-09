@@ -46,5 +46,5 @@
   - if @events.collect{|e| e.calendar}.uniq.size == 1
     %p.pdf!= _("Generate attendance report for these events (%{PDF})") % {:PDF => link_to(_('PDF'), "#{url_for(params.merge :format => :pdf)}")}
 %table.events
-  = render :partial => 'table_header'
+  = render :partial => 'table_header', :locals => {:order => @order, :direction => @direction}
   = render :partial => 'event', :collection => @events
