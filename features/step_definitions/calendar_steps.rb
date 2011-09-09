@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 Given /^I am subscribed to "([^\"]*)"$/ do |calendar|
   cal = Calendar.find_by_name(calendar) || FactoryGirl.create(:calendar, :name => calendar)
   Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around

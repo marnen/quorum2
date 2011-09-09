@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # Module to extend #Hash objects used as search parameters.
 # Deals with #Date construction and #ActiveRecord-style hash-value accessors.
 

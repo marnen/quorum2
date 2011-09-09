@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 Given /^I am logged in$/ do
   user = FactoryGirl.create :user, :password => 'passw0rd'
   visit login_path

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 require 'digest/sha1'
 require 'geocoding_utilities'
 

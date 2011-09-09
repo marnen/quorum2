@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class RemoveCountryIdFromEvents < ActiveRecord::Migration
   def self.up
     remove_column :events, :country_id

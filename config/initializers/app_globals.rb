@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # Application globals go here.
 #require 'gettext/rails'
 require 'yaml'

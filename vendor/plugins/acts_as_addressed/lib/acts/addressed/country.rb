@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 module Acts::Addressed
   class Country < ActiveRecord::Base
     has_many :states

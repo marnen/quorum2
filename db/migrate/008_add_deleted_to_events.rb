@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class AddDeletedToEvents < ActiveRecord::Migration
   def self.up
     add_column :events, :deleted, :boolean

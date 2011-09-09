@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 require 'spec_helper'
 
 describe ApplicationController, "(admin?)" do

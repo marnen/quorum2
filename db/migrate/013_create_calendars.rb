@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class CreateCalendars < ActiveRecord::Migration
   def self.up
     create_table :calendars do |t|

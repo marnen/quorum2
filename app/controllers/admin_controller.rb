@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class AdminController < ApplicationController
   before_filter :check_admin
   layout 'standard'

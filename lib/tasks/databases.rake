@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 namespace :db do
   namespace :test do
     desc "Empty the test database"

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class AddFeedKeyToUsers < ActiveRecord::Migration
   def self.up
     # This is a unique key for each user's RSS feeds

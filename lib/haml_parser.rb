@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # haml_parser.rb
 require 'gettext/rgettext'
  

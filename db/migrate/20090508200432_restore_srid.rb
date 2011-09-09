@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class RestoreSrid < ActiveRecord::Migration
   def self.up
     srid = GeoRuby::SimpleFeatures::DEFAULT_SRID.to_i
