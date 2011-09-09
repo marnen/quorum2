@@ -71,7 +71,9 @@ Quorum2::Application.routes.draw do
   match 'events/index' => 'events#index'
   
   match 'events/feed.:fmt/:key' => 'events#feed', :as => :feed_events
-  resources :events
+  resources :events do
+    member { get :map }
+  end
 
   resources :permissions do
     member do

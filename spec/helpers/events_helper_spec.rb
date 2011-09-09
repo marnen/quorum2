@@ -79,6 +79,10 @@ describe EventsHelper, "event_map" do
     User.stub!(:current_user).and_return(FactoryGirl.create :user)
   end
   
+  it "should return a safe string" do
+    helper.event_map(Factory(:event), DOMAIN).should be_html_safe
+  end
+  
   it "should set up a GMap with all the options" do
     event = FactoryGirl.create :event
 
@@ -107,8 +111,6 @@ describe EventsHelper, "event_map" do
     gmap_div = '<div id="gmap">GMap div</div>'
     gmap.should_receive(:div).and_return(gmap_div)
     GMap.should_receive(:new).and_return(gmap)
-    info_div = '<div id="info">Event info</div>'
-    helper.should_receive(:info).with(event).at_least(:once).and_return(info_div)
     
     map = helper.event_map(event, DOMAIN)
     {'#gmap' => nil, '#info' => nil, '#lat' => ERB::Util::h(event.coords.lat), '#lng' => ERB::Util::h(event.coords.lng)}.each do |k, v|
@@ -135,6 +137,26 @@ describe EventsHelper, "ical_escape" do
   
   it "should put backslashes before commas and semicolons" do
     helper.ical_escape('comma,semicolon;').should == 'comma\\,semicolon\\;'
+  end
+end
+
+describe EventsHelper, "info" do
+  before :each do
+    User.stub(:current_user).and_return(Factory :user)
+    @event = Factory :event
+    @info = helper.info(@event)
+  end
+  
+  it "should return a safe string" do
+    @info.should be_html_safe
+  end
+  
+  it "should display a <h3> with the site name" do
+    @info.should have_selector('h3', :content => @event.site)
+  end
+  
+  it "should display the address separated by line breaks" do
+    @info.should include([h(@event.street), h(@event.street2), h([@event.city, @event.state.code, @event.state.country.code].join(', '))].join(tag :br))
   end
 end
 
