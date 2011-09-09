@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 Quorum2::Application.configure do
   config.cache_classes = true # This must be true for Cucumber to operate correctly!
   

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class Calendar < ActiveRecord::Base
   has_many :events
   has_many :permissions

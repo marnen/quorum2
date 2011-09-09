@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 module GeocodingUtilities
   def self.included(klass)
     klass.before_update :clear_coords

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 module Acts::Addressed
   # This is just like NilClass, but when methods are called on a QuietNil, they just return the QuietNil without raising an exception.
   #

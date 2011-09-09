@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # ActsAsAddressed
 module Acts #:nodoc:
   module Addressed #:nodoc:

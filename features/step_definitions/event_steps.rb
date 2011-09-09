@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 Given /^there are no events$/ do
   Event.destroy_all
 end

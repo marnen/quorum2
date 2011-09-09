@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class CalendarsController < ApplicationController
   @nonadmin ||= [:new, :create]
   before_filter :check_admin, :except => @nonadmin

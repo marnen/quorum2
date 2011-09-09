@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # from https://gist.github.com/738245
 
 desc "Manage the encoding header of Ruby files"

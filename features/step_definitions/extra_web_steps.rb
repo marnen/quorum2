@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 Then /^I should see the word "([^\"]*)"$/ do |word|
   Then %Q{I should see /\\b#{word}\\b/}
 end

@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class PermissionsController < ApplicationController
   @@nonadmin = :index, :subscribe, :destroy
   before_filter :check_admin, :except => @@nonadmin

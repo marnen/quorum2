@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class TransitionToAuthlogic < ActiveRecord::Migration
   # Much of this is from http://jrmehle.com/2009/09/02/switching-from-restful_authentication-to-authlogic/ .
   def self.up

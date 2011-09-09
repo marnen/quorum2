@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class CreateStatesAndCountries < ActiveRecord::Migration
   def self.up
     create_table :states do |t|

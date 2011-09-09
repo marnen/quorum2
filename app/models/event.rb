@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 require 'geocoding_utilities'
 
 class Event < ActiveRecord::Base
