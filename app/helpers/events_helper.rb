@@ -56,11 +56,11 @@ module EventsHelper
     @extra_headers << GMap.header(:host => hostname).to_s.html_safe << javascript_include_tag('events/map').html_safe
 
     map = GMap.new(:map)
-    result = ''
-    result << info(event)
-    result << content_tag(:div, h(event.coords.lat), :id => :lat, :class => :hidden)
-    result << content_tag(:div, h(event.coords.lng), :id => :lng, :class => :hidden)
-    result << map.div(:width => 500, :height => 400)
+    result = ''.html_safe
+    result << info(event).html_safe
+    result << content_tag(:div, event.coords.lat, :id => :lat, :class => :hidden)
+    result << content_tag(:div, event.coords.lng, :id => :lng, :class => :hidden)
+    result << map.div(:width => 500, :height => 400).html_safe
     result
   end
   
