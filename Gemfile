@@ -43,7 +43,7 @@ group :development do
 end
 
 group :test, :development do
-  gem 'ruby-debug'
+  gem 'ruby-debug19'
   gem 'autotest-rails', :require => false
   gem 'rspec-rails', '~> 2.6.1', :require => false
   gem 'cucumber-rails', :require => false
