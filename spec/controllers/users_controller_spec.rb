@@ -177,8 +177,8 @@ describe UsersController, '(reset)' do
   end
   
   it "should display a form asking for e-mail address, with a submit button" do
-    response.should have_tag('input[type=text]')
-    response.should have_tag('input[type=submit]')
+    response.body.should have_selector('input[type=text]')
+    response.body.should have_selector('input[type=submit]')
   end
   
   it "should set the page title" do
