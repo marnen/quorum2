@@ -99,16 +99,42 @@ describe User, "(validations)" do
 =end
 
   it 'should create a user permission for the calendar, when there\'s only one calendar' do
+    Calendar.destroy_all
     User.stub!(:current_user).and_return(Factory :user)
     calendar = Factory :calendar
     Calendar.count.should == 1
-    user = User.create!(User.plan)
+    user = User.create!(Factory.attributes_for :user)
     user.permissions.should_not be_nil
     user.permissions.should_not be_empty
     user.permissions[0].user.should == user
     user.permissions[0].calendar.should == calendar
     user.permissions[0].role.name.should == 'user'
   end
+  
+  context 'field validations' do
+    before :each do
+      @user = Factory.build :user
+    end
+    
+    it 'should be valid with default data' do
+      @user.should be_valid
+    end
+    
+    ['password_confirmation', 'email'].each do |field| # TODO: should work for password too, but it doesn't
+      it "requires #{field.gsub '_', ' '}" do
+        @user.send "#{field}=", ''
+        @user.should_not be_valid
+      end
+    end
+  end
+
+=begin
+    it 'initializes #activation_code' do
+      @creating_user.call
+      @user.reload.activation_code.should_not be_nil
+    end
+  end
+=end
 end
   
 describe User, "(instance methods)" do
@@ -249,7 +275,7 @@ describe User, "(geographical features)" do
     Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
     Geocoding.stub!(:get).and_return(@placemarks)
 
-    @user = User.new(User.plan)
+    @user = Factory.build :user
   end
   
   it "should save coords when successfully encoded" do
@@ -271,59 +297,9 @@ describe User, "(geographical features)" do
   
   it "should clear coords on update" do
     User.stub!(:current_user).and_return(Factory :user)
-    @user.update_attributes(User.plan)
+    @user.update_attributes(Factory.attributes_for :user)
     @user.should_receive(:coords=)
     @user.update_attributes(:name => 'foo')
   end
 end
 
-describe User, "(authentication structure)" do
-=begin
-  describe 'being created' do
-    before do
-      @user = nil
-      @creating_user = lambda do
-        @user = create_user
-        violated "#{@user.errors.full_messages.to_sentence}" if @user.new_record?
-      end
-    end
-    
-    it 'increments User#count' do
-      @creating_user.should change(User, :count).by(1)
-    end
-
-    it 'initializes #activation_code' do
-      @creating_user.call
-      @user.reload.activation_code.should_not be_nil
-    end
-  end
-=end
-
-  it 'requires password' do
-    lambda do
-      u = create_user(:password => nil)
-      u.errors.on(:password).should_not be_nil
-    end.should_not change(User, :count)
-  end
-
-  it 'requires password confirmation' do
-    lambda do
-      u = create_user(:password_confirmation => nil)
-      u.errors.on(:password_confirmation).should_not be_nil
-    end.should_not change(User, :count)
-  end
-
-  it 'requires email' do
-    lambda do
-      u = create_user(:email => nil)
-      u.errors.on(:email).should_not be_nil
-    end.should_not change(User, :count)
-  end
-  
-protected
-  def create_user(options = {})
-    record = Factory :user, {:email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire'}.merge(options)
-    record.save
-    record
-  end
-end
