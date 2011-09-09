@@ -8,3 +8,4 @@ Feature: Event map
     And an event exists
     When I go to the event's map page
     Then I should see a map of the event
+    And I should see "Get directions" within a link to somewhere at "http://maps.google.com"

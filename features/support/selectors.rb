@@ -28,6 +28,9 @@ module HtmlSelectorsHelpers
     # web steps:
     when /^"(.+)"$/
       $1
+    when %r{^a link to somewhere at "([^"]+)"$}
+      url = $1
+      "a[href^='#{url}']"
 
     else
       raise "Can't find mapping from \"#{locator}\" to a selector.\n" +

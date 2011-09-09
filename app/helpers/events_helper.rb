@@ -57,7 +57,7 @@ module EventsHelper
 
     map = GMap.new(:map)
     result = ''.html_safe
-    result << info(event).html_safe
+    result << info(event)
     result << content_tag(:div, event.coords.lat, :id => :lat, :class => :hidden)
     result << content_tag(:div, event.coords.lng, :id => :lng, :class => :hidden)
     result << map.div(:width => 500, :height => 400).html_safe
