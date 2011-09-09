@@ -46,6 +46,7 @@ group :test, :development do
   gem 'autotest-rails', :require => false
   gem 'rspec-rails', '~> 2.6.1', :require => false
   gem 'cucumber-rails', :require => false
+  gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'ffaker'
 end
