@@ -17,16 +17,15 @@ module NavigationHelpers
     #   when /^(.*)'s profile page$/i
     #     user_profile_path(User.find_by_login($1))
     
-    when /\badmin page/
+    when /the admin page$/
       '/admin'
-    
-    when /\bevent list/
+    when /the event list$/
       events_path
-      
-    when /\blogin page/
+    when /#{capture_model}'s map page$/
+      map_event_path model!($1)
+    when /the login page$/
       login_path
-      
-    when /\buser list for "([^"]*)"/
+    when /the user list for "([^"]*)"$/
       url_for :controller => 'calendars', :id => Calendar.find_by_name($1).id, :action => 'users', :only_path => true
 
     else
