@@ -22,7 +22,7 @@ describe "/events/index" do
  it "should have a date limiting form" do
     render :file => 'events/index'
     form = "form[action='#{url_for(params.merge :escape => false)}'][method=get]"
-    response.should have_selector("#{form}") do |e|
+    rendered.should have_selector("#{form}") do |e|
       e.should have_selector('input') do |inputs|
         inputs.should have_selector('[type=radio]') do |radios|
           radios.should have_selector(name_selector('search[from_date_preset]')) do |from_date|
@@ -51,22 +51,22 @@ describe "/events/index" do
     User.current_user.stub!(:calendars).and_return((1..2).map{ Factory :calendar })
     render :file => 'events/index'
     form = "form[action='#{url_for(params.merge :escape => false)}'][method=get]"
-    response.should have_selector("#{form} select") do |selects|
+    rendered.should have_selector("#{form} select") do |selects|
       selects.should have_selector(name_selector "search[calendar_id]")
     end
   end
   
   it "should show a sort link in date and event column header" do
     render :file => 'events/index'
-    response.should have_selector("th a.sort", :content => 'Date')
-    response.should have_selector("th a.sort", :content => "Event")
+    rendered.should have_selector("th a.sort", :content => 'Date')
+    rendered.should have_selector("th a.sort", :content => "Event")
   end
   
   it "should show a sort indicator next to headers that have been sorted by" do
     assign :order, 'name'
     assign :direction, 'desc'
     render :file => 'events/index'
-    response.should =~ %r{Event\s?((<[^>]*>)?\s?)*↓}
+    rendered.should =~ %r{Event\s?((<[^>]*>)?\s?)*↓}
   end
   
   it "should render _event for each event" do
@@ -88,13 +88,13 @@ describe "/events/index" do
   
   it "should contain a link and a URL for the RSS feed" do
     render :file => 'events/index'
-    response.should have_selector(".rss a[href='#{rss_url}']")
-    response.should have_selector(".rss .url", :content => rss_url)
+    rendered.should have_selector(".rss a[href='#{rss_url}']")
+    rendered.should have_selector(".rss .url", :content => rss_url)
   end
   
   it "should contain a link to regenerate the RSS feed key" do
     render :file => 'events/index'
-    response.should have_selector(".rss a[href='#{regenerate_key_path}']")
+    rendered.should have_selector(".rss a[href='#{regenerate_key_path}']")
   end
   
   it "should contain a link for PDF export if the current events belong to exactly one calendar" do
@@ -103,7 +103,7 @@ describe "/events/index" do
       e.stub!(:calendar).and_return(@one)
     end
     render :file => "events/index"
-    response.should have_selector("a[href='#{url_for(params.merge :format => :pdf, :escape => false)}']")
+    rendered.should have_selector("a[href='#{url_for(params.merge :format => :pdf, :escape => false)}']")
   end
   
   it "should not contain a link for PDF export if the current events belong to more than one calendar" do
@@ -118,6 +118,6 @@ describe "/events/index" do
       end
     end
     render :file => "events/index"
-    response.should_not have_selector("a[href='#{url_for(params.merge :format => :pdf, :escape => false)}']")
+    rendered.should_not have_selector("a[href='#{url_for(params.merge :format => :pdf, :escape => false)}']")
   end
 end

@@ -12,10 +12,10 @@ describe 'events/_attendance' do
   end
   
   it "should have a select element for event" do
-    response.should have_selector("select.commit")
+    rendered.should have_selector("select.commit")
   end
   
   it "should have an empty element for the progress indicator" do
-    response.should have_selector(".progress", :content => /&nbsp;/)
+    rendered.should have_selector(".progress", :content => /&nbsp;/)
   end
 end
