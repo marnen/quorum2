@@ -29,7 +29,7 @@ FactoryGirl.define do
     street { Faker::Address.street_address }
     street2 { Faker::Address.secondary_address }
     city { Faker::Address.city }
-    state
+    association :state_raw, :factory => :state
     zip { Faker::Address.zip_code }
     date { Date.civil(rand(10) + 2000, rand(12) + 1, rand(28) + 1) }
     calendar
@@ -60,7 +60,7 @@ FactoryGirl.define do
     street { Faker::Address.street_address }
     street2 { Faker::Address.secondary_address }
     city {Faker::Address.city}
-    state 
+    association :state_raw, :factory => :state 
     zip { Faker::Address.zip_code }
     active {true}
     
