@@ -30,6 +30,7 @@ gem 'GeoRuby'
 gem 'rdiscount'
 gem 'authlogic', '~> 3.0.3'
 gem 'dynamic_form'
+gem 'exception_notification'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

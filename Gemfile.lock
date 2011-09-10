@@ -69,6 +69,8 @@ GEM
     dynamic_form (1.1.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    exception_notification (2.5.2)
+      actionmailer (>= 3.0.4)
     factory_girl (2.1.0)
     factory_girl_rails (1.2.0)
       factory_girl (~> 2.1.0)
@@ -188,6 +190,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   dynamic_form
+  exception_notification
   factory_girl_rails
   ffaker
   gettext (>= 1.9.3)

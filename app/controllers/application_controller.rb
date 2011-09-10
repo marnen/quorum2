@@ -4,7 +4,6 @@
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
-  include ExceptionNotifiable
   
   before_filter :set_gettext_locale
     
