@@ -11,7 +11,10 @@ describe Event, "(general properties)" do
   end
   
   it "should belong to a State" do
-    Event.reflect_on_association(:state).macro.should == :belongs_to
+    r = Event.reflect_on_association(:state_raw)
+    r.macro.should == :belongs_to
+    r.options[:class_name].should == 'Acts::Addressed::State'
+    r.options[:foreign_key].should == 'state_id'
   end
   
   it "should belong to a Country" do
@@ -45,8 +48,8 @@ describe Event, "(general properties)" do
   end
   
   it "should have a country property referred through state" do
-    event = Event.new
-    event.state = Acts::Addressed::State.new
+    event = Factory :event, :state => Factory(:state)
+    event.state.should_not be_nil
     event.country.should == event.state.country
   end
   
