@@ -11,7 +11,10 @@ describe User, "(general properties)" do
   end
   
   it "should belong to a State" do
-    User.reflect_on_association(:state).macro.should == :belongs_to
+    r = User.reflect_on_association(:state_raw)
+    r.macro.should == :belongs_to
+    r.options[:class_name].should == 'Acts::Addressed::State'
+    r.options[:foreign_key].should == 'state_id'
   end
   
   it "should have many Commitments" do
@@ -42,7 +45,7 @@ describe User, "(general properties)" do
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
     state = Factory :state
     opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
-    u = User.new(opts)
+    u = Factory :user, opts
     u.address.should == Acts::Addressed::Address.new(opts)
   end
   
@@ -56,7 +59,7 @@ describe User, "(general properties)" do
     state = Factory :state
     user = User.new
     user.should respond_to(:country)
-    user.state = state
+    user.state_raw = state
     user.country.should == state.country
   end
   
