@@ -48,7 +48,7 @@ describe CalendarsController do
       it 'should create admin permissions on the new calendar' do
         cal = Calendar.find_by_name(@calendar[:name])
         cal.should_not be_nil
-        Permission.find_by_calendar_id_and_user_id(cal.id, @current_user.id).should_not be_nil
+        cal.permissions.where(:user_id => @current_user.id).should_not be_nil
       end
     end
   end
