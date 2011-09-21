@@ -36,8 +36,7 @@ role :db,  "HOST", :primary => true
 set :runner, "capistrano" # might want to change this
 set :use_sudo, false
 
-after 'deploy:update_code', 'deploy:remove_unnecessary_files'
-after 'deploy:finalize_update', 'deploy:tag'
+after 'deploy:update_code', 'deploy:remove_unnecessary_files', 'deploy:tag'
 
 namespace :deploy do
   
@@ -69,7 +68,7 @@ namespace :deploy do
   task :tag do
     user = `git config --get user.name`.chomp
     email = `git config --get user.email`.chomp
-    tag_name = "#{stage}_#{release_name}"
+    tag_name = "#{remote}_#{release_name}"
     puts `git tag #{tag_name} #{current_revision} -m "Deployed by #{user} <#{email}>"`
     puts `git push #{remote} #{tag_name}`
   end
