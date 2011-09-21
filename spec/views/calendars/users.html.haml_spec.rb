@@ -27,10 +27,10 @@ describe "/calendars/users" do
       u.permissions.destroy_all
       u.permissions.create!(@user.merge :user => u)
     end
-    @all_users = [@millie, @marnen, @quentin]
+    @users = [@millie, @marnen, @quentin]
     User.stub!(:current_user).and_return(@marnen)
 
-    assign :users, (@users = @all_users)
+    assign :users, @users
     assign :current_object, @calendar
     render :file => 'calendars/users'
   end
@@ -47,11 +47,13 @@ describe "/calendars/users" do
   end
   
   it "should show street and e-mail addresses for each user who has not requested to be hidden" do
-    for u in @users
-      rendered.should have_selector("tr#user_#{u.id}") do |row|
-        if u.show_contact
-          row.should have_selector('td._address',
-            :content => Regexp.new([u.street, u.street2, u.city, u.state.code].collect{|x| Regexp.escape(h x)}.join('.*')))
+    @users.each do |u|
+      Capybara.string(rendered).find("tr#user_#{u.id}").tap do |row|
+        if u.show_contact?
+          row.find('td._address').tap do |address|
+            address.text.should =~ Regexp.new([u.street, u.street2, "#{u.city}, #{u.state.code}"].collect{|x| Regexp.escape(h x)}.join('.*'))
+            address.should have_selector 'br'
+          end
           row.should have_selector('td._email', :content => u.email)
         else
           row.should have_selector("td._address", :content => "")
