@@ -35,7 +35,7 @@ role :db,  "HOST", :primary => true
 set :runner, "capistrano" # might want to change this
 set :use_sudo, false
 
-# get GemInstaller working
+after 'deploy:update_code', 'deploy:remove_unnecessary_files'
 
 namespace :deploy do
   
@@ -46,7 +46,8 @@ namespace :deploy do
     run "/usr/bin/touch #{current_path}/tmp/restart.txt"
   end
   
-  task :after_update_code do
+  desc 'Remove shared files and image sources.'
+  task :remove_unnecessary_files, :roles => :app do
     # Remove some unversioned YAML config files and link to shared directory.
     rpath = File.expand_path(release_path)
     ['database.yml', 'config.yml', 'gmaps_api_key.yml'].each do |file|
