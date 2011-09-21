@@ -18,6 +18,7 @@ set :user, "capistrano"
 set :scm, :git
 set :branch, :master
 set :deploy_via, :remote_cache
+set :remote, 'origin'
 
 =begin
 set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN 
@@ -36,6 +37,7 @@ set :runner, "capistrano" # might want to change this
 set :use_sudo, false
 
 after 'deploy:update_code', 'deploy:remove_unnecessary_files'
+after 'deploy:finalize_update', 'deploy:tag'
 
 namespace :deploy do
   
@@ -60,5 +62,15 @@ namespace :deploy do
     
     #run "chown www-data #{current_path}/config/environment.rb"
 
+  end
+  
+  # From http://stackoverflow.com/questions/5735656/tagging-release-before-deploying-with-capistrano
+  desc 'Tags deployed release with a unique Git tag.'
+  task :tag do
+    user = `git config --get user.name`.chomp
+    email = `git config --get user.email`.chomp
+    tag_name = "#{stage}_#{release_name}"
+    puts `git tag #{tag_name} #{current_revision} -m "Deployed by #{user} <#{email}>"`
+    puts `git push #{remote} #{tag_name}`
   end
 end
