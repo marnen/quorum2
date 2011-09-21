@@ -71,8 +71,8 @@ describe PermissionsController, 'index' do
   it 'should show a list of unsubscribed calendars to subscribe to' do
     @current_user.permissions.find_by_calendar_id(@three.id).should be_nil
     get :index
-    response.body.should have_selector("table.unsubscribed tr#calendar_#{@three.id}") do |r|
-      r.should have_selector("a[href=#{subscribe_path(:calendar_id => @three.id)}]")
+    Capybara.string(response.body).find("table.unsubscribed tr#calendar_#{@three.id}").tap do |r|
+      r.should have_selector("a[href='#{subscribe_path(:calendar_id => @three.id)}']")
     end
     [@one, @two].each do |c|
       response.body.should_not have_selector("table.unsubscribed tr#calendar_#{c.id}")

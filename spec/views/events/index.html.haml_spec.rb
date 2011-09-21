@@ -22,28 +22,22 @@ describe "/events/index" do
  it "should have a date limiting form" do
     render :file => 'events/index'
     form = "form[action='#{url_for(params.merge :escape => false)}'][method=get]"
-    rendered.should have_selector("#{form}") do |e|
-      e.should have_selector('input') do |inputs|
-        inputs.should have_selector('[type=radio]') do |radios|
-          radios.should have_selector(name_selector('search[from_date_preset]')) do |from_date|
-            from_date.should have_selector('[value=today][checked]')
-            from_date.should have_selector('[value=earliest]')
-            from_date.should have_selector('[value=other]')
-          end
-          radios.should have_selector(name_selector 'search[to_date_preset]') do |to_date|
-            to_date.should have_selector('[value=latest][checked]')
-            to_date.should have_selector('[value=other]')
-          end
-        end
-        inputs.should have_selector(HTML::Selector.new('[type=submit]:not([name])'))
+    Capybara.string(rendered).find("#{form}").tap do |e|
+      from_date_selector = "input[type='radio']#{name_selector('search[from_date_preset]')}"
+      e.should have_selector("#{from_date_selector}[value='today'][checked]")
+      e.should have_selector("#{from_date_selector}[value='earliest']")
+      e.should have_selector("#{from_date_selector}[value='other']")
+
+      to_date_selector = "input[type='radio']#{name_selector 'search[to_date_preset]'}"
+      e.should have_selector("#{to_date_selector}[value='latest'][checked]")
+      e.should have_selector("#{to_date_selector}[value='other']")
+      e.should have_selector("input[type='submit']:not([name])")
+      
+      (1..3).each do |x|
+        e.should have_selector("select#{name_selector "search[from_date(#{x}i)]"}")
+        e.should have_selector("select#{name_selector "search[to_date(#{x}i)]"}")
       end
-      e.should have_selector('select') do |selects|
-        (1..3).each do |x|
-          selects.should have_selector(name_selector "search[from_date(#{x}i)]")
-          selects.should have_selector(name_selector "search[to_date(#{x}i)]")
-          selects.should_not have_selector(name_selector "search[calendar_id]")
-        end
-      end
+      e.should_not have_selector("select#{name_selector "search[calendar_id]"}")
     end
   end
   
@@ -51,9 +45,7 @@ describe "/events/index" do
     User.current_user.stub!(:calendars).and_return((1..2).map{ Factory :calendar })
     render :file => 'events/index'
     form = "form[action='#{url_for(params.merge :escape => false)}'][method=get]"
-    rendered.should have_selector("#{form} select") do |selects|
-      selects.should have_selector(name_selector "search[calendar_id]")
-    end
+    rendered.should have_selector("#{form} select #{name_selector "search[calendar_id]"}")
   end
   
   it "should show a sort link in date and event column header" do
