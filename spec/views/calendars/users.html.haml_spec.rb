@@ -65,7 +65,7 @@ describe "/calendars/users" do
   
   it "should show each user's role in this calendar, and -- except for the current user -- should allow it to be changed" do
     for u in @users
-      rendered.should have_selector("tr#user_#{u.id}") do |row|
+      Capybara.string(rendered).find("tr#user_#{u.id}").tap do |row|
         if u == User.current_user
           row.should have_selector("td._role", :content => /admin/) # just text
           row.should_not have_selector("td._role select" )
