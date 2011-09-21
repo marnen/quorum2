@@ -29,6 +29,8 @@ gem 'prawn'
 gem 'GeoRuby'
 gem 'rdiscount'
 gem 'authlogic', '~> 3.0.3'
+gem 'dynamic_form'
+gem 'exception_notification'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -48,6 +50,7 @@ group :test, :development do
   gem 'rspec-rails', '~> 2.6.1', :require => false
   gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
   gem 'cucumber-rails', :require => false
+  gem 'launchy'
   gem 'pickle'
   gem 'database_cleaner'
   gem 'factory_girl_rails'

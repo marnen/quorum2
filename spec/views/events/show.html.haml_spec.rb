@@ -18,6 +18,6 @@ describe "/events/show" do
   
   it "should wrap the whole thing in a <table> of class events" do
     render :file => '/events/show'
-    response.should =~ %r{^\s*<\s*table\s+([^>]*\s*)class=(["'])events\2[^>]*>.*</table>\s*$}m
+    rendered.should =~ %r{^\s*<\s*table\s+([^>]*\s*)class=(["'])events\2[^>]*>.*</table>\s*$}m
   end
 end

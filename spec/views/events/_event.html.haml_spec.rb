@@ -26,7 +26,7 @@ describe 'events/_event' do
     edit_url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
     delete_url = url_for(:controller => 'events', :action => 'delete', :id => @event.id, :escape => false)
     [edit_url, delete_url].each do |url|
-      response.should have_selector("#event_#{@event.id} a[href='#{url}']")
+      rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
     end
   end
 
@@ -36,7 +36,7 @@ describe 'events/_event' do
     @event.stub!(:calendar).and_return(@one)
     
     render_view
-    response.should have_selector("#event_#{@event.id} .calendar", :content => @one)
+    rendered.should have_selector("#event_#{@event.id} .calendar", :content => @one)
   end
   
   it 'should not contain calendar names for events, if the current user has only one calendar' do
@@ -45,7 +45,7 @@ describe 'events/_event' do
     @event.stub!(:calendar).and_return(@one)
     
     render_view
-    response.should_not have_selector("#event_#{@event.id} .calendar")
+    rendered.should_not have_selector("#event_#{@event.id} .calendar")
   end
   
   it "should have a control to set the current user's attendance for the event" do
@@ -58,73 +58,73 @@ describe 'events/_event' do
   it "should contain a distance in miles or km for the event if it has good coords" do
     render_view
     if !@event.coords.nil? then
-      response.should have_selector("#event_#{@event.id} .distance", :content => /\d (miles|km)/)
+      rendered.should have_selector("#event_#{@event.id} .distance", :content => /\d (miles|km)/)
     end
   end
   
   it "should show the name of the event in a tag of class 'summary'" do
     render_view
-    response.should have_selector("#event_#{@event.id} .summary", :content => @event.name)
+    rendered.should have_selector("#event_#{@event.id} .summary", :content => @event.name)
   end
   
   it "should show the description of the event (formatted with Markdown) in a tag of class 'description'" do
     render_view
     selector = "#event_#{@event.id} .description"
-    response.should have_selector(selector, :content => /Testing use of/)
-    response.should have_selector("#{selector} em", :content => 'Markdown')
+    rendered.should have_selector(selector, :content => /Testing use of/)
+    rendered.should have_selector("#{selector} em", :content => 'Markdown')
   end
   
   it "should show the site for the event" do
     render_view
-    response.should have_selector("#event_#{@event.id}", :content => @event.site)
+    rendered.should have_selector("#event_#{@event.id}", :content => @event.site)
   end 
 
   it "should show the street address of the event in a tag of class 'street-address" do
     render_view
-    response.should have_selector("#event_#{@event.id} .street-address", :content => /#{[h(@event.street), h(@event.street2)].join('.*')}/m)
+    rendered.should have_selector("#event_#{@event.id} .street-address", :content => /#{[h(@event.street), h(@event.street2)].join('.*')}/m)
   end
   
   it "should show the city of the event in a tag of class 'locality'" do
     render_view
-    response.should have_selector("#event_#{@event.id} .locality", :content => @event.city)
+    rendered.should have_selector("#event_#{@event.id} .locality", :content => @event.city)
   end
   
   it "should show the state code of the event in a tag of class 'region'" do
     render_view
-    response.should have_selector("#event_#{@event.id} .region", :content => @event.state.code)
+    rendered.should have_selector("#event_#{@event.id} .region", :content => @event.state.code)
   end
 
   it "should show the country code of each event in a tag of class 'country-name'" do
     render_view
-    response.should have_selector("#event_#{@event.id} .country-name", :content => @event.country.code)
+    rendered.should have_selector("#event_#{@event.id} .country-name", :content => @event.country.code)
   end
   
   it "should show the zip code of each event in a tag of class 'postal-code'" do
     render_view
-    response.should have_selector("#event_#{@event.id} .postal-code", :content => @event.zip)
+    rendered.should have_selector("#event_#{@event.id} .postal-code", :content => @event.zip)
   end
   
   it "should show a map link for the event" do
     render_view
     url = url_for(:controller => 'events', :action => 'map', :id => @event.id, :escape => false)
-    response.should have_selector("#event_#{@event.id} a[href='#{url}']")
+    rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
   end
   
   it "should show an iCal export link for the event, of class 'ical'" do
     render_view
     url = url_for(:controller => 'events', :action => 'export', :id => @event.id, :escape => false)
-    response.should have_selector("#event_#{@event.id} a.ical[href='#{url}']")
+    rendered.should have_selector("#event_#{@event.id} a.ical[href='#{url}']")
   end
   
   it "should show a date for the event in RFC 822 format, wrapped in an <abbr> of class 'dtstart' with ical-style date as the title" do
     render_view
     date = @event.date
-    response.should have_selector("#event_#{@event.id} abbr.dtstart[title='#{date.to_formatted_s(:ical)}']", :content => date.to_formatted_s(:rfc822))
+    rendered.should have_selector("#event_#{@event.id} abbr.dtstart[title='#{date.to_formatted_s(:ical)}']", :content => date.to_formatted_s(:rfc822))
   end
   
   it "should have an element of class 'uid' for each event, containing an iCal unique ID for the event" do
     render_view
-    response.should have_selector("#event_#{@event.id} .uid", :content => ical_uid(@event))
+    rendered.should have_selector("#event_#{@event.id} .uid", :content => ical_uid(@event))
   end
   
   it "should contain an edit link for each event that the current user created" do
@@ -133,14 +133,14 @@ describe 'events/_event' do
 
     events.each do |event|
       url = url_for(:controller => 'events', :action => 'edit', :id => event.id, :escape => false)
-      response.should have_selector("#event_#{event.id} a[href=" << url << "]")
+      rendered.should have_selector("#event_#{event.id} a[href=" << url << "]")
     end
 =end
     @user.permissions << Factory(:permission, :calendar => @event.calendar)
     @event.created_by = @user
     render_view
     url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
-    response.should have_selector("#event_#{@event.id} a[href='#{url}']")
+    rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
   end
   
   it "should not contain an edit link for events that the current (non-admin) user created" do
@@ -148,7 +148,7 @@ describe 'events/_event' do
     @event.created_by = Factory :user # some other guy
     render_view
     url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
-    response.should_not have_selector("#event_#{@event.id} a[href='#{url}']")
+    rendered.should_not have_selector("#event_#{@event.id} a[href='#{url}']")
   end
   
   it "should get a list of users attending and not attending for each event" do
@@ -164,7 +164,7 @@ describe 'events/_event' do
 
   it "should wrap the whole response in a form" do
     render_view
-    response.should have_selector("form.attendance")
+    rendered.should have_selector("form.attendance")
   end
   
  protected

@@ -1,7 +1,7 @@
 - if !current_user
   %h1&= _("Register")
 = error_messages_for :user
-- form_for :user, :url => current_user ? edit_user_path(current_user) : users_path do |f|
+= form_for :user, :url => current_user ? edit_user_path(current_user) : users_path do |f|
   %h2&= _("Who are you?")
   %table.edit
     %tr

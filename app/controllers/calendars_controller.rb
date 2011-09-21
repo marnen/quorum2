@@ -18,6 +18,7 @@ class CalendarsController < ApplicationController
       @page_title = _('Edit calendar')
     end
     
+    # TODO: Shouldn't this be replaced by Calendar#set_admin ?
     after :create do
       p = User.current_user.permissions
       @admin ||= Role.find_or_create_by_name('admin')
