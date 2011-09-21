@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # This is the controller for #Event instances. It supports the following make_resourceful[http://mr.hamptoncatlin.com] actions: :index, :create, :new, :edit, :update, :show.
 class EventsController < ApplicationController
   layout "standard", :except => [:export, :feed] # no layout needed on export, since it generates an iCal file
@@ -16,7 +18,7 @@ class EventsController < ApplicationController
       @page_title = _("Upcoming events")
       @order = params[:order]
       @direction = params[:direction]
-      @search = params[:search].extend(Search)
+      @search = params[:search].extend(Search) if params[:search]
     end
       
     response_for :index do |format|

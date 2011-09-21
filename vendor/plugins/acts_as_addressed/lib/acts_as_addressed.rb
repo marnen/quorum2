@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # ActsAsAddressed
 module Acts #:nodoc:
   module Addressed #:nodoc:
@@ -9,7 +11,7 @@ module Acts #:nodoc:
     module SingletonMethods
       # Includes the acts_as_addressed structure in the model it's called on.
       def acts_as_addressed
-        belongs_to :state, :class_name => "Acts::Addressed::State"
+        belongs_to :state_raw, :class_name => "Acts::Addressed::State", :foreign_key => 'state_id'
         composed_of :address, :class_name => "Acts::Addressed::Address", :mapping => %w(street street2 city state_id zip coords).collect{|x| [x, x.gsub(/_id$/, '')]}
         include InstanceMethods
       end
@@ -20,6 +22,14 @@ module Acts #:nodoc:
       # Nil-safe country accessor.
       def country
         address.country
+      end
+      
+      def state
+        address.state
+      end
+      
+      def state=(value)
+        self.state_raw = value
       end
     end
   end

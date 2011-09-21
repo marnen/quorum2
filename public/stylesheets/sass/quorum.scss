@@ -162,11 +162,16 @@ $pdf_icon_size: 16px;
 .pdf {
   @include icon($pdf_icon_url, $pdf_icon_size, 0px); }
 
-.fieldWithErrors {
+.field_with_errors {
   background-color: red;
   input {
     background-color: #ffcccc;
-    color: black; } }
+    color: black;
+  }
+}
+.formError {
+  color: red * 0.8;
+}
 
 $notice_icon_url: url("../images/accept.png");
 $warning_icon_url: url("../images/star.png");

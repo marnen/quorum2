@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class CreateAttendanceSchema < ActiveRecord::Migration
   def self.up
     create_table :events_users do |t|

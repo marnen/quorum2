@@ -1,14 +1,15 @@
-%h1= h(_('Welcome to %{Quorum}!')) % {:Quorum => content_tag(:span, h(SITE_TITLE), :class => :siteName)}
-%p= h(_('This is %{Quorum}, an invitation and scheduling system. If you have an account, please log in here; otherwise, please %{link}register%{_link}.')) % {:Quorum => content_tag(:span, h(SITE_TITLE), :class => :siteName), :link => "<a href='#{register_url}'>", :'_link' => '</a>'}
-- form_for @user_session, :url => user_session_path do |f|
+-# TODO: Add .html_safe on translated strings when gettext can support it along with %{}.
+%h1!= _('Welcome to %{Quorum}!') % {:Quorum => content_tag(:span, SITE_TITLE, :class => :siteName).html_safe}
+%p!= _('This is %{Quorum}, an invitation and scheduling system. If you have an account, please log in here; otherwise, please %{link}register%{_link}.') % {:Quorum => content_tag(:span, SITE_TITLE, :class => :siteName), :link => "<a href='#{register_url}'>", :'_link' => '</a>'}
+= form_for @user_session, :url => user_session_path do |f|
   %table.login
     %tr
       %td
-        %label{:for => "email"}&= _("E-mail address:")
+        %label{:for => "email"}= _("E-mail address:")
       %td= f.text_field :email, :size => nil
     %tr
       %td
-        %label{:for => "password"}&= _("Password:")
+        %label{:for => "password"}= _("Password:")
       %td= f.password_field :password, :size => nil
   - if false
     /
@@ -17,4 +18,4 @@
         %label{:for => "remember_me"} Remember me:
         = check_box_tag 'remember_me'
   = submit_tag _('Log in')
-%p= link_to(h(_('Forgot your password?')), reset_password_url)
+%p= link_to(_('Forgot your password?'), reset_password_url)

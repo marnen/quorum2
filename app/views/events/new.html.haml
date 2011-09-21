@@ -1,46 +1,45 @@
-- form_for @current_object do |f|
+= form_for @current_object do |f|
   %table.edit
     - if current_user.calendars.size > 1
       %tr
-        %th&= _("Calendar")
-        %td
-          = f.collection_select :calendar_id, User.current_user.calendars.sort{|x, y| x.name <=> y.name}, :id, :name
+        %th= _("Calendar")
+        %td= f.collection_select :calendar_id, User.current_user.calendars.sort{|x, y| x.name <=> y.name}, :id, :name
     - else
       = f.hidden_field :calendar_id, :value => User.current_user.calendars[0].id
     %tr
-      %th&= _("Event name")
+      %th= _("Event name")
       %td
         = f.text_field :name
         = _(error_message_on(:event, :name))
     %tr
       %th
-        &= _("Description")
+        = _("Description")
         %br
         = markdown_hint
       %td= f.text_area :description, :cols => 40, :rows => 6
     %tr
-      %th&= _("Date")
+      %th= _("Date")
       %td
         = f.date_select :date, :order => [:day, :month, :year], :start_year => 2006
         = _(error_message_on(:event, :date))
     %tr
-      %th&= _("Site")
+      %th= _("Site")
       %td= f.text_field :site
     %tr
-      %th&= _("Street address")
+      %th= _("Street address")
       %td
         = f.text_field :street
         %br
         = f.text_field :street2
     %tr
-      %th&= _("City")
+      %th= _("City")
       %td= f.text_field :city
     %tr
-      %th&= _("State")
+      %th= _("State")
       %td
         = f.collection_select :state_id, Acts::Addressed::State.find(:all), :id, :name
         = _(error_message_on :event, :state)
     %tr
-      %th&= _("Zip")
+      %th= _("Zip")
       %td= f.text_field :zip
   = submit_tag _("Save changes")

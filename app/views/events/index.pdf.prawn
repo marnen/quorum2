@@ -11,7 +11,7 @@ rescue
   pdf.font 'Times-Roman'
 end
 data = @users.collect do |u|
-  row = [u.to_s :last_first] + @events.collect do |e|
+  row = [u.to_s(:last_first)] + @events.collect do |e|
     case attendance_status(e, u)
       when :yes
         _('Y')

@@ -1,4 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+# coding: UTF-8
+
+require 'spec_helper'
 
 describe User, "(general properties)" do
   before(:each) do
@@ -9,7 +11,10 @@ describe User, "(general properties)" do
   end
   
   it "should belong to a State" do
-    User.reflect_on_association(:state).macro.should == :belongs_to
+    r = User.reflect_on_association(:state_raw)
+    r.macro.should == :belongs_to
+    r.options[:class_name].should == 'Acts::Addressed::State'
+    r.options[:foreign_key].should == 'state_id'
   end
   
   it "should have many Commitments" do
@@ -38,9 +43,9 @@ describe User, "(general properties)" do
     aggr = User.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = Acts::Addressed::State.make
+    state = Factory :state
     opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
-    u = User.new(opts)
+    u = Factory :user, opts
     u.address.should == Acts::Addressed::Address.new(opts)
   end
   
@@ -51,15 +56,15 @@ describe User, "(general properties)" do
   end
   
   it "should have country referred through state" do
-    state = Acts::Addressed::State.make
+    state = Factory :state
     user = User.new
     user.should respond_to(:country)
-    user.state = state
+    user.state_raw = state
     user.country.should == state.country
   end
   
   it "should be nil-safe on country" do
-    user = User.make(:state => nil)
+    user = Factory :user, :state => nil
     lambda{user.country}.should_not raise_error
   end
 end
@@ -99,16 +104,42 @@ describe User, "(validations)" do
 =end
 
   it 'should create a user permission for the calendar, when there\'s only one calendar' do
-    User.stub!(:current_user).and_return(User.make)
-    calendar = Calendar.make
+    Calendar.destroy_all
+    User.stub!(:current_user).and_return(Factory :user)
+    calendar = Factory :calendar
     Calendar.count.should == 1
-    user = User.create!(User.plan)
+    user = User.create!(Factory.attributes_for :user)
     user.permissions.should_not be_nil
     user.permissions.should_not be_empty
     user.permissions[0].user.should == user
     user.permissions[0].calendar.should == calendar
     user.permissions[0].role.name.should == 'user'
   end
+  
+  context 'field validations' do
+    before :each do
+      @user = Factory.build :user
+    end
+    
+    it 'should be valid with default data' do
+      @user.should be_valid
+    end
+    
+    ['password_confirmation', 'email'].each do |field| # TODO: should work for password too, but it doesn't
+      it "requires #{field.gsub '_', ' '}" do
+        @user.send "#{field}=", ''
+        @user.should_not be_valid
+      end
+    end
+  end
+
+=begin
+    it 'initializes #activation_code' do
+      @creating_user.call
+      @user.reload.activation_code.should_not be_nil
+    end
+  end
+=end
 end
   
 describe User, "(instance methods)" do
@@ -176,35 +207,35 @@ describe User, "(instance methods)" do
   
   describe "activate" do
     it "should be valid" do
-      User.make.should respond_to(:activate)
+      Factory(:user).should respond_to(:activate)
     end
     
     it "should set the active flag to true" do
-      u = User.make(:inactive)
+      u = Factory :inactive_user
       u.activate
       u.active?.should be_true
     end
   end
   
   it "should have a 'single_access_token' property initialized to a string" do
-    User.make.single_access_token.should_not be_blank
+    Factory(:user).single_access_token.should_not be_blank
   end
   
   it "should set single_access_token on save" do
-    @u = User.make
+    @u = Factory :user
     @u.single_access_token = nil
     @u.reload.single_access_token.should_not be_blank
   end
   
   it "should not overwrite single_access_token if already set" do
-    @u = User.make
+    @u = Factory :user
     token = @u.single_access_token
     @u.reload.single_access_token.should == token
   end
   
   it "should properly deal with regenerating single_access_token if it's a duplicate" do
-    @one = User.make
-    @two = User.make
+    @one = Factory :user
+    @two = Factory :user
     token = @two.single_access_token
     @one.single_access_token = token
     # TODO: Does this properly test what's being asserted here?
@@ -218,7 +249,7 @@ describe User, "(instance methods)" do
     
     it "should reset the user's password and password_confirmation to identical strings" do
       old_password = 'old password'
-      user = User.make(:password => old_password)
+      user = Factory :user, :password => old_password
       lambda {user.reset_password!}.should_not raise_error(ActiveRecord::RecordInvalid) # should set password_confirmation
       new_password = user.password
       new_password.should_not == old_password
@@ -226,7 +257,7 @@ describe User, "(instance methods)" do
     
     it "should reset password to a random hex string of length 10 (MD5 digest or similar)" do
       pattern = /^[a-f\d]{10}$/
-      user = User.make
+      user = Factory :user
       user.reset_password!
       password1 = user.password
       password1.should =~ pattern
@@ -249,7 +280,7 @@ describe User, "(geographical features)" do
     Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
     Geocoding.stub!(:get).and_return(@placemarks)
 
-    @user = User.new(User.plan)
+    @user = Factory.build :user
   end
   
   it "should save coords when successfully encoded" do
@@ -270,60 +301,10 @@ describe User, "(geographical features)" do
   end
   
   it "should clear coords on update" do
-    User.stub!(:current_user).and_return(User.make)
-    @user.update_attributes(User.plan)
+    User.stub!(:current_user).and_return(Factory :user)
+    @user.update_attributes(Factory.attributes_for :user)
     @user.should_receive(:coords=)
     @user.update_attributes(:name => 'foo')
   end
 end
 
-describe User, "(authentication structure)" do
-=begin
-  describe 'being created' do
-    before do
-      @user = nil
-      @creating_user = lambda do
-        @user = create_user
-        violated "#{@user.errors.full_messages.to_sentence}" if @user.new_record?
-      end
-    end
-    
-    it 'increments User#count' do
-      @creating_user.should change(User, :count).by(1)
-    end
-
-    it 'initializes #activation_code' do
-      @creating_user.call
-      @user.reload.activation_code.should_not be_nil
-    end
-  end
-=end
-
-  it 'requires password' do
-    lambda do
-      u = create_user(:password => nil)
-      u.errors.on(:password).should_not be_nil
-    end.should_not change(User, :count)
-  end
-
-  it 'requires password confirmation' do
-    lambda do
-      u = create_user(:password_confirmation => nil)
-      u.errors.on(:password_confirmation).should_not be_nil
-    end.should_not change(User, :count)
-  end
-
-  it 'requires email' do
-    lambda do
-      u = create_user(:email => nil)
-      u.errors.on(:email).should_not be_nil
-    end.should_not change(User, :count)
-  end
-  
-protected
-  def create_user(options = {})
-    record = User.make_unsaved({:email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire'}.merge(options))
-    record.save
-    record
-  end
-end

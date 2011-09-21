@@ -1,7 +1,9 @@
+# coding: UTF-8
+
 class CalendarsController < ApplicationController
-  @@nonadmin = [:new, :create]
-  before_filter :check_admin, :except => @@nonadmin
-  before_filter :require_user, :only => @@nonadmin
+  @nonadmin ||= [:new, :create]
+  before_filter :check_admin, :except => @nonadmin
+  before_filter :require_user, :only => @nonadmin
   layout 'standard'
   
   make_resourceful do
@@ -16,6 +18,7 @@ class CalendarsController < ApplicationController
       @page_title = _('Edit calendar')
     end
     
+    # TODO: Shouldn't this be replaced by Calendar#set_admin ?
     after :create do
       p = User.current_user.permissions
       @admin ||= Role.find_or_create_by_name('admin')

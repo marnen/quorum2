@@ -11,20 +11,20 @@
     - if event.allow?(:delete)
       = delete_link(event)
   %td
-    %span.uid&= ical_uid(event)
+    %span.uid= ical_uid(event)
     = date_element(event)
   - if User.current_user.calendars.size > 1
-    %td.calendar
-      &= event.calendar
+    %td.calendar= event.calendar
   %td
-    %h3.summary&= event.name
+    %h3.summary= event.name
     %span.location.vcard
-      = h(event.site) + tag(:br)
-      %span.street-address= [h(event.street), h(event.street2)].join(tag(:br))
+      = event.site
+      %br
+      %span.street-address!= [h(event.street), h(event.street2)].join(tag(:br))
       %br
       :erb
-        <span class="locality"><%= h(event.city) %></span>, <span class="region"><%= h event.state.code %></span> <span class="postal-code"><%= h event.zip %></span><br>
-        <span class="country-name"><%= h event.state.country.code %></span>
+        <span class="locality"><%= event.city %></span>, <span class="region"><%= event.state.code %></span> <span class="postal-code"><%= event.zip %></span><br>
+        <span class="country-name"><%= event.state.country.code %></span>
     %br
     = distance_string(event, current_user)
   %td

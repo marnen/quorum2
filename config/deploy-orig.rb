@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 require 'bundler/capistrano'
 
 set :application, "quorum2"
@@ -16,6 +18,7 @@ set :user, "capistrano"
 set :scm, :git
 set :branch, :master
 set :deploy_via, :remote_cache
+set :remote, 'origin'
 
 =begin
 set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN 
@@ -33,7 +36,8 @@ role :db,  "HOST", :primary => true
 set :runner, "capistrano" # might want to change this
 set :use_sudo, false
 
-# get GemInstaller working
+after 'deploy:update_code', 'deploy:remove_unnecessary_files'
+after 'deploy:finalize_update', 'deploy:tag'
 
 namespace :deploy do
   
@@ -44,7 +48,8 @@ namespace :deploy do
     run "/usr/bin/touch #{current_path}/tmp/restart.txt"
   end
   
-  task :after_update_code do
+  desc 'Remove shared files and image sources.'
+  task :remove_unnecessary_files, :roles => :app do
     # Remove some unversioned YAML config files and link to shared directory.
     rpath = File.expand_path(release_path)
     ['database.yml', 'config.yml', 'gmaps_api_key.yml'].each do |file|
@@ -57,5 +62,15 @@ namespace :deploy do
     
     #run "chown www-data #{current_path}/config/environment.rb"
 
+  end
+  
+  # From http://stackoverflow.com/questions/5735656/tagging-release-before-deploying-with-capistrano
+  desc 'Tags deployed release with a unique Git tag.'
+  task :tag do
+    user = `git config --get user.name`.chomp
+    email = `git config --get user.email`.chomp
+    tag_name = "#{stage}_#{release_name}"
+    puts `git tag #{tag_name} #{current_revision} -m "Deployed by #{user} <#{email}>"`
+    puts `git push #{remote} #{tag_name}`
   end
 end

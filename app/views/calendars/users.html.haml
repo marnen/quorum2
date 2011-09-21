@@ -10,11 +10,11 @@
       / blank
   - for user in @users do
     - perm = user.permissions.find_by_calendar_id(@current_object)
-    - form_for perm do |f|
+    = form_for perm do |f|
       %tr[user]
-        %td._name&= [user.lastname, user.firstname].compact.join(', ')
-        %td._email&= user.show_contact ? user.email : ''
-        %td._address= user.show_contact ? [user.street, user.street2, "#{user.city}, #{user.state.code} #{user.zip}, #{user.state.country.code}"].compact.collect {|s| h(s)}.join(tag(:br)) : ''
+        %td._name= [user.lastname, user.firstname].compact.join(', ')
+        %td._email= user.show_contact ? user.email : ''
+        %td._address= user.show_contact ? [user.street, user.street2, "#{user.city}, #{user.state.code} #{user.zip}, #{user.state.country.code}"].compact.collect {|s| h(s)}.join(tag(:br)).html_safe : ''
         %td._role
           - if user == User.current_user
             &= perm.role

@@ -1,4 +1,8 @@
+# coding: UTF-8
+
 require 'digest/sha1'
+require 'geocoding_utilities'
+
 class User < ActiveRecord::Base
   acts_as_authentic do |c|
     c.transition_from_restful_authentication = true

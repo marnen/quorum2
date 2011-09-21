@@ -1,10 +1,12 @@
+# coding: UTF-8
+
 module Acts::Addressed
   # Value object for addresses.
 
   class Address
     # List of readable attributes.
     FIELDS = [:street, :street2, :city, :state, :zip, :coords]
-    FIELDS.each do |f|
+    (FIELDS - [:state]).each do |f| # state has its own reader
       attr_reader f
     end
     

@@ -1,3 +1,7 @@
+# coding: UTF-8
+
+require 'geocoding_utilities'
+
 class Event < ActiveRecord::Base
   acts_as_addressed
   include GeocodingUtilities

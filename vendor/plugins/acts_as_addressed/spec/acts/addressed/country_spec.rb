@@ -1,4 +1,6 @@
-require File.dirname(__FILE__) + '/../../spec_helper'
+# coding: UTF-8
+
+require 'spec_helper'
 
 require 'acts/addressed/country'
 

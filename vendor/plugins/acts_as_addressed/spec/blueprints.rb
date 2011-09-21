@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # Object blueprints for Machinist.
 require 'machinist/active_record'
 require 'sham'

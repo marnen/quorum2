@@ -3,4 +3,4 @@
   - @calendars.each do |c|
     %li[c]
       &= c
-      == (#{[link_to(h(_('properties')), :controller => :calendars, :id => c.id, :action => :edit), link_to(h(_('users')), :controller => :calendars, :id => c.id, :action => :users)].join(' | ')})
+      !== (#{[link_to(_('properties'), :controller => :calendars, :id => c.id, :action => :edit), link_to(_('users'), :controller => :calendars, :id => c.id, :action => :users)].join(' | ')})

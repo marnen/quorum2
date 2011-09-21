@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 module EventsHelper 
   # Returns #User's commitment status for #Event as a symbol -- :yes, :no, :or maybe.
   def attendance_status(event, user)
@@ -48,18 +50,19 @@ module EventsHelper
   end
   
   # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
+  # TODO: figure out how to make this html_safe!
   def event_map(event, hostname)
     return nil if event.nil?
     
-    @extra_headers = @extra_headers.to_s 
-    @extra_headers << GMap.header(:host => hostname).to_s << javascript_include_tag('events/map')
+    @extra_headers ||= ''.html_safe
+    @extra_headers << GMap.header(:host => hostname).to_s.html_safe << javascript_include_tag('events/map').html_safe
 
     map = GMap.new(:map)
-    result = ''
+    result = ''.html_safe
     result << info(event)
-    result << content_tag(:div, h(event.coords.lat), :id => :lat, :class => :hidden)
-    result << content_tag(:div, h(event.coords.lng), :id => :lng, :class => :hidden)
-    result << map.div(:width => 500, :height => 400)
+    result << content_tag(:div, event.coords.lat, :id => :lat, :class => :hidden)
+    result << content_tag(:div, event.coords.lng, :id => :lng, :class => :hidden)
+    result << map.div(:width => 500, :height => 400).html_safe
     result
   end
   
@@ -82,11 +85,12 @@ module EventsHelper
   #
   # TODO: this should probably become a partial.
   def info(event)
+    # TODO: Switch this to the HTML 5 outline model.
     return nil if (event.nil? or !event.kind_of?(Event))
-    result = ""
-    result << content_tag(:h3, h(event.site || event.name))
-    city = [h(event.city), h(event.state.code), h(event.state.country.code)].compact.join(', ')
-    result << content_tag(:p, [h(event.street), h(event.street2), city].compact.join(tag(:br)))
+    result = ''.html_safe
+    result << content_tag(:h3, (event.site || event.name))
+    city = [event.city, event.state.code, event.state.country.code].compact.join(', ')
+    result << content_tag(:p, [h(event.street), h(event.street2), h(city)].compact.join(tag :br).html_safe)
     
     gmaps = 'http://maps.google.com'
     from = "saddr=#{u User.current_user.address.to_s(:geo)}"
@@ -108,8 +112,9 @@ module EventsHelper
   end
   
   # Generates a hint to use Markdown for formatting.
+  # TODO: make this work as html_safe properly.
   def markdown_hint
-    content_tag(:span, h(_('(use %{Markdown} for formatting)')) % {:Markdown => link_to(h(_('Markdown')), 'http://daringfireball.net/projects/markdown/basics', :target => 'markdown')}, :class => :hint)
+    content_tag(:span, (h(_ '(use %{Markdown} for formatting)').to_str % {:Markdown => link_to(_('Markdown'), 'http://daringfireball.net/projects/markdown/basics', :target => 'markdown')}).html_safe, :class => :hint)
   end
   
   # Generates an RSS URL for the current user's events feed.
@@ -130,6 +135,6 @@ module EventsHelper
     # generate a sort link
     my_class = options[:class]
     my_class ||= 'sort'
-    link_to h(_(title)), url_for(:overwrite_params => {:order => field, :direction => direction}), :class => my_class
+    link_to h(_(title)), url_for(params.merge :order => field, :direction => direction), :class => my_class
   end
 end

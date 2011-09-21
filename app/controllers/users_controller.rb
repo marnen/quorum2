@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 class UsersController < ApplicationController
   layout :get_layout
   before_filter :require_user, :only => [:edit, :regenerate_key]
