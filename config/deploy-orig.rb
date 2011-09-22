@@ -51,7 +51,7 @@ namespace :deploy do
   task :remove_unnecessary_files, :roles => :app do
     # Remove some unversioned YAML config files and link to shared directory.
     rpath = File.expand_path(release_path)
-    ['database.yml', 'config.yml', 'gmaps_api_key.yml'].each do |file|
+    ['database.yml', 'config.yml', 'gmaps_api_key.yml', 'initializers/secret_token.rb'].each do |file|
       run "rm -f #{rpath}/config/#{file}"
       run "ln -s #{deploy_to}/shared/config/#{file} #{rpath}/config/#{file}"
     end
