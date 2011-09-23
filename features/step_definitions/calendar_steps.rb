@@ -32,3 +32,14 @@ Then /^I should be an admin(?:istrator)? of "([^\"]*)"$/ do |calendar|
   cal = Calendar.find_by_name(calendar)
   User.current_user.permissions.find_by_calendar_id_and_role_id(cal.id, admin.id).should_not be_nil
 end
+
+Then /^I should (not )?be subscribed to "([^"]*)"$/ do |negation, calendar|
+  calendar = Calendar.find_by_name(calendar)
+  user = User.current_user
+  permission = user.permissions.find_by_calendar_id(calendar)
+  if negation
+    permission.should be_nil
+  else
+    permission.should_not be_nil
+  end
+end
