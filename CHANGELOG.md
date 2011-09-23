@@ -30,3 +30,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 ## v0.3.6, 23 September 2011
 * Fix Atom link on RSS feed [#62]
 * Fix problem with Git tagging on Cap deployment.
+
+## v0.3.7, 23 September 2011
+* Fix a couple more broken links to RSS feed [#62]
