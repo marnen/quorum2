@@ -21,7 +21,8 @@ Feature: Administer calendars
     And I am subscribed to "Someone else's calendar"
     And I am on the homepage
     When I follow "Admin tools"
-    Then I should see "My calendar"
+    Then I should be on the admin page
+    And I should see "My calendar"
     And I should not see "Someone else's calendar"
     
   Scenario: Admin users should be able to change the name of calendars they control
