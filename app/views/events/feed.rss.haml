@@ -1,7 +1,7 @@
 !!! XML
 %rss{:version => '2.0', %s{xmlns:atom} => "http://www.w3.org/2005/Atom"}
   %channel
-    %atom:link{:href => feed_events_url(:fmt => :rss, :key => @key), :rel => :self}
+    %atom:link{:href => feed_events_url(:format => :rss, :key => @key), :rel => :self}
     %title= _("%{Quorum} Events") % {:Quorum => SITE_TITLE}
     %link= events_url
     %description
