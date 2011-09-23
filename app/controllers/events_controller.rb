@@ -66,7 +66,6 @@ class EventsController < ApplicationController
   
   # Generate an RSS feed of events.
   def feed
-    params[:format] = params[:fmt]
     respond_to do |format|
       format.rss do
         @key = params[:key]
