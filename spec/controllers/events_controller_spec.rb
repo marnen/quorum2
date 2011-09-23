@@ -7,25 +7,6 @@ describe EventsController, "index" do
     UserSession.create FactoryGirl.create(:user)
   end
   
-  it "should be successful" do
-    get :index
-    response.should be_success
-  end
- 
-  it "should set the page_title" do
-    get :index
-    assigns[:page_title].should_not be_nil
-  end
-  
-  it "should get all non-deleted events, with distance, ordered by date, earliest to latest" do
-    Event.should_receive(:find) do |arg1, opts|
-      arg1.should == :all
-      opts.should be_a_kind_of(Hash)
-      opts[:order].should == 'date asc'
-    end.once
-    get :index
-  end
-  
   it "should pass sorting parameters from the URL" do
     order = 'name'
     direction = 'desc'

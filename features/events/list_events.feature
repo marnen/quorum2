@@ -10,7 +10,6 @@ Feature: List events
     
   Scenario Outline: It should sort events by date
     Given I am logged in
-    And a calendar exists with name: "<calendar>"
     And I am subscribed to "<calendar>"
     And the following events exist:
       | calendar     | name     | date       |
@@ -26,3 +25,14 @@ Feature: List events
     Examples:
       | calendar            |
       | My Amazing Calendar |
+      
+  Scenario Outline: It should not show deleted events
+    Given I am logged in
+    And I am subscribed to "<calendar>"
+    And a deleted event exists with name: "<deleted>", calendar: the calendar
+    When I go to the events page
+    Then I should not see "<deleted>"
+    
+    Examples:
+      | calendar      | deleted        |
+      | Deletion test | I'm invisible! |

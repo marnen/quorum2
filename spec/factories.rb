@@ -31,9 +31,13 @@ FactoryGirl.define do
     city { Faker::Address.city }
     association :state_raw, :factory => :state
     zip { Faker::Address.zip_code }
-    date { Date.civil(rand(10) + 2000, rand(12) + 1, rand(28) + 1) }
+    date { Date.civil(rand(10) + 2100, rand(12) + 1, rand(28) + 1) } # way in the future so it shows up on the event list
     calendar
     association :created_by, :factory => :user
+    
+    factory :deleted_event do
+      deleted { true }
+    end
   end
   
   factory :state, :class => Acts::Addressed::State do
