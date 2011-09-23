@@ -1,4 +1,4 @@
-Feature: Edit events
+Feature: Delete events
   In order to remove unneeded content
   any administrator should be able to
   delete events already created.
