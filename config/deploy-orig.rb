@@ -69,7 +69,7 @@ namespace :deploy do
     user = `git config --get user.name`.chomp
     email = `git config --get user.email`.chomp
     tag_name = "#{remote}_#{release_name}"
-    puts `git tag #{tag_name} #{current_revision} -m "Deployed by #{user} <#{email}>"`
+    puts `git tag #{tag_name} #{latest_revision} -m "Deployed by #{user} <#{email}>"`
     puts `git push #{remote} #{tag_name}`
   end
 end
