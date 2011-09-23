@@ -22,5 +22,11 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 ## v0.3.2, v0.3.3, 21 September 2011
 * Fix Capistrano deployment issues
 
-## v0.3.4, 23 September 2011
+[I mistakenly skipped 0.3.4.]
+
+## v0.3.5, 23 September 2011
 * Fix MIME type on RSS feed [#62]
+
+## v0.3.6, 23 September 2011
+* Fix Atom link on RSS feed [#62]
+* Fix problem with Git tagging on Cap deployment.
