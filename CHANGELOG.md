@@ -11,3 +11,13 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 * First release under the new numbering format: v0.3.0 (new) = beta3.0.0 (old)
 * Upgrade to Rails 3.0
 * DO NOT USE! Although tests are passing, the application has serious cosmetic bugs involving Rails 3's autoescaping of HTML. I'll fix these bugs and release a new version.
+
+## v0.3.1, 21 September 2011
+
+* Upgrade to Ruby 1.9 [#58]
+* Deal with Rails 3 deprecations [#56]
+* Fix problems involving Rails 3's autoescaping of HTML [#57]
+* Fix acts_as_addressed issues caused by upgrade [#59]
+
+## v0.3.2, v0.3.3, 21 September 2011
+* Fix Capistrano deployment issues
