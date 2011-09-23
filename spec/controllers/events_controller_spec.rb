@@ -148,7 +148,7 @@ describe EventsController, "feed.rss (login)" do
   
   it "should not list any events if given an invalid single_access_token" do
     User.stub!(:find_by_single_access_token).and_return(nil)
-    get :feed, :fmt => 'rss', :key => 'fake key'
+    get :feed, :format => 'rss', :key => 'fake key'
     Event.should_not_receive(:find)
     response.should_not have_selector('item')
   end
