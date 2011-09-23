@@ -16,6 +16,13 @@ Then /^I should not see an element matching "([^\"]*)"$/ do |selector|
   page.should_not have_selector(selector) and response.should_not have_xpath(selector)
 end
 
+Then /^I should see the following in order:$/ do |table|
+  # table is a Cucumber::Ast::Table
+  regexp = %r{#{table.raw.flatten.collect {|x| Regexp.escape x }.join '.*'}}m
+  
+  page.should have_xpath('//*', :text => regexp)
+end
+
 Then /^(?:|I )should not be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   current_path.should_not == path_to(page_name)

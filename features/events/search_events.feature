@@ -5,6 +5,6 @@ Feature: Search events
   
   Scenario: Search form is displayed
     Given I am logged in
-    When I am on the event list
+    And I am on the event list
     Then I should see an element matching "input[@type=submit][@value=Search]"
   
