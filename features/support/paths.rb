@@ -29,6 +29,8 @@ module NavigationHelpers
       login_path
     when /the user list for "([^"]*)"$/
       url_for :controller => 'calendars', :id => Calendar.find_by_name($1).id, :action => 'users', :only_path => true
+    when /the calendar edit page for "([^"]*)"$/
+      url_for :controller => 'calendars', :id => Calendar.find_by_name($1).id, :action => 'edit', :only_path => true
 
     else
       begin

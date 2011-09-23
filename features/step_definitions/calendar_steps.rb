@@ -1,9 +1,15 @@
 # coding: UTF-8
 
-Given /^I am subscribed to "([^\"]*)"$/ do |calendar|
+Given /^(I|"[^\"]*") (?:am|is) subscribed to "([^\"]*)"$/ do |user, calendar|
+  if user == 'I'
+    user = User.current_user
+  else
+    names = user.gsub(/^"|"$/, '').split(' ', 2)
+    user = Factory :user, :firstname => names.first, :lastname => names.last
+  end
   cal = Calendar.find_by_name(calendar) || FactoryGirl.create(:calendar, :name => calendar)
-  Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
-  FactoryGirl.create :permission, :user => User.current_user, :calendar => cal
+  Permission.destroy(cal.permissions.find_all_by_user_id(user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
+  FactoryGirl.create :permission, :user => user, :calendar => cal
 end
 
 Given /^I am an admin(?:istrator)? of "([^\"]*)"$/ do |calendar|
