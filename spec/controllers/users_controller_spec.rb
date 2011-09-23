@@ -3,12 +3,6 @@
 require 'spec_helper'
 
 describe UsersController do
-  it 'allows signup' do
-    @user = FactoryGirl.create :user
-    User.should_receive(:new).and_return(@user)
-    @user.should_receive(:save).at_least(:once).and_return(true)
-    create_user
-  end
 
   
 # Uncomment this spec when we set up e-mail activation.
@@ -18,30 +12,6 @@ describe UsersController do
     assigns(:user).activation_code.should_not be_nil
   end
 =end
-
-  it 'requires password on signup' do
-    lambda do
-      create_user(:password => nil)
-      assigns[:user].errors.on(:password).should_not be_nil
-      response.should be_success
-    end.should_not change(User, :count)
-  end
-  
-  it 'requires password confirmation on signup' do
-    lambda do
-      create_user(:password_confirmation => nil)
-      assigns[:user].errors.on(:password_confirmation).should_not be_nil
-      response.should be_success
-    end.should_not change(User, :count)
-  end
-
-  it 'requires email on signup' do
-    lambda do
-      create_user(:email => nil)
-      assigns[:user].errors.on(:email).should_not be_nil
-      response.should be_success
-    end.should_not change(User, :count)
-  end
   
   it 'activates user' do
     pending "meaningless until we start doing activation" do

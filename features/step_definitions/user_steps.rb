@@ -20,6 +20,11 @@ Given /^there is no user account for "([^\"]*)"$/ do |email|
   end
 end
 
-Then /^I should have a user account for "([^\"]*)"$/ do |email|
-  User.find_by_email(email).should_not be_nil
+Then /^I should (not )?have a user account for "([^\"]*)"$/ do |negation, email|
+  user = User.find_by_email(email)
+  if negation
+    user.should be_nil
+  else
+    user.should_not be_nil
+  end
 end
