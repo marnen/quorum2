@@ -73,7 +73,7 @@ private
     unless current_user
       store_location
       flash[:notice] = _("Please log in to view this page.")
-      redirect_to new_user_session_url
+      redirect_to login_url
       return false
     end
   end
