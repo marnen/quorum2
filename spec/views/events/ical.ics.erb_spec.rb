@@ -32,6 +32,6 @@ describe "/events/ical.ics" do
   end
 
   it "should contain the date in iCal format" do
-    rendered.should have_content("DTSTART;VALUE=DATE:#{@event.date.to_s :ical}")
+    rendered.should have_content("DTSTART;VALUE=DATE:#{@event.date.strftime '%Y%m%d'}")
   end
 end
