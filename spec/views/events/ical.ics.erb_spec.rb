@@ -23,7 +23,8 @@ describe "/events/ical.ics" do
   end
 
   it "should contain the event address as location" do
-    rendered.should have_content("LOCATION:#{[@event.street, @event.street2, @event.city, @event.state.code, @event.country.code].compact.join(', ')}")
+    escaped_location = ical_escape [@event.street, @event.street2, @event.city, @event.state.code, @event.country.code].compact.join(', ')
+    rendered.should have_content("LOCATION:#{escaped_location}")
   end
 
   it "should contain the event description as description" do
