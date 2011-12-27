@@ -5,6 +5,8 @@
 require 'yaml'
 APP_CONFIG = YAML.load_file("#{Rails.root}/config/config.yml")[Rails.env]
 
+APP_VERSION = '0.3.9'
+
 SITE_TITLE = "Quorum" # Name of site as it appears in <title> element
 
 DOMAIN = APP_CONFIG['domain'] # Domain on which the site is hosted
