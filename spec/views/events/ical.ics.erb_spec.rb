@@ -10,6 +10,11 @@ describe "/events/ical.ics" do
     render :file => 'events/ical.ics.erb'
   end
 
+  it "should use Windows line ends" do
+    rendered.should include("#{13.chr}#{10.chr}")
+    rendered.should_not =~ /[^#{13.chr}]#{10.chr}/
+  end
+
   it "should countain a product identifier" do
     rendered.should have_content("PRODID:-//quorum2.sf.net//#{SITE_TITLE} #{APP_VERSION}//EN")
   end
