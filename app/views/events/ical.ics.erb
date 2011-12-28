@@ -1,11 +1,12 @@
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//quorum2.sf.net//<%= SITE_TITLE %> <%= APP_VERSION %>//EN
-BEGIN:VEVENT
-UID:<%= ical_uid @event %>
-SUMMARY:<%= ical_escape @event.name %>
-LOCATION:<%= ical_escape [@event.street, @event.street2, @event.city, @event.state.code, @event.country.code].compact.join(', ') %>
-DESCRIPTION:<%= ical_escape @event.description %>
-DTSTART;VALUE=DATE:<%= @event.date.to_s :ical %>
-END:VEVENT
-END:VCALENDAR
+<% cr = 13.chr %>
+BEGIN:VCALENDAR<%= cr %>
+VERSION:2.0<%= cr %>
+PRODID:-//quorum2.sf.net//<%= SITE_TITLE %> <%= APP_VERSION %>//EN<%= cr %>
+BEGIN:VEVENT<%= cr %>
+UID:<%= ical_uid @event %><%= cr %>
+SUMMARY:<%= ical_escape @event.name %><%= cr %>
+LOCATION:<%= ical_escape [@event.street, @event.street2, @event.city, @event.state.code, @event.country.code].compact.join(', ') %><%= cr %>
+DESCRIPTION:<%= ical_escape @event.description %><%= cr %>
+DTSTART;VALUE=DATE:<%= @event.date.to_s :ical %><%= cr %>
+END:VEVENT<%= cr %>
+END:VCALENDAR<%= cr %>
