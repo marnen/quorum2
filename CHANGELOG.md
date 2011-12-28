@@ -37,3 +37,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 ## v0.3.8, 23 September 2011
 * Replace many controller specs with Cucumber stories [#54]
 * Deal better with HTML escaping
+
+## v0.3.9, 28 December 2011
+* Fix iCal export issues: we were exporting an invalid iCalendar file. [#65]
