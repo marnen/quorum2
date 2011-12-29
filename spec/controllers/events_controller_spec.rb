@@ -12,13 +12,9 @@ describe EventsController, "index" do
     direction = 'desc'
     params = {:order => order, :direction => direction}
     {:get => "/events/index/#{order}/#{direction}"}.should route_to params.merge(:controller => 'events', :action => 'index')
-    Event.should_receive(:find) do |arg1, arg2|
-      arg1.should == :all
-      arg2.should be_an_instance_of(Hash)
-      arg2.should have_key(:order)
-      arg2[:order].should == "#{order} #{direction}"
-      arg2.should have_key(:conditions)
-      conditions = arg2[:conditions]
+    mock_conditions = mock 'conditions'
+    mock_conditions.should_receive(:order).with "#{order} #{direction}"
+    Event.should_receive(:where) do |conditions|
       conditions.should be_an_instance_of(Array)
       conditions[0].should =~ /date >= :from_date/i
       conditions[1].should be_an_instance_of(Hash)
@@ -27,6 +23,7 @@ describe EventsController, "index" do
       conditions[1][:from_date].should == Time.zone.today # default value if not set in params
       conditions[1].should have_key(:to_date)
       conditions[1][:to_date].should be_nil
+      mock_conditions
     end
     get :index, params
 =begin
@@ -140,7 +137,8 @@ describe EventsController, "feed.rss (login)" do
     calendar = FactoryGirl.create :calendar # @user will be subscribed to
     @events = (1..5).map { FactoryGirl.create :event, :calendar => calendar }
     User.stub!(:find_by_single_access_token).and_return(@user)
-    Event.should_receive(:find).and_return(@events)
+    @events.stub!(:order).and_return @events
+    Event.should_receive(:where).and_return(@events)
     get :feed, :format => 'rss', :key => @user.single_access_token
     response.body.should have_selector('item')
   end

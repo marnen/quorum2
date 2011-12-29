@@ -130,7 +130,7 @@ class EventsController < ApplicationController
     user = params[:feed_user] || User.current_user
 
     # Process parameters from the search form, if it was submitted.
-    if !params[:search].nil?
+    if params[:search].present?
       search = params[:search]
       search.extend(Search)
       ['to', 'from'].each do |s|
@@ -147,13 +147,13 @@ class EventsController < ApplicationController
     direction = params[:direction] || 'asc'
     calendars ||= user.calendars.collect{|c| c.id}
 
-    if to_date == nil
-      date_query = 'date >= :from_date'
-    else
+    if to_date.present?
       date_query = 'date BETWEEN :from_date AND :to_date'
+    else
+      date_query = 'date >= :from_date'
     end
 
-    @current_objects || Event.find(:all, :conditions => ['calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
+    @current_objects || Event.where(['calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}]).order("#{order} #{direction}")
   end
 
   # Return an HTTP header with proper MIME type for iCal.
