@@ -37,7 +37,7 @@ class EventsController < ApplicationController
 
   def edit
     @event = Event.find params[:id]
-    if @event.allow?(:edit)
+    if @event.allow? :edit
       @page_title = _("Edit event")
       respond_with @event
     else
@@ -50,16 +50,13 @@ class EventsController < ApplicationController
     respond_with_flash { @event.update_attributes params[:event] }
   end
 
-  make_resourceful do
-    actions :show
-
-    response_for :show do
-      if !current_object.allow?(:show)
-        flash[:error] = _("You are not authorized to view that event.")
-        redirect_to :action => :index
-      else
-        @page_title = current_object.name
-      end
+  def show
+    @event = Event.find params[:id]
+    if @event.allow? :show
+      @page_title = @event.name
+      respond_with @event
+    else
+      redirect_to({action: :index}, flash: {error: _("You are not authorized to view that event.")})
     end
   end
 
@@ -127,7 +124,9 @@ class EventsController < ApplicationController
     @page_title = _("Map for %{event}") % {:event => @event.name}
   end
 
-  # Return non-deleted events between params[:from_date] and params[:to_date], optionally ordered as specified by params[:order] and [:direction]. Provided for use with make_resourceful[http://mr.hamptoncatlin.com].
+  private
+
+  # Return non-deleted events between params[:from_date] and params[:to_date], optionally ordered as specified by params[:order] and [:direction].
   def current_objects
     user = params[:feed_user] || User.current_user
 
@@ -158,7 +157,6 @@ class EventsController < ApplicationController
     @current_objects || current_model.find(:all, :conditions => ['calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
   end
 
-  private
   # Return an HTTP header with proper MIME type for iCal.
   def ical_header
     headers['Content-Type'] = 'text/calendar'
