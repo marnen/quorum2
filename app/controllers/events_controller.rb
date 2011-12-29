@@ -9,8 +9,9 @@ class EventsController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
 
-  respond_to :html
+  respond_to :html, except: :feed
   respond_to :pdf, only: :index
+  respond_to :rss, only: :feed
 
   def index
     set_table_headers
@@ -64,6 +65,7 @@ class EventsController < ApplicationController
   def feed
     respond_to do |format|
       format.rss do
+        @events = current_objects
         @key = params[:key]
         params[:from_date] = Date.civil(1, 1, 1)
       end
@@ -154,7 +156,7 @@ class EventsController < ApplicationController
       date_query = 'date BETWEEN :from_date AND :to_date'
     end
 
-    @current_objects || current_model.find(:all, :conditions => ['calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
+    @current_objects || Event.find(:all, :conditions => ['calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}], :order => "#{order} #{direction}")
   end
 
   # Return an HTTP header with proper MIME type for iCal.
