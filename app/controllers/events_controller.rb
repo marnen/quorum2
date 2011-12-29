@@ -18,18 +18,19 @@ class EventsController < ApplicationController
     respond_with @events do |format|
       format.pdf do
         @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort # TODO: fix for multiple calendars
-        prawnto :prawn => {:page_layout => :landscape}
-        render :layout => false
+        prawnto prawn: {page_layout: :landscape}
+        render layout: false
       end
     end
   end
 
-  make_resourceful do
-    actions :create, :new, :edit, :update, :show
+  def new
+    @page_title = _("Add event")
+    @event = Event.new
+  end
 
-    before :new do
-      @page_title = _("Add event")
-    end
+  make_resourceful do
+    actions :create, :edit, :update, :show
 
     response_for :edit do
       if !current_object.allow?(:edit)

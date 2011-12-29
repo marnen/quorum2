@@ -1,4 +1,4 @@
-= form_for @current_object do |f|
+= form_for @event do |f|
   %table.edit
     - if current_user.calendars.size > 1
       %tr
@@ -10,7 +10,7 @@
       %th= _("Event name")
       %td
         = f.text_field :name
-        = _(error_message_on(:event, :name))
+        = _(error_message_on(:event, :name)) # TODO: Do we need the :event now?
     %tr
       %th
         = _("Description")
