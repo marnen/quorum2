@@ -63,9 +63,9 @@ class EventsController < ApplicationController
   def feed
     respond_to do |format|
       format.rss do
-        @events = current_objects
-        @key = params[:key]
         params[:from_date] = Date.civil(1, 1, 1)
+        @key = params[:key]
+        @events = current_objects
       end
     end
   end

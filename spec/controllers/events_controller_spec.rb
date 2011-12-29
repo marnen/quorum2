@@ -59,10 +59,10 @@ describe EventsController, "feed.rss" do
     user = FactoryGirl.create :user
     User.stub!(:current_user).and_return(user) # we need this for some of the callbacks on Calendar and Event
     @calendar = FactoryGirl.create :calendar
+    Factory :permission, user: user, calendar: @calendar, role: Factory(:role)
     @one = FactoryGirl.create :event, :name => 'Event 1', :calendar => @calendar, :date => Date.civil(2008, 7, 4), :description => 'The first event.', :created_at => 1.week.ago
     @two = FactoryGirl.create :event, :name => 'Event 2', :calendar => @calendar, :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :created_at => 2.days.ago
     @events = [@one, @two]
-    controller.stub!(:current_objects).and_return(@events)
     get :feed, :format => 'rss', :key => user.single_access_token
   end
 
