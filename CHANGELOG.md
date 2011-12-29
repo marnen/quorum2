@@ -39,4 +39,7 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 * Deal better with HTML escaping
 
 ## v0.3.9, 28 December 2011
-* Fix iCal export issues: we were exporting an invalid iCalendar file. [#65]
+* Fix iCal export issues: we were exporting an invalid iCalendar file [#65]
+
+## v0.4.0, 29 December 2011
+* Remove make_resourceful now that Rails offers `respond_with` [#64]

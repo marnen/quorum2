@@ -5,7 +5,7 @@
 require 'yaml'
 APP_CONFIG = YAML.load_file("#{Rails.root}/config/config.yml")[Rails.env]
 
-APP_VERSION = '0.3.9'
+APP_VERSION = '0.4.0'
 
 SITE_TITLE = "Quorum" # Name of site as it appears in <title> element
 
