@@ -26,7 +26,8 @@ class CalendarsController < ApplicationController
       make_admin_permission_for @calendar
       redirect_to '/admin', notice: _('Your calendar was successfully created.')
     else
-      redirect_to :back, error: _("Couldn't create your calendar!")
+      flash[:error] = _("Couldn't create your calendar!")
+      respond_with @calendar
     end
   end
 
