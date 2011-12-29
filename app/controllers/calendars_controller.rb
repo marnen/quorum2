@@ -20,27 +20,18 @@ class CalendarsController < ApplicationController
     respond_with @calendar
   end
 
+  def create
+    @calendar = Calendar.new params[:calendar]
+    if @calendar.save!
+      make_admin_permission_for @calendar
+      redirect_to '/admin', notice: _('Your calendar was successfully created.')
+    else
+      redirect_to :back, error: _("Couldn't create your calendar!")
+    end
+  end
+
   make_resourceful do
-    actions :create, :update
-
-    # TODO: Shouldn't this be replaced by Calendar#set_admin ?
-    after :create do
-      p = User.current_user.permissions
-      @admin ||= Role.find_or_create_by_name('admin')
-      if !p.find_by_calendar_id_and_role_id(current_object.id, @admin.id)
-        p << Permission.create!(:user => User.current_user, :calendar => current_object, :role => @admin)
-      end
-    end
-
-    response_for :create do
-      flash[:notice] = _('Your calendar was successfully created.')
-      redirect_to '/admin'
-    end
-
-    response_for :create_fails do
-      flash[:error] = _('Couldn\'t create your calendar!')
-      redirect_to :back
-    end
+    actions :update
 
     response_for :update do
       flash[:notice] = _('Your calendar was successfully saved.')
@@ -57,5 +48,15 @@ class CalendarsController < ApplicationController
   def users
     @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => current_object}
     @users = current_object.users.find(:all, :order => 'lastname, firstname')
+  end
+
+  private
+
+  def make_admin_permission_for(calendar)
+    p = User.current_user.permissions
+    @admin ||= Role.find_or_create_by_name('admin')
+    if !p.find_by_calendar_id_and_role_id(calendar.id, @admin.id)
+      p << Permission.create!(:user => User.current_user, :calendar => calendar, :role => @admin)
+    end
   end
 end
