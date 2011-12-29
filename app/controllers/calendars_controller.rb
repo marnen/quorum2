@@ -5,19 +5,22 @@ class CalendarsController < ApplicationController
   before_filter :check_admin, :except => @nonadmin
   before_filter :require_user, :only => @nonadmin
   layout 'standard'
-  
+
+  respond_to :html
+
+  def new
+    @page_title = _('Create calendar')
+    @current_object = Calendar.new
+    respond_with @current_object
+  end
+
   make_resourceful do
-    actions :new, :create, :edit, :update
-    
-    response_for :new do
-      @page_title = _('Create calendar')
-      render :action => 'edit'
-    end
-    
+    actions :create, :edit, :update
+
     response_for :edit do
       @page_title = _('Edit calendar')
     end
-    
+
     # TODO: Shouldn't this be replaced by Calendar#set_admin ?
     after :create do
       p = User.current_user.permissions
@@ -26,7 +29,7 @@ class CalendarsController < ApplicationController
         p << Permission.create!(:user => User.current_user, :calendar => current_object, :role => @admin)
       end
     end
-    
+
     response_for :create do
       flash[:notice] = _('Your calendar was successfully created.')
       redirect_to '/admin'
@@ -47,7 +50,7 @@ class CalendarsController < ApplicationController
       redirect_to :back
     end
   end
-  
+
   # Lists all the users for the current #Calendar.
   def users
     @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => current_object}
