@@ -2,12 +2,13 @@
 
 # This is the controller for #Event instances. It supports the following make_resourceful[http://mr.hamptoncatlin.com] actions: :index, :create, :new, :edit, :update, :show.
 class EventsController < ApplicationController
-  layout "standard", :except => [:export, :feed] # no layout needed on export, since it generates an iCal file
-  before_filter :require_user, :except => :feed
-  before_filter :login_from_key, :only => :feed
-  after_filter :ical_header, :only => :export # assign the correct MIME type so that it gets recognized as an iCal event
+  layout "standard", except: [:export, :feed] # no layout needed on export, since it generates an iCal file
+  before_filter :require_user, except: :feed
+  before_filter :login_from_key, only: :feed
+  before_filter :load_event, only: [:edit, :update, :show, :delete]
+  after_filter :ical_header, only: :export # assign the correct MIME type so that it gets recognized as an iCal event
 
-  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   respond_to :html, except: :feed
   respond_to :pdf, only: :index
@@ -37,7 +38,6 @@ class EventsController < ApplicationController
   end
 
   def edit
-    load_event
     if @event.allow? :edit
       @page_title = _("Edit event")
       respond_with @event
@@ -47,12 +47,10 @@ class EventsController < ApplicationController
   end
 
   def update
-    load_event
     respond_with_flash { @event.update_attributes params[:event] }
   end
 
   def show
-    load_event
     if @event.allow? :show
       @page_title = @event.name
       respond_with @event
@@ -74,10 +72,9 @@ class EventsController < ApplicationController
 
 # Delete an #Event, subject to #Event#allow?.
   def delete
-    load_event
     begin
-      if event.allow?(:delete)
-        event.hide
+      if @event.allow?(:delete)
+        @event.hide
         flash[:notice] = _("The selected event was deleted.")
       else
         flash[:error] = _("You are not authorized to delete that event.")
