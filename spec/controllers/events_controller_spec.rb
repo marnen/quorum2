@@ -333,7 +333,6 @@ describe EventsController, "edit" do
     event.should be_valid
     post 'update', :event => event.attributes, :id => id # valid
     request.should be_post
-    assigns[:current_object].should_receive(:update_attributes)
     response.should redirect_to(:action => :index)
     flash[:notice].should_not be_nil
 

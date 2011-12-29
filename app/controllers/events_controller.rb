@@ -39,8 +39,18 @@ class EventsController < ApplicationController
     end
   end
 
+  def update
+    @event = Event.find params[:id]
+    if @event.update_attributes params[:event]
+      redirect_to({action: :index}, notice: _("Your event has been saved."))
+    else
+      flash[:error] = _("We couldn't process that request. Please try again.")
+      respond_with @event
+    end
+  end
+
   make_resourceful do
-    actions :edit, :update, :show
+    actions :edit, :show
 
     response_for :edit do
       if !current_object.allow?(:edit)
@@ -50,16 +60,6 @@ class EventsController < ApplicationController
         @page_title = _("Edit event")
         render :action => 'new'
       end
-    end
-
-    response_for :update do
-      flash[:notice] = _("Your event has been saved.")
-      redirect_to :action => :index
-    end
-
-    response_for :update_fails do
-      flash[:error] = _("We couldn't process that request. Please try again.")
-      render :new
     end
 
     response_for :show do
