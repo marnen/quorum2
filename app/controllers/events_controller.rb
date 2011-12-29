@@ -37,7 +37,7 @@ class EventsController < ApplicationController
   end
 
   def edit
-    @event = Event.find params[:id]
+    load_event
     if @event.allow? :edit
       @page_title = _("Edit event")
       respond_with @event
@@ -47,12 +47,12 @@ class EventsController < ApplicationController
   end
 
   def update
-    @event = Event.find params[:id]
+    load_event
     respond_with_flash { @event.update_attributes params[:event] }
   end
 
   def show
-    @event = Event.find params[:id]
+    load_event
     if @event.allow? :show
       @page_title = @event.name
       respond_with @event
@@ -74,7 +74,7 @@ class EventsController < ApplicationController
 
 # Delete an #Event, subject to #Event#allow?.
   def delete
-    event = Event.find(params[:id].to_i)
+    load_event
     begin
       if event.allow?(:delete)
         event.hide
@@ -117,7 +117,7 @@ class EventsController < ApplicationController
   # Display a map page for the current #Event.
   def map
     begin
-      @event = Event.find(params[:id])
+      load_event
       @host = request.host_with_port
     rescue
       flash[:error] = _("Couldn't find that event!")
@@ -162,6 +162,10 @@ class EventsController < ApplicationController
   # Return an HTTP header with proper MIME type for iCal.
   def ical_header
     headers['Content-Type'] = 'text/calendar'
+  end
+
+  def load_event
+    @event = Event.find params[:id]
   end
 
   # Log user in based on single_access_token.
