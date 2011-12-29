@@ -31,22 +31,12 @@ class EventsController < ApplicationController
 
   def create
     @event = Event.new params[:event]
-    if @event.save
-      redirect_to({action: :index}, notice: _("Your event has been saved."))
-    else
-      flash[:error] = _("We couldn't process that request. Please try again.")
-      respond_with @event
-    end
+    with_flash { @event.save }
   end
 
   def update
     @event = Event.find params[:id]
-    if @event.update_attributes params[:event]
-      redirect_to({action: :index}, notice: _("Your event has been saved."))
-    else
-      flash[:error] = _("We couldn't process that request. Please try again.")
-      respond_with @event
-    end
+    with_flash { @event.update_attributes params[:event] }
   end
 
   make_resourceful do
@@ -191,5 +181,16 @@ class EventsController < ApplicationController
     @order = params[:order]
     @direction = params[:direction]
     @search = params[:search].extend(Search) if params[:search]
+  end
+
+  def with_flash
+    raise ArgumentError, 'no block specified' unless block_given?
+
+    if yield
+      redirect_to({action: :index}, notice: _("Your event has been saved."))
+    else
+      flash[:error] = _("We couldn't process that request. Please try again.")
+      respond_with @event
+    end
   end
 end
