@@ -8,8 +8,8 @@
     %th
       &nbsp;
       / blank
-  - for user in @users do
-    - perm = user.permissions.find_by_calendar_id(@current_object)
+  - @users.each do |user|
+    - perm = user.permissions.find_by_calendar_id(@calendar) # TODO: get query out of view!
     = form_for perm do |f|
       %tr[user]
         %td._name= [user.lastname, user.firstname].compact.join(', ')

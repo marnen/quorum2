@@ -14,12 +14,6 @@ class CalendarsController < ApplicationController
     respond_with @calendar
   end
 
-  def edit
-    @page_title = _('Edit calendar')
-    @calendar = Calendar.find_by_id params[:id]
-    respond_with @calendar
-  end
-
   def create
     @calendar = Calendar.new params[:calendar]
     if @calendar.save!
@@ -31,24 +25,27 @@ class CalendarsController < ApplicationController
     end
   end
 
-  make_resourceful do
-    actions :update
+  def edit
+    @page_title = _('Edit calendar')
+    @calendar = Calendar.find params[:id]
+    respond_with @calendar
+  end
 
-    response_for :update do
-      flash[:notice] = _('Your calendar was successfully saved.')
-      redirect_to '/admin'
-    end
-
-    response_for :update_fails do
+  def update
+    @calendar = Calendar.find params[:id]
+    if @calendar.update_attributes! params[:calendar]
+      redirect_to '/admin', notice: _('Your calendar was successfully saved.')
+    else
       flash[:error] = _('Couldn\'t save your calendar!')
-      redirect_to :back
+      respond_with @calendar
     end
   end
 
   # Lists all the users for the current #Calendar.
   def users
-    @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => current_object}
-    @users = current_object.users.find(:all, :order => 'lastname, firstname')
+    @calendar = Calendar.find(params[:id])
+    @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => @calendar}
+    @users = @calendar.users.find(:all, order: 'lastname, firstname')
   end
 
   private
