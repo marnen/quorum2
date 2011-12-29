@@ -3,6 +3,7 @@
 class CalendarsController < ApplicationController
   @nonadmin ||= [:new, :create]
   before_filter :check_admin, :except => @nonadmin
+  before_filter :load_calendar, :except => @nonadmin
   before_filter :require_user, :only => @nonadmin
   layout 'standard'
 
@@ -27,12 +28,10 @@ class CalendarsController < ApplicationController
 
   def edit
     @page_title = _('Edit calendar')
-    @calendar = Calendar.find params[:id]
     respond_with @calendar
   end
 
   def update
-    @calendar = Calendar.find params[:id]
     if @calendar.update_attributes! params[:calendar]
       redirect_to '/admin', notice: _('Your calendar was successfully saved.')
     else
@@ -43,12 +42,15 @@ class CalendarsController < ApplicationController
 
   # Lists all the users for the current #Calendar.
   def users
-    @calendar = Calendar.find(params[:id])
     @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => @calendar}
     @users = @calendar.users.find(:all, order: 'lastname, firstname')
   end
 
   private
+
+  def load_calendar
+    @calendar = Calendar.find params[:id]
+  end
 
   def make_admin_permission_for(calendar)
     p = User.current_user.permissions
