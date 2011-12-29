@@ -1,6 +1,1 @@
-= form_for @current_object do |f|
-  %table.edit
-    %tr
-      %th= f.label :name, _('Name')
-      %td= f.text_field :name
-  = submit_tag(h(_('Save')))
+= render partial: 'form', locals: {calendar: @calendar}

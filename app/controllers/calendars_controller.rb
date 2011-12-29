@@ -10,16 +10,18 @@ class CalendarsController < ApplicationController
 
   def new
     @page_title = _('Create calendar')
-    @current_object = Calendar.new
-    respond_with @current_object
+    @calendar = Calendar.new
+    respond_with @calendar
+  end
+
+  def edit
+    @page_title = _('Edit calendar')
+    @calendar = Calendar.find_by_id params[:id]
+    respond_with @calendar
   end
 
   make_resourceful do
-    actions :create, :edit, :update
-
-    response_for :edit do
-      @page_title = _('Edit calendar')
-    end
+    actions :create, :update
 
     # TODO: Shouldn't this be replaced by Calendar#set_admin ?
     after :create do
