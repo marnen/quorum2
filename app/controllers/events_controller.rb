@@ -27,30 +27,31 @@ class EventsController < ApplicationController
   def new
     @page_title = _("Add event")
     @event = Event.new
+    respond_with @event
   end
 
   def create
     @event = Event.new params[:event]
-    with_flash { @event.save }
+    respond_with_flash { @event.save }
+  end
+
+  def edit
+    @event = Event.find params[:id]
+    if @event.allow?(:edit)
+      @page_title = _("Edit event")
+      respond_with @event
+    else
+      redirect_to({action: :index}, flash: {error: _("You are not authorized to edit that event.")})
+    end
   end
 
   def update
     @event = Event.find params[:id]
-    with_flash { @event.update_attributes params[:event] }
+    respond_with_flash { @event.update_attributes params[:event] }
   end
 
   make_resourceful do
-    actions :edit, :show
-
-    response_for :edit do
-      if !current_object.allow?(:edit)
-        flash[:error] = _("You are not authorized to edit that event.")
-        redirect_to :action => :index
-      else
-        @page_title = _("Edit event")
-        render :action => 'new'
-      end
-    end
+    actions :show
 
     response_for :show do
       if !current_object.allow?(:show)
@@ -183,7 +184,7 @@ class EventsController < ApplicationController
     @search = params[:search].extend(Search) if params[:search]
   end
 
-  def with_flash
+  def respond_with_flash
     raise ArgumentError, 'no block specified' unless block_given?
 
     if yield

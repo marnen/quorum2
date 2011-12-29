@@ -300,11 +300,6 @@ describe EventsController, "edit" do
     response.should redirect_to(:action => :index)
   end
 
-  it "should reuse the new-event form" do
-    get 'edit', :id => @event.id
-    response.should render_template(:new)
-  end
-
   it "should set the page title" do
     get 'edit', :id => @event.id
     assigns[:page_title].should_not be_nil
