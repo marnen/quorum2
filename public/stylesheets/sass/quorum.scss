@@ -196,6 +196,38 @@ $error_icon_url: url("../images/exclamation.png");
   p {
     padding: 0.25em; } }
 
+/* Styles for sexy dates. */
+.date {
+  text-align: center;
+  background-color: white;
+  color: #666;
+  text-transform: uppercase;
+  font: {
+    size: 90%;
+    weight: bolder;
+  }
+  margin: 3px;
+  min-width: 5em;
+  min-height: 5em;
+  .month {
+    padding-top: 1px;
+  }
+  .wday {
+    background-color: red;
+    color: white;
+    padding: 1px;
+  }
+  .day {
+    font: {
+      size: 200%;
+      weight: normal;
+    }
+    line-height: 90%;
+    padding: 0px;
+    color: black;
+  }
+}
+
 /* Some hCalendar properties... */
 abbr {
   text-decoration: inherit; }
