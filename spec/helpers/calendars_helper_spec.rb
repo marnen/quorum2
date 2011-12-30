@@ -1,4 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+# coding: UTF-8
+
+require 'spec_helper'
 
 describe CalendarsHelper do
   

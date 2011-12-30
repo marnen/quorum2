@@ -23,3 +23,6 @@ production:
     user_name: SMTP_USER_NAME
     password: SMTP_PASSWORD
 
+  # Recipients for exception notifications.
+  exception_recipients:
+    - RECIPIENT

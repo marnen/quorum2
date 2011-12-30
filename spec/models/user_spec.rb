@@ -1,11 +1,20 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+# coding: UTF-8
+
+require 'spec_helper'
 
 describe User, "(general properties)" do
   before(:each) do
   end
   
+  it "should act_as_addressed" do
+    User.included_modules.should include(Acts::Addressed::InstanceMethods)
+  end
+  
   it "should belong to a State" do
-    User.reflect_on_association(:state).macro.should == :belongs_to
+    r = User.reflect_on_association(:state_raw)
+    r.macro.should == :belongs_to
+    r.options[:class_name].should == 'Acts::Addressed::State'
+    r.options[:foreign_key].should == 'state_id'
   end
   
   it "should have many Commitments" do
@@ -34,11 +43,10 @@ describe User, "(general properties)" do
     aggr = User.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = mock_model(State, :id => 15, :code => 'NY', :country => mock_model(Country, :code => 'US'))
-    a = Address.new
-    Address.should_receive(:new).and_return(a)
-    u = User.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state)
-    u.address.should == a
+    state = Factory :state
+    opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
+    u = Factory :user, opts
+    u.address.should == Acts::Addressed::Address.new(opts)
   end
   
   it "should have a writable flag controlling display of personal information on contact list" do
@@ -48,14 +56,17 @@ describe User, "(general properties)" do
   end
   
   it "should have country referred through state" do
-    country = mock_model(Country, :name => 'Ruritania', :code => 'RU')
-    state = mock_model(State, :name => 'Federal District', :country => country)
+    state = Factory :state
     user = User.new
     user.should respond_to(:country)
-    user.state = state
-    user.country.should == user.state.country
+    user.state_raw = state
+    user.country.should == state.country
   end
   
+  it "should be nil-safe on country" do
+    user = Factory :user, :state => nil
+    lambda{user.country}.should_not raise_error
+  end
 end
 
 describe User, "(admin?)" do
@@ -83,8 +94,6 @@ describe User, "(admin?)" do
 end
 
 describe User, "(validations)" do
-  fixtures :users, :roles, :calendars, :permissions
-  
 =begin
   it "should require at least one permission" do
     user = users(:marnen)
@@ -95,64 +104,172 @@ describe User, "(validations)" do
 =end
 
   it 'should create a user permission for the calendar, when there\'s only one calendar' do
-    Calendar.delete(calendars(:two).id) # so we only have one calendar
+    Calendar.destroy_all
+    User.stub!(:current_user).and_return(Factory :user)
+    calendar = Factory :calendar
     Calendar.count.should == 1
-    user = User.new(:email => 'johndoe@example.com', :password => 'foo', :password_confirmation => 'foo')
-    user.save!
+    user = User.create!(Factory.attributes_for :user)
     user.permissions.should_not be_nil
     user.permissions.should_not be_empty
     user.permissions[0].user.should == user
-    user.permissions[0].calendar.should == calendars(:one)
-    user.permissions[0].role.should == roles(:user)
+    user.permissions[0].calendar.should == calendar
+    user.permissions[0].role.name.should == 'user'
   end
+  
+  context 'field validations' do
+    before :each do
+      @user = Factory.build :user
+    end
+    
+    it 'should be valid with default data' do
+      @user.should be_valid
+    end
+    
+    ['password_confirmation', 'email'].each do |field| # TODO: should work for password too, but it doesn't
+      it "requires #{field.gsub '_', ' '}" do
+        @user.send "#{field}=", ''
+        @user.should_not be_valid
+      end
+    end
+  end
+
+=begin
+    it 'initializes #activation_code' do
+      @creating_user.call
+      @user.reload.activation_code.should_not be_nil
+    end
+  end
+=end
 end
   
-describe User, "(instance properties)" do
-  fixtures :users
-  
-  it "should have a 'to_s' property returning firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
-    @user = User.new
-    @user.email = 'foo@bar.com' # arbitrary
-    @user.to_s.should == @user.email
-    @user.firstname = 'f' # arbitrary
-    @user.to_s.should == @user.firstname
-    @user.firstname = nil
-    @user.lastname = 'l' # arbitrary
-    @user.to_s.should == @user.lastname
-    @user.firstname = 'f'
-    @user.to_s.should == @user.firstname << ' ' << @user.lastname
+describe User, "(instance methods)" do
+  describe "<=>" do
+    it "should be valid" do
+      User.new.should respond_to(:<=>)
+      User.method(:<=>).arity.should == 1
+    end
+    
+    it "should sort on last name, first name, and e-mail address in that order" do
+      attrs = ['Smith', 'John', 'jsmith1@aol.com']
+      smith = u(attrs)
+      (smith <=> u(['Smith', 'John', 'jsmith2@aol.com'])).should == -1
+      (smith <=> u(['Jones', 'Robert', 'rj123@gmail.com'])).should == 1
+      (smith <=> u(['Smith', 'Mary', 'aaa@aaa.com'])).should == -1
+      (smith <=> u([nil, nil, 'Smitty@aol.com'])).should == -1 # nil-safe
+      (smith <=> u(attrs.collect(&:downcase))).should == 0 # not case-sensitive
+    end
+    
+    protected
+    def u(array)
+      User.new(:lastname => array[0], :firstname => array[1], :email => array[2])
+    end
   end
   
-  it "should have a 'feed_key' property initialized to a 32-character string" do
-    User.find(:first).feed_key.length.should == 32
+  describe "to_s" do
+    it "should return firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
+      @user = User.new
+      @user.email = 'foo@bar.com' # arbitrary
+      @user.to_s.should == @user.email
+      @user.firstname = 'f' # arbitrary
+      @user.to_s.should == @user.firstname
+      @user.firstname = nil
+      @user.lastname = 'l' # arbitrary
+      @user.to_s.should == @user.lastname
+      @user.firstname = 'f'
+      @user.to_s.should == @user.firstname << ' ' << @user.lastname
+    end
+    
+    it "should take an optional parameter, :first_last or :last_first" do
+      @user = User.new
+      lambda{@user.to_s}.should_not raise_error
+      lambda{@user.to_s :first_last}.should_not raise_error
+      lambda{@user.to_s :last_first}.should_not raise_error
+    end
+    
+    describe nil do
+      before(:each) do
+        @user = User.new(:email => 'foo@bar.com', :firstname => 'f', :lastname => 'l')
+      end
+      
+      it "should return lastname, firstname if :last_first is specified" do
+        @user.to_s(:last_first).should == 'l, f'
+      end
+      
+      it "should default to :first_last if no order is specified" do
+        @user.to_s.should == @user.to_s(:first_last)
+      end
+      
+      it "should raise an error if format is unrecognized" do
+        lambda{@user.to_s :bogus}.should raise_error
+      end
+    end
   end
   
-  it "should set feed_key on save" do
-    @u = User.find(:first)
-    @u.feed_key = nil
-    @u.reload.feed_key.length.should == 32
+  describe "activate" do
+    it "should be valid" do
+      Factory(:user).should respond_to(:activate)
+    end
+    
+    it "should set the active flag to true" do
+      u = Factory :inactive_user
+      u.activate
+      u.active?.should be_true
+    end
   end
   
-  it "should not overwrite feed_key if already set" do
-    @u = User.find(:first)
-    fk = @u.feed_key
-    @u.reload.feed_key.should == fk
+  it "should have a 'single_access_token' property initialized to a string" do
+    Factory(:user).single_access_token.should_not be_blank
   end
   
-  it "should properly deal with regenerating feed_key if it's a duplicate" do
-    @users = User.find(:all)
-    @one = @users[0]
-    @two = @users[1]
-    fk = @two.feed_key
-    @one.feed_key = fk
-    @one.reload.feed_key.should_not == fk
-
+  it "should set single_access_token on save" do
+    @u = Factory :user
+    @u.single_access_token = nil
+    @u.reload.single_access_token.should_not be_blank
+  end
+  
+  it "should not overwrite single_access_token if already set" do
+    @u = Factory :user
+    token = @u.single_access_token
+    @u.reload.single_access_token.should == token
+  end
+  
+  it "should properly deal with regenerating single_access_token if it's a duplicate" do
+    @one = Factory :user
+    @two = Factory :user
+    token = @two.single_access_token
+    @one.single_access_token = token
+    # TODO: Does this properly test what's being asserted here?
+    @one.reload.single_access_token.should_not == token
+  end
+  
+  describe "reset_password!" do
+    it "should be a valid instance method" do
+      User.new.should respond_to(:reset_password!)
+    end
+    
+    it "should reset the user's password and password_confirmation to identical strings" do
+      old_password = 'old password'
+      user = Factory :user, :password => old_password
+      lambda {user.reset_password!}.should_not raise_error(ActiveRecord::RecordInvalid) # should set password_confirmation
+      new_password = user.password
+      new_password.should_not == old_password
+    end
+    
+    it "should reset password to a random hex string of length 10 (MD5 digest or similar)" do
+      pattern = /^[a-f\d]{10}$/
+      user = Factory :user
+      user.reset_password!
+      password1 = user.password
+      password1.should =~ pattern
+      user.reset_password!
+      password2 = user.password
+      password2.should =~ pattern
+      password2.should_not == password1
+    end
   end
 end
 
 describe User, "(geographical features)" do
-  fixtures :users, :states, :countries
-  
   before(:each) do
     @placemark = Geocoding::Placemark.new
     @placemark.stub!(:latlon).and_return([1.0, 2.0])
@@ -162,9 +279,8 @@ describe User, "(geographical features)" do
     @placemarks.stub!(:[]).and_return(@placemark)
     Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
     Geocoding.stub!(:get).and_return(@placemarks)
-    Point.stub!(:from_coordinates).and_return(mock_model(Point))
 
-    @user = users(:marnen)
+    @user = Factory.build :user
   end
   
   it "should save coords when successfully encoded" do
@@ -183,110 +299,12 @@ describe User, "(geographical features)" do
     @user.should_not_receive(:save)
     @user.coords
   end
-end
-
-describe User, "(authentication structure)" do
-  fixtures :users, :roles, :permissions
-
-=begin
-  describe 'being created' do
-    before do
-      @user = nil
-      @creating_user = lambda do
-        @user = create_user
-        violated "#{@user.errors.full_messages.to_sentence}" if @user.new_record?
-      end
-    end
-    
-    it 'increments User#count' do
-      @creating_user.should change(User, :count).by(1)
-    end
-
-    it 'initializes #activation_code' do
-      @creating_user.call
-      @user.reload.activation_code.should_not be_nil
-    end
-  end
-=end
-
-  it 'requires password' do
-    lambda do
-      u = create_user(:password => nil)
-      u.errors.on(:password).should_not be_nil
-    end.should_not change(User, :count)
-  end
-
-  it 'requires password confirmation' do
-    lambda do
-      u = create_user(:password_confirmation => nil)
-      u.errors.on(:password_confirmation).should_not be_nil
-    end.should_not change(User, :count)
-  end
-
-  it 'requires email' do
-    lambda do
-      u = create_user(:email => nil)
-      u.errors.on(:email).should_not be_nil
-    end.should_not change(User, :count)
-  end
-
-  it 'resets password' do
-    users(:quentin).update_attributes(:password => 'new password', :password_confirmation => 'new password')
-    User.authenticate('quentin@example.com', 'new password').should == users(:quentin)
-  end
-
-  it 'does not rehash password' do
-    users(:quentin).update_attributes(:email => 'quentin2@example.com')
-    User.authenticate('quentin2@example.com', 'test').should == users(:quentin)
-  end
-
-  it 'authenticates user' do
-    User.authenticate('quentin@example.com', 'test').should == users(:quentin)
-  end
-
-  it 'sets remember token' do
-    users(:quentin).remember_me
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-  end
-
-  it 'unsets remember token' do
-    users(:quentin).remember_me
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).forget_me
-    users(:quentin).remember_token.should be_nil
-  end
-
-  it 'remembers me for one week' do
-    before = 1.week.from_now.utc
-    users(:quentin).remember_me_for 1.week
-    after = 1.week.from_now.utc
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.between?(before, after).should be_true
-  end
-
-  it 'remembers me until one week' do
-    time = 1.week.from_now.utc
-    users(:quentin).remember_me_until time
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.should == time
-  end
-
-  it 'remembers me default two weeks' do
-    before = 2.weeks.from_now.utc
-    users(:quentin).remember_me
-    after = 2.weeks.from_now.utc
-    users(:quentin).remember_token.should_not be_nil
-    users(:quentin).remember_token_expires_at.should_not be_nil
-    users(:quentin).remember_token_expires_at.between?(before, after).should be_true
-  end
-
-protected
-  def create_user(options = {})
-    record = User.new({ :id => 1, :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
-    record.save
-    record
+  
+  it "should clear coords on update" do
+    User.stub!(:current_user).and_return(Factory :user)
+    @user.update_attributes(Factory.attributes_for :user)
+    @user.should_receive(:coords=)
+    @user.update_attributes(:name => 'foo')
   end
 end
+

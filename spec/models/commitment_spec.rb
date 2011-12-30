@@ -1,4 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+# coding: UTF-8
+
+require 'spec_helper'
 
 describe Commitment, "(general properties)" do
   it "should belong to an Event" do
@@ -7,6 +9,20 @@ describe Commitment, "(general properties)" do
   
   it "should belong to a User" do
     Commitment.reflect_on_association(:user).macro.should == :belongs_to
+  end
+end
+
+describe Commitment, "(named scopes)" do
+  # TODO: implement have_named_scope as described at http://evolve.st/articles/11-testing-named-scope-with-rspec
+
+  it "should have a named scope for attending" do
+    Commitment.should respond_to(:attending)
+    Commitment.attending.where_values_hash.should == {:status => true}
+  end
+  
+  it "should have a named scope for not attending" do
+    Commitment.should respond_to(:not_attending)
+    Commitment.not_attending.where_values_hash.should == {:status => false}
   end
 end
 

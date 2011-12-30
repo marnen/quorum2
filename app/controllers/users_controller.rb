@@ -1,21 +1,18 @@
+# coding: UTF-8
+
 class UsersController < ApplicationController
   layout :get_layout
-  before_filter :login_required, :only => [:edit, :regenerate_key]
+  before_filter :require_user, :only => [:edit, :regenerate_key]
   # render new.html.haml
   def new
   end
 
   def create
-    cookies.delete :auth_token
-    # protects against session fixation attacks, wreaks havoc with 
-    # request forgery protection.
-    # uncomment at your own risk
-    # reset_session
     @user = User.new(params[:user])
     @user.save
     if @user.errors.empty?
       @user.activate # so we don't have to go through activation right now
-      self.current_user = @user
+      UserSession.create @user
       redirect_back_or_default('/login')
       # The next line should be uncommented when we go through e-mail activation.
       # flash[:notice] = "Thanks for signing up! Please check your e-mail for activation instructions."
@@ -33,7 +30,7 @@ class UsersController < ApplicationController
         form[:password] = ''
         form[:password_confirmation] = ''
       end
-      @user = User.current_user # User.find(params[:id].to_i)
+      @user = current_user # User.find(params[:id].to_i)
       @user.update_attributes(form)
       @user.update_attribute(:coords, nil)
       if @user.errors.empty?
@@ -43,7 +40,7 @@ class UsersController < ApplicationController
         render :action => 'new'
       end
     else
-      @user = User.current_user # params[:id].nil? ? User.current_user : User.find(params[:id].to_i)
+      @user = current_user # params[:id].nil? ? User.current_user : User.find(params[:id].to_i)
       @page_title = _("Edit profile")
       render :action => 'new'
     end
@@ -58,12 +55,11 @@ class UsersController < ApplicationController
     redirect_back_or_default('/login')
   end
   
-  # Regenerates #feed_key of #User.current_user, then redirects to previous page.
+  # Regenerates #single_access_token of current_user, then redirects to previous page.
   def regenerate_key
-    u = User.current_user
+    u = current_user
     begin
-      u.feed_key = nil
-      u.save!
+      u.reset_single_access_token!
       flash[:notice] = _('Your RSS URL has been regenerated.')
     rescue Exception
       flash[:error] = _("Couldn't regenerate the URL! Please try again.")
@@ -80,12 +76,9 @@ class UsersController < ApplicationController
         flash[:error] = _("Couldn't find that e-mail address!")
         return
       end
-      password = Digest::MD5.hexdigest(Time.now.to_s.split(//).sort_by {rand}.join)[0, 10]
-      user.password = password
-      user.password_confirmation = password
       begin
-        user.save!
-        UserMailer.deliver_reset(user, password)
+        user.reset_password!
+        UserMailer.deliver_reset(user)
         flash[:notice] = _("Password reset for %{email}. Please check your e-mail for your new password.") % {:email => params[:email]}
       #rescue
         #flash[:error] = _("Couldn't reset password. Please try again.")
@@ -99,6 +92,6 @@ class UsersController < ApplicationController
  protected
   # Returns the name of the layout we should be using. This enables us to have different layouts depending on whether a user is logged in.
   def get_layout
-    logged_in? ? "standard" : "unauthenticated"
+    current_user ? "standard" : "unauthenticated"
   end
 end

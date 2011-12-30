@@ -1,0 +1,13 @@
+ActsAsAddressed
+===============
+
+This plugin abstracts some common functionality for dealing with models that contain street addresses.
+
+
+Example
+=======
+
+Example goes here.
+
+
+Copyright (c) 2009 Marnen E. Laibow-Koser <marnen@marnen.org>, released under the BSD license

@@ -1,3 +1,7 @@
+# coding: UTF-8
+
+require 'bundler/capistrano'
+
 set :application, "quorum2"
 set :repository,  "REPOSITORY_URL" # CONFIG: use a Git clone URL or SVN repo spec here.
 
@@ -14,7 +18,7 @@ set :user, "capistrano"
 set :scm, :git
 set :branch, :master
 set :deploy_via, :remote_cache
-set :git_enable_submodules, 1
+set :remote, 'origin'
 
 =begin
 set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN 
@@ -32,7 +36,7 @@ role :db,  "HOST", :primary => true
 set :runner, "capistrano" # might want to change this
 set :use_sudo, false
 
-# get GemInstaller working
+after 'deploy:update_code', 'deploy:remove_unnecessary_files', 'deploy:tag'
 
 namespace :deploy do
   
@@ -43,44 +47,29 @@ namespace :deploy do
     run "/usr/bin/touch #{current_path}/tmp/restart.txt"
   end
   
-  task :after_update_code do
+  desc 'Remove shared files and image sources.'
+  task :remove_unnecessary_files, :roles => :app do
     # Remove some unversioned YAML config files and link to shared directory.
     rpath = File.expand_path(release_path)
-    ['database.yml', 'config.yml', 'gmaps_api_key.yml'].each do |file|
+    ['database.yml', 'config.yml', 'gmaps_api_key.yml', 'initializers/secret_token.rb'].each do |file|
       run "rm -f #{rpath}/config/#{file}"
       run "ln -s #{deploy_to}/shared/config/#{file} #{rpath}/config/#{file}"
     end
+
+    # Remove image source files.
+    run "rm -rf #{rpath}/public/images/sources"
     
     #run "chown www-data #{current_path}/config/environment.rb"
-    ############# Begin GemInstaller config - see http://geminstaller.rubyforge.org
-    require "rubygems" 
-    require "geminstaller" 
-    
-    # Path(s) to your GemInstaller config file(s)
-    config_paths = "#{File.expand_path(release_path)}/config/geminstaller.yml" 
-    
-    # Arguments which will be passed to GemInstaller (you can add any extra ones)
-    args = "--config #{config_paths}" 
-    
-    # The 'exceptions' flag determines whether errors encountered while running GemInstaller
-    # should raise exceptions (and abort Rails), or just return a nonzero return code
-    args += " --exceptions" 
-    
-    # This will use sudo by default on all non-windows platforms, but requires an entry in your
-    # sudoers file to avoid having to type a password.  It can be omitted if you don't want to use sudo.
-    # See http://geminstaller.rubyforge.org/documentation/documentation.html#dealing_with_sudo
-    args += " --sudo" unless RUBY_PLATFORM =~ /mswin/ 
-    
-    # And show some output...
-    args += " --geminstaller-output=all --rubygems-output=all"
-    
-    # The 'install' method will auto-install gems as specified by the args and config
-    # GemInstaller.run(args)
-    run "/usr/bin/geminstaller #{args}"
-    
-    # The 'autogem' method will automatically add all gems in the GemInstaller config to your load path, using the 'gem'
-    # or 'require_gem' command.  Note that only the *first* version of any given gem will be loaded.
-    # GemInstaller.autogem(args)
-    ############# End GemInstaller config
+
+  end
+  
+  # From http://stackoverflow.com/questions/5735656/tagging-release-before-deploying-with-capistrano
+  desc 'Tags deployed release with a unique Git tag.'
+  task :tag do
+    user = `git config --get user.name`.chomp
+    email = `git config --get user.email`.chomp
+    tag_name = "#{remote}_#{release_name}"
+    puts `git tag #{tag_name} #{latest_revision} -m "Deployed by #{user} <#{email}>"`
+    puts `git push #{remote} #{tag_name}`
   end
 end

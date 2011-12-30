@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # This file is auto-generated from the current state of the database. Instead of editing this file, 
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
@@ -9,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081111034201) do
+ActiveRecord::Schema.define(:version => 20091020154940) do
 
   create_table "calendars", :force => true do |t|
     t.column "name", :string, :null => false
@@ -19,8 +21,8 @@ ActiveRecord::Schema.define(:version => 20081111034201) do
 
   create_table "commitments", :force => true do |t|
     t.column "event_id", :integer, :null => false
+    t.column "user_id", :integer, :null => false
     t.column "status", :boolean
-    t.column "user_id", :integer
   end
 
   create_table "countries", :force => true do |t|
@@ -39,11 +41,11 @@ ActiveRecord::Schema.define(:version => 20081111034201) do
     t.column "zip", :string
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :point
     t.column "created_by_id", :integer
     t.column "deleted", :boolean
     t.column "description", :text
     t.column "calendar_id", :integer, :null => false
+    t.column "coords", :point, :srid => 4326
   end
 
   create_table "permissions", :force => true do |t|
@@ -52,6 +54,8 @@ ActiveRecord::Schema.define(:version => 20081111034201) do
     t.column "role_id", :integer, :null => false
     t.column "show_in_report", :boolean, :default => true, :null => false
   end
+
+  add_index "permissions", ["user_id", "calendar_id", "role_id"], :name => "index_permissions_on_user_id_and_calendar_id_and_role_id", :unique => true
 
   create_table "roles", :force => true do |t|
     t.column "name", :string
@@ -67,8 +71,8 @@ ActiveRecord::Schema.define(:version => 20081111034201) do
 
   create_table "users", :force => true do |t|
     t.column "email", :string
-    t.column "crypted_password", :string, :limit => 40
-    t.column "salt", :string, :limit => 40
+    t.column "crypted_password", :string, :limit => 128, :default => "", :null => false
+    t.column "password_salt", :string, :limit => 128, :default => "", :null => false
     t.column "firstname", :string
     t.column "lastname", :string
     t.column "street", :string
@@ -76,17 +80,25 @@ ActiveRecord::Schema.define(:version => 20081111034201) do
     t.column "city", :string
     t.column "state_id", :integer
     t.column "zip", :string
-    t.column "remember_token", :string
-    t.column "remember_token_expires_at", :timestamp
-    t.column "activation_code", :string, :limit => 40
     t.column "activated_at", :timestamp
     t.column "created_at", :timestamp
     t.column "updated_at", :timestamp
-    t.column "coords", :point
     t.column "show_contact", :boolean, :default => true
-    t.column "feed_key", :string, :limit => 32, :null => false
+    t.column "single_access_token", :string, :limit => 32, :null => false
+    t.column "coords", :point, :srid => 4326
+    t.column "login_count", :integer, :default => 0, :null => false
+    t.column "failed_login_count", :integer, :default => 0, :null => false
+    t.column "last_request_at", :timestamp
+    t.column "current_login_at", :timestamp
+    t.column "last_login_at", :timestamp
+    t.column "current_login_ip", :string
+    t.column "last_login_ip", :string
+    t.column "persistence_token", :string, :default => "", :null => false
+    t.column "perishable_token", :string, :default => "", :null => false
+    t.column "active", :boolean, :default => false, :null => false
   end
 
-  add_index "users", ["feed_key"], :name => "index_users_on_feed_key", :unique => true
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
+  add_index "users", ["single_access_token"], :name => "index_users_on_single_access_token"
 
 end

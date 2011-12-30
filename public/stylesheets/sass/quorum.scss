@@ -1,0 +1,204 @@
+$title_blue: #3333ff;
+
+// size of icons from Silk set
+$silk_icon_size: 16px;
+
+// margin around icons
+$default_icon_margin: 3px;
+
+body {
+  color: black;
+  font: {
+    size: 12px;
+    family: Helvetica, Arial, Geneva, sans-serif; };
+  background-color: white;
+  margin: 0px; }
+
+.name {
+  color: red;
+  font-weight: bolder; }
+
+.hidden {
+  display: none; }
+
+.siteName {
+  color: #0000cc;
+  font: {
+    style: oblique;
+    weight: bolder;
+    size: 116%; }; }
+
+.footer {
+  border-top: 1px solid black;
+  padding-top: 2px; }
+
+#navbar {
+  color: white;
+  background-color: $title_blue;
+  margin: {
+    top: 0px;
+    left: 0px;
+    right: 0px; };
+  padding: 0.25em;
+  * {
+    color: white; } }
+
+#navbar a, th a {
+  color: white;
+  font-weight: bold;
+  &:hover {
+    background-color: white;
+    color: $title_blue; } }
+
+#content {
+  margin: 0.5em; }
+
+td {
+  background-color: #cccccc; }
+
+th {
+  background-color: $title_blue;
+  color: white; }
+
+.hint {
+  font: {
+    size: 90%;
+    weight: lighter; }; }
+
+span.yes {
+  color: lime;
+  font-weight: bolder; }
+
+span.no {
+  font-weight: bolder;
+  color: red; }
+
+span.maybe {
+  color: yellow;
+  font-weight: bolder; }
+
+$circle_size: 12px;
+$attend_yes_url: url("../images/attend_yes.png");
+$attend_no_url: url("../images/attend_no.png");
+$attend_maybe_url: url("../images/attend_maybe.gif");
+
+td.yes p {
+  background-image: $attend_yes_url; }
+
+td.no p {
+  background-image: $attend_no_url; }
+
+td.maybe p {
+  background-image: $attend_maybe_url; }
+
+td.yes, td.no, td.maybe {
+  background-color: black;
+  color: white;
+  p {
+    padding-left: $circle_size + $default_icon_margin;
+    background-repeat: no-repeat; } }
+
+td.actions {
+  background-color: transparent;
+  font-size: 90%;
+  min-width: 6em;
+  a {
+    display: inline-block; } }
+
+// Toolbar links with icons
+
+@mixin icon($icon_url, $icon_size: $silk_icon_size, $icon_margin: $default_icon_margin) {
+  background: {
+    image: $icon_url;
+    repeat: no-repeat; };
+  min-height: $icon_size + $icon_margin;
+  padding-left: $icon_size + $icon_margin; }
+
+$edit_icon_url: url("../images/pencil.png");
+
+a.edit {
+  @include icon($edit_icon_url); }
+
+$delete_icon_url: url("../images/cross.png");
+
+a.delete {
+  @include icon($delete_icon_url); }
+
+$ical_icon_url: url("../images/date.png");
+
+a.ical {
+  @include icon($ical_icon_url); }
+
+$map_icon_url: url("../images/map.png");
+
+a.map {
+  @include icon($map_icon_url); }
+
+$subscribe_icon_url: url("../images/add.png");
+
+a.subscribe {
+  @include icon($subscribe_icon_url); }
+
+$unsubscribe_icon_url: url("../images/delete.png");
+
+a.unsubscribe {
+  @include icon($unsubscribe_icon_url); }
+
+// Other links with icons
+
+$rss_icon_url: url("../images/feed-icon-14x14.png");
+$rss_icon_size: 14px;
+
+.rss {
+  font-size: 90%;
+  @include icon($rss_icon_url, $rss_icon_size); }
+
+.url {
+  font-weight: bolder; }
+
+$pdf_icon_url: url("../images/pdf-icon-16x16.png");
+$pdf_icon_size: 16px;
+
+.pdf {
+  @include icon($pdf_icon_url, $pdf_icon_size, 0px); }
+
+.field_with_errors {
+  background-color: red;
+  input {
+    background-color: #ffcccc;
+    color: black;
+  }
+}
+.formError {
+  color: red * 0.8;
+}
+
+$notice_icon_url: url("../images/accept.png");
+$warning_icon_url: url("../images/star.png");
+$error_icon_url: url("../images/exclamation.png");
+
+#flash {
+  background: {
+    position: 2px 2px;
+    repeat: no-repeat; };
+  min-height: $silk_icon_size + 4px;
+  min-width: $silk_icon_size + 4px;
+  padding-left: $silk_icon_size + $default_icon_margin;
+  &.notice {
+    background-image: $notice_icon_url;
+    background-color: #ccffcc; }
+  &.warning {
+    background-image: $warning_icon_url;
+    background-color: #ffffcc; }
+  &.error {
+    background-image: $error_icon_url;
+    background-color: #ffcccc; }
+  p {
+    padding: 0.25em; } }
+
+/* Some hCalendar properties... */
+abbr {
+  text-decoration: inherit; }
+
+.uid {
+  display: none; }

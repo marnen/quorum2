@@ -1,0 +1,6 @@
+= form_for calendar do |f|
+  %table.edit
+    %tr
+      %th= f.label :name, _('Name')
+      %td= f.text_field :name
+  = submit_tag(h(_('Save')))

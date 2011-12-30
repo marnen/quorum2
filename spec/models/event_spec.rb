@@ -1,17 +1,28 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+# coding: UTF-8
+
+require 'spec_helper'
 
 describe Event, "(general properties)" do
   before(:each) do
   end
   
+  it "should act_as_addressed" do
+    Event.included_modules.should include(Acts::Addressed::InstanceMethods)
+  end
+  
   it "should belong to a State" do
-    Event.reflect_on_association(:state).macro.should == :belongs_to
+    r = Event.reflect_on_association(:state_raw)
+    r.macro.should == :belongs_to
+    r.options[:class_name].should == 'Acts::Addressed::State'
+    r.options[:foreign_key].should == 'state_id'
   end
   
   it "should belong to a Country" do
-    opts = Event.reflect_on_association(:state).options
-    opts.should have_key(:include)
-    opts[:include].should == :country
+    pending ":include doesn't seem to be a good idea at all -- must investigate" do
+      opts = Event.reflect_on_association(:state).options
+      opts.should have_key(:include)
+      opts[:include].should == :country
+    end
   end
     
   it "should belong to a Calendar" do
@@ -37,25 +48,41 @@ describe Event, "(general properties)" do
   end
   
   it "should have a country property referred through state" do
-    event = Event.new
-    event.state = State.new
+    event = Factory :event, :state => Factory(:state)
+    event.state.should_not be_nil
     event.country.should == event.state.country
   end
   
+  it "should be nil-safe on country" do
+    event = Event.new(:state => nil)
+    lambda{event.country}.should_not raise_error
+  end
+
   it "should be composed_of an Address" do
     aggr = Event.reflect_on_aggregation(:address)
     aggr.should_not be_nil
     aggr.options[:mapping].should == [%w(street street), %w(street2 street2), %w(city city), %w(state_id state), %w(zip zip), %w(coords coords)]
-    state = mock_model(State, :id => 15, :code => 'NY', :country => mock_model(Country, :code => 'US'))
-    a = Address.new
-    Address.should_receive(:new).and_return(a)
-    e = Event.new(:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state)
-    e.address.should == a
+    state = FactoryGirl.create :state
+    opts = {:street => '123 Main Street', :street2 => '1st floor', :city => 'Anytown', :zip => 12345, :state => state}
+    e = Event.new(opts)
+    e.address.should == Acts::Addressed::Address.new(opts)
   end
   
   it "should have a deleted property" do
     event = Event.new
     event.should respond_to(:deleted)
+  end
+  
+  it "should exclude deleted events on find" do
+    undeleted = FactoryGirl.create :event
+    begin
+      deleted = FactoryGirl.create :event, :deleted => true
+    rescue ActiveRecord::RecordNotFound
+      # don't worry about it -- since default_scope excludes this record, it won't be found.
+    end
+    all = Event.find :all
+    all.should include(undeleted)
+    all.should_not include(deleted)
   end
   
   it "should have a description" do
@@ -66,7 +93,12 @@ end
 
 describe Event, "(allow?)" do
   before(:each) do
-    @event = Event.new(:calendar_id => 27)
+    @event = FactoryGirl.create :event
+    @alien = FactoryGirl.create :user, :permissions => [Factory(:permission)]
+    @nonadmin = FactoryGirl.create :user, :permissions => [Factory(:permission, :calendar => @event.calendar)]
+    @admin = FactoryGirl.create(:user).tap do |u|
+      u.permissions << Factory(:admin_permission, :calendar => @event.calendar, :user => u)
+    end
   end
   
   it "should exist with one argument" do
@@ -75,43 +107,28 @@ describe Event, "(allow?)" do
   end
   
   it "should return true for :delete iff current user has a role of admin for the event's calendar, false otherwise" do
-    @notallowed = [mock_model(Permission, :calendar_id => 999)]
-    @notallowed.should_receive(:find_by_calendar_id).with(27).and_return(nil)
-    @admin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
-    @admin.should_receive(:find_by_calendar_id).with(27).and_return(@admin[0])
-    
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @notallowed))
+    User.stub!(:current_user).and_return(@alien)
     @event.allow?(:delete).should == false
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @admin))
+    User.stub!(:current_user).and_return(@admin)
     @event.allow?(:delete).should == true
   end
   
   it "should return true for :edit iff current user has a role of admin for the event's calendar or created the event" do
-    @nonadmin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'foo'))]
-    @nonadmin.should_receive(:find_by_calendar_id).with(27).and_return(@nonadmin[0])
-    @admin_p = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
-    @admin_p.should_receive(:find_by_calendar_id).with(27).and_return(@admin_p[0])
-    
-    @two = mock_model(User, :id => 2, :permissions => @nonadmin) # arbitrary non-admin role
-    @admin = mock_model(User, :id => 3, :permissions => @admin_p)
-    @event.created_by = @two
-    User.stub!(:current_user).and_return(@two)
+    @event.created_by = @nonadmin
+    User.stub!(:current_user).and_return(@nonadmin)
     @event.allow?(:edit).should == true
     User.stub!(:current_user).and_return(@admin)
     @event.allow?(:edit).should == true
   end
   
   it "should return true for :show iff current user has any role for the event's calendar" do
-    @user_p = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'anything'))]
-    @user_p.should_receive(:find_by_calendar_id).with(27).and_return(@user_p[0])
-    @onr = mock_model(User, :permissions => @user_p)
-    User.stub!(:current_user).and_return(@onr)
+    user = Factory(:user).tap do |u|
+      u.permissions << Factory(:permission, :user => u, :calendar => @event.calendar, :role => Factory(:role, :name => Faker::Lorem.word))
+    end
+    User.stub!(:current_user).and_return user
     @event.allow?(:show).should == true
 
-    @user_p = [mock_model(Permission, :calendar_id => 37, :role => mock_model(Role, :name => 'anything'))]
-    @user_p.should_receive(:find_by_calendar_id).with(27).and_return(nil)
-    @two = mock_model(User, :permissions => @user_p)
-    User.stub!(:current_user).and_return(@two)
+    User.stub!(:current_user).and_return Factory(:user, :permissions => [Factory(:permission, :role => Factory(:role, :name => Faker::Lorem.word))])
     @event.allow?(:show).should == false
   end
   
@@ -121,17 +138,42 @@ describe Event, "(allow?)" do
   end
   
   it "should return nil for any operation it doesn't know about" do
-    @admin = [mock_model(Permission, :calendar_id => 27, :role => mock_model(Role, :name => 'admin'))]
-    @admin.should_receive(:find_by_calendar_id).with(27).and_return(@admin[0])
-    User.stub!(:current_user).and_return(mock_model(User, :id => 1, :permissions => @admin))
+    User.stub!(:current_user).and_return(@admin)
     
     @event.allow?(:foobar).should be_nil
   end
 end
 
+describe Event, "(change_status!)" do
+  before(:each) do
+    @event = Factory :event
+    @user = Factory :user
+  end
+  
+  it "should be valid" do
+    @event.should respond_to(:change_status!)
+  end
+  
+  it "should change the status on the already existing commitment if one exists" do
+    commitment = Factory :commitment, :event => @event, :user => @user, :status => true
+    id = commitment.id
+    [false, nil, true].each do |status|
+      @event.change_status!(@user, status)
+      commitment = Commitment.find(id)
+      commitment.status.should == status
+    end
+  end
+  
+  it "should create a new commitment if there isn't one" do
+    @event.commitments.find_all_by_user_id(@user.id).should be_empty
+    @event.change_status!(@user, nil) # somewhat arbitrary choice of status
+    @event.commitments.find_all_by_user_id(@user.id).should_not be_empty
+  end
+end
+
 describe Event, "(find_committed)" do
   before(:each) do
-    @event = Event.new
+    @event = Factory :event
     @find = @event.method(:find_committed)
   end
   
@@ -141,25 +183,32 @@ describe Event, "(find_committed)" do
   end
   
   it "should get a collection of Users when called with :yes or :no" do
-    yes = @find[:yes]
-    yes.should be_a_kind_of(Array)
-    if !yes[0].nil? then
-      yes[0].should be_a_kind_of(User)
+    @attending = Factory(:user).tap do |u|
+      u.commitments << Factory(:commitment, :user => u, :event => @event, :status => true)
     end
-    no = @find[:no]
-    no.should be_a_kind_of(Array)
-    if !no[0].nil? then
-      no[0].should be_a_kind_of(User)
+    @not_attending = Factory(:user).tap do |u|
+      u.commitments << Factory(:commitment, :user => u, :event => @event, :status => false)
     end
+    @find[:yes].should == [@attending]
+    @find[:no].should == [@not_attending]
   end
   
   it 'should sort the Users on lastname or, failing that, email' do
-    @array = []
-    @array.should_receive(:sort).twice # need to figure out a way to specify the sort block
-    @temp = mock('temp', :collect => @array, :null_object => true)
-    @event.should_receive(:commitments).twice.and_return(mock('commitments', :clone => @temp))
-    @find[:yes]
-    @find[:no]
+    [true, false].each do |status|  
+      a = Factory :user, :lastname => 'a'
+      b = Factory :user, :email => 'b@b.com', :lastname => nil
+      c = Factory :user, :lastname => 'c'
+      users = [c, a, b]
+      users.each do |u|
+        u.commitments << Factory(:commitment, :user => u, :event => @event, :status => status)
+      end
+  
+      @find[status ? :yes : :no].should == [a, b, c]
+      
+      users.each do |u|
+        u.destroy
+      end
+    end
   end
 end
 
@@ -175,9 +224,7 @@ describe Event, "(hide)" do
   end
 end
 
-describe Event, "(validations)" do
-  fixtures :users
-  
+describe Event, "(validations)" do 
   before(:each) do
     @event = Event.new
     @event.state_id = 23 # arbitrary; should be able to use any value
@@ -214,28 +261,36 @@ describe Event, "(validations)" do
 =end
 
   it "should assign current_user to created_by" do
+    user = Factory :user
+    User.stub!(:current_user).and_return user
     @event.created_by_id = nil
-    User.should_receive(:current_user).and_return(users(:marnen))
     @event.save!
-    @event.created_by.should == users(:marnen)
+    @event.created_by.should == user
+  end
+  
+  it "should not try to set created_by if there's no current user" do
+    [false, :false].each do |v|
+      User.stub!(:current_user).and_return(v)
+      @event.created_by_id = nil
+      @event.should_not_receive(:created_by=)
+      @event.save!
+    end
   end
 end
 
 describe Event, "(geographical features)" do
-  fixtures :events, :calendars, :states, :countries
-  
   before(:each) do
     @placemark = Geocoding::Placemark.new
     @placemark.stub!(:latlon).and_return([1.0, 2.0])
     Geocoding::Placemark.stub!(:new).and_return(@placemark)
     
+    # TODO: Use Webmock here.
     @placemarks = Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS)
     @placemarks.stub!(:[]).and_return(@placemark)
     Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
     Geocoding.stub!(:get).and_return(@placemarks)
-    Point.stub!(:from_coordinates).and_return(mock_model(Point))
 
-    @event = events(:one)
+    @event = Factory.build :event
   end
   
   it "should have coords (Point)" do
@@ -256,6 +311,8 @@ describe Event, "(geographical features)" do
   end 
   
   it "should clear coords on update" do
+    User.stub!(:current_user).and_return(Factory :user)
+    @event.update_attributes(Factory.attributes_for :event)
     @event.should_receive(:coords=)
     @event.update_attributes(:name => 'foo')
     # @event.should_not_receive(:coords=)

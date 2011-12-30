@@ -1,0 +1,4 @@
+h2. HTML Output
+
+This miniscule Rails plugin stops Rails outputting self-closing (XHTML-style) markup
+which is useful if you want to use the Rails tag helpers and produce valid HTML.
