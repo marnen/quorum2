@@ -105,6 +105,10 @@ td.actions {
   a {
     display: inline-block; } }
 
+.comments .user {
+  font-weight: bolder;
+}
+
 // Toolbar links with icons
 
 @mixin icon($icon_url, $icon_size: $silk_icon_size, $icon_margin: $default_icon_margin) {
