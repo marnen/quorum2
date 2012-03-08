@@ -3,9 +3,6 @@
 require 'spec_helper'
 
 describe Event, "(general properties)" do
-  before(:each) do
-  end
-
   it "should act_as_addressed" do
     Event.included_modules.should include(Acts::Addressed::InstanceMethods)
   end
