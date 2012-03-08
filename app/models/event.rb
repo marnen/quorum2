@@ -47,6 +47,7 @@ class Event < ActiveRecord::Base
     end
     scope = {:yes => :attending, :no => :not_attending}[status]
     c = commitments.send(scope)
+    # TODO: move comparator into the User class, or do the sort on the DB side.
     c.collect{|e| e.user }.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)}
   end
 

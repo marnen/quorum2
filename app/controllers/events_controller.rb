@@ -102,7 +102,7 @@ class EventsController < ApplicationController
     status_map = {'yes' => true, 'no' => false, 'maybe' => nil}
     if !id.nil? then
       event = Event.find_by_id(id)
-      event.change_status!(current_user, status_map[params[:status].to_s])
+      event.change_status! current_user, status_map[params[:status].to_s], params[:comment]
     end
     if request.xhr?
       render :partial => 'event', :locals => {:event => event}
@@ -153,6 +153,7 @@ class EventsController < ApplicationController
       date_query = 'date >= :from_date'
     end
 
+    # TODO: use "#{}" for query string.
     @current_objects || Event.where(['calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}]).order("#{order} #{direction}")
   end
 
