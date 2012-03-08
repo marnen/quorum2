@@ -15,9 +15,7 @@ module EventsHelper
 
   # Returns #User's commitment comment for #Event.
   def attendance_comment(event, user)
-    # TODO: Remove DB access in the view layer.
-    commitment = event.commitments.where(user_id: user).first
-    commitment.try :comment
+    event.comments.find {|c| c.user == user }.try :comment
   end
 
   # Generates an HTML date element for #Event, including hCalendar[http://microformats.org/wiki/hcalendar] annotation.
