@@ -176,6 +176,30 @@ describe Event, "(change_status!)" do
   end
 end
 
+describe Event, '#comments' do
+  let(:event) { Factory :event }
+  let(:comment_names) { event.comments.collect {|comment| comment.user.lastname } }
+
+  it "should order comments by user's last name" do
+    last_names = ['Z', 'X', 'Y']
+    last_names.each do |last_name|
+      Factory :commitment, event: event, user: Factory(:user, lastname: last_name)
+    end
+
+    comment_names.should == last_names.sort
+  end
+
+  it "should not return blank comments" do
+    {
+      'Nil' => nil, 'Whitespace' => "  \t\n ", 'Nonblank' => Faker::Lorem.sentence
+    }.each do |last_name, comment|
+      event.commitments.create! user: Factory(:user, lastname: last_name), comment: comment
+    end
+
+    comment_names.should == ['Nonblank']
+  end
+end
+
 describe Event, "(find_committed)" do
   before(:each) do
     @event = Factory :event

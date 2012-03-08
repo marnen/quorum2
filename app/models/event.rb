@@ -39,6 +39,11 @@ class Event < ActiveRecord::Base
     commitment.update_attributes! :status => status, :comment => comment
   end
 
+  # Returns an array of nonblank comments for the #Event, ordered by #User's name.
+  def comments
+    commitments.reject {|c| c.comment.blank? }.sort_by &:user
+  end
+
   # Returns an #Array of #User objects with commitment status (for the current #Event) of <i>status</i>,
   # where <i>status</i> may be <tt>:yes</tt> or <tt>:no</tt>.
   def find_committed(status)
