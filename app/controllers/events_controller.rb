@@ -154,7 +154,7 @@ class EventsController < ApplicationController
     end
 
     # TODO: can we use more Arel and less literal SQL?
-    @current_objects || Event.includes(:commitments => :user).where(["calendar_id IN (:calendars) AND #{date_query}", {:calendars => calendars, :from_date => from_date, :to_date => to_date}]).order("#{order} #{direction}")
+    @current_objects ||= Event.includes(:commitments => :user).where(["calendar_id IN (:calendars) AND #{date_query}", {:calendars => calendars, :from_date => from_date, :to_date => to_date}]).order("#{order} #{direction}")
   end
 
   # Return an HTTP header with proper MIME type for iCal.

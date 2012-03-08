@@ -14,7 +14,9 @@ describe EventsController, "index" do
     {:get => "/events/index/#{order}/#{direction}"}.should route_to params.merge(:controller => 'events', :action => 'index')
     mock_conditions = mock 'conditions'
     mock_conditions.should_receive(:order).with "#{order} #{direction}"
-    Event.should_receive(:where) do |conditions|
+    mock_includes = mock 'includes'
+    Event.should_receive(:includes).and_return(mock_includes)
+    mock_includes.should_receive(:where) do |conditions|
       conditions.should be_an_instance_of(Array)
       conditions[0].should =~ /date >= :from_date/i
       conditions[1].should be_an_instance_of(Hash)
@@ -134,11 +136,14 @@ describe EventsController, "feed.rss (login)" do
   it "should list events if given a valid single_access_token" do
     @user = FactoryGirl.create :user
     UserSession.create @user
-    calendar = FactoryGirl.create :calendar # @user will be subscribed to
+    calendar = FactoryGirl.create :calendar
+    Factory :permission, user: @user, calendar: calendar
     @events = (1..5).map { FactoryGirl.create :event, :calendar => calendar }
     User.stub!(:find_by_single_access_token).and_return(@user)
     @events.stub!(:order).and_return @events
-    Event.should_receive(:where).and_return(@events)
+    mock_includes = mock 'includes'
+    mock_includes.should_receive(:where).and_return(@events)
+    Event.should_receive(:includes).and_return mock_includes
     get :feed, :format => 'rss', :key => @user.single_access_token
     response.body.should have_selector('item')
   end
