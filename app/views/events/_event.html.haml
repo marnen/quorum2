@@ -31,9 +31,7 @@
     %div.description
       :markdown
         #{h event.description}
-    %div.comments
-      %span.user== #{current_user}:
-      = attendance_comment event, current_user
+    = render partial: 'comments', locals: {event: event}
   = render :partial => 'attendance', :locals => {:event => event}
   - yes = event.find_committed(:yes)
   - no = event.find_committed(:no)
