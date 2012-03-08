@@ -13,6 +13,7 @@ function ajaxify_page() {
     'form.attendance input[type=submit]': function () {
       this.hide();
     },
+    'form.attendance textarea:blur': ajaxify_form,
     'form.attendance select.commit:change': ajaxify_form
   });
 };
@@ -29,10 +30,11 @@ function ajaxify_form(event) {
       var id = row.id;
       row.replace(transport.responseText);
       var newForm = $(id).down('form.attendance');
-      
-      // these two statements repeat ajaxify_page; can we do better?
+
+      // TODO: these statements repeat ajaxify_page; can we do better?
       newForm.down('input[type=submit]').hide();
       newForm.down('select.commit').observe('change', ajaxify_form);
+      newForm.down('textarea').observe('blur', ajaxify_form);
 			f = prepare_spinner.bind(newForm.down('.progress'));
 			f();
     },

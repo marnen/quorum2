@@ -34,65 +34,70 @@ FactoryGirl.define do
     date { Date.civil(rand(10) + 2100, rand(12) + 1, rand(28) + 1) } # way in the future so it shows up on the event list
     calendar
     association :created_by, :factory => :user
-    
+
     factory :deleted_event do
       deleted { true }
     end
   end
-  
+
   factory :state, :class => Acts::Addressed::State do
     country
     name { Faker::Name.last_name } # generic_name
     code { LETTERS.sample + LETTERS.sample }
   end
-  
+
   factory :country, :class => Acts::Addressed::Country do
     name { Faker::Name.last_name } # generic_name
     code { LETTERS.sample + LETTERS.sample }
   end
-  
+
   factory :calendar do
     name {Faker::Name.name + "'s calendar"}
   end
-  
+
   factory :user do
     firstname { Faker::Name.first_name }
     lastname { Faker::Name.last_name }
     email { Faker::Internet.email }
-    password { (1..(rand(15) + 4)).map{(32..127).to_a.sample.chr}.join }
+    password {'passw0rd'}
     password_confirmation { password }
     street { Faker::Address.street_address }
     street2 { Faker::Address.secondary_address }
     city {Faker::Address.city}
-    association :state_raw, :factory => :state 
+    association :state_raw, :factory => :state
     zip { Faker::Address.zip_code }
     active {true}
-    
+
     factory :inactive_user do
       active {false}
     end
+
+    factory :user_with_random_password do
+      password { (1..(rand(15) + 4)).map{(32..127).to_a.sample.chr}.join }
+    end
   end
-  
+
   factory :commitment do
-    event 
-    user 
+    event
+    user
     status {true}
+    comment { Faker::Lorem.sentence }
   end
-  
+
   factory :permission do
     user
     role
     calendar
     show_in_report {true}
-    
+
     factory :admin_permission do
       association :role, :factory => :admin_role
     end
   end
-    
+
   factory :role do
     name {'user'}
-    
+
     factory :admin_role do
       name {'admin'}
     end

@@ -1,17 +1,17 @@
-# coding: UTF-8
-
-# This file is auto-generated from the current state of the database. Instead of editing this file, 
-# please use the migrations feature of Active Record to incrementally modify your database, and
-# then regenerate this schema definition.
+# encoding: UTF-8
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your database schema. If you need
-# to create the application database on another system, you should be using db:schema:load, not running
-# all the migrations from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091020154940) do
+ActiveRecord::Schema.define(:version => 20120308160523) do
 
   create_table "calendars", :force => true do |t|
     t.column "name", :string, :null => false
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20091020154940) do
     t.column "event_id", :integer, :null => false
     t.column "user_id", :integer, :null => false
     t.column "status", :boolean
+    t.column "comment", :text
   end
 
   create_table "countries", :force => true do |t|
@@ -85,7 +86,6 @@ ActiveRecord::Schema.define(:version => 20091020154940) do
     t.column "updated_at", :timestamp
     t.column "show_contact", :boolean, :default => true
     t.column "single_access_token", :string, :limit => 32, :null => false
-    t.column "coords", :point, :srid => 4326
     t.column "login_count", :integer, :default => 0, :null => false
     t.column "failed_login_count", :integer, :default => 0, :null => false
     t.column "last_request_at", :timestamp
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(:version => 20091020154940) do
     t.column "persistence_token", :string, :default => "", :null => false
     t.column "perishable_token", :string, :default => "", :null => false
     t.column "active", :boolean, :default => false, :null => false
+    t.column "coords", :point, :srid => 4326
   end
 
   add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
