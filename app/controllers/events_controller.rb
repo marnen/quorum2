@@ -153,8 +153,8 @@ class EventsController < ApplicationController
       date_query = 'date >= :from_date'
     end
 
-    # TODO: use "#{}" for query string.
-    @current_objects || Event.where(['calendar_id IN (:calendars) AND ' + date_query, {:calendars => calendars, :from_date => from_date, :to_date => to_date}]).order("#{order} #{direction}")
+    # TODO: can we use more Arel and less literal SQL?
+    @current_objects || Event.where(["calendar_id IN (:calendars) AND #{date_query}", {:calendars => calendars, :from_date => from_date, :to_date => to_date}]).order("#{order} #{direction}")
   end
 
   # Return an HTTP header with proper MIME type for iCal.
