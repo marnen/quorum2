@@ -200,23 +200,21 @@ describe Event, '#comments' do
   end
 end
 
-describe Event, "(find_committed)" do
-  before(:each) do
-    @event = Factory :event
-    @find = @event.method(:find_committed)
-  end
+describe Event, "#find_committed" do
+  let(:event) { Factory :event }
+  let(:find_committed) { event.method(:find_committed) }
 
   it "should exist with one argument" do
-    @event.should respond_to(:find_committed)
+    event.should respond_to(:find_committed)
     @find.arity.should == 1
   end
 
   it "should get a collection of Users when called with :yes or :no" do
     @attending = Factory(:user).tap do |u|
-      u.commitments << Factory(:commitment, :user => u, :event => @event, :status => true)
+      u.commitments << Factory(:commitment, :user => u, :event => event, :status => true)
     end
     @not_attending = Factory(:user).tap do |u|
-      u.commitments << Factory(:commitment, :user => u, :event => @event, :status => false)
+      u.commitments << Factory(:commitment, :user => u, :event => event, :status => false)
     end
     @find[:yes].should == [@attending]
     @find[:no].should == [@not_attending]
@@ -229,7 +227,7 @@ describe Event, "(find_committed)" do
       c = Factory :user, :lastname => 'c'
       users = [c, a, b]
       users.each do |u|
-        u.commitments << Factory(:commitment, :user => u, :event => @event, :status => status)
+        u.commitments << Factory(:commitment, :user => u, :event => event, :status => status)
       end
 
       @find[status ? :yes : :no].should == [a, b, c]
