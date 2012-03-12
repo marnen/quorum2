@@ -43,3 +43,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 
 ## v0.4.0, 29 December 2011
 * Remove make_resourceful now that Rails offers `respond_with` [#64]
+
+## v0.5.0, 12 March 2012
+* Add the ability to make comments on one's commitment status [#69]
