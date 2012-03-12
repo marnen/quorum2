@@ -46,3 +46,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 
 ## v0.5.0, 12 March 2012
 * Add the ability to make comments on one's commitment status [#69]
+
+## v0.5.1, 12 March 2012
+* Fix invalid HTML on event list [#71]
