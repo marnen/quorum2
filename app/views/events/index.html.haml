@@ -42,7 +42,7 @@
       - if User.current_user.calendars.size > 1
         %tr
           %th= _('Calendar:')
-          %td= s.select(:calendar_id, User.current_user.calendars.collect{|c| [c, c.id.to_s]}, {:include_blank => _('[All calendars]')})
+          %td{colspan: 3}= s.select(:calendar_id, User.current_user.calendars.collect{|c| [c, c.id.to_s]}, {:include_blank => _('[All calendars]')})
   = submit_tag(_('Search'), :name => nil)
   - if @events.collect{|e| e.calendar}.uniq.size == 1
     %p.pdf!= _("Generate attendance report for these events (%{PDF})") % {:PDF => link_to(_('PDF'), "#{url_for(params.merge :format => :pdf)}")}
