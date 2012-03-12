@@ -202,11 +202,12 @@ end
 
 describe Event, "#find_committed" do
   let(:event) { Factory :event }
-  let(:find_committed) { event.method(:find_committed) }
+  let(:event_with_commitments) { Event.includes(:commitments => :user).find(event.id) }
+
 
   it "should exist with one argument" do
     event.should respond_to(:find_committed)
-    @find.arity.should == 1
+    event.method(:find_committed).arity.should == 1
   end
 
   it "should get a collection of Users when called with :yes or :no" do
@@ -216,26 +217,26 @@ describe Event, "#find_committed" do
     @not_attending = Factory(:user).tap do |u|
       u.commitments << Factory(:commitment, :user => u, :event => event, :status => false)
     end
-    @find[:yes].should == [@attending]
-    @find[:no].should == [@not_attending]
+    event_with_commitments.find_committed(:yes).should == [@attending]
+    event_with_commitments.find_committed(:no).should == [@not_attending]
   end
 
   it 'should sort the Users on lastname or, failing that, email' do
-    [true, false].each do |status|
-      a = Factory :user, :lastname => 'a'
-      b = Factory :user, :email => 'b@b.com', :lastname => nil
-      c = Factory :user, :lastname => 'c'
-      users = [c, a, b]
-      users.each do |u|
-        u.commitments << Factory(:commitment, :user => u, :event => event, :status => status)
-      end
-
-      @find[status ? :yes : :no].should == [a, b, c]
-
-      users.each do |u|
-        u.destroy
-      end
+    a = Factory :user, :lastname => 'a'
+    b = Factory :user, :email => 'b@b.com', :lastname => nil
+    c = Factory :user, :lastname => 'c'
+    users = [c, a, b]
+    users.each do |u|
+      u.commitments << Factory(:commitment, :user => u, :event => event, :status => true)
     end
+
+    event_with_commitments.find_committed(:yes).should == [a, b, c]
+  end
+
+  it 'should not make a database query' do
+    event_with_commitments # get the necessary query out of the way
+    Commitment.connection.should_not_receive(:execute).with(/\A((?!rollback).)*\Z/i) # we should have no queries except rollbacks -- see http://stackoverflow.com/questions/957379/invert-match-with-regexp
+    event_with_commitments.find_committed :yes
   end
 end
 
