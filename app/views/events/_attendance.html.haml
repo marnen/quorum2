@@ -1,11 +1,10 @@
 -# TODO: stop defining variables in views!
-- @status_strings ||= { :yes => _('attending'), :no => _('not attending'), :maybe => _('uncommitted') }
 - status = attendance_status(event, User.current_user)
 %td{:class => status}
   -# TODO: why not make this form_for commitment ?
   = form_for event, :as => :commitment, :url => {:action => :change_status, :id => event.id}, :html => {:class => :attendance} do |f|
-    %p!= h(_("You are currently %{status}.")) % {:status => content_tag(:span, h(@status_strings[status]), :class => status)}
-    = select_tag(:status, options_for_select(@status_strings.invert, status), :class => :commit, :id => nil)
+    %p!= h(_("You are currently %{status}.")) % {:status => content_tag(:span, h(status_strings[status]), :class => status)}
+    = select_tag(:status, options_for_select(status_strings.invert, status), :class => :commit, :id => nil)
     %span.progress &nbsp;
     %br
     = text_area_tag :comment, attendance_comment(event, User.current_user), placeholder: _('comment')

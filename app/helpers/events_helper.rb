@@ -142,4 +142,8 @@ module EventsHelper
     my_class ||= 'sort'
     link_to h(_(title)), url_for(params.merge :order => field, :direction => direction), :class => my_class
   end
+
+  def status_strings
+    @status_strings ||= {yes: _('attending'), no: _('not attending'), maybe: _('uncommitted')}
+  end
 end
