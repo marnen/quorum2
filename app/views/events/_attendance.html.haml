@@ -7,6 +7,6 @@
     = select_tag(:status, options_for_select(status_strings.invert, status), :class => :commit, :id => nil)
     %span.progress &nbsp;
     %br
-    = text_area_tag :comment, attendance_comment(event, User.current_user), placeholder: _('comment')
+    = text_area_tag :comment, attendance_comment(event, User.current_user), placeholder: _('comment'), id: nil
     %br
     = submit_tag(h(_("Change status")))
