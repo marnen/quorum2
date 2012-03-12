@@ -3,7 +3,6 @@
 module EventsHelper
   # Returns #User's commitment status for #Event as a symbol -- :yes, :no, :or maybe.
   def attendance_status(event, user)
-    # TODO: stop doing queries in the view!
     if event.find_committed(:yes).include? user then
       status = :yes
     elsif event.find_committed(:no).include? user then
