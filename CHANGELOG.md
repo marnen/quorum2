@@ -49,3 +49,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 
 ## v0.5.1, 12 March 2012
 * Fix invalid HTML on event list [#71]
+
+## v.0.5.2, 12 March 2012
+* Autolink URLs in event descriptions [#75]
