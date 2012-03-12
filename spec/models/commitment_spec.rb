@@ -13,21 +13,17 @@ describe Commitment, "(general properties)" do
 end
 
 describe Commitment, "(validations)" do
-  before(:each) do
-    @commitment = Commitment.new
-    @commitment.event_id = 1 # arbitrary
-    @commitment.user_id = 5 # arbitrary
-  end
+  let(:commitment) { Factory :commitment, event: Factory(:event), user: Factory(:user) }
 
   it "should not be valid without an event" do
-    @commitment.should be_valid
-    @commitment.event_id = nil
-    @commitment.should_not be_valid
+    commitment.should be_valid
+    commitment.event_id = nil
+    commitment.should_not be_valid
   end
 
   it "should not be valid without a user" do
-    @commitment.should be_valid
-    @commitment.user_id = nil
-    @commitment.should_not be_valid
+    commitment.should be_valid
+    commitment.user_id = nil
+    commitment.should_not be_valid
   end
 end
