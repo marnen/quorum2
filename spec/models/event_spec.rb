@@ -221,10 +221,10 @@ describe Event, "#find_committed" do
     event_with_commitments.find_committed(:no).should == [@not_attending]
   end
 
-  it 'should sort the Users on lastname or, failing that, email' do
+  it 'should sort the Users on name or, failing that, email' do
     a = Factory :user, :lastname => 'a'
-    b = Factory :user, :email => 'b@b.com', :lastname => nil
-    c = Factory :user, :lastname => 'c'
+    b = Factory :user, :email => 'b@b.com', :lastname => nil, :firstname => nil
+    c = Factory :user, :lastname => nil, :firstname => 'c'
     users = [c, a, b]
     users.each do |u|
       u.commitments << Factory(:commitment, :user => u, :event => event, :status => true)

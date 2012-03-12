@@ -52,8 +52,7 @@ class Event < ActiveRecord::Base
     end
     status_to_find = {yes: true, no: false}[status]
     found_commitments = commitments.select {|c| c.status == status_to_find }
-    # TODO: move comparator into the User class, or do the sort on the DB side.
-    found_commitments.collect{|e| e.user }.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)}
+    found_commitments.collect {|e| e.user }.sort
   end
 
   # Hides the current #Event. This has the effect of deleting it, since hidden Events will not show up in the main list.
