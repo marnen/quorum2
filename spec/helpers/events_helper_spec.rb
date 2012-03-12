@@ -201,3 +201,9 @@ describe EventsHelper, "rss_url" do
     helper.rss_url.should be_nil
   end
 end
+
+describe EventsHelper, '#status_strings' do
+  it 'should return an array of status strings' do
+    helper.status_strings.should == {yes: 'attending', no: 'not attending', maybe: 'uncommitted'}
+  end
+end

@@ -39,16 +39,20 @@ class Event < ActiveRecord::Base
     commitment.update_attributes! :status => status, :comment => comment
   end
 
+  # Returns an array of nonblank comments for the #Event, ordered by #User's name.
+  def comments
+    commitments.reject {|c| c.comment.blank? }.sort_by &:user
+  end
+
   # Returns an #Array of #User objects with commitment status (for the current #Event) of <i>status</i>,
   # where <i>status</i> may be <tt>:yes</tt> or <tt>:no</tt>.
   def find_committed(status)
     if ![:yes, :no].include? status
-      raise "Invalid status: " << status
+      raise "Invalid status (not :yes or :no): " << status
     end
-    scope = {:yes => :attending, :no => :not_attending}[status]
-    c = commitments.send(scope)
-    # TODO: move comparator into the User class, or do the sort on the DB side.
-    c.collect{|e| e.user }.sort{|x, y| (x.lastname || x.email) <=> (y.lastname || y.email)}
+    status_to_find = {yes: true, no: false}[status]
+    found_commitments = commitments.select {|c| c.status == status_to_find }
+    found_commitments.collect {|e| e.user }.sort
   end
 
   # Hides the current #Event. This has the effect of deleting it, since hidden Events will not show up in the main list.

@@ -3,7 +3,6 @@
 module EventsHelper
   # Returns #User's commitment status for #Event as a symbol -- :yes, :no, :or maybe.
   def attendance_status(event, user)
-    # TODO: stop doing queries in the view!
     if event.find_committed(:yes).include? user then
       status = :yes
     elsif event.find_committed(:no).include? user then
@@ -15,9 +14,7 @@ module EventsHelper
 
   # Returns #User's commitment comment for #Event.
   def attendance_comment(event, user)
-    # TODO: Remove DB access in the view layer.
-    commitment = event.commitments.where(user_id: user).first
-    commitment.try :comment
+    event.comments.find {|c| c.user == user }.try :comment
   end
 
   # Generates an HTML date element for #Event, including hCalendar[http://microformats.org/wiki/hcalendar] annotation.
@@ -144,5 +141,9 @@ module EventsHelper
     my_class = options[:class]
     my_class ||= 'sort'
     link_to h(_(title)), url_for(params.merge :order => field, :direction => direction), :class => my_class
+  end
+
+  def status_strings
+    @status_strings ||= {yes: _('attending'), no: _('not attending'), maybe: _('uncommitted')}
   end
 end
