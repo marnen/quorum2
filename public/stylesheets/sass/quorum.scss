@@ -1,3 +1,5 @@
+@import "_icon";
+
 $title_blue: #3333ff;
 
 // size of icons from Silk set
@@ -61,38 +63,34 @@ th {
     size: 90%;
     weight: lighter; }; }
 
-span.yes {
-  color: lime;
-  font-weight: bolder; }
-
-span.no {
-  font-weight: bolder;
-  color: red; }
-
-span.maybe {
-  color: yellow;
-  font-weight: bolder; }
-
-$circle_size: 12px;
-$attend_yes_url: url("../images/attend_yes.png");
-$attend_no_url: url("../images/attend_no.png");
-$attend_maybe_url: url("../images/attend_maybe.gif");
-
 td.yes p {
-  background-image: $attend_yes_url; }
+  @include attendance_icon(yes);
+}
 
 td.no p {
-  background-image: $attend_no_url; }
+  @include attendance_icon(no);
+}
 
 td.maybe p {
-  background-image: $attend_maybe_url; }
+  @include attendance_icon(maybe);
+}
 
 td.yes, td.no, td.maybe {
   background-color: black;
   color: white;
-  p {
-    padding-left: $circle_size + $default_icon_margin;
-    background-repeat: no-repeat; } }
+
+  span.yes {
+    color: lime;
+    font-weight: bolder; }
+
+  span.no {
+    font-weight: bolder;
+    color: red; }
+
+  span.maybe {
+    color: yellow;
+    font-weight: bolder; }
+}
 
 td.actions {
   background-color: transparent;
@@ -103,16 +101,21 @@ td.actions {
 
 .comments .user {
   font-weight: bolder;
+
+  &.yes {
+    @include attendance_icon(yes);
+  }
+
+  &.no {
+    @include attendance_icon(no);
+  }
+
+  &.maybe {
+    @include attendance_icon(maybe);
+  }
 }
 
 // Toolbar links with icons
-
-@mixin icon($icon_url, $icon_size: $silk_icon_size, $icon_margin: $default_icon_margin) {
-  background: {
-    image: $icon_url;
-    repeat: no-repeat; };
-  min-height: $icon_size + $icon_margin;
-  padding-left: $icon_size + $icon_margin; }
 
 $edit_icon_url: url("../images/pencil.png");
 
