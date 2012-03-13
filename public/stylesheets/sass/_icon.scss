@@ -1,0 +1,16 @@
+@mixin icon($icon_url, $icon_size: $silk_icon_size, $icon_margin: $default_icon_margin) {
+  background: {
+    image: $icon_url;
+    repeat: no-repeat; };
+  min-height: $icon_size + $icon_margin;
+  padding-left: $icon_size + $icon_margin; }
+
+@mixin attendance_icon($status) { // $status is 'yes', 'no', or 'maybe'
+  $attendance_icon_size: 12px;
+  $extension: png;
+  @if $status == maybe {
+    $extension: gif;
+  }
+  $icon_url: url("../images/attend_#{$status}.#{$extension}");
+  @include icon($icon_url, $attendance_icon_size);
+}

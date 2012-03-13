@@ -29,3 +29,19 @@ Feature: Add comment to commitment
     Examples:
       | comment                         |
       | This is someone else's comment. |
+
+  Scenario Outline: Show attendance status on comments
+    Given a user named "John Doe" exists with email "john@doe.org"
+    And I am logged in as "john@doe.org"
+    And I am subscribed to "Calendar 1"
+    When I go to the event list
+    And I select "<status>" from "status"
+    And I fill in "comment" with "text"
+    And I press "Change status"
+    Then I should see "John Doe:" within a <status> user comment
+
+    Examples:
+      | status        |
+      | attending     |
+      | not attending |
+      | uncommitted   |

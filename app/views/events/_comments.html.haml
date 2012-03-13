@@ -1,5 +1,5 @@
 - unless comments.empty?
   %div.comments
     - comments.each do |comment|
-      %span.user== #{comment.user}:
+      %span.user{class: attendance_status(event, comment.user)}== #{comment.user}:
       = comment.comment
