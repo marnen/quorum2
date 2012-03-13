@@ -55,3 +55,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 
 ## v0.5.3, 13 March 2012
 * Show commitment status icons on comments [#74]
+
+## v0.5.4, 13 March 2012
+* Bugfix.
