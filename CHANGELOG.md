@@ -59,5 +59,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 ## v0.5.4, 13 March 2012
 * Bugfix.
 
-## For next release
+## v0.5.5, 2 July 2012
 * Put event comments on separate lines [#77]
+* Add application information in footer [#79]
