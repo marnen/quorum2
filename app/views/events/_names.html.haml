@@ -1,4 +1,4 @@
-- if !names.blank?
-  %strong&= n_('1 person:', '%{num} people:', names.size) % {:num => names.size}
-  &= list_names(names)
+- if names.present?
+  %strong= n_('1 person:', '%{num} people:', names.size) % {:num => names.size}
+  = list_names(names)
 
