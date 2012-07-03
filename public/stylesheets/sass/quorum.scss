@@ -1,5 +1,6 @@
 @import "_icon";
 
+$light_gray: #999999;
 $title_blue: #3333ff;
 
 body {
@@ -192,6 +193,15 @@ $error_icon_url: url("../images/exclamation.png");
     background-color: #ffcccc; }
   p {
     padding: 0.25em; } }
+
+#footer {
+  margin-top: 2em;
+  border-top: 1px solid $light_gray;
+  .version {
+    font-size: 90%;
+    color: $light_gray;
+  }
+}
 
 /* Some hCalendar properties... */
 abbr {

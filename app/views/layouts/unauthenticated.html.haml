@@ -1,7 +1,5 @@
-!!! 5
-%html
-  = render partial: 'layouts/head', locals: {page_title: @page_title, extra_headers: @extra_headers}
+- content_for :content do
+  = render partial: 'layouts/flash', locals: {flash: flash}
+  = yield
 
-  %body
-    = render partial: 'layouts/flash', locals: {flash: flash}
-    = yield
+= render template: 'layouts/application'
