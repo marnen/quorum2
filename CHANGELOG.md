@@ -65,3 +65,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 
 ## v0.5.6, v0.5.7, 2 July 2012
 * Bugfix.
+
+## v0.5.8, 2 July 2012
+* Put attendance icons in "attending" and "not attending" columns [#81]
