@@ -1,6 +1,2 @@
 - unless comments.empty?
-  .comments
-    - comments.each do |comment|
-      .comment
-        %span.user{class: attendance_status(event, comment.user)}== #{comment.user}:
-        = comment.comment
+  .comments= render partial: 'comment', collection: comments, locals: {event: event}
