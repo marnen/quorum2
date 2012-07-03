@@ -1,4 +1,5 @@
 - if names.present?
-  %strong= n_('1 person:', '%{num} people:', names.size) % {:num => names.size}
-  = list_names(names)
+  %p
+    %span.count= n_('1 person:', '%{num} people:', names.size) % {:num => names.size}
+    = list_names(names)
 

@@ -1,6 +1,6 @@
 -# TODO: stop defining variables in views!
 - status = attendance_status(event, User.current_user)
-%td{:class => status}
+%td.attendance{:class => status}
   -# TODO: can we use accepts_nested here?
   = form_tag({action: :change_status, id: event.id}, {class: :attendance}) do
     %p!= h(_("You are currently %{status}.")) % {:status => content_tag(:span, h(status_strings[status]), :class => status)}

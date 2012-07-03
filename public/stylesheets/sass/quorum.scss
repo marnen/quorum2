@@ -70,7 +70,7 @@ td.maybe p {
   @include attendance_icon(maybe);
 }
 
-td.yes, td.no, td.maybe {
+td.attendance {
   background-color: black;
   color: white;
 
@@ -108,6 +108,10 @@ td.actions {
   &.maybe {
     @include attendance_icon(maybe);
   }
+}
+
+td .count {
+  font-weight: bolder;
 }
 
 // Toolbar links with icons
