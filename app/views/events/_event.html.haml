@@ -36,5 +36,5 @@
   = render :partial => 'attendance', :locals => {:event => event}
   - yes = event.find_committed(:yes)
   - no = event.find_committed(:no)
-  %td= render :partial => 'names', :object => yes
-  %td= render :partial => 'names', :object => no
+  %td.yes= render :partial => 'names', :object => yes
+  %td.no= render :partial => 'names', :object => no
