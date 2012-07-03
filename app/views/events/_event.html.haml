@@ -31,7 +31,8 @@
     %div.description
       :markdown
         #{h event.description}
-    = render partial: 'comments', locals: {event: event, comments: event.comments}
+    - if event.comments.present?
+      .comments= render partial: 'comment', collection: event.comments, locals: {event: event}
   = render :partial => 'attendance', :locals => {:event => event}
   - yes = event.find_committed(:yes)
   - no = event.find_committed(:no)
