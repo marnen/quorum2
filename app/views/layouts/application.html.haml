@@ -1,0 +1,6 @@
+!!! 5
+%html
+  = render partial: 'layouts/head', locals: {page_title: @page_title, extra_headers: @extra_headers}
+
+  %body
+    = content_for?(:content) ? yield(:content) : yield

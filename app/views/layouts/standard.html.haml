@@ -1,12 +1,10 @@
-!!! 5
-%html
-  = render partial: 'layouts/head', locals: {page_title: @page_title, extra_headers: @extra_headers}
+- content_for :content do
+  %p#navbar
+    != ([content_tag(:span, h(SITE_TITLE), :class => :siteName)] + [link_to(h(_("List events")), events_path), link_to(h(_("Add event")), new_event_path), link_to(h(_("User profile")), profile_path), link_to(h(_("Create calendar")), new_calendar_path), link_to(h(_("Subscriptions")), subscriptions_path), current_user.admin? ? link_to(h(_("Admin tools")), url_for(:controller => :admin, :action => :index)) : nil, link_to(h(_("Log out")), logout_path)].compact).join(' | ')
+  #content
+    %p!= _("Welcome, %{user}!") % {:user => content_tag(:span, h(current_user), :class => :name)}
+    = render partial: 'layouts/flash', locals: {flash: flash}
+    %h1= @page_title
+    = yield
 
-  %body
-    %p#navbar
-      != ([content_tag(:span, h(SITE_TITLE), :class => :siteName)] + [link_to(h(_("List events")), events_path), link_to(h(_("Add event")), new_event_path), link_to(h(_("User profile")), profile_path), link_to(h(_("Create calendar")), new_calendar_path), link_to(h(_("Subscriptions")), subscriptions_path), current_user.admin? ? link_to(h(_("Admin tools")), url_for(:controller => :admin, :action => :index)) : nil, link_to(h(_("Log out")), logout_path)].compact).join(' | ')
-    #content
-      %p!= _("Welcome, %{user}!") % {:user => content_tag(:span, h(current_user), :class => :name)}
-      = render partial: 'layouts/flash', locals: {flash: flash}
-      %h1= @page_title
-      = yield
+= render template: 'layouts/application'
