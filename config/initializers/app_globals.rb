@@ -15,7 +15,7 @@ DOMAIN = APP_CONFIG['domain'] # Domain on which the site is hosted
 
 EMAIL = APP_CONFIG['email'] # Address that application-generated e-mail will come from.
 
-GeoRuby::SimpleFeatures::DEFAULT_SRID = 4326
+GeoRuby::SimpleFeatures::DEFAULT_SRID = 4326 # TODO: should this become an rgeo reference?
 
 Date::DATE_FORMATS[:ical] = "%Y%m%d" # yyyymmdd, for iCal conversion
 
