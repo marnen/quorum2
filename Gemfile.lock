@@ -1,7 +1,6 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    GeoRuby (1.3.3)
     ZenTest (4.6.2)
     abstract (1.0.0)
     actionmailer (3.0.10)
@@ -80,6 +79,7 @@ GEM
     ffaker (1.8.1)
     ffi (1.0.9)
     geocoder (1.1.2)
+    georuby (1.9.7)
     gettext (2.0.0)
     gettext_i18n_rails (0.2.20)
       fast_gettext
@@ -187,7 +187,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  GeoRuby
   authlogic (~> 3.0.3)
   autotest-rails
   capistrano
@@ -198,6 +197,7 @@ DEPENDENCIES
   factory_girl_rails
   ffaker
   geocoder
+  georuby
   gettext (>= 1.9.3)
   gettext_i18n_rails
   haml
