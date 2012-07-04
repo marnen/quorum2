@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.10'
+gem 'rails', '~> 3.1.4'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -28,7 +28,7 @@ gem 'gettext_i18n_rails'
 gem 'prawn'
 gem 'GeoRuby'
 gem 'rdiscount'
-gem 'authlogic', '~> 3.0.3'
+gem 'authlogic'
 gem 'dynamic_form'
 gem 'exception_notification'
 
