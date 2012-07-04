@@ -79,6 +79,7 @@ GEM
     fast_gettext (0.5.13)
     ffaker (1.8.1)
     ffi (1.0.9)
+    geocoder (1.1.2)
     gettext (2.0.0)
     gettext_i18n_rails (0.2.20)
       fast_gettext
@@ -196,6 +197,7 @@ DEPENDENCIES
   exception_notification
   factory_girl_rails
   ffaker
+  geocoder
   gettext (>= 1.9.3)
   gettext_i18n_rails
   haml
