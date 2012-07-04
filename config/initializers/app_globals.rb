@@ -19,4 +19,4 @@ GeoRuby::SimpleFeatures::DEFAULT_SRID = 4326 # TODO: should this become an rgeo 
 
 Date::DATE_FORMATS[:ical] = "%Y%m%d" # yyyymmdd, for iCal conversion
 
-FONT_ROOT = "#{RAILS_ROOT}/fonts/dejavu-fonts-ttf-2.26/ttf"
+FONT_ROOT = "#{Rails.root}/fonts/dejavu-fonts-ttf-2.26/ttf"
