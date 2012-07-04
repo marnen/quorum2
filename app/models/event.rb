@@ -61,6 +61,14 @@ class Event < ActiveRecord::Base
     self.save
   end
 
+  def latitude
+    coords.lat
+  end
+
+  def longitude
+    coords.lng
+  end
+
  protected
   # TODO: allow_* methods should probably be public. Keeping them protected mainly so as not to change the class interface just yet.
   def allow_delete?(user)

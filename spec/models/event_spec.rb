@@ -347,3 +347,21 @@ describe Event, "(geographical features)" do
     # @event.update_attributes(nil)
   end
 end
+
+describe Event, 'latitude and longitude' do # TODO: merge into geographical features context
+  describe '#latitude' do
+    it 'should return the latitude coordinate' do
+      latitude = (rand * 180) - 90 # -90 to +90
+      event = Factory :event, coords: Point.from_lon_lat(0, latitude)
+      event.latitude.should == latitude
+    end
+  end
+
+  describe '#longitude' do
+    it 'should return the latitude coordinate' do
+      longitude = (rand * 360) - 180 # -90 to +90
+      event = Factory :event, coords: Point.from_lon_lat(longitude, 0)
+      event.longitude.should == longitude
+    end
+  end
+end
