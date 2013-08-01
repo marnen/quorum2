@@ -119,7 +119,7 @@ describe EventsHelper, "event_map" do
 =end
 
     map = helper.event_map(event, DOMAIN)
-    {'#map' => nil, '#info' => nil, '#lat' => ERB::Util::h(event.coords.lat), '#lng' => ERB::Util::h(event.coords.lng)}.each do |k, v|
+    {'#map' => nil, '#info' => nil, '#lat' => ERB::Util::h(event.latitude), '#lng' => ERB::Util::h(event.longitude)}.each do |k, v|
       map.should have_selector(k, :content => v)
     end
 

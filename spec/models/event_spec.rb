@@ -323,26 +323,43 @@ end
 describe Event, 'latitude and longitude' do # TODO: merge into geographical features context
   let(:event) { Factory.build :event }
   let(:address) { event.address.to_s :geo }
-  let(:latitude) { (rand * 180) - 90 }
-  let(:longitude) { (rand * 360) - 180 }
-  let(:coordinates) { {'latitude' => latitude, 'longitude' => longitude} }
 
   around(:each) do |example|
-    Geocoder::Lookup::Test.add_stub address, [coordinates]
+    Geocoder::Lookup::Test.add_stub address, coordinates
     event.save!
     example.run
     Geocoder::Lookup::Test.stubs.delete address
   end
 
-  describe '#latitude' do
-    it 'should return the latitude coordinate' do
-      event.latitude.should == latitude
+  describe 'event has coordinates' do
+    let(:latitude) { (rand * 180) - 90 }
+    let(:longitude) { (rand * 360) - 180 }
+    let(:coordinates) { [{'latitude' => latitude, 'longitude' => longitude}] }
+
+    describe '#latitude' do
+      it 'should return the latitude coordinate' do
+        event.latitude.should == latitude
+      end
+    end
+
+    describe '#longitude' do
+      it 'should return the latitude coordinate' do
+        event.longitude.should == longitude
+      end
     end
   end
 
-  describe '#longitude' do
-    it 'should return the latitude coordinate' do
-      event.longitude.should == longitude
+  describe 'event has no coordinates' do
+    let(:coordinates) { [] }
+
+    describe '#latitude' do
+      subject { event.latitude }
+      it { should be_nil }
+    end
+
+    describe '#longitude' do
+      subject { event.longitude }
+      it { should be_nil }
     end
   end
 end
