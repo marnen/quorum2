@@ -55,19 +55,19 @@ module EventsHelper
   end
 
   # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
-  # TODO: figure out how to make this html_safe!
+  # TODO: figure out how to make this html_safe! And fix the architecture!
   def event_map(event, hostname)
     return nil if event.nil?
 
-    @extra_headers ||= ''.html_safe
-    @extra_headers << GMap.header(:host => hostname).to_s.html_safe << javascript_include_tag('events/map').html_safe
+    content_for(:javascript) do
+      google_maps_header(hostname) + javascript_include_tag('events/map')
+    end
 
-    map = GMap.new(:map)
     result = ''.html_safe
     result << info(event)
-    result << content_tag(:div, event.coords.lat, :id => :lat, :class => :hidden)
-    result << content_tag(:div, event.coords.lng, :id => :lng, :class => :hidden)
-    result << map.div(:width => 500, :height => 400).html_safe
+    result << content_tag(:div, event.coords.lat, id: :lat, class: :hidden)
+    result << content_tag(:div, event.coords.lng, id: :lng, class: :hidden)
+    result << tag(:div, id: :map, width: 500, height: 400)
     result
   end
 
@@ -145,5 +145,12 @@ module EventsHelper
 
   def status_strings
     @status_strings ||= {yes: _('attending'), no: _('not attending'), maybe: _('uncommitted')}
+  end
+
+  private
+
+  def google_maps_header(hostname)
+    api_key = GMAPS_API_KEY.respond_to?(:[]) ? GMAPS_API_KEY[hostname] : GMAPS_API_KEY
+    javascript_include_tag "http://maps.google.com/maps?file=api&v=2&sensor=false&key=#{api_key}"
   end
 end
