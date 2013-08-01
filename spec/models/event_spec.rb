@@ -254,12 +254,7 @@ end
 
 describe Event, "(validations)" do
   before(:each) do
-    @event = Event.new
-    @event.state_id = 23 # arbitrary; should be able to use any value
-    @event.city = "x" # arbitrary value
-    @event.created_by_id = 34 # arbitrary
-    @event.name = "y" # arbitrary
-    @event.calendar_id = 'abc' # arbitrary
+    @event = Factory.build :event
   end
 
   it "should not be valid without a state" do
@@ -308,17 +303,7 @@ end
 
 describe Event, "(geographical features)" do
   before(:each) do
-    @placemark = Geocoding::Placemark.new
-    @placemark.stub!(:latlon).and_return([1.0, 2.0])
-    Geocoding::Placemark.stub!(:new).and_return(@placemark)
-
-    # TODO: Use Webmock here.
-    @placemarks = Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS)
-    @placemarks.stub!(:[]).and_return(@placemark)
-    Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
-    Geocoding.stub!(:get).and_return(@placemarks)
-
-    @event = Factory.build :event
+    @event = Factory.create :event
   end
 
   it "should have coords (Point)" do
@@ -327,40 +312,36 @@ describe Event, "(geographical features)" do
     @event.coords.should be_a_kind_of(Point)
   end
 
-  it "should save coords when successfully encoded" do
-    @event.should_receive(:save).once
-    @event.coords
-  end
-
-  it "should not save coords when unsuccessfully encoded" do
-    Geocoding.should_receive(:get).and_return(false)
-    @event.should_not_receive(:save)
-    @event.coords
-  end
-
-  it "should clear coords on update" do
+  it "should reset coords on update" do
     User.stub!(:current_user).and_return(Factory :user)
     @event.update_attributes(Factory.attributes_for :event)
     @event.should_receive(:coords=)
     @event.update_attributes(:name => 'foo')
-    # @event.should_not_receive(:coords=)
-    # @event.update_attributes(nil)
   end
 end
 
 describe Event, 'latitude and longitude' do # TODO: merge into geographical features context
+  let(:event) { Factory.build :event }
+  let(:address) { event.address.to_s :geo }
+  let(:latitude) { (rand * 180) - 90 }
+  let(:longitude) { (rand * 360) - 180 }
+  let(:coordinates) { {'latitude' => latitude, 'longitude' => longitude} }
+
+  around(:each) do |example|
+    Geocoder::Lookup::Test.add_stub address, [coordinates]
+    event.save!
+    example.run
+    Geocoder::Lookup::Test.stubs.delete address
+  end
+
   describe '#latitude' do
     it 'should return the latitude coordinate' do
-      latitude = (rand * 180) - 90 # -90 to +90
-      event = Factory :event, coords: Point.from_lon_lat(0, latitude)
       event.latitude.should == latitude
     end
   end
 
   describe '#longitude' do
     it 'should return the latitude coordinate' do
-      longitude = (rand * 360) - 180 # -90 to +90
-      event = Factory :event, coords: Point.from_lon_lat(longitude, 0)
       event.longitude.should == longitude
     end
   end
