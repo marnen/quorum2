@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.10'
+gem 'rails', '3.0.20'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -41,7 +41,7 @@ gem 'exception_notification'
 # end
 
 group :development do
-  gem 'capistrano'
+  gem 'rvm-capistrano'
   gem 'gettext', '>= 1.9.3', :require => false
 end
 
