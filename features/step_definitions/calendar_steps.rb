@@ -7,7 +7,7 @@ Given /^(I|"[^\"]*") (?:am|is) subscribed to "([^\"]*)"$/ do |user, calendar|
     names = user.gsub(/^"|"$/, '').split(' ', 2)
     user = Factory :user, :firstname => names.first, :lastname => names.last
   end
-  cal = create_model(:calendar, :name => calendar)
+  cal = Calendar.where(name: calendar).first || create_model(:calendar, :name => calendar)
   Permission.destroy(cal.permissions.find_all_by_user_id(user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
   FactoryGirl.create :permission, :user => user, :calendar => cal
 end
@@ -21,6 +21,10 @@ Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|
   cal = fetch_calendar calendar
   Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
   Factory :admin_permission, :calendar => cal
+end
+
+Given /^no calendars exist$/ do
+  Calendar.destroy_all
 end
 
 Then /^I should have a calendar called "([^\"]*)"$/ do |calendar|
