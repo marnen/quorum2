@@ -150,7 +150,7 @@ module EventsHelper
   private
 
   def google_maps_header(hostname)
-    api_key = GMAPS_API_KEY.respond_to?(:[]) ? GMAPS_API_KEY[hostname] : GMAPS_API_KEY
+    api_key = GMAPS_API_KEY.kind_of?(Array) ? GMAPS_API_KEY[hostname] : GMAPS_API_KEY
     javascript_include_tag "http://maps.google.com/maps?file=api&v=2&sensor=false&key=#{api_key}"
   end
 end

@@ -124,7 +124,7 @@ describe EventsHelper, "event_map" do
     end
 
     helper.content_for(:javascript).should_not be_nil
-    api_key = GMAPS_API_KEY.respond_to?(:[]) ? GMAPS_API_KEY[DOMAIN] : GMAPS_API_KEY
+    api_key = GMAPS_API_KEY.kind_of?(Array) ? GMAPS_API_KEY[DOMAIN] : GMAPS_API_KEY
     helper.content_for(:javascript).should include(javascript_include_tag "http://maps.google.com/maps?file=api&v=2&sensor=false&key=#{api_key}")
     helper.content_for(:javascript).should include(javascript_include_tag 'events/map')
   end
