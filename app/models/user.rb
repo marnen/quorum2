@@ -1,5 +1,5 @@
 # coding: UTF-8
-
+require 'acts/geocoded'
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
@@ -7,12 +7,7 @@ class User < ActiveRecord::Base
     c.transition_from_restful_authentication = true
   end
 
-  acts_as_addressed
-  geocoded_by :address_for_geocoding do |user, results|
-    if result = results.first
-      user.coords = Point.from_x_y result.longitude, result.latitude
-    end
-  end
+  acts_as_geocoded
 
   cattr_accessor :current_user
 
@@ -31,7 +26,6 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email, :case_sensitive => false
   before_save :make_single_access_token
   after_create :set_calendar
-  after_validation :geocode
 
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -77,25 +71,20 @@ class User < ActiveRecord::Base
   end
 
   protected
-    def password_required?
-      crypted_password.blank? || !password.blank? || !password_confirmation.blank?
+
+  def password_required?
+    crypted_password.blank? || !password.blank? || !password_confirmation.blank?
+  end
+
+  def make_single_access_token
+    if single_access_token.blank?
+      reset_single_access_token!
     end
+  end
 
-    def make_single_access_token
-      if single_access_token.blank?
-        reset_single_access_token!
-      end
+  def set_calendar
+    if Calendar.count == 1
+      permissions.create(:user => self, :calendar => Calendar.find(:first), :role => Role.find_or_create_by_name('user'))
     end
-
-    def set_calendar
-      if Calendar.count == 1
-        permissions.create(:user => self, :calendar => Calendar.find(:first), :role => Role.find_or_create_by_name('user'))
-      end
-    end
-
-  private
-
-  def address_for_geocoding
-    address.to_s :geo
   end
 end

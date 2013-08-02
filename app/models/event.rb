@@ -1,12 +1,8 @@
 # coding: UTF-8
+require 'acts/geocoded'
 
 class Event < ActiveRecord::Base
-  acts_as_addressed
-  geocoded_by :address_for_geocoding do |event, results|
-    if result = results.first
-      event.coords = Point.from_x_y result.longitude, result.latitude
-    end
-  end
+  acts_as_geocoded
 
   belongs_to :created_by, :class_name => "User"
   belongs_to :calendar
@@ -18,7 +14,6 @@ class Event < ActiveRecord::Base
   validates_presence_of :state_id
 
   before_create :set_created_by_id
-  after_validation :geocode
 
   default_scope :conditions => 'deleted is distinct from true'
 
@@ -105,11 +100,5 @@ class Event < ActiveRecord::Base
     if User.current_user and User.current_user != :false
       self.created_by = User.current_user
     end
-  end
-
-  private
-
-  def address_for_geocoding
-    address.to_s :geo
   end
 end
