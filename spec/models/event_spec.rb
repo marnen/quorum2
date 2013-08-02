@@ -311,14 +311,16 @@ describe Event, "(geographical features)" do
 end
 
 describe Event, 'latitude and longitude' do # TODO: merge into geographical features context
+  include GeocoderHelpers
+
   let(:event) { Factory.build :event }
   let(:address) { event.address.to_s :geo }
 
   around(:each) do |example|
-    Geocoder::Lookup::Test.add_stub address, coordinates
-    event.save!
-    example.run
-    Geocoder::Lookup::Test.stubs.delete address
+    geocoder_stub address => coordinates do
+      event.save!
+      example.run
+    end
   end
 
   describe 'event has coordinates' do

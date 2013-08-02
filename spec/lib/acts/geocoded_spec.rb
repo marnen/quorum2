@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'acts/geocoded'
 
 describe Acts::Geocoded do
+  include GeocoderHelpers
+
   describe '.acts_as_geocoded' do
     let(:klass) { Class.new ActiveRecord::Base }
 
@@ -27,19 +29,19 @@ describe Acts::Geocoded do
 
       it "should geocode based on the host's address" do
         coords = {'latitude' => 1.0, 'longitude' => 2.0}
-        Geocoder::Lookup::Test.add_stub address, [coords]
-        point = double 'Point'
-        Point.should_receive(:from_x_y).with(2.0, 1.0).and_return point
-        model.should_receive(:coords=).with(point).and_return true
-        model.geocode
-        Geocoder::Lookup::Test.stubs.delete address
+        geocoder_stub address => [coords] do
+          point = double 'Point'
+          Point.should_receive(:from_x_y).with(2.0, 1.0).and_return point
+          model.should_receive(:coords=).with(point).and_return true
+          model.geocode
+        end
       end
 
       it "should not set coords if the geocoder doesn't return anything" do
-        Geocoder::Lookup::Test.add_stub address, []
-        model.should_not_receive :coords=
-        model.geocode
-        Geocoder::Lookup::Test.stubs.delete address
+        geocoder_stub address => [] do
+          model.should_not_receive :coords=
+          model.geocode
+        end
       end
     end
   end
