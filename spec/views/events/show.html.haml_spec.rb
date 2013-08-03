@@ -4,8 +4,8 @@ require 'spec_helper'
 
 describe "/events/show" do
   before(:each) do
-    [User, view].each {|x| x.stub!(:current_user).and_return(Factory :user) }
-    @event = Factory :event
+    [User, view].each {|x| x.stub!(:current_user).and_return(FactoryGirl.create :user) }
+    @event = FactoryGirl.create :event
     assign :event, @event
   end
 

@@ -7,7 +7,7 @@ module FetchHelpers
 
   def fetch_event(options)
     calendar = options.delete :calendar
-    calendar.events.find_by_name(options[:name]) || Factory(:event, calendar: calendar)
+    calendar.events.find_by_name(options[:name]) || FactoryGirl.create(:event, calendar: calendar)
   end
 end
 

@@ -45,7 +45,7 @@ describe Event, "(general properties)" do
   end
 
   it "should have a country property referred through state" do
-    event = Factory :event, state: Factory(:state)
+    event = FactoryGirl.create :event, state: FactoryGirl.create(:state)
     event.state.should_not be_nil
     event.country.should == event.state.country
   end
@@ -89,10 +89,10 @@ describe Event, "(general properties)" do
 end
 
 describe Event, "(allow?)" do
-  let!(:event) { Factory :event }
+  let!(:event) { FactoryGirl.create :event }
   let(:admin) do
     FactoryGirl.create(:user).tap do |u|
-      u.permissions << Factory(:admin_permission, calendar: event.calendar, user: u)
+      u.permissions << FactoryGirl.create(:admin_permission, calendar: event.calendar, user: u)
     end
   end
 
@@ -102,7 +102,7 @@ describe Event, "(allow?)" do
   end
 
   it "should return true for :delete iff current user has a role of admin for the event's calendar, false otherwise" do
-    alien = FactoryGirl.create :user, permissions: [Factory(:permission)]
+    alien = FactoryGirl.create :user, permissions: [FactoryGirl.create(:permission)]
     User.stub current_user: alien
     event.allow?(:delete).should == false
     User.stub current_user: admin
@@ -110,7 +110,7 @@ describe Event, "(allow?)" do
   end
 
   it "should return true for :edit iff current user has a role of admin for the event's calendar or created the event" do
-    nonadmin = FactoryGirl.create :user, permissions: [Factory(:permission, calendar: event.calendar)]
+    nonadmin = FactoryGirl.create :user, permissions: [FactoryGirl.create(:permission, calendar: event.calendar)]
     event.created_by = nonadmin
     User.stub current_user: nonadmin
     event.allow?(:edit).should == true
@@ -119,13 +119,13 @@ describe Event, "(allow?)" do
   end
 
   it "should return true for :show iff current user has any role for the event's calendar" do
-    user = Factory(:user).tap do |u|
-      u.permissions << Factory(:permission, user: u, calendar: event.calendar, role: Factory(:role, name: Faker::Lorem.word))
+    user = FactoryGirl.create(:user).tap do |u|
+      u.permissions << FactoryGirl.create(:permission, user: u, calendar: event.calendar, role: FactoryGirl.create(:role, name: Faker::Lorem.word))
     end
     User.stub current_user: user
     event.allow?(:show).should == true
 
-    User.stub current_user: Factory(:user, permissions: [Factory(:permission, role: Factory(:role, name: Faker::Lorem.word))])
+    User.stub current_user: FactoryGirl.create(:user, permissions: [FactoryGirl.create(:permission, role: FactoryGirl.create(:role, name: Faker::Lorem.word))])
     event.allow?(:show).should == false
   end
 
@@ -141,15 +141,15 @@ describe Event, "(allow?)" do
 end
 
 describe Event, "(change_status!)" do
-  let(:event) { Factory :event }
-  let(:user) { Factory :user }
+  let(:event) { FactoryGirl.create :event }
+  let(:user) { FactoryGirl.create :user }
 
   it "should be valid" do
     event.should respond_to(:change_status!)
   end
 
   it "should change the status on the already existing commitment if one exists" do
-    commitment = Factory :commitment, event: event, user: user, status: true
+    commitment = FactoryGirl.create :commitment, event: event, user: user, status: true
     id = commitment.id
     [false, nil, true].each do |status|
       event.change_status!(user, status)
@@ -174,13 +174,13 @@ describe Event, "(change_status!)" do
 end
 
 describe Event, '#comments' do
-  let(:event) { Factory :event }
+  let(:event) { FactoryGirl.create :event }
   let(:comment_names) { event.comments.collect {|comment| comment.user.lastname } }
 
   it "should order comments by user's last name" do
     last_names = ['Z', 'X', 'Y']
     last_names.each do |last_name|
-      Factory :commitment, event: event, user: Factory(:user, lastname: last_name)
+      FactoryGirl.create :commitment, event: event, user: FactoryGirl.create(:user, lastname: last_name)
     end
 
     comment_names.should == last_names.sort
@@ -190,7 +190,7 @@ describe Event, '#comments' do
     {
       'Nil' => nil, 'Whitespace' => "  \t\n ", 'Nonblank' => Faker::Lorem.sentence
     }.each do |last_name, comment|
-      event.commitments.create! user: Factory(:user, lastname: last_name), comment: comment
+      event.commitments.create! user: FactoryGirl.create(:user, lastname: last_name), comment: comment
     end
 
     comment_names.should == ['Nonblank']
@@ -198,7 +198,7 @@ describe Event, '#comments' do
 end
 
 describe Event, "#find_committed" do
-  let(:event) { Factory :event }
+  let(:event) { FactoryGirl.create :event }
   let(:event_with_commitments) { Event.includes(commitments: :user).find(event.id) }
 
 
@@ -208,23 +208,23 @@ describe Event, "#find_committed" do
   end
 
   it "should get a collection of Users when called with :yes or :no" do
-    @attending = Factory(:user).tap do |u|
-      u.commitments << Factory(:commitment, user: u, event: event, status: true)
+    @attending = FactoryGirl.create(:user).tap do |u|
+      u.commitments << FactoryGirl.create(:commitment, user: u, event: event, status: true)
     end
-    @not_attending = Factory(:user).tap do |u|
-      u.commitments << Factory(:commitment, user: u, event: event, status: false)
+    @not_attending = FactoryGirl.create(:user).tap do |u|
+      u.commitments << FactoryGirl.create(:commitment, user: u, event: event, status: false)
     end
     event_with_commitments.find_committed(:yes).should == [@attending]
     event_with_commitments.find_committed(:no).should == [@not_attending]
   end
 
   it 'should sort the Users on name or, failing that, email' do
-    a = Factory :user, lastname: 'a'
-    b = Factory :user, email: 'b@b.com', lastname: nil, firstname: nil
-    c = Factory :user, lastname: nil, firstname: 'c'
+    a = FactoryGirl.create :user, lastname: 'a'
+    b = FactoryGirl.create :user, email: 'b@b.com', lastname: nil, firstname: nil
+    c = FactoryGirl.create :user, lastname: nil, firstname: 'c'
     users = [c, a, b]
     users.each do |u|
-      u.commitments << Factory(:commitment, user: u, event: event, status: true)
+      u.commitments << FactoryGirl.create(:commitment, user: u, event: event, status: true)
     end
 
     event_with_commitments.find_committed(:yes).should == [a, b, c]
@@ -239,7 +239,7 @@ end
 
 describe Event, "(hide)" do
   it "should set deleted to true" do
-    event = Factory.build :event
+    event = FactoryGirl.build :event
     event.deleted.should_not == true
     event.hide
     event.deleted.should == true
@@ -247,7 +247,7 @@ describe Event, "(hide)" do
 end
 
 describe Event, "(validations)" do
-  let(:event) { Factory.build :event }
+  let(:event) { FactoryGirl.build :event }
 
   it "should not be valid without a state" do
    event.should be_valid
@@ -276,7 +276,7 @@ describe Event, "(validations)" do
 =end
 
   it "should assign current_user to created_by" do
-    user = Factory :user
+    user = FactoryGirl.create :user
     User.stub!(:current_user).and_return user
     event.created_by_id = nil
     event.save!
@@ -294,7 +294,7 @@ describe Event, "(validations)" do
 end
 
 describe Event, "(geographical features)" do
-  let(:event) { Factory :event }
+  let(:event) { FactoryGirl.create :event }
 
   it "should have coords" do
     event.should respond_to(:coords)
@@ -303,8 +303,8 @@ describe Event, "(geographical features)" do
   end
 
   it "should reset coords on update" do
-    User.stub!(:current_user).and_return(Factory :user)
-    event.update_attributes(Factory.attributes_for :event)
+    User.stub!(:current_user).and_return(FactoryGirl.create :user)
+    event.update_attributes(FactoryGirl.attributes_for :event)
     event.should_receive(:coords=)
     event.update_attributes(name: 'foo')
   end
@@ -313,12 +313,11 @@ end
 describe Event, 'latitude and longitude' do # TODO: merge into geographical features context
   include GeocoderHelpers
 
-  let(:event) { Factory.build :event }
+  let(:event) { FactoryGirl.build :event }
   let(:address) { event.address.to_s :geo }
 
   around(:each) do |example|
     geocoder_stub address => coordinates do
-      event.save!
       example.run
     end
   end

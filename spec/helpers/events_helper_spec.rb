@@ -53,10 +53,10 @@ describe EventsHelper do
   end
 
   describe '#attendance_comment' do
-    let(:user) { Factory :user }
+    let(:user) { FactoryGirl.create :user }
 
     it 'should retrieve the comment string for the event and user' do
-      commitment = Factory :commitment, event: @event, user: user
+      commitment = FactoryGirl.create :commitment, event: @event, user: user
       helper.attendance_comment(@event, user).should == commitment.comment
     end
 
@@ -147,8 +147,8 @@ end
 
 describe EventsHelper, "info" do
   before :each do
-    User.stub(:current_user).and_return(Factory :user)
-    @event = Factory :event
+    User.stub(:current_user).and_return(FactoryGirl.create :user)
+    @event = FactoryGirl.create :event
     @info = helper.info(@event)
   end
 
