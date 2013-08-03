@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/marnen/rgeo-activerecord.git
+  revision: 26bd2daa1650b35643a3f0aef9ae82186bf1556b
+  branch: fix-proc-error-in-default-factory
+  specs:
+    rgeo-activerecord (0.5.0)
+      activerecord (>= 3.0.3)
+      arel (>= 2.0.6)
+      rgeo (>= 0.3.20)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -144,10 +154,6 @@ GEM
     rdoc (3.12)
       json (~> 1.4)
     rgeo (0.3.20)
-    rgeo-activerecord (0.5.0)
-      activerecord (>= 3.0.3)
-      arel (>= 2.0.6)
-      rgeo (>= 0.3.20)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
       rspec-expectations (~> 2.6.0)
@@ -215,6 +221,7 @@ DEPENDENCIES
   prawn
   rails (= 3.0.20)
   rdiscount
+  rgeo-activerecord!
   rspec-rails (~> 2.6.1)
   ruby-debug19
   rvm-capistrano
