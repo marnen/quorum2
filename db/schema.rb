@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120308160523) do
+ActiveRecord::Schema.define(:version => 20130803025446) do
 
   create_table "calendars", :force => true do |t|
     t.string   "name",       :null => false
@@ -45,8 +45,8 @@ ActiveRecord::Schema.define(:version => 20120308160523) do
     t.integer  "created_by_id"
     t.boolean  "deleted"
     t.text     "description"
-    t.integer  "calendar_id",                                            :null => false
-    t.spatial  "coords",        :limit => {:srid=>4326, :type=>"point"}
+    t.integer  "calendar_id",                                                               :null => false
+    t.spatial  "coords",        :limit => {:srid=>4326, :type=>"point", :geographic=>true}
   end
 
   create_table "permissions", :force => true do |t|
@@ -72,8 +72,8 @@ ActiveRecord::Schema.define(:version => 20120308160523) do
 
   create_table "users", :force => true do |t|
     t.string   "email"
-    t.string   "crypted_password",    :limit => 128,                           :default => "",    :null => false
-    t.string   "password_salt",       :limit => 128,                           :default => "",    :null => false
+    t.string   "crypted_password",    :limit => 128,                                              :default => "",    :null => false
+    t.string   "password_salt",       :limit => 128,                                              :default => "",    :null => false
     t.string   "firstname"
     t.string   "lastname"
     t.string   "street"
@@ -84,19 +84,19 @@ ActiveRecord::Schema.define(:version => 20120308160523) do
     t.datetime "activated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "show_contact",                                                 :default => true
-    t.string   "single_access_token", :limit => 32,                                               :null => false
-    t.integer  "login_count",                                                  :default => 0,     :null => false
-    t.integer  "failed_login_count",                                           :default => 0,     :null => false
+    t.boolean  "show_contact",                                                                    :default => true
+    t.string   "single_access_token", :limit => 32,                                                                  :null => false
+    t.integer  "login_count",                                                                     :default => 0,     :null => false
+    t.integer  "failed_login_count",                                                              :default => 0,     :null => false
     t.datetime "last_request_at"
     t.datetime "current_login_at"
     t.datetime "last_login_at"
     t.string   "current_login_ip"
     t.string   "last_login_ip"
-    t.string   "persistence_token",                                            :default => "",    :null => false
-    t.string   "perishable_token",                                             :default => "",    :null => false
-    t.boolean  "active",                                                       :default => false, :null => false
-    t.spatial  "coords",              :limit => {:srid=>4326, :type=>"point"}
+    t.string   "persistence_token",                                                               :default => "",    :null => false
+    t.string   "perishable_token",                                                                :default => "",    :null => false
+    t.boolean  "active",                                                                          :default => false, :null => false
+    t.spatial  "coords",              :limit => {:srid=>4326, :type=>"point", :geographic=>true}
   end
 
   add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
