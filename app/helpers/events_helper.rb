@@ -67,7 +67,7 @@ module EventsHelper
     result << info(event)
     result << content_tag(:div, event.latitude, id: :lat, class: :hidden)
     result << content_tag(:div, event.longitude, id: :lng, class: :hidden)
-    result << tag(:div, id: :map, width: 500, height: 400)
+    result << tag(:div, id: :map)
     result
   end
 
