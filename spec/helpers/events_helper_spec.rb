@@ -87,49 +87,6 @@ describe EventsHelper do
  end
 end
 
-describe EventsHelper, "event_map" do
-  before(:each) do
-    User.stub!(:current_user).and_return(FactoryGirl.create :user)
-  end
-
-  it "should return a safe string" do
-    helper.event_map(Factory(:event), DOMAIN).should be_html_safe
-  end
-
-  it "should set up a Google map" do
-    event = FactoryGirl.create :event
-
-    # TODO: since this code is now in events/map.js , translate these specs into JavaScript!
-=begin
-    marker = GMarker.new([1.0, 2.0])
-    gmap_header = "[Stubbed header for #{DOMAIN}]"
-    GMap.should_receive(:header).with(:host => DOMAIN).at_least(:once).and_return(gmap_header)
-    GMarker.stub!(:new).and_return(marker)
-    gmap.should_receive(:center_zoom_init)
-    gmap.should_receive(:overlay_init).with(marker)
-    marker.should_receive(:open_info_window).with(EventsHelper::ElementVar.new(helper.info(event)))
-    gmap.should_receive(:control_init) do |opts|
-      opts.should be_a_kind_of(Hash)
-      opts.should have_key(:large_map)
-      opts[:large_map].should == true
-      opts.should have_key(:map_type)
-      opts[:map_type].should == true
-    end
-    gmap.should_receive(:to_html).at_least(:once)
-=end
-
-    map = helper.event_map(event, DOMAIN)
-    {'#map' => nil, '#info' => nil, '#lat' => ERB::Util::h(event.latitude), '#lng' => ERB::Util::h(event.longitude)}.each do |k, v|
-      map.should have_selector(k, :content => v)
-    end
-
-    helper.content_for(:javascript).should_not be_nil
-    api_key = GMAPS_API_KEY.kind_of?(Array) ? GMAPS_API_KEY[DOMAIN] : GMAPS_API_KEY
-    helper.content_for(:javascript).should include(javascript_include_tag "http://maps.google.com/maps?file=api&v=2&sensor=false&key=#{api_key}")
-    helper.content_for(:javascript).should include(javascript_include_tag 'events/map')
-  end
-end
-
 describe EventsHelper, "ical_escape" do
   it "should make newlines into '\n'" do
     helper.ical_escape("a\na").should == 'a\\na'

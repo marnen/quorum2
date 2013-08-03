@@ -54,23 +54,6 @@ module EventsHelper
     link_to h(_("edit")), url_for(:controller => 'events', :action => 'edit', :id => event.id), :class => :edit
   end
 
-  # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
-  # TODO: figure out how to make this html_safe! And fix the architecture!
-  def event_map(event, hostname)
-    return nil if event.nil?
-
-    content_for(:javascript) do
-      google_maps_header(hostname) + javascript_include_tag('events/map')
-    end
-
-    result = ''.html_safe
-    result << info(event)
-    result << content_tag(:div, event.latitude, id: :lat, class: :hidden)
-    result << content_tag(:div, event.longitude, id: :lng, class: :hidden)
-    result << tag(:div, id: :map)
-    result
-  end
-
   # Escapes characters in <em>string</em> that would be illegal in iCalendar format.
   def ical_escape(string)
     string.gsub(%r{[\\,;]}) {|c| '\\' + c}.gsub("\n", '\\n')
@@ -145,12 +128,5 @@ module EventsHelper
 
   def status_strings
     @status_strings ||= {yes: _('attending'), no: _('not attending'), maybe: _('uncommitted')}
-  end
-
-  private
-
-  def google_maps_header(hostname)
-    api_key = GMAPS_API_KEY.kind_of?(Array) ? GMAPS_API_KEY[hostname] : GMAPS_API_KEY
-    javascript_include_tag "http://maps.google.com/maps?file=api&v=2&sensor=false&key=#{api_key}"
   end
 end
