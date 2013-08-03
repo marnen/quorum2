@@ -296,10 +296,10 @@ end
 describe Event, "(geographical features)" do
   let(:event) { Factory :event }
 
-  it "should have coords (Point)" do
+  it "should have coords" do
     event.should respond_to(:coords)
     event.coords.should_not be_nil
-    event.coords.should be_a_kind_of(Point)
+    event.coords.should be_a_kind_of RGeo::Geographic::SphericalPointImpl
   end
 
   it "should reset coords on update" do

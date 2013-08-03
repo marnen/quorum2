@@ -19,19 +19,22 @@ describe Acts::Geocoded do
 
     context 'setting coords' do
       let(:address) { Faker::Lorem.sentence }
+      let(:rgeo) { RGeo::Geographic::Factory.new('Spherical') }
       let(:model) do
-        klass.stub connection: nil, columns: [], transaction: true
+        klass.stub connection: nil, columns: [], transaction: true, rgeo_factory_for_column: rgeo
         klass.acts_as_geocoded
         klass.new
       end
 
-      before(:each) { model.stub address_for_geocoding: address }
+      before(:each) do
+        model.stub address_for_geocoding: address
+      end
 
       it "should geocode based on the host's address" do
         coords = {'latitude' => 1.0, 'longitude' => 2.0}
         geocoder_stub address => [coords] do
           point = double 'Point'
-          Point.should_receive(:from_x_y).with(2.0, 1.0).and_return point
+          rgeo.should_receive(:point).with(2.0, 1.0).and_return point
           model.should_receive(:coords=).with(point).and_return true
           model.geocode
         end

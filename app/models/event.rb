@@ -61,11 +61,11 @@ class Event < ActiveRecord::Base
   end
 
   def latitude
-    coords.try :lat
+    coords.try :y
   end
 
   def longitude
-    coords.try :lng
+    coords.try :x
   end
 
   protected
