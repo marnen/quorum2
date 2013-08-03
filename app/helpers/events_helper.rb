@@ -40,7 +40,7 @@ module EventsHelper
   # If something goes wrong, returns <tt>"0.0 miles"</tt>.
   def distance_string(event, user)
     begin
-      meters = event.coords.ellipsoidal_distance(user.coords)
+      meters = event.coords.distance(user.coords)
       miles = meters / 1609.344
 
       content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance)

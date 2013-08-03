@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/marnen/rgeo-activerecord.git
+  revision: 26bd2daa1650b35643a3f0aef9ae82186bf1556b
+  branch: fix-proc-error-in-default-factory
+  specs:
+    rgeo-activerecord (0.5.0)
+      activerecord (>= 3.0.3)
+      arel (>= 2.0.6)
+      rgeo (>= 0.3.20)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -25,6 +35,8 @@ GEM
       activesupport (= 3.0.20)
       arel (~> 2.0.10)
       tzinfo (~> 0.3.23)
+    activerecord-postgis-adapter (0.6.5)
+      rgeo-activerecord (~> 0.5.0)
     activeresource (3.0.20)
       activemodel (= 3.0.20)
       activesupport (= 3.0.20)
@@ -79,7 +91,6 @@ GEM
     ffaker (1.8.1)
     ffi (1.0.9)
     geocoder (1.1.8)
-    georuby (1.9.7)
     gettext (2.0.0)
     gettext_i18n_rails (0.2.20)
       fast_gettext
@@ -142,6 +153,7 @@ GEM
     rdiscount (1.6.8)
     rdoc (3.12)
       json (~> 1.4)
+    rgeo (0.3.20)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
       rspec-expectations (~> 2.6.0)
@@ -190,6 +202,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-postgis-adapter
   authlogic (~> 3.0.3)
   autotest-rails
   cucumber-rails
@@ -199,7 +212,6 @@ DEPENDENCIES
   factory_girl_rails
   ffaker
   geocoder (~> 1.1.8)
-  georuby
   gettext (>= 1.9.3)
   gettext_i18n_rails
   haml
@@ -209,6 +221,7 @@ DEPENDENCIES
   prawn
   rails (= 3.0.20)
   rdiscount
+  rgeo-activerecord!
   rspec-rails (~> 2.6.1)
   ruby-debug19
   rvm-capistrano
