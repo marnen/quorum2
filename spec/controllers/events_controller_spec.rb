@@ -338,20 +338,6 @@ describe EventsController, "edit" do
     post 'update', :event => event.attributes, :id => id
     response.should_not redirect_to(:action => :index)
   end
-
-  it "should reset coords to nil when saving" do
-    event = Event.find(:first)
-    id = event.id.to_s
-    event.coords.should_not be_nil
-=begin
-    Event.should_receive(:find).with(id).twice.and_return(event, Event.find_by_id(id))
-    event.should_receive(:update_attributes).with(an_instance_of(Hash)).once
-=end
-    post 'edit', :event => event.attributes, :id => id
-    event = Event.find(id)
-    event.should_receive(:coords_from_string).once # calling event.coords should trigger recoding
-    event.coords
-  end
 end
 
 describe EventsController, "show" do

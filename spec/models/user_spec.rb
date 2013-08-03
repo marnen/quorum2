@@ -5,40 +5,40 @@ require 'spec_helper'
 describe User, "(general properties)" do
   before(:each) do
   end
-  
+
   it "should act_as_addressed" do
     User.included_modules.should include(Acts::Addressed::InstanceMethods)
   end
-  
+
   it "should belong to a State" do
     r = User.reflect_on_association(:state_raw)
     r.macro.should == :belongs_to
     r.options[:class_name].should == 'Acts::Addressed::State'
     r.options[:foreign_key].should == 'state_id'
   end
-  
+
   it "should have many Commitments" do
     User.reflect_on_association(:commitments).macro.should == :has_many
   end
-  
+
   it "should have many Events through Commitments" do
     reflection = User.reflect_on_association(:events)
     reflection.macro.should == :has_many
     reflection.options.should have_key(:through)
     reflection.options[:through].should == :commitments
   end
-  
+
   it "should have many Permissions" do
     User.reflect_on_association(:permissions).macro.should == :has_many
   end
-  
+
   it "should have many Calendars through Permissions" do
     reflection = User.reflect_on_association(:calendars)
     reflection.macro.should == :has_many
     reflection.options.should have_key(:through)
     reflection.options[:through].should == :permissions
   end
-  
+
   it "should be composed_of an Address" do
     aggr = User.reflect_on_aggregation(:address)
     aggr.should_not be_nil
@@ -48,13 +48,13 @@ describe User, "(general properties)" do
     u = Factory :user, opts
     u.address.should == Acts::Addressed::Address.new(opts)
   end
-  
+
   it "should have a writable flag controlling display of personal information on contact list" do
     u = User.new
     u.should respond_to(:show_contact)
     u.should respond_to(:show_contact=)
   end
-  
+
   it "should have country referred through state" do
     state = Factory :state
     user = User.new
@@ -62,7 +62,7 @@ describe User, "(general properties)" do
     user.state_raw = state
     user.country.should == state.country
   end
-  
+
   it "should be nil-safe on country" do
     user = Factory :user, :state => nil
     lambda{user.country}.should_not raise_error
@@ -75,7 +75,7 @@ describe User, "(admin?)" do
     @user = mock_model(Role, :name => 'user')
     @two = mock_model(Permission, :role => @admin, :calendar => mock_model(Calendar, :id => 2, :name => 'Calendar 2'))
   end
-  
+
   it "should return false if user has no admin roles" do
     @permissions = [mock_model(Permission, :role => @user, :calendar => mock_model(Calendar, :id => 1, :name => 'Calendar 1')), mock_model(Permission, :role => @user, :calendar => mock_model(Calendar, :id => 2, :name => 'Calendar 2'))]
     @permissions.stub!(:find_by_role_id).and_return(nil)
@@ -83,7 +83,7 @@ describe User, "(admin?)" do
     u.permissions << @permissions
     u.admin?.should == false
   end
-  
+
   it "should return true if user has at least one admin role" do
     @permissions = [mock_model(Permission, :role => @user, :calendar => mock_model(Calendar, :id => 1, :name => 'Calendar 1')), @two]
     u = User.new
@@ -115,16 +115,16 @@ describe User, "(validations)" do
     user.permissions[0].calendar.should == calendar
     user.permissions[0].role.name.should == 'user'
   end
-  
+
   context 'field validations' do
     before :each do
       @user = Factory.build :user
     end
-    
+
     it 'should be valid with default data' do
       @user.should be_valid
     end
-    
+
     ['password_confirmation', 'email'].each do |field| # TODO: should work for password too, but it doesn't
       it "requires #{field.gsub '_', ' '}" do
         @user.send "#{field}=", ''
@@ -141,14 +141,14 @@ describe User, "(validations)" do
   end
 =end
 end
-  
+
 describe User, "(instance methods)" do
   describe "<=>" do
     it "should be valid" do
       User.new.should respond_to(:<=>)
       User.method(:<=>).arity.should == 1
     end
-    
+
     it "should sort on last name, first name, and e-mail address in that order" do
       attrs = ['Smith', 'John', 'jsmith1@aol.com']
       smith = u(attrs)
@@ -158,13 +158,13 @@ describe User, "(instance methods)" do
       (smith <=> u([nil, nil, 'Smitty@aol.com'])).should == -1 # nil-safe
       (smith <=> u(attrs.collect(&:downcase))).should == 0 # not case-sensitive
     end
-    
+
     protected
     def u(array)
       User.new(:lastname => array[0], :firstname => array[1], :email => array[2])
     end
   end
-  
+
   describe "to_s" do
     it "should return firstname or lastname if only one of these is defined, 'firstname lastname' if both are defined, or e-mail address if no name is defined" do
       @user = User.new
@@ -178,61 +178,61 @@ describe User, "(instance methods)" do
       @user.firstname = 'f'
       @user.to_s.should == @user.firstname << ' ' << @user.lastname
     end
-    
+
     it "should take an optional parameter, :first_last or :last_first" do
       @user = User.new
       lambda{@user.to_s}.should_not raise_error
       lambda{@user.to_s :first_last}.should_not raise_error
       lambda{@user.to_s :last_first}.should_not raise_error
     end
-    
+
     describe nil do
       before(:each) do
         @user = User.new(:email => 'foo@bar.com', :firstname => 'f', :lastname => 'l')
       end
-      
+
       it "should return lastname, firstname if :last_first is specified" do
         @user.to_s(:last_first).should == 'l, f'
       end
-      
+
       it "should default to :first_last if no order is specified" do
         @user.to_s.should == @user.to_s(:first_last)
       end
-      
+
       it "should raise an error if format is unrecognized" do
         lambda{@user.to_s :bogus}.should raise_error
       end
     end
   end
-  
+
   describe "activate" do
     it "should be valid" do
       Factory(:user).should respond_to(:activate)
     end
-    
+
     it "should set the active flag to true" do
       u = Factory :inactive_user
       u.activate
       u.active?.should be_true
     end
   end
-  
+
   it "should have a 'single_access_token' property initialized to a string" do
     Factory(:user).single_access_token.should_not be_blank
   end
-  
+
   it "should set single_access_token on save" do
     @u = Factory :user
     @u.single_access_token = nil
     @u.reload.single_access_token.should_not be_blank
   end
-  
+
   it "should not overwrite single_access_token if already set" do
     @u = Factory :user
     token = @u.single_access_token
     @u.reload.single_access_token.should == token
   end
-  
+
   it "should properly deal with regenerating single_access_token if it's a duplicate" do
     @one = Factory :user
     @two = Factory :user
@@ -241,12 +241,12 @@ describe User, "(instance methods)" do
     # TODO: Does this properly test what's being asserted here?
     @one.reload.single_access_token.should_not == token
   end
-  
+
   describe "reset_password!" do
     it "should be a valid instance method" do
       User.new.should respond_to(:reset_password!)
     end
-    
+
     it "should reset the user's password and password_confirmation to identical strings" do
       old_password = 'old password'
       user = Factory :user, :password => old_password
@@ -254,7 +254,7 @@ describe User, "(instance methods)" do
       new_password = user.password
       new_password.should_not == old_password
     end
-    
+
     it "should reset password to a random hex string of length 10 (MD5 digest or similar)" do
       pattern = /^[a-f\d]{10}$/
       user = Factory :user
@@ -271,21 +271,7 @@ end
 
 describe User, "(geographical features)" do
   before(:each) do
-    @placemark = Geocoding::Placemark.new
-    @placemark.stub!(:latlon).and_return([1.0, 2.0])
-    Geocoding::Placemark.stub!(:new).and_return(@placemark)
-    
-    @placemarks = Geocoding::Placemarks.new('Test Placemarks', Geocoding::GEO_SUCCESS)
-    @placemarks.stub!(:[]).and_return(@placemark)
-    Geocoding::Placemarks.stub!(:new).and_return(@placemarks)
-    Geocoding.stub!(:get).and_return(@placemarks)
-
-    @user = Factory.build :user
-  end
-  
-  it "should save coords when successfully encoded" do
-    @user.should_receive(:save).once
-    @user.coords
+    @user = Factory.create :user
   end
 
   it "should have coords (Point)" do
@@ -293,14 +279,8 @@ describe User, "(geographical features)" do
     @user.coords.should_not be_nil
     @user.coords.should be_a_kind_of(Point)
   end
-  
-  it "should not save coords when unsuccessfully encoded" do
-    Geocoding.should_receive(:get).and_return(false)
-    @user.should_not_receive(:save)
-    @user.coords
-  end
-  
-  it "should clear coords on update" do
+
+  it "should reset coords on update" do
     User.stub!(:current_user).and_return(Factory :user)
     @user.update_attributes(Factory.attributes_for :user)
     @user.should_receive(:coords=)

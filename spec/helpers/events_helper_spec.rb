@@ -96,7 +96,7 @@ describe EventsHelper, "event_map" do
     helper.event_map(Factory(:event), DOMAIN).should be_html_safe
   end
 
-  it "should set up a GMap with all the options" do
+  it "should set up a Google map" do
     event = FactoryGirl.create :event
 
     # TODO: since this code is now in events/map.js , translate these specs into JavaScript!
@@ -118,23 +118,15 @@ describe EventsHelper, "event_map" do
     gmap.should_receive(:to_html).at_least(:once)
 =end
 
-    gmap_header = "[Stubbed header for #{DOMAIN}]"
-    GMap.should_receive(:header).with(:host => DOMAIN).at_least(:once).and_return(gmap_header)
-    gmap = GMap.new(:gmap)
-    gmap_div = '<div id="gmap">GMap div</div>'
-    gmap.should_receive(:div).and_return(gmap_div)
-    GMap.should_receive(:new).and_return(gmap)
-
     map = helper.event_map(event, DOMAIN)
-    {'#gmap' => nil, '#info' => nil, '#lat' => ERB::Util::h(event.coords.lat), '#lng' => ERB::Util::h(event.coords.lng)}.each do |k, v|
+    {'#map' => nil, '#info' => nil, '#lat' => ERB::Util::h(event.latitude), '#lng' => ERB::Util::h(event.longitude)}.each do |k, v|
       map.should have_selector(k, :content => v)
     end
 
-    pending "RSpec 2 has broken these lines. Not sure how to fix, but in any case we should change the helper architecture." do
-      assigns[:extra_headers].should_not be_nil
-      assigns[:extra_headers].should include(gmap_header)
-      assigns[:extra_headers].should include(javascript_include_tag 'events/map')
-    end
+    helper.content_for(:javascript).should_not be_nil
+    api_key = GMAPS_API_KEY.kind_of?(Array) ? GMAPS_API_KEY[DOMAIN] : GMAPS_API_KEY
+    helper.content_for(:javascript).should include(javascript_include_tag "http://maps.google.com/maps?file=api&v=2&sensor=false&key=#{api_key}")
+    helper.content_for(:javascript).should include(javascript_include_tag 'events/map')
   end
 end
 

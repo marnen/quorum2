@@ -1,10 +1,8 @@
 # coding: UTF-8
-
-require 'geocoding_utilities'
+require 'acts/geocoded'
 
 class Event < ActiveRecord::Base
-  acts_as_addressed
-  include GeocodingUtilities
+  acts_as_geocoded
 
   belongs_to :created_by, :class_name => "User"
   belongs_to :calendar
@@ -14,6 +12,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :calendar_id
   validates_presence_of :name
   validates_presence_of :state_id
+
   before_create :set_created_by_id
 
   default_scope :conditions => 'deleted is distinct from true'
@@ -61,7 +60,15 @@ class Event < ActiveRecord::Base
     self.save
   end
 
- protected
+  def latitude
+    coords.try :lat
+  end
+
+  def longitude
+    coords.try :lng
+  end
+
+  protected
   # TODO: allow_* methods should probably be public. Keeping them protected mainly so as not to change the class interface just yet.
   def allow_delete?(user)
     role = role_of user

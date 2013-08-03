@@ -1,6 +1,8 @@
 module FetchHelpers
   def fetch_calendar(name)
-    Calendar.find_by_name(name) || Factory(:calendar, :name => name)
+    fields = {name: name}
+    args = [:calendar, fields]
+    find_model(*args) || create_model(*args)
   end
 
   def fetch_event(options)
