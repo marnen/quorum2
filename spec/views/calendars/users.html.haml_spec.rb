@@ -12,8 +12,8 @@ describe "/calendars/users" do
     @admin_role = FactoryGirl.create :admin_role
     @user_role = FactoryGirl.create :role
 
-    @admin = FactoryGirl.attributes_for :permission, :calendar => @calendar, :role => @admin_role, :user => nil
-    @user = FactoryGirl.attributes_for :permission, :calendar => @calendar, :role => @user_role, :user => nil
+    @admin = FactoryGirl.build(:permission, :calendar => @calendar, :role => @admin_role, :user => nil).attributes
+    @user = FactoryGirl.build(:permission, :calendar => @calendar, :role => @user_role, :user => nil).attributes
 
     @marnen = FactoryGirl.create(:user, :show_contact => true).tap do |u|
       u.permissions.destroy_all

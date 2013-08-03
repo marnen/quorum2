@@ -12,7 +12,7 @@ describe ApplicationController, "(admin?)" do
 
   it "should return true if current user is an admin" do
     admin_role = FactoryGirl.create :admin_role
-    Role.should_receive(:find_by_name).with('admin').and_return admin_role
+    Role.should_receive(:find_by_name).with('admin').at_least(:once).and_return admin_role
     @admin = FactoryGirl.create(:user).tap {|u| u.permissions << FactoryGirl.create(:admin_permission, :user => u, :role => admin_role) }
     UserSession.create @admin
     controller.admin?.should be_true

@@ -177,6 +177,8 @@ describe Event, '#comments' do
   let(:event) { FactoryGirl.create :event }
   let(:comment_names) { event.comments.collect {|comment| comment.user.lastname } }
 
+  before(:each) { User.delete_all } # TODO: why do we need this?
+
   it "should order comments by user's last name" do
     last_names = ['Z', 'X', 'Y']
     last_names.each do |last_name|
@@ -238,6 +240,8 @@ describe Event, "#find_committed" do
 end
 
 describe Event, "(hide)" do
+  before(:each) { User.delete_all } # TODO: why do we need this?
+
   it "should set deleted to true" do
     event = FactoryGirl.build :event
     event.deleted.should_not == true
@@ -296,6 +300,8 @@ end
 describe Event, "(geographical features)" do
   let(:event) { FactoryGirl.create :event }
 
+  before(:each) { User.delete_all } # TODO: why do we need this?
+
   it "should have coords" do
     event.should respond_to(:coords)
     event.coords.should_not be_nil
@@ -313,11 +319,12 @@ end
 describe Event, 'latitude and longitude' do # TODO: merge into geographical features context
   include GeocoderHelpers
 
-  let(:event) { FactoryGirl.build :event }
+  let(:event) { User.delete_all; FactoryGirl.build :event } # TODO: Why isn't it already clearing users?
   let(:address) { event.address.to_s :geo }
 
   around(:each) do |example|
     geocoder_stub address => coordinates do
+      event.save
       example.run
     end
   end
