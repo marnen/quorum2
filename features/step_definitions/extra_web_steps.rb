@@ -16,10 +16,14 @@ Then /^I should not see an element matching "([^\"]*)"$/ do |selector|
   page.should_not have_selector(selector) and response.should_not have_xpath(selector)
 end
 
+Then /^I should see a link to "([^\"]*)"$/ do |url|
+  page.should have_selector("a[href='#{url}']")
+end
+
 Then /^I should see the following in order:$/ do |table|
   # table is a Cucumber::Ast::Table
   regexp = %r{#{table.raw.flatten.collect {|x| Regexp.escape x }.join '.*'}}m
-  
+
   page.should have_xpath('//*', :text => regexp)
 end
 

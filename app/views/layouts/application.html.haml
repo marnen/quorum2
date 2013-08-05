@@ -1,0 +1,11 @@
+!!! 5
+%html
+  = render partial: 'layouts/head', locals: {page_title: @page_title}
+
+  %body
+    = content_for?(:content) ? yield(:content) : yield
+
+    #footer
+      .version
+        = link_to _(SITE_TITLE), APP_HOME_PAGE
+        = _('version %{version}') % {version: APP_VERSION}

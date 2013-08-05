@@ -4,7 +4,7 @@
 # CONFIG: replace PASSWORD with an appropriate password.
 
 development:
-  adapter: postgresql
+  adapter: postgis
   database: quorum2_dev
   username: quorum2_dev
   password: PASSWORD
@@ -15,7 +15,7 @@ development:
 # re-generated from your development database when you run 'rake'.
 # Do not set this db to the same as development or production.
 test: &test
-  adapter: postgresql
+  adapter: postgis
   database: quorum2_test
   username: quorum2_test
   password: PASSWORD
@@ -23,11 +23,11 @@ test: &test
   template: template_postgis
 
 production:
-  adapter: postgresql
+  adapter: postgis
   database: quorum2
   username: quorum2
   password: PASSWORD
   encoding: UTF8
   template: template_postgis
-  
+
 cucumber: *test

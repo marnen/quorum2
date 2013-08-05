@@ -1,0 +1,9 @@
+- if !flash[:notice].nil?
+  #flash.notice
+    %p= flash[:notice]
+- if !flash[:warning].nil?
+  #flash.warning
+    %p= flash[:warning]
+- if !flash[:error].nil?
+  #flash.error
+    %p= flash[:error]

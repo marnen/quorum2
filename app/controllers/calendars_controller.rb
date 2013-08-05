@@ -3,54 +3,60 @@
 class CalendarsController < ApplicationController
   @nonadmin ||= [:new, :create]
   before_filter :check_admin, :except => @nonadmin
+  before_filter :load_calendar, :except => @nonadmin
   before_filter :require_user, :only => @nonadmin
   layout 'standard'
-  
-  make_resourceful do
-    actions :new, :create, :edit, :update
-    
-    response_for :new do
-      @page_title = _('Create calendar')
-      render :action => 'edit'
-    end
-    
-    response_for :edit do
-      @page_title = _('Edit calendar')
-    end
-    
-    # TODO: Shouldn't this be replaced by Calendar#set_admin ?
-    after :create do
-      p = User.current_user.permissions
-      @admin ||= Role.find_or_create_by_name('admin')
-      if !p.find_by_calendar_id_and_role_id(current_object.id, @admin.id)
-        p << Permission.create!(:user => User.current_user, :calendar => current_object, :role => @admin)
-      end
-    end
-    
-    response_for :create do
-      flash[:notice] = _('Your calendar was successfully created.')
-      redirect_to '/admin'
-    end
 
-    response_for :create_fails do
-      flash[:error] = _('Couldn\'t create your calendar!')
-      redirect_to :back
-    end
+  respond_to :html
 
-    response_for :update do
-      flash[:notice] = _('Your calendar was successfully saved.')
-      redirect_to '/admin'
-    end
+  def new
+    @page_title = _('Create calendar')
+    @calendar = Calendar.new
+    respond_with @calendar
+  end
 
-    response_for :update_fails do
-      flash[:error] = _('Couldn\'t save your calendar!')
-      redirect_to :back
+  def create
+    @calendar = Calendar.new params[:calendar]
+    if @calendar.save
+      make_admin_permission_for @calendar
+      redirect_to '/admin', notice: _('Your calendar was successfully created.')
+    else
+      flash[:error] = _("Couldn't create your calendar!")
+      respond_with @calendar
     end
   end
-  
+
+  def edit
+    @page_title = _('Edit calendar')
+    respond_with @calendar
+  end
+
+  def update
+    if @calendar.update_attributes params[:calendar]
+      redirect_to '/admin', notice: _('Your calendar was successfully saved.')
+    else
+      flash[:error] = _('Couldn\'t save your calendar!')
+      respond_with @calendar
+    end
+  end
+
   # Lists all the users for the current #Calendar.
   def users
-    @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => current_object}
-    @users = current_object.users.find(:all, :order => 'lastname, firstname')
+    @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => @calendar}
+    @users = @calendar.users.find(:all, order: 'lastname, firstname')
+  end
+
+  private
+
+  def load_calendar
+    @calendar = Calendar.find params[:id]
+  end
+
+  def make_admin_permission_for(calendar)
+    p = User.current_user.permissions
+    @admin ||= Role.find_or_create_by_name('admin')
+    if !p.find_by_calendar_id_and_role_id(calendar.id, @admin.id)
+      p << Permission.create!(:user => User.current_user, :calendar => calendar, :role => @admin)
+    end
   end
 end

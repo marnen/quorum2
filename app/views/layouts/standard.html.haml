@@ -1,30 +1,10 @@
-!!! 5
-%html
-  %head
-    %meta{:'http-equiv' => "content-type", :content => "text/html;charset=utf-8"}
-    %title= h(SITE_TITLE) + ' | ' + h(@page_title)
-    = stylesheet_link_tag "quorum"
-    = yield :head
-    = yield :javascript
-    = @extra_headers
+- content_for :content do
+  %p#navbar
+    != ([content_tag(:span, h(SITE_TITLE), :class => :siteName)] + [link_to(h(_("List events")), events_path), link_to(h(_("Add event")), new_event_path), link_to(h(_("User profile")), profile_path), link_to(h(_("Create calendar")), new_calendar_path), link_to(h(_("Subscriptions")), subscriptions_path), current_user.admin? ? link_to(h(_("Admin tools")), url_for(:controller => :admin, :action => :index)) : nil, link_to(h(_("Log out")), logout_path)].compact).join(' | ')
+  #content
+    %p!= _("Welcome, %{user}!") % {:user => content_tag(:span, h(current_user), :class => :name)}
+    = render partial: 'layouts/flash', locals: {flash: flash}
+    %h1= @page_title
+    = yield
 
-  %body
-    %p#navbar
-      != ([content_tag(:span, h(SITE_TITLE), :class => :siteName)] + [link_to(h(_("List events")), events_path), link_to(h(_("Add event")), new_event_path), link_to(h(_("User profile")), profile_path), link_to(h(_("Create calendar")), new_calendar_path), link_to(h(_("Subscriptions")), subscriptions_path), current_user.admin? ? link_to(h(_("Admin tools")), url_for(:controller => :admin, :action => :index)) : nil, link_to(h(_("Log out")), logout_path)].compact).join(' | ')
-    #content
-      %p!= _("Welcome, %{user}!") % {:user => content_tag(:span, h(current_user), :class => :name)}
-      - if !flash[:notice].nil?
-        #flash.notice
-          %p= flash[:notice]
-      - if !flash[:warning].nil?
-        #flash.warning
-          %p= flash[:warning]
-      - if !flash[:error].nil?
-        #flash.error
-          %p= flash[:error]
-      %h1= @page_title
-      = yield
-      
-      %p.footer
-        %a{:href => "http://validator.w3.org/check?uri=referer"}
-          %img{:src => "http://www.w3.org/Icons/valid-html401", :alt => "Valid XHTML 4.01 Transitional", :height => "31", :width => "88"}
+= render template: 'layouts/application'
