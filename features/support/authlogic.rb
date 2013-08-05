@@ -1,0 +1,1 @@
+User.acts_as_authentic_config[:maintain_sessions] = false # see https://github.com/binarylogic/authlogic/issues/262

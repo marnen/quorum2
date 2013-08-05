@@ -2,11 +2,11 @@
 
 require 'spec_helper'
 
-include ERB::Util
-include ActionView::Helpers::UrlHelper
 include EventsHelper
 
 describe "/events/index" do
+  include ActionView::Helpers::UrlHelper
+
   def name_selector(string)
     "[name='#{string}']"
   end
@@ -21,7 +21,7 @@ describe "/events/index" do
 
  it "should have a date limiting form" do
     render :file => 'events/index'
-    form = "form[action='#{url_for(params.merge :escape => false)}'][method=get]"
+    form = "form[action='#{url_for params}'][method=get]"
     Capybara.string(rendered).find("#{form}").tap do |e|
       from_date_selector = "input[type='radio']#{name_selector('search[from_date_preset]')}"
       e.should have_selector("#{from_date_selector}[value='today'][checked]")
@@ -44,7 +44,7 @@ describe "/events/index" do
   it "should have a calendar option on the limiting form iff user has multiple calendars" do
     User.current_user.stub!(:calendars).and_return((1..2).map{ FactoryGirl.create :calendar })
     render :file => 'events/index'
-    form = "form[action='#{url_for(params.merge :escape => false)}'][method=get]"
+    form = "form[action='#{url_for params}'][method=get]"
     rendered.should have_selector("#{form} select #{name_selector "search[calendar_id]"}")
   end
 
@@ -95,7 +95,7 @@ describe "/events/index" do
       e.stub!(:calendar).and_return(@one)
     end
     render :file => "events/index"
-    rendered.should have_selector("a[href='#{url_for(params.merge :format => :pdf, :escape => false)}']")
+    rendered.should have_selector("a[href='#{url_for(params.merge :format => :pdf)}']")
   end
 
   it "should not contain a link for PDF export if the current events belong to more than one calendar" do
@@ -110,6 +110,6 @@ describe "/events/index" do
       end
     end
     render :file => "events/index"
-    rendered.should_not have_selector("a[href='#{url_for(params.merge :format => :pdf, :escape => false)}']")
+    rendered.should_not have_selector("a[href='#{url_for(params.merge :format => :pdf)}']")
   end
 end

@@ -5,7 +5,7 @@
 
 module Search
  private
-  def method_missing(name)
+  def method_missing(name, *args, &block)
     s = name.to_s
     if s =~ /_date$/
       begin

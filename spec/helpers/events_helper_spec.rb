@@ -103,6 +103,8 @@ describe EventsHelper, "ical_escape" do
 end
 
 describe EventsHelper, "info" do
+  include ERB::Util
+
   before :each do
     User.stub(:current_user).and_return(FactoryGirl.create :user)
     @event = FactoryGirl.create :event

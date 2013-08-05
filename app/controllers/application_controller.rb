@@ -4,9 +4,9 @@
 # Likewise, all the methods added will be available for all controllers.
 class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
-  
+
   before_filter :set_gettext_locale
-    
+
   helper :all # include all helpers, all the time
 
   # Check to see if the current user is an admin of at least one calendar.
@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
       return u.admin?
     end
   end
-  
+
   # Return true if the current user is admin, otherwise give an error and redirect. Meant as a before_filter.
   def check_admin
     if admin?
@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => 'efb0994fc16e17d478432d89deb46862'
-  
+
 protected
   def admin
     @admin ||= Role.find_by_name('admin')
@@ -46,7 +46,7 @@ protected
   def set_current_user
     User.current_user = self.current_user
   end
-  
+
   def set_gettext_locale
     FastGettext.available_locales = ['en'] #all you want to allow
     begin
@@ -55,7 +55,7 @@ protected
       # don't worry about it
     end
   end
-  
+
 private
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
@@ -68,7 +68,7 @@ private
     end
     User.current_user = @current_user
   end
-  
+
   def require_user
     unless current_user
       store_location
@@ -86,11 +86,11 @@ private
       return false
     end
   end
-    
+
   def store_location
-    session[:return_to] = request.request_uri
+    session[:return_to] = request.url
   end
-    
+
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil

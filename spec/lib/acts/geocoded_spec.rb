@@ -21,9 +21,11 @@ describe Acts::Geocoded do
       let(:address) { Faker::Lorem.sentence }
       let(:rgeo) { RGeo::Geographic::Factory.new('Spherical') }
       let(:model) do
-        klass.stub connection: nil, columns: [], transaction: true, rgeo_factory_for_column: rgeo
-        klass.acts_as_geocoded
-        klass.new
+        begin
+          klass.stub connection: nil, column_defaults: {}, transaction: true, rgeo_factory_for_column: rgeo
+          klass.acts_as_geocoded
+          klass.new
+        end
       end
 
       before(:each) do

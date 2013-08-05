@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-include ERB::Util
-
 describe "/calendars/users" do
+  include ERB::Util
+
   before(:each) do
     @calendar = FactoryGirl.create :calendar
 
