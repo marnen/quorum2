@@ -68,3 +68,8 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 
 ## v0.5.8, 2 July 2012
 * Put attendance icons in "attending" and "not attending" columns [#81]
+
+## v0.5.9, 5 August 2013
+* Update to Rails 3.0.20 to patch security hole
+* Make some configuration changes for Passenger
+* Remove YM4R and Spatial Adapter, since neither is currently supported [#82, #86]
