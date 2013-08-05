@@ -18,11 +18,13 @@ module NavigationHelpers
     #
     #   when /^(.*)'s profile page$/i
     #     user_profile_path(User.find_by_login($1))
-    
+
     when /the admin page$/
       '/admin'
     when /the event list$/
       events_path
+    when 'the event add page'
+      new_event_path
     when /#{capture_model}'s map page$/
       map_event_path model!($1)
     when /the login page$/

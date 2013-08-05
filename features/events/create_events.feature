@@ -2,7 +2,12 @@ Feature: Create events
   In order to share events with other users
   any registered user should be able to
   create events on any subscribed calendar.
-  
+
+  Scenario: Can't create event if not logged in
+    Given I am not logged in
+    When I go to the new event page
+    Then I should be on the login page
+
   Scenario: Create events on subscribed calendar when there's only one subscription
     Given I am logged in
     And there are no events
@@ -12,7 +17,7 @@ Feature: Create events
     And I fill in "event[name]" with "My event"
     And I press "Save changes"
     Then I should have an event called "My event" in "Calendar 1"
-  
+
   Scenario: Create events on subscribed calendar when there are multiple subscriptions
     Given I am logged in
     And there are no events

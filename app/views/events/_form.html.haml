@@ -2,44 +2,44 @@
   %table.edit
     - if current_user.calendars.size > 1
       %tr
-        %th= _("Calendar")
+        %th= f.label :calendar, _("Calendar")
         %td= f.collection_select :calendar_id, User.current_user.calendars.sort{|x, y| x.name <=> y.name}, :id, :name
     - else
       = f.hidden_field :calendar_id, :value => User.current_user.calendars[0].id
     %tr
-      %th= _("Event name")
+      %th= f.label :name, _("Event name")
       %td
         = f.text_field :name
         = _(error_message_on(:event, :name)) # TODO: Do we need the :event now?
     %tr
       %th
-        = _("Description")
+        = f.label :description, _("Description")
         %br
         = markdown_hint
       %td= f.text_area :description, :cols => 40, :rows => 6
     %tr
-      %th= _("Date")
+      %th= f.label :date_3i, _("Date")
       %td
         = f.date_select :date, :order => [:day, :month, :year], :start_year => 2006
         = _(error_message_on(:event, :date))
     %tr
-      %th= _("Site")
+      %th= f.label :site,  _("Site")
       %td= f.text_field :site
     %tr
-      %th= _("Street address")
+      %th= f.label :street, _("Street address")
       %td
         = f.text_field :street
         %br
         = f.text_field :street2
     %tr
-      %th= _("City")
+      %th= f.label :city, _("City")
       %td= f.text_field :city
     %tr
-      %th= _("State")
+      %th= f.label :state_id, _("State")
       %td
         = f.collection_select :state_id, Acts::Addressed::State.find(:all), :id, :name
         = _(error_message_on :event, :state)
     %tr
-      %th= _("Zip")
+      %th= f.label :zip, _("Zip")
       %td= f.text_field :zip
   = submit_tag _("Save changes")
