@@ -2,55 +2,6 @@
 
 require 'spec_helper'
 
-describe EventsController, "index" do
-  before(:each) do
-    UserSession.create FactoryGirl.create(:user)
-  end
-
-  it "should pass sorting parameters from the URL" do
-    order = 'name'
-    direction = 'desc'
-    params = {:order => order, :direction => direction}
-    {:get => "/events/index/#{order}/#{direction}"}.should route_to params.merge(:controller => 'events', :action => 'index')
-    mock_conditions = mock 'conditions'
-    mock_conditions.should_receive(:order).with "#{order} #{direction}"
-    mock_includes = mock 'includes'
-    Event.should_receive(:includes).and_return(mock_includes)
-    mock_includes.should_receive(:where) do |conditions|
-      conditions.should be_an_instance_of(Array)
-      conditions[0].should =~ /date >= :from_date/i
-      conditions[1].should be_an_instance_of(Hash)
-      conditions[1].should have_key(:from_date)
-      conditions[1][:from_date].should be_an_instance_of(Date)
-      conditions[1][:from_date].should == Time.zone.today # default value if not set in params
-      conditions[1].should have_key(:to_date)
-      conditions[1][:to_date].should be_nil
-      mock_conditions
-    end
-    get :index, params
-=begin
-  TODO: when we have a search form, I suppose :)
-
-  If to_date is not nil, then we need the following specs for the monstrosity above:
-  conditions[0].should =~ /between :from_date and :to_date/i
-  conditions[1][:to_date].should be_an_instance_of(Date)
-  conditions[1][:to_date].should > Time.zone.today + 99.years
-=end
-  end
-
-  it "should have date/asc as default order and direction in URL" do
-    pending "route_for doesn't actually seem to work this way" do
-      route_for(:controller => 'events', :action => 'index', :order => 'date', :direction => 'asc').should == 'foo' # '/events/index'
-    end
-  end
-
-  it "should pass sorting parameters on to the view" do
-    get :index
-    assigns[:order].should_not be_nil
-    assigns[:direction].should_not be_nil
-  end
-end
-
 describe EventsController, "feed.rss" do
   render_views
 
@@ -181,36 +132,6 @@ describe EventsController, 'index.pdf' do
     controller.stub(:current_objects).and_return([@event])
     get :index, :format => 'pdf'
     assigns[:users].should_not be_nil
-  end
-end
-
-describe EventsController, "change_status" do
-  before(:each) do
-    @user = FactoryGirl.create :user
-    UserSession.create @user
-  end
-
-  it "should change attendance status for current user if called with a non-nil event id" do
-    event = FactoryGirl.create :event
-    commitment = FactoryGirl.create :commitment, :user => @user, :event => event, :status => true
-    id = event.id
-    status = :yes # could also be :no or :maybe
-    Event.should_receive(:find_by_id).with(id).once.and_return(event)
-    event.commitments.should_receive(:find_or_create_by_user_id).with(@user.id).once.and_return(commitment)
-    commitment.should_receive(:status=).with(true).once.and_return(true)
-    commitment.should_receive(:save!).once.and_return(true)
-    get "change_status", :id => id, :status => status
-  end
-
-  it "should redirect to index on a standard request" do
-    get 'change_status'
-    response.should redirect_to(:action => :index)
-  end
-
-  it "should render an event row on an Ajax request" do
-    event = FactoryGirl.create :event
-    xhr :get, "change_status", :id => event.id, :status => 'yes' # status could also be :no or :maybe
-    response.should render_template('_event') # with :locals => {:event => event}, but I can't figure out how to test for that
   end
 end
 
