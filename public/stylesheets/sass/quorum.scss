@@ -207,6 +207,11 @@ $error_icon_url: url("../images/exclamation.png");
   }
 }
 
+#map {
+  height: 400px;
+  width: 500px;
+}
+
 /* Some hCalendar properties... */
 abbr {
   text-decoration: inherit; }

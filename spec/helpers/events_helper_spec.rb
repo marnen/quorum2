@@ -53,10 +53,10 @@ describe EventsHelper do
   end
 
   describe '#attendance_comment' do
-    let(:user) { Factory :user }
+    let(:user) { FactoryGirl.create :user }
 
     it 'should retrieve the comment string for the event and user' do
-      commitment = Factory :commitment, event: @event, user: user
+      commitment = FactoryGirl.create :commitment, event: @event, user: user
       helper.attendance_comment(@event, user).should == commitment.comment
     end
 
@@ -66,14 +66,14 @@ describe EventsHelper do
   end
 
   it "should generate a distance string from an event to a user's coords," do
-    marnen = FactoryGirl.create :user, :coords => Point.from_x_y(5, 10) # TODO: use Faker instead of arbitrary coordinates
+    marnen = FactoryGirl.create :user, :coords => User.rgeo_factory_for_column(:coords).point(5, 10) # TODO: use Faker instead of arbitrary coordinates
     @event.coords = marnen.coords
     helper.distance_string(@event, marnen).should =~ /\D\d(\.\d+)? miles/
     user = User.new
     # distance_string(@event, user).should == "" # user.coords is nil -- this spec is not working right now
-    @event = Event.new do |e| e.coords = Point.from_x_y(0, 2) end
-    user.coords = Point.from_x_y(0, 1)
-    helper.distance_string(@event, user).should =~ /\D6(8.7)|9.*miles.*#{h('•')}$/ # 1 degree of latitude
+    @event = Event.new do |e| e.coords = Event.rgeo_factory_for_column(:coords).point(0, 2) end
+    user.coords = User.rgeo_factory_for_column(:coords).point(0, 1)
+    helper.distance_string(@event, user).should =~ /\D6(8\.7)|9\D.*miles/ # 1 degree of latitude
   end
 
   it "should generate a sort link for a table header (asc unless desc is specified)" do
@@ -85,57 +85,6 @@ describe EventsHelper do
     #link = sort_link("Date", :date, :desc)
     #link.should match(/\A<a [^>]*href="#{url_for :controller => 'events', :action => 'index', :order => :date, :direction => :desc}".*<\/a>\Z/i)
  end
-end
-
-describe EventsHelper, "event_map" do
-  before(:each) do
-    User.stub!(:current_user).and_return(FactoryGirl.create :user)
-  end
-
-  it "should return a safe string" do
-    helper.event_map(Factory(:event), DOMAIN).should be_html_safe
-  end
-
-  it "should set up a GMap with all the options" do
-    event = FactoryGirl.create :event
-
-    # TODO: since this code is now in events/map.js , translate these specs into JavaScript!
-=begin
-    marker = GMarker.new([1.0, 2.0])
-    gmap_header = "[Stubbed header for #{DOMAIN}]"
-    GMap.should_receive(:header).with(:host => DOMAIN).at_least(:once).and_return(gmap_header)
-    GMarker.stub!(:new).and_return(marker)
-    gmap.should_receive(:center_zoom_init)
-    gmap.should_receive(:overlay_init).with(marker)
-    marker.should_receive(:open_info_window).with(EventsHelper::ElementVar.new(helper.info(event)))
-    gmap.should_receive(:control_init) do |opts|
-      opts.should be_a_kind_of(Hash)
-      opts.should have_key(:large_map)
-      opts[:large_map].should == true
-      opts.should have_key(:map_type)
-      opts[:map_type].should == true
-    end
-    gmap.should_receive(:to_html).at_least(:once)
-=end
-
-    gmap_header = "[Stubbed header for #{DOMAIN}]"
-    GMap.should_receive(:header).with(:host => DOMAIN).at_least(:once).and_return(gmap_header)
-    gmap = GMap.new(:gmap)
-    gmap_div = '<div id="gmap">GMap div</div>'
-    gmap.should_receive(:div).and_return(gmap_div)
-    GMap.should_receive(:new).and_return(gmap)
-
-    map = helper.event_map(event, DOMAIN)
-    {'#gmap' => nil, '#info' => nil, '#lat' => ERB::Util::h(event.coords.lat), '#lng' => ERB::Util::h(event.coords.lng)}.each do |k, v|
-      map.should have_selector(k, :content => v)
-    end
-
-    pending "RSpec 2 has broken these lines. Not sure how to fix, but in any case we should change the helper architecture." do
-      assigns[:extra_headers].should_not be_nil
-      assigns[:extra_headers].should include(gmap_header)
-      assigns[:extra_headers].should include(javascript_include_tag 'events/map')
-    end
-  end
 end
 
 describe EventsHelper, "ical_escape" do
@@ -155,8 +104,8 @@ end
 
 describe EventsHelper, "info" do
   before :each do
-    User.stub(:current_user).and_return(Factory :user)
-    @event = Factory :event
+    User.stub(:current_user).and_return(FactoryGirl.create :user)
+    @event = FactoryGirl.create :event
     @info = helper.info(@event)
   end
 

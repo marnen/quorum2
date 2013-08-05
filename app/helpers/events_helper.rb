@@ -40,7 +40,7 @@ module EventsHelper
   # If something goes wrong, returns <tt>"0.0 miles"</tt>.
   def distance_string(event, user)
     begin
-      meters = event.coords.ellipsoidal_distance(user.coords)
+      meters = event.coords.distance(user.coords)
       miles = meters / 1609.344
 
       content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance)
@@ -52,23 +52,6 @@ module EventsHelper
   # Generates an edit link for #Event.
   def edit_link(event)
     link_to h(_("edit")), url_for(:controller => 'events', :action => 'edit', :id => event.id), :class => :edit
-  end
-
-  # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
-  # TODO: figure out how to make this html_safe!
-  def event_map(event, hostname)
-    return nil if event.nil?
-
-    @extra_headers ||= ''.html_safe
-    @extra_headers << GMap.header(:host => hostname).to_s.html_safe << javascript_include_tag('events/map').html_safe
-
-    map = GMap.new(:map)
-    result = ''.html_safe
-    result << info(event)
-    result << content_tag(:div, event.coords.lat, :id => :lat, :class => :hidden)
-    result << content_tag(:div, event.coords.lng, :id => :lng, :class => :hidden)
-    result << map.div(:width => 500, :height => 400).html_safe
-    result
   end
 
   # Escapes characters in <em>string</em> that would be illegal in iCalendar format.

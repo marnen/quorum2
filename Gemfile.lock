@@ -1,7 +1,16 @@
+GIT
+  remote: git://github.com/marnen/rgeo-activerecord.git
+  revision: 26bd2daa1650b35643a3f0aef9ae82186bf1556b
+  branch: fix-proc-error-in-default-factory
+  specs:
+    rgeo-activerecord (0.5.0)
+      activerecord (>= 3.0.3)
+      arel (>= 2.0.6)
+      rgeo (>= 0.3.20)
+
 GEM
   remote: http://rubygems.org/
   specs:
-    GeoRuby (1.3.3)
     ZenTest (4.6.2)
     abstract (1.0.0)
     actionmailer (3.0.20)
@@ -26,6 +35,8 @@ GEM
       activesupport (= 3.0.20)
       arel (~> 2.0.10)
       tzinfo (~> 0.3.23)
+    activerecord-postgis-adapter (0.6.5)
+      rgeo-activerecord (~> 0.5.0)
     activeresource (3.0.20)
       activemodel (= 3.0.20)
       activesupport (= 3.0.20)
@@ -65,20 +76,22 @@ GEM
       capybara (>= 1.0.0)
       cucumber (~> 1.0.0)
       nokogiri (>= 1.4.6)
-    database_cleaner (0.6.7)
+    database_cleaner (1.1.1)
     diff-lcs (1.1.3)
     dynamic_form (1.1.4)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     exception_notification (2.5.2)
       actionmailer (>= 3.0.4)
-    factory_girl (2.1.0)
-    factory_girl_rails (1.2.0)
-      factory_girl (~> 2.1.0)
+    factory_girl (4.2.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.2.1)
+      factory_girl (~> 4.2.0)
       railties (>= 3.0.0)
     fast_gettext (0.5.13)
     ffaker (1.8.1)
     ffi (1.0.9)
+    geocoder (1.1.8)
     gettext (2.0.0)
     gettext_i18n_rails (0.2.20)
       fast_gettext
@@ -89,7 +102,7 @@ GEM
     hoe (3.5.0)
       rake (>= 0.8, < 11.0)
     i18n (0.5.0)
-    json (1.5.4)
+    json (1.8.0)
     json_pure (1.5.4)
       spruz (~> 0.2.8)
     launchy (2.0.5)
@@ -118,7 +131,7 @@ GEM
     prawn (0.4.0)
       prawn-layout
     prawn-layout (0.1.0)
-    rack (1.2.7)
+    rack (1.2.8)
     rack-mount (0.6.14)
       rack (>= 1.0.0)
     rack-test (0.5.7)
@@ -137,23 +150,24 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (~> 0.14.4)
-    rake (10.0.3)
+    rake (10.1.0)
     rdiscount (1.6.8)
-    rdoc (3.12)
+    rdoc (3.12.2)
       json (~> 1.4)
-    rspec (2.6.0)
-      rspec-core (~> 2.6.0)
-      rspec-expectations (~> 2.6.0)
-      rspec-mocks (~> 2.6.0)
-    rspec-core (2.6.4)
-    rspec-expectations (2.6.0)
-      diff-lcs (~> 1.1.2)
-    rspec-mocks (2.6.0)
-    rspec-rails (2.6.1)
-      actionpack (~> 3.0)
-      activesupport (~> 3.0)
-      railties (~> 3.0)
-      rspec (~> 2.6.0)
+    rgeo (0.3.20)
+    rspec (2.11.0)
+      rspec-core (~> 2.11.0)
+      rspec-expectations (~> 2.11.0)
+      rspec-mocks (~> 2.11.0)
+    rspec-core (2.11.1)
+    rspec-expectations (2.11.3)
+      diff-lcs (~> 1.1.3)
+    rspec-mocks (2.11.3)
+    rspec-rails (2.11.4)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec (~> 2.11.0)
     ruby-debug-base19 (0.11.25)
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
@@ -181,7 +195,7 @@ GEM
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.35)
+    tzinfo (0.3.37)
     xpath (0.1.4)
       nokogiri (~> 1.3)
 
@@ -189,7 +203,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  GeoRuby
+  activerecord-postgis-adapter
   authlogic (~> 3.0.3)
   autotest-rails
   cucumber-rails
@@ -198,6 +212,7 @@ DEPENDENCIES
   exception_notification
   factory_girl_rails
   ffaker
+  geocoder (~> 1.1.8)
   gettext (>= 1.9.3)
   gettext_i18n_rails
   haml
@@ -207,7 +222,8 @@ DEPENDENCIES
   prawn
   rails (= 3.0.20)
   rdiscount
-  rspec-rails (~> 2.6.1)
+  rgeo-activerecord!
+  rspec-rails (~> 2.11.0)
   ruby-debug19
   rvm-capistrano
   sass

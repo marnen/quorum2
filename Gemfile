@@ -26,8 +26,10 @@ gem 'sass'
 gem 'pg'
 gem 'gettext_i18n_rails'
 gem 'prawn'
-gem 'GeoRuby'
+gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
+gem 'rgeo-activerecord', github: 'marnen/rgeo-activerecord', branch: 'fix-proc-error-in-default-factory' # TODO: waiting for https://github.com/dazuma/rgeo-activerecord/pull/10
+gem 'activerecord-postgis-adapter'
 gem 'authlogic', '~> 3.0.3'
 gem 'dynamic_form'
 gem 'exception_notification'
@@ -47,7 +49,7 @@ end
 group :test, :development do
   gem 'ruby-debug19'
   gem 'autotest-rails', :require => false
-  gem 'rspec-rails', '~> 2.6.1', :require => false
+  gem 'rspec-rails', '~> 2.11.0', :require => false
   gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
   gem 'cucumber-rails', :require => false
   gem 'launchy'

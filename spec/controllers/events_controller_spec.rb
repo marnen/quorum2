@@ -58,7 +58,7 @@ describe EventsController, "feed.rss" do
     user = FactoryGirl.create :user
     User.stub!(:current_user).and_return(user) # we need this for some of the callbacks on Calendar and Event
     @calendar = FactoryGirl.create :calendar
-    Factory :permission, user: user, calendar: @calendar, role: Factory(:role)
+    FactoryGirl.create :permission, user: user, calendar: @calendar, role: FactoryGirl.create(:role)
     @one = FactoryGirl.create :event, :name => 'Event 1', :calendar => @calendar, :date => Date.civil(2008, 7, 4), :description => 'The first event.', :created_at => 1.week.ago
     @two = FactoryGirl.create :event, :name => 'Event 2', :calendar => @calendar, :date => Date.civil(2008, 10, 10), :description => 'The <i>second</i> event.', :created_at => 2.days.ago
     @events = [@one, @two]
@@ -137,7 +137,7 @@ describe EventsController, "feed.rss (login)" do
     @user = FactoryGirl.create :user
     UserSession.create @user
     calendar = FactoryGirl.create :calendar
-    Factory :permission, user: @user, calendar: calendar
+    FactoryGirl.create :permission, user: @user, calendar: calendar
     @events = (1..5).map { FactoryGirl.create :event, :calendar => calendar }
     User.stub!(:find_by_single_access_token).and_return(@user)
     @events.stub!(:order).and_return @events
@@ -151,7 +151,7 @@ end
 
 describe EventsController, 'index.pdf' do
   before(:each) do
-    @user = Factory(:user)
+    @user = FactoryGirl.create :user
     UserSession.create @user
     User.stub(:current_user).and_return @user
     request.env["SERVER_PROTOCOL"] = "http" # see http://iain.nl/prawn-and-controller-tests
@@ -159,8 +159,8 @@ describe EventsController, 'index.pdf' do
 
   context 'generic events' do
     before :each do
-      event = Factory :event
-      Factory(:permission, :calendar => event.calendar, :user => @user)
+      event = FactoryGirl.create :event
+      FactoryGirl.create :permission, :calendar => event.calendar, :user => @user
       controller.stub!(:current_objects).and_return([event])
     end
 
@@ -176,8 +176,8 @@ describe EventsController, 'index.pdf' do
   end
 
   it "should set assigns[:users]" do
-    @perms = [Factory(:permission, :user => @user)]
-    @event = Factory :event, :calendar => Factory(:calendar, :permissions => @perms)
+    @perms = [FactoryGirl.create(:permission, :user => @user)]
+    @event = FactoryGirl.create :event, :calendar => FactoryGirl.create(:calendar, :permissions => @perms)
     controller.stub(:current_objects).and_return([@event])
     get :index, :format => 'pdf'
     assigns[:users].should_not be_nil
@@ -248,11 +248,11 @@ describe EventsController, "new" do
     get 'new'
     response.should_not redirect_to(:action => :list)
 
-    my_event = Factory.build :event, name: nil, calendar: nil, state: nil # invalid
+    my_event = FactoryGirl.build :event, name: nil, calendar: nil, state: nil # invalid
     post :create, :event => my_event.attributes
     response.should_not redirect_to(:action => :list)
 
-    my_event = Factory.build :event
+    my_event = FactoryGirl.build :event
     post :create, :event => my_event.attributes
     response.should redirect_to(:action => :index)
     flash[:notice].should_not be_nil
@@ -261,14 +261,14 @@ describe EventsController, "new" do
 end
 
 describe EventsController, "create" do
-  let(:user) { Factory :user }
+  let(:user) { FactoryGirl.create :user }
 
   before(:each) do
     UserSession.create user
   end
 
   it "should save an Event object" do
-    event = Factory.build :event, created_by: nil
+    event = FactoryGirl.build :event, created_by: nil
     post :create, event: event.attributes
     Event.find_by_name(event.name).created_by.should == user
   end
@@ -337,20 +337,6 @@ describe EventsController, "edit" do
     event.name = nil # now it's invalid
     post 'update', :event => event.attributes, :id => id
     response.should_not redirect_to(:action => :index)
-  end
-
-  it "should reset coords to nil when saving" do
-    event = Event.find(:first)
-    id = event.id.to_s
-    event.coords.should_not be_nil
-=begin
-    Event.should_receive(:find).with(id).twice.and_return(event, Event.find_by_id(id))
-    event.should_receive(:update_attributes).with(an_instance_of(Hash)).once
-=end
-    post 'edit', :event => event.attributes, :id => id
-    event = Event.find(id)
-    event.should_receive(:coords_from_string).once # calling event.coords should trigger recoding
-    event.coords
   end
 end
 
@@ -473,9 +459,9 @@ end
 # Returns a User with admin permissions on the specified Calendar.
 def admin_user(calendar)
   admin = Role.find_or_create_by_name('admin')
-  Factory(:user).tap do |u|
+  FactoryGirl.create(:user).tap do |u|
     u.permissions.destroy_all
-    u.permissions << Factory(:permission, :calendar => calendar, :user => u, :role => admin)
+    u.permissions << FactoryGirl.create(:permission, :calendar => calendar, :user => u, :role => admin)
   end
 end
 

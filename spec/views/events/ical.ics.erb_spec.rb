@@ -5,7 +5,7 @@ include EventsHelper
 
 describe "/events/ical.ics" do
   before(:each) do
-    @event = Factory :event
+    @event = FactoryGirl.create :event
     assign :event, @event
     render :file => 'events/ical.ics.erb'
   end
