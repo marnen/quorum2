@@ -2,24 +2,34 @@ Feature: Edit events
   In order to keep content current
   any administrator OR the author of an event should be able to
   edit events already created.
-  
-  Scenario: Non-admin subscribers can edit their own events
+
+  Background:
     Given I am logged in
-    And I am subscribed to "Calendar 1"
+
+  Scenario: Non-admin subscribers can edit their own events
+    Given I am subscribed to "Calendar 1"
     And I have an event called "My event" in "Calendar 1"
     When I am on the event list
     Then I should see the word "edit"
-    
+
   Scenario: Non-admin subscribers cannot edit others' events
-    Given I am logged in
-    And I am subscribed to "Calendar 1"
+    Given I am subscribed to "Calendar 1"
     And someone else has an event called "Someone else's event" in "Calendar 1"
     When I am on the event list
     Then I should not see the word "edit"
-    
+
   Scenario: Admin subscribers can edit others' events
-    Given I am logged in
-    And I am an admin of "Calendar 1"
+    Given I am an admin of "Calendar 1"
     And someone else has an event called "Someone else's event" in "Calendar 1"
     When I am on the event list
     Then I should see the word "edit"
+
+Scenario: Save changes to event
+    Given I am subscribed to "Calendar 1"
+    And I have an event called "Old name" in "Calendar 1"
+    When I go to the event's edit page
+    And I fill in "Event name" with "New name"
+    And I save
+    And I go to the event list
+    Then I should not see "Old name"
+    But I should see "New name"

@@ -14,8 +14,8 @@ Feature: Create events
     And I am on the homepage
     And I am subscribed to "Calendar 1"
     When I follow "Add event"
-    And I fill in "event[name]" with "My event"
-    And I press "Save changes"
+    And I fill in "Event name" with "My event"
+    And I save
     Then I should have an event called "My event" in "Calendar 1"
 
   Scenario: Create events on subscribed calendar when there are multiple subscriptions
@@ -26,6 +26,6 @@ Feature: Create events
     And I am subscribed to "Calendar 2"
     When I follow "Add event"
     And I select "Calendar 2" from "event[calendar_id]"
-    And I fill in "event[name]" with "My event"
-    And I press "Save changes"
+    And I fill in "Event name" with "My event"
+    And I save
     Then I should have an event called "My event" in "Calendar 2"

@@ -8,7 +8,7 @@ Feature: List events
     When I go to the events page
     Then I should be on the login page
 
-  Scenario Outline: It should sort events by date
+  Scenario Outline: It should sort events by date as default
     Given I am logged in
     And I am subscribed to "<calendar>"
     And the following events exist:

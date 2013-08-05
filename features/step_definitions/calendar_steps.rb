@@ -12,6 +12,12 @@ Given /^(I|"[^\"]*") (?:am|is) subscribed to "([^\"]*)"$/ do |user, calendar|
   FactoryGirl.create :permission, :user => user, :calendar => cal
 end
 
+Given /^I am not subscribed to "([^"]*)"$/ do |calendar|
+  calendar = fetch_calendar calendar
+
+  Permission.destroy(calendar.permissions.find_all_by_user_id(User.current_user).collect(&:id))
+end
+
 Given /^I am an admin(?:istrator)? of "([^\"]*)"$/ do |calendar|
   cal = fetch_calendar calendar
   FactoryGirl.create :permission, :user => UserSession.find.record, :calendar => cal, :role => FactoryGirl.create(:admin_role)

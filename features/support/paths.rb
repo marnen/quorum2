@@ -25,8 +25,13 @@ module NavigationHelpers
       events_path
     when 'the event add page'
       new_event_path
+    when /#{capture_model}'s page$/
+      url_for model! $1
     when /#{capture_model}'s map page$/
       map_event_path model!($1)
+    when /^#{capture_model}'s edit page$/
+      model = model! $1
+      self.send "edit_#{model.class.name.underscore}_path", model
     when /the login page$/
       login_path
     when /the user list for "([^"]*)"$/

@@ -6,7 +6,7 @@ end
 
 Given /^I have an event called "([^\"]*)" in "([^\"]*)"$/ do |name, calendar|
   cal = Calendar.find_by_name(calendar) || FactoryGirl.create(:calendar, :name => calendar)
-  e = FactoryGirl.create :event, :name => name, :calendar => cal, :date => Time.now + 10.years # so it will show up on default event list
+  e = create_model :event, :name => name, :calendar => cal, :date => Time.now + 10.years # so it will show up on default event list
   e.created_by = User.current_user
   e.save!
 end
