@@ -25,5 +25,8 @@ Then /^I should have an event called "([^\"]*)" in "([^\"]*)"$/ do |name, calend
 end
 
 Then /^I should see a map of the event$/ do
-  Then 'I should see an element matching "#map"'
+  event = model! :event
+  page.should have_selector '#map'
+  page.should have_selector '#lat', text: event.latitude.to_s
+  page.should have_selector '#lng', text: event.longitude.to_s
 end

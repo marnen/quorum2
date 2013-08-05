@@ -6,7 +6,7 @@ describe Permission, "(general properties)" do
   it "should belong to a User" do
     Permission.reflect_on_association(:user).macro.should == :belongs_to
   end
-  
+
   it "should belong to a Calendar" do
     Permission.reflect_on_association(:calendar).macro.should == :belongs_to
   end
@@ -19,30 +19,30 @@ end
 describe Permission, "(validations)" do
   context 'field validations' do
     before(:each) do
-      @permission = Factory :permission
+      @permission = FactoryGirl.create :permission
     end
-  
+
     it "should not be valid without a calendar" do
       @permission.should be_valid
       @permission.calendar_id = nil
       @permission.should_not be_valid
     end
-  
+
     it "should not be valid without a user" do
       @permission.should be_valid
       @permission.user_id = nil
       @permission.should_not be_valid
     end
-  
+
     it "should not be valid without a role" do
       @permission.should be_valid
       @permission.role_id = nil
       @permission.should_not be_valid
     end
   end
-  
+
   it "should be unique across all three attributes" do
-    opts = Factory.build(:permission).attributes # can't use attributes_for since we need the associations
+    opts = FactoryGirl.build(:permission).attributes # can't use attributes_for since we need the associations
     @one = Permission.new opts
     @one.should be_valid
     @one.save!

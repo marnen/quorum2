@@ -2,7 +2,7 @@
 
 Given /^a user named "([^"]*)" exists with email "([^"]*)"$/ do |name, email|
   first, last = name.split ' ', 2
-  Factory :user, firstname: first, lastname: last, email: email
+  FactoryGirl.create :user, firstname: first, lastname: last, email: email
 end
 
 Given /^I am logged in as "([^"]*)"$/ do |email|

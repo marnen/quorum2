@@ -145,7 +145,7 @@ class EventsController < ApplicationController
     from_date = params[:from_date] || Time.zone.today
     to_date = params[:to_date]
     direction = params[:direction] || 'asc'
-    calendars ||= user.calendars.collect{|c| c.id}
+    calendars ||= (user ? user.calendars.collect{|c| c.id} : [])
 
     if to_date.present?
       date_query = 'date BETWEEN :from_date AND :to_date'

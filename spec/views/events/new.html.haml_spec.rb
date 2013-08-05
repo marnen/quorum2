@@ -4,10 +4,10 @@ require 'spec_helper'
 
 describe "/events/new" do
   before(:each) do
-    user = Factory(:user).tap {|u| u.permissions << Factory(:permission, :user => u) }
+    user = FactoryGirl.create(:user).tap {|u| u.permissions << FactoryGirl.create(:permission, :user => u) }
     UserSession.create user
     [User, view].each {|x| x.stub(:current_user).and_return user }
-    assign :event, Factory(:event)
+    assign :event, FactoryGirl.create(:event)
     render :file => 'events/new'
   end
 
@@ -66,24 +66,24 @@ end
 
 describe "/events/new (multiple calendars)" do
   before(:each) do
-    @one = Factory :calendar
-    @two = Factory :calendar
-    assign :event, Factory(:event, :date => Time.now, :calendar => @one)
-    @user = Factory :user, :permissions => []
+    @one = FactoryGirl.create :calendar
+    @two = FactoryGirl.create :calendar
+    assign :event, FactoryGirl.create(:event, :date => Time.now, :calendar => @one)
+    @user = FactoryGirl.create :user, :permissions => []
     UserSession.create @user
     [User, view].each {|x| x.stub(:current_user).and_return @user }
   end
 
   it "should display a calendar selector if current user has multiple calendars" do
     [@one, @two].each do |c|
-      @user.permissions << Factory(:permission, :user => @user, :calendar => c)
+      @user.permissions << FactoryGirl.create(:permission, :user => @user, :calendar => c)
     end
     render :file => '/events/new'
     rendered.should have_selector('select#event_calendar_id')
   end
 
   it "should not display a calendar selector if current user only has one calendar" do
-    @user.permissions << Factory(:permission, :user => @user, :calendar => @one)
+    @user.permissions << FactoryGirl.create(:permission, :user => @user, :calendar => @one)
     render :file => '/events/new'
     rendered.should_not have_selector('select#event_calendar_id')
     rendered.should have_selector("input[type=hidden][value='#{@one.id}']#event_calendar_id")

@@ -13,7 +13,7 @@ describe Commitment, "(general properties)" do
 end
 
 describe Commitment, "(validations)" do
-  let(:commitment) { Factory :commitment, event: Factory(:event), user: Factory(:user) }
+  let(:commitment) { FactoryGirl.create :commitment, event: FactoryGirl.create(:event), user: FactoryGirl.create(:user) }
 
   it "should not be valid without an event" do
     commitment.should be_valid

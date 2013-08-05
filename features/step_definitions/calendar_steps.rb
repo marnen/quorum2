@@ -5,9 +5,9 @@ Given /^(I|"[^\"]*") (?:am|is) subscribed to "([^\"]*)"$/ do |user, calendar|
     user = User.current_user
   else
     names = user.gsub(/^"|"$/, '').split(' ', 2)
-    user = Factory :user, :firstname => names.first, :lastname => names.last
+    user = FactoryGirl.create :user, :firstname => names.first, :lastname => names.last
   end
-  cal = create_model(:calendar, :name => calendar)
+  cal = fetch_calendar calendar
   Permission.destroy(cal.permissions.find_all_by_user_id(user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
   FactoryGirl.create :permission, :user => user, :calendar => cal
 end
@@ -20,7 +20,11 @@ end
 Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|
   cal = fetch_calendar calendar
   Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
-  Factory :admin_permission, :calendar => cal
+  FactoryGirl.create :admin_permission, :calendar => cal
+end
+
+Given /^no calendars exist$/ do
+  Calendar.destroy_all
 end
 
 Then /^I should have a calendar called "([^\"]*)"$/ do |calendar|
@@ -34,12 +38,8 @@ Then /^I should be an admin(?:istrator)? of "([^\"]*)"$/ do |calendar|
 end
 
 Then /^I should (not )?be subscribed to "([^"]*)"$/ do |negation, calendar|
-  calendar = fetch_calendar calendar
-  user = User.current_user
-  permission = user.permissions.find_by_calendar_id(calendar)
-  if negation
-    permission.should be_nil
-  else
-    permission.should_not be_nil
+  visit subscriptions_path
+  within '.subscriptions' do
+    page.has_content?(calendar).should == !negation
   end
 end

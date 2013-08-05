@@ -21,9 +21,9 @@ set :deploy_via, :remote_cache
 set :remote, 'origin'
 
 =begin
-set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN 
-password for #{scm_user}, please: ") } 
-set :repository, Proc.new { "--username #{scm_user} --password 
+set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN
+password for #{scm_user}, please: ") }
+set :repository, Proc.new { "--username #{scm_user} --password
 #{scm_password} --no-auth-cache #{repository}" }
 =end
 
@@ -36,17 +36,19 @@ role :db,  "HOST", :primary => true
 set :runner, "capistrano" # might want to change this
 set :use_sudo, false
 
+set :migrate_target, :current
+
 after 'deploy:update_code', 'deploy:remove_unnecessary_files', 'deploy:tag'
 
 namespace :deploy do
-  
+
   # CONFIG: Comment out task :restart block unless you're using Phusion Passenger -- it won't work with other servers
   desc 'Restart the application server.'
   task :restart, :roles => :app do
     run "if test ! -d #{current_path}/tmp; then mkdir #{current_path}/tmp; fi"
     run "/usr/bin/touch #{current_path}/tmp/restart.txt"
   end
-  
+
   desc 'Remove shared files and image sources.'
   task :remove_unnecessary_files, :roles => :app do
     # Remove some unversioned YAML config files and link to shared directory.
@@ -58,11 +60,11 @@ namespace :deploy do
 
     # Remove image source files.
     run "rm -rf #{rpath}/public/images/sources"
-    
+
     #run "chown www-data #{current_path}/config/environment.rb"
 
   end
-  
+
   # From http://stackoverflow.com/questions/5735656/tagging-release-before-deploying-with-capistrano
   desc 'Tags deployed release with a unique Git tag.'
   task :tag do

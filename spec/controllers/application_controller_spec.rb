@@ -9,17 +9,17 @@ describe ApplicationController, "(admin?)" do
     UserSession.create false
     controller.admin?.should be_nil
   end
-  
+
   it "should return true if current user is an admin" do
-    admin_role = Factory :admin_role
-    Role.should_receive(:find_by_name).with('admin').and_return admin_role
-    @admin = Factory(:user).tap {|u| u.permissions << Factory(:admin_permission, :user => u, :role => admin_role) }
+    admin_role = FactoryGirl.create :admin_role
+    Role.should_receive(:find_by_name).with('admin').at_least(:once).and_return admin_role
+    @admin = FactoryGirl.create(:user).tap {|u| u.permissions << FactoryGirl.create(:admin_permission, :user => u, :role => admin_role) }
     UserSession.create @admin
     controller.admin?.should be_true
   end
-  
+
   it "should return false if current user is not an admin" do
-    @user = Factory(:user).tap {|u| u.permissions << Factory(:permission, :user => u) }
+    @user = FactoryGirl.create(:user).tap {|u| u.permissions << FactoryGirl.create(:permission, :user => u) }
     UserSession.create @user
     controller.admin?.should be_false
   end

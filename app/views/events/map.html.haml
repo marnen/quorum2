@@ -1,1 +1,8 @@
-= event_map @event, @host
+- content_for(:javascript) do
+  = javascript_include_tag "http://maps.google.com/maps?file=api&v=2&sensor=false&key=#{gmaps_api_key}"
+  = javascript_include_tag('events/map')
+
+= info(@event)
+#lat.hidden= @event.latitude
+#lng.hidden= @event.longitude
+#map
