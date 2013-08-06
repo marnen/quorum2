@@ -35,34 +35,6 @@ describe "/calendars/users" do
     render :file => 'calendars/users'
   end
 
-  it "should show the results in a table" do
-    rendered.should have_selector("table.users")
-  end
-
-  it "should show first and last names for each user" do
-    for u in @users
-      rendered.should have_selector("tr#user_#{u.id} td._name", :content => u.firstname)
-      rendered.should have_selector("tr#user_#{u.id} td._name", :content => u.lastname)
-    end
-  end
-
-  it "should show street and e-mail addresses for each user who has not requested to be hidden" do
-    @users.each do |u|
-      Capybara.string(rendered).find("tr#user_#{u.id}").tap do |row|
-        if u.show_contact?
-          row.find('td._address').tap do |address|
-            address.text.should =~ Regexp.new([u.street, u.street2, "#{u.city}, #{u.state.code}"].collect{|x| Regexp.escape(h x)}.join('.*'))
-            address.should have_selector 'br'
-          end
-          row.should have_selector('td._email', :content => u.email)
-        else
-          row.should have_selector("td._address", :content => "")
-          row.should_not have_selector("td._email *", :content => u.email)
-        end
-      end
-    end
-  end
-
   it "should show each user's role in this calendar, and -- except for the current user -- should allow it to be changed" do
     for u in @users
       Capybara.string(rendered).find("tr#user_#{u.id}").tap do |row|

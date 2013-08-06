@@ -1,12 +1,7 @@
 # coding: UTF-8
 
 Given /^(I|"[^\"]*") (?:am|is) subscribed to "([^\"]*)"$/ do |user, calendar|
-  if user == 'I'
-    user = User.current_user || model!(:user)
-  else
-    names = user.gsub(/^"|"$/, '').split(' ', 2)
-    user = FactoryGirl.create :user, :firstname => names.first, :lastname => names.last
-  end
+  user = me_or_other_user user
   cal = fetch_calendar calendar
   Permission.destroy(cal.permissions.find_all_by_user_id(user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
   FactoryGirl.create :permission, :user => user, :calendar => cal
@@ -18,9 +13,10 @@ Given /^I am not subscribed to "([^"]*)"$/ do |calendar|
   Permission.destroy(calendar.permissions.find_all_by_user_id(User.current_user).collect(&:id))
 end
 
-Given /^I am an admin(?:istrator)? of "([^\"]*)"$/ do |calendar|
+Given /^(I|"[^\"]*") (?:am|is) an admin(?:istrator)? of "([^\"]*)"$/ do |user, calendar|
+  user = me_or_other_user user
   cal = fetch_calendar calendar
-  FactoryGirl.create :permission, :user => UserSession.find.record, :calendar => cal, :role => FactoryGirl.create(:admin_role)
+  FactoryGirl.create :permission, :user => user, :calendar => cal, :role => FactoryGirl.create(:admin_role)
 end
 
 Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|
@@ -47,5 +43,15 @@ Then /^I should (not )?be subscribed to "([^"]*)"$/ do |negation, calendar|
   visit subscriptions_path
   within '.subscriptions' do
     page.has_content?(calendar).should == !negation
+  end
+end
+
+private
+
+def me_or_other_user(user)
+  if user == 'I'
+    user = User.current_user || model!(:user)
+  else
+    user_by_name user.gsub /^"|"$/, ''
   end
 end

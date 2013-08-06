@@ -30,17 +30,19 @@ module HtmlSelectorsHelpers
       ".comments .user.#{status}"
     when 'an event'
       '.event'
+    when %r{^a link to somewhere at "([^"]+)"$}
+      url = $1
+      "a[href^='#{url}']"
+    when 'the form errors'
+      '.errorExplanation'
+    when /^user "(.+)"$/
+      ['.user', text: $1]
 
     # This allows you to provide a quoted selector as the scope
     # for "within" steps as was previously the default for the
     # web steps:
     when /^"(.+)"$/
       $1
-    when %r{^a link to somewhere at "([^"]+)"$}
-      url = $1
-      "a[href^='#{url}']"
-    when 'the form errors'
-      '.errorExplanation'
 
     else
       raise "Can't find mapping from \"#{locator}\" to a selector.\n" +
