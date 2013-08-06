@@ -66,6 +66,9 @@ GEM
     capybara-email (1.0.2)
       capybara (~> 1.0)
       mail
+    capybara-webkit (0.13.0)
+      capybara (>= 1.0.0, < 1.2)
+      json
     childprocess (0.2.2)
       ffi (~> 1.0.6)
     columnize (0.3.4)
@@ -210,6 +213,7 @@ DEPENDENCIES
   authlogic (~> 3.0.3)
   autotest-rails
   capybara-email
+  capybara-webkit
   cucumber-rails
   database_cleaner
   dynamic_form

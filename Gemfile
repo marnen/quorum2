@@ -53,6 +53,7 @@ group :test, :development do
   gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
   gem 'cucumber-rails', :require => false
   gem 'capybara-email', require: false
+  gem 'capybara-webkit', require: false
   gem 'launchy'
   gem 'pickle'
   gem 'database_cleaner'
