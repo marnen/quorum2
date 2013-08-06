@@ -52,6 +52,7 @@ group :test, :development do
   gem 'rspec-rails', '~> 2.11.0', :require => false
   gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
   gem 'cucumber-rails', :require => false
+  gem 'capybara-email', require: false
   gem 'launchy'
   gem 'pickle'
   gem 'database_cleaner'
