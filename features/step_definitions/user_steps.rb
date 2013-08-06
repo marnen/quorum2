@@ -15,7 +15,7 @@ Given /^I am logged in as "([^"]*)"$/ do |email|
 end
 
 Given /^I am logged in$/ do
-  user = FactoryGirl.create :user, :password => 'passw0rd'
+  user = create_model :user, :password => 'passw0rd'
   login_as user
 end
 

@@ -2,7 +2,7 @@
 
 Given /^(I|"[^\"]*") (?:am|is) subscribed to "([^\"]*)"$/ do |user, calendar|
   if user == 'I'
-    user = User.current_user
+    user = User.current_user || model!(:user)
   else
     names = user.gsub(/^"|"$/, '').split(' ', 2)
     user = FactoryGirl.create :user, :firstname => names.first, :lastname => names.last
