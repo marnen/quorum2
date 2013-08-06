@@ -14,47 +14,6 @@ describe 'events/_event' do
     [User, view].each {|x| x.stub!(:current_user).and_return @user }
   end
 
-  it "should contain edit and delete links for the event, if the current user is an admin" do
-    admin_role = Role.find_or_create_by_name 'admin'
-    admin = FactoryGirl.create(:user).tap do |u|
-      u.permissions.destroy_all
-      u.permissions << FactoryGirl.create(:permission, :role => admin_role, :calendar => @event.calendar, :user => u)
-    end
-    [User, view].each {|x| x.stub!(:current_user).and_return admin }
-
-    render_view
-    edit_url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
-    delete_url = url_for(:controller => 'events', :action => 'delete', :id => @event.id, :escape => false)
-    [edit_url, delete_url].each do |url|
-      rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
-    end
-  end
-
-  it 'should contain calendar names for events, if the current user has more than one calendar' do
-    @one = FactoryGirl.create :calendar
-    @user.stub!(:calendars).and_return([@one, FactoryGirl.create(:calendar)])
-    @event.stub!(:calendar).and_return(@one)
-
-    render_view
-    rendered.should have_selector("#event_#{@event.id} .calendar", :content => @one)
-  end
-
-  it 'should not contain calendar names for events, if the current user has only one calendar' do
-    @one = FactoryGirl.create :calendar
-    @user.stub!(:calendars).and_return([@one])
-    @event.stub!(:calendar).and_return(@one)
-
-    render_view
-    rendered.should_not have_selector("#event_#{@event.id} .calendar")
-  end
-
-  it "should have a control to set the current user's attendance for the event" do
-    pending "This works, but spec fails strangely." do
-      template.should_receive(:render).with(:partial => 'attendance', :locals => {:event => @event})
-      render_view
-    end
-  end
-
   it "should contain a distance in miles or km for the event if it has good coords" do
     render_view
     if !@event.coords.nil? then
@@ -127,30 +86,6 @@ describe 'events/_event' do
     rendered.should have_selector("#event_#{@event.id} .uid", :content => ical_uid(@event))
   end
 
-  it "should contain an edit link for each event that the current user created" do
-=begin
-    How did this *ever* work?
-
-    events.each do |event|
-      url = url_for(:controller => 'events', :action => 'edit', :id => event.id, :escape => false)
-      rendered.should have_selector("#event_#{event.id} a[href=" << url << "]")
-    end
-=end
-    @user.permissions << FactoryGirl.create(:permission, :calendar => @event.calendar)
-    @event.created_by = @user
-    render_view
-    url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
-    rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
-  end
-
-  it "should not contain an edit link for events that the current (non-admin) user created" do
-    @user.permissions << FactoryGirl.create(:permission, :calendar => @event.calendar)
-    @event.created_by = FactoryGirl.create :user # some other guy
-    render_view
-    url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
-    rendered.should_not have_selector("#event_#{@event.id} a[href='#{url}']")
-  end
-
   it "should get a list of users attending and not attending for each event" do
     # TODO: figure out why each find_committed call is happening 3 times
     @event.should_receive(:find_committed).with(:yes).at_least(:once).and_return([])
@@ -160,11 +95,6 @@ describe 'events/_event' do
 
   it "should show the number of users attending and not attending each event" do
     pending "not sure how to spec this"
-  end
-
-  it "should wrap the whole response in a form" do
-    render_view
-    rendered.should have_selector("form.attendance")
   end
 
  protected

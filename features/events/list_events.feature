@@ -8,7 +8,7 @@ Feature: List events
     When I go to the events page
     Then I should be on the login page
 
-  Scenario Outline: It should sort events by date as default
+  Scenario Outline: Sort events by date as default
     Given I am logged in
     And I am subscribed to "<calendar>"
     And the following events exist:
@@ -26,7 +26,7 @@ Feature: List events
       | calendar            |
       | My Amazing Calendar |
 
-  Scenario Outline: It should not show deleted events
+  Scenario Outline: Don't show deleted events
     Given I am logged in
     And I am subscribed to "<calendar>"
     And a deleted event exists with name: "<deleted>", calendar: the calendar
@@ -37,7 +37,7 @@ Feature: List events
       | calendar      | deleted        |
       | Deletion test | I'm invisible! |
 
-  Scenario Outline: It should linkify URLs in event descriptions
+  Scenario Outline: Linkify URLs in event descriptions
     Given I am logged in
     And I am subscribed to "My Calendar"
     And the following events exist:
@@ -49,3 +49,17 @@ Feature: List events
     Examples:
      | url                    |
      | http://www.example.com |
+
+  Scenario: Show calendar names if there are multiple calendars
+    Given I am logged in
+    And I am subscribed to "Calendar 1"
+    And I am subscribed to "Calendar 2"
+    And I have an event called "Event one" in "Calendar 1"
+    And I have an event called "Event two" in "Calendar 2"
+    When I go to the events page
+    Then I should see an event with the following text:
+      | Calendar 1 |
+      | Event one  |
+    And I should see an event with the following text:
+      | Calendar 2 |
+      | Event two  |

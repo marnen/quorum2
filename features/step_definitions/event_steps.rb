@@ -30,3 +30,13 @@ Then /^I should see a map of the event$/ do
   page.should have_selector '#lat', text: event.latitude.to_s
   page.should have_selector '#lng', text: event.longitude.to_s
 end
+
+Then /^I should see an event with the following text:$/ do |table|
+  strings = table.raw.flatten
+  strings *= 2 if strings.size == 1
+  within '.event', text: strings.shift do
+    strings.each do |string|
+      page.should have_content string
+    end
+  end
+end

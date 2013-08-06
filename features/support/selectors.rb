@@ -28,6 +28,8 @@ module HtmlSelectorsHelpers
     when /^an? (.+) user comment$/
       status = {'attending' => :yes, 'not attending' => :no, 'uncommitted' => :maybe}[$1]
       ".comments .user.#{status}"
+    when 'an event'
+      '.event'
 
     # This allows you to provide a quoted selector as the scope
     # for "within" steps as was previously the default for the
