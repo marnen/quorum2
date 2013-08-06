@@ -46,12 +46,3 @@ Feature: Administer calendars
     Then I should be on the admin page
     And I should not see /My calendar\s*\(properties \| users\)/
     And I should see /New name\s*\(properties \| users\)/
-
-  Scenario: Admin users should be able to see user lists for calendars they control
-    Given I am logged in
-    And I am an admin of "My calendar"
-    And "John Smith" is subscribed to "My calendar"
-    And I am on the admin page
-    When I follow "users"
-    Then I should be on the user list for "My calendar"
-    And I should see "Smith, John"
