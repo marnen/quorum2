@@ -5,6 +5,10 @@ Given /^a user named "([^"]*)" exists with email "([^"]*)"$/ do |name, email|
   FactoryGirl.create :user, firstname: first, lastname: last, email: email
 end
 
+Given /^a user exists with #{capture_fields}, single access token: "([^"]*)"$/ do |fields, token|
+  create_model :user, parse_fields(fields).merge('single_access_token' => token)
+end
+
 Given /^I am logged in as "([^"]*)"$/ do |email|
   user = User.find_by_email email
   login_as user

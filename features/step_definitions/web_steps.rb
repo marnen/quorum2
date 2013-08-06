@@ -105,7 +105,7 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"$/ do |path, field|
 end
 
 When /^I save$/ do
-  click_button "Save changes"
+  find('input[type=submit][value^="Save"]').click
 end
 
 Then /^(?:|I )should see "([^"]*)"$/ do |text|
@@ -187,6 +187,16 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
     else
       assert !field_checked
     end
+  end
+end
+
+Then /^(.+) should be blank$/ do |locator|
+  begin
+    with_scope locator do
+      page.should have_no_content
+    end
+  rescue Capybara::ElementNotFound
+    true
   end
 end
 

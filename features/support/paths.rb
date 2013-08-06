@@ -32,6 +32,8 @@ module NavigationHelpers
     when /^#{capture_model}'s edit page$/
       model = model! $1
       self.send "edit_#{model.class.name.underscore}_path", model
+    when /^the (user )?profile page$/
+      profile_path
     when /the login page$/
       login_path
     when /the user list for "([^"]*)"$/

@@ -37,6 +37,8 @@ module HtmlSelectorsHelpers
     when %r{^a link to somewhere at "([^"]+)"$}
       url = $1
       "a[href^='#{url}']"
+    when 'the form errors'
+      '.errorExplanation'
 
     else
       raise "Can't find mapping from \"#{locator}\" to a selector.\n" +
