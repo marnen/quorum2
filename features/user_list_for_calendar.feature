@@ -4,7 +4,8 @@ Feature: User list for calendar
   So that I can find out who can see my events
 
   Background:
-    Given I am logged in
+    Given a user named "George Spelvin" exists with email "gspelvin@aol.com"
+    And I am logged in as "gspelvin@aol.com"
     And I am an admin of "My calendar"
     And "John Smith" is subscribed to "My calendar"
 
@@ -40,6 +41,13 @@ Feature: User list for calendar
     Then I should see "user" within user "Smith, John"
     Then I should see "admin" within user "Wilson, Mary"
 
+  Scenario: Show report status of users
+    Given "Bill Peters" is subscribed to "My calendar"
+    And user "Bill Peters" is not shown on reports for "My calendar"
+    When I go to the user list for "My calendar"
+    Then "show on reports" should be checked within user "Smith, John"
+    But "show on reports" should not be checked within user "Peters, Bill"
+
   Scenario: Allow other users' roles to be changed
     When I go to the user list for "My calendar"
     And I do the following within user "Smith, John":
@@ -47,3 +55,7 @@ Feature: User list for calendar
       | I save                       |
     Then I should be on the user list for "My calendar"
     Then I should see "admin" within user "Smith, John"
+
+  Scenario: Don't allow own role to be changed
+    When I go to the user list for "My calendar"
+    Then I should not see a role selector within user "Spelvin, George"

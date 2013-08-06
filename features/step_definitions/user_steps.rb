@@ -19,6 +19,14 @@ Given /^user "([^"]*)" does (not )?hide his address$/ do |full_name, negation|
   user_by_name full_name, show_contact: !!negation
 end
 
+Given /^user "([^"]*)" is not shown on reports for "([^"]*)"$/ do |full_name, calendar|
+  user = user_by_name full_name
+  calendar = fetch_calendar calendar
+  conditions = {user_id: user, calendar_id: calendar}
+  permission = Permission.where(conditions).first || Permission.create(conditions)
+  permission.update_attributes show_in_report: false
+end
+
 Given /^I am logged in as "([^"]*)"$/ do |email|
   user = User.find_by_email email
   login_as user
@@ -53,6 +61,14 @@ Then /^I should (not )?have a user account for "([^\"]*)"$/ do |negation, email|
   else
     user.should_not be_nil
   end
+end
+
+Then /^I should not see a role selector$/ do
+  page.should_not have_selector '._role select'
+end
+
+Then /^"show on reports" should (not )?be checked$/ do |negation|
+  page.first('._show input[type=checkbox]')[:checked].should == !negation
 end
 
 private
