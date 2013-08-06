@@ -40,6 +40,12 @@ Given /^there is no user account for "([^\"]*)"$/ do |email|
   end
 end
 
+When /^I change the role to "([^"]*)"$/ do |role|
+  within '._role' do
+    select role
+  end
+end
+
 Then /^I should (not )?have a user account for "([^\"]*)"$/ do |negation, email|
   user = User.find_by_email(email)
   if negation

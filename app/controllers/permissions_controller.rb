@@ -41,6 +41,11 @@ class PermissionsController < ApplicationController
     go_back
   end
 
+  def update
+    Permission.find(params[:id]).update_attributes! params[:permission]
+    go_back
+  end
+
   def subscribe
     begin
       Permission.create! do |p|

@@ -39,3 +39,11 @@ Feature: User list for calendar
     When I go to the user list for "My calendar"
     Then I should see "user" within user "Smith, John"
     Then I should see "admin" within user "Wilson, Mary"
+
+  Scenario: Allow other users' roles to be changed
+    When I go to the user list for "My calendar"
+    And I do the following within user "Smith, John":
+      | I change the role to "admin" |
+      | I save                       |
+    Then I should be on the user list for "My calendar"
+    Then I should see "admin" within user "Smith, John"

@@ -35,19 +35,6 @@ describe "/calendars/users" do
     render :file => 'calendars/users'
   end
 
-  it "should show each user's role in this calendar, and -- except for the current user -- should allow it to be changed" do
-    for u in @users
-      Capybara.string(rendered).find("tr#user_#{u.id}").tap do |row|
-        if u == User.current_user
-          row.should have_selector("td._role", :content => /admin/) # just text
-          row.should_not have_selector("td._role select" )
-        else
-          row.should have_selector("td._role select" )
-        end
-      end
-    end
-  end
-
   it "should show whether each user is visible on commitment reports" do
     for u in @users
       rendered.should have_selector("tr#user_#{u.id} td._show input[type=checkbox]")
