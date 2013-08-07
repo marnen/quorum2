@@ -25,10 +25,6 @@ Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|
   FactoryGirl.create :admin_permission, :calendar => cal
 end
 
-Given /^no calendars exist$/ do
-  Calendar.destroy_all
-end
-
 Then /^I should have a calendar called "([^\"]*)"$/ do |calendar|
   Calendar.find_by_name(calendar).should_not be_nil
 end

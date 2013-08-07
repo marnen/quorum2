@@ -34,6 +34,8 @@ module NavigationHelpers
       self.send "edit_#{model.class.name.underscore}_path", model
     when /^the (user )?profile page$/
       profile_path
+    when 'the registration page'
+      register_path
     when /the login page$/
       login_path
     when 'the password reset page'
