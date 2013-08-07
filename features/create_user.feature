@@ -18,6 +18,7 @@ Feature: Create user
       | Address line 2 | Apt. 1           |
       | City           | Middletown       |
       | ZIP code       | 13579            |
+    And I check "Make my address visible in the contact list"
     And I select "Somewhere" from "State"
     And I press "Sign up"
     Then 1 user should exist
