@@ -89,7 +89,7 @@ describe Event, "(general properties)" do
 end
 
 describe Event, "(allow?)" do
-  let!(:event) { FactoryGirl.create :event }
+  let!(:event) { User.delete_all; FactoryGirl.create :event } # TODO: why is User.delete_all necessary?
   let(:admin) do
     FactoryGirl.create(:user).tap do |u|
       u.permissions << FactoryGirl.create(:admin_permission, calendar: event.calendar, user: u)
@@ -143,6 +143,8 @@ end
 describe Event, "(change_status!)" do
   let(:event) { FactoryGirl.create :event }
   let(:user) { FactoryGirl.create :user }
+
+  before(:each) { User.delete_all } # TODO: why is this necessary?
 
   it "should be valid" do
     event.should respond_to(:change_status!)
