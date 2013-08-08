@@ -17,6 +17,6 @@ before_script:
       encoding: UTF8
     EOF
   - cp config/config-orig.yml config/config.yml
-  - bundle exec rake db:create db:schema:load
+  - bundle exec rake db:create
   - psql -U postgres -d quorum2_test -c 'CREATE EXTENSION postgis;'
-script: bundle exec rspec && cucumber
+  - bundle exec rake db:schema:load
