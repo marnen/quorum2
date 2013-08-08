@@ -16,7 +16,8 @@ end
 Given /^(I|"[^\"]*") (?:am|is) an admin(?:istrator)? of "([^\"]*)"$/ do |user, calendar|
   user = me_or_other_user user
   cal = fetch_calendar calendar
-  FactoryGirl.create :permission, :user => user, :calendar => cal, :role => FactoryGirl.create(:admin_role)
+  admin = Role.where(name: 'admin').first || FactoryGirl.create(:admin_role)
+  FactoryGirl.create :permission, :user => user, :calendar => cal, :role => admin
 end
 
 Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|
