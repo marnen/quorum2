@@ -18,4 +18,5 @@ before_script:
     EOF
   - bundle exec rake db:create db:schema:load
   - psql -U postgres -d quorum2_test -c 'CREATE EXTENSION postgis;'
+  - cp config/config-orig.yml config/config.yml
 script: bundle exec rspec && cucumber
