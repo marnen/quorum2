@@ -50,6 +50,19 @@ Feature: List events
      | url                    |
      | http://www.example.com |
 
+  Scenario Outline: Process event descriptions with Markdown
+    Given I am logged in
+    And I am subscribed to "My Calendar"
+    And the following events exist:
+      | calendar     | description |
+      | the calendar | <markdown>  |
+    When I go to the events page
+    Then I should see "<markdown>" as Markdown
+
+    Examples:
+     | markdown                                  |
+     | Here is some really __nifty__ *Markdown*. |
+
   Scenario: Show calendar names if there are multiple calendars
     Given I am logged in
     And I am subscribed to "Calendar 1"

@@ -19,13 +19,6 @@ describe 'events/_event' do
     rendered.should have_selector("#event_#{@event.id} .summary", :content => @event.name)
   end
 
-  it "should show the description of the event (formatted with Markdown) in a tag of class 'description'" do
-    render_view
-    selector = "#event_#{@event.id} .description"
-    rendered.should have_selector(selector, :content => /Testing use of/)
-    rendered.should have_selector("#{selector} em", :content => 'Markdown')
-  end
-
   it "should show the site for the event" do
     render_view
     rendered.should have_selector("#event_#{@event.id}", :content => @event.site)

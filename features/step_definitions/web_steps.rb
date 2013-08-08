@@ -122,6 +122,10 @@ Then /^(?:|I )should see "([^"]*)"$/ do |text|
   end
 end
 
+Then /^I should see "([^"]*)" as Markdown$/ do |markdown|
+  page.body.should include RDiscount.new(markdown).to_html
+end
+
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
   regexp = Regexp.new(regexp)
 
