@@ -9,62 +9,15 @@ include EventsHelper
 describe 'events/_event' do
   before(:each) do
     Role.destroy_all(:name => 'admin')
-    @event = FactoryGirl.create :event, :description => 'Testing use of *Markdown*.'
+    @event = FactoryGirl.create :event
     @user = FactoryGirl.create :user
     [User, view].each {|x| x.stub!(:current_user).and_return @user }
-  end
-
-  it "should show the name of the event in a tag of class 'summary'" do
-    render_view
-    rendered.should have_selector("#event_#{@event.id} .summary", :content => @event.name)
-  end
-
-  it "should show the site for the event" do
-    render_view
-    rendered.should have_selector("#event_#{@event.id}", :content => @event.site)
-  end
-
-  it "should show the street address of the event in a tag of class 'street-address" do
-    render_view
-    rendered.should have_selector("#event_#{@event.id} .street-address", :content => /#{[h(@event.street), h(@event.street2)].join('.*')}/m)
-  end
-
-  it "should show the city of the event in a tag of class 'locality'" do
-    render_view
-    rendered.should have_selector("#event_#{@event.id} .locality", :content => @event.city)
-  end
-
-  it "should show the state code of the event in a tag of class 'region'" do
-    render_view
-    rendered.should have_selector("#event_#{@event.id} .region", :content => @event.state.code)
-  end
-
-  it "should show the country code of each event in a tag of class 'country-name'" do
-    render_view
-    rendered.should have_selector("#event_#{@event.id} .country-name", :content => @event.country.code)
-  end
-
-  it "should show the zip code of each event in a tag of class 'postal-code'" do
-    render_view
-    rendered.should have_selector("#event_#{@event.id} .postal-code", :content => @event.zip)
-  end
-
-  it "should show a map link for the event" do
-    render_view
-    url = url_for(:controller => 'events', :action => 'map', :id => @event.id, :escape => false)
-    rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
   end
 
   it "should show an iCal export link for the event, of class 'ical'" do
     render_view
     url = url_for(:controller => 'events', :action => 'export', :id => @event.id, :escape => false)
     rendered.should have_selector("#event_#{@event.id} a.ical[href='#{url}']")
-  end
-
-  it "should show a date for the event in RFC 822 format, wrapped in an <abbr> of class 'dtstart' with ical-style date as the title" do
-    render_view
-    date = @event.date
-    rendered.should have_selector("#event_#{@event.id} abbr.dtstart[title='#{date.to_formatted_s(:ical)}']", :content => date.to_formatted_s(:rfc822))
   end
 
   it "should have an element of class 'uid' for each event, containing an iCal unique ID for the event" do
