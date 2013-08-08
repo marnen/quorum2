@@ -9,7 +9,7 @@ before_install:
   - gem --version
 before_script:
   - >
-    cat <config/database.yml <<EOF
+    cat >config/database.yml <<EOF
     test:
       adapter: postgis
       database: quorum2_test
