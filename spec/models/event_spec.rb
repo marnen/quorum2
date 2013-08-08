@@ -113,14 +113,22 @@ describe Event, "(allow?)" do
     let(:nonadmin) { FactoryGirl.create :user, permissions: [FactoryGirl.create(:permission, calendar: event.calendar)] }
 
     before(:each) { event.created_by = nonadmin }
-    after(:each) { event.allow?(:edit).should == true }
 
-    it "should return true if current user has a role of admin for the event's calendar" do
-      User.stub current_user: admin
+    context 'allowed' do
+      after(:each) { event.allow?(:edit).should == true }
+
+      specify "if current user has a role of admin for the event's calendar" do
+        User.stub current_user: admin
+      end
+
+      specify 'if current user created the event' do
+        User.stub current_user: nonadmin
+      end
     end
 
-    it 'should return true if current user created the event' do
-      User.stub current_user: nonadmin
+    it 'should not return true otherwise' do
+      User.stub current_User: FactoryGirl.create(:user)
+      event.allow?(:edit).should_not == true
     end
   end
 
