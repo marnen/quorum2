@@ -109,13 +109,19 @@ describe Event, "(allow?)" do
     event.allow?(:delete).should == true
   end
 
-  it "should return true for :edit iff current user has a role of admin for the event's calendar or created the event" do
-    nonadmin = FactoryGirl.create :user, permissions: [FactoryGirl.create(:permission, calendar: event.calendar)]
-    event.created_by = nonadmin
-    User.stub current_user: nonadmin
-    event.allow?(:edit).should == true
-    User.stub current_user: admin
-    event.allow?(:edit).should == true
+  describe 'edit' do
+    let(:nonadmin) { FactoryGirl.create :user, permissions: [FactoryGirl.create(:permission, calendar: event.calendar)] }
+
+    before(:each) { event.created_by = nonadmin }
+    after(:each) { event.allow?(:edit).should == true }
+
+    it "should return true if current user has a role of admin for the event's calendar" do
+      User.stub current_user: admin
+    end
+
+    it 'should return true if current user created the event' do
+      User.stub current_user: nonadmin
+    end
   end
 
   it "should return true for :show iff current user has any role for the event's calendar" do
