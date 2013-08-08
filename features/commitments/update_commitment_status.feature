@@ -14,6 +14,7 @@ Feature: Update commitment status
   Scenario Outline: Change commitment status
     Given I am logged in
     And I am subscribed to "Calendar 1"
+    # TODO: the following line fails intermittently for some reason
     And someone else has an event called "Event" in "Calendar 1"
     And I am on the event list
     When I select "<status>" from "status"
