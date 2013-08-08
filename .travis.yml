@@ -6,3 +6,4 @@ bundler_args: --without development
 before_install:
   - gem update --system 1.8.25 # since ZenTest needs ~> 1.8
   - gem --version
+script: bundle exec rspec && cucumber
