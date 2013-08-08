@@ -8,7 +8,7 @@ before_install:
   - gem update --system 1.8.25 # since ZenTest needs ~> 1.8
   - gem --version
 before_script:
-  - >
+  - |
     cat >config/database.yml <<EOF
     test:
       adapter: postgis
