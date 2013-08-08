@@ -205,6 +205,7 @@ describe Event, "#find_committed" do
   let(:event) { FactoryGirl.create :event }
   let(:event_with_commitments) { Event.includes(commitments: :user).find(event.id) }
 
+  before(:each) { User.destroy_all } # TODO: why is this necessary?
 
   it "should exist with one argument" do
     event.should respond_to(:find_committed)

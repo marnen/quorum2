@@ -14,13 +14,6 @@ describe 'events/_event' do
     [User, view].each {|x| x.stub!(:current_user).and_return @user }
   end
 
-  it "should contain a distance in miles or km for the event if it has good coords" do
-    render_view
-    if !@event.coords.nil? then
-      rendered.should have_selector("#event_#{@event.id} .distance", :content => /\d (miles|km)/)
-    end
-  end
-
   it "should show the name of the event in a tag of class 'summary'" do
     render_view
     rendered.should have_selector("#event_#{@event.id} .summary", :content => @event.name)
