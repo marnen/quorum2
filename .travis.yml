@@ -1,0 +1,8 @@
+language: ruby
+rvm:
+  - 1.9.3
+  - jruby-19mode
+bundler_args: --without development
+before_install:
+  - gem update --system '~> 1.8' # for ZenTest
+  - gem --version
