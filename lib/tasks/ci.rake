@@ -11,5 +11,6 @@ end
 desc 'Run CI tests (intended for Travis)'
 task ci: 'db:setup_with_postgis' do
   sh 'bundle exec rspec -O .rspec.travis'
-  sh 'xvfb-run bundle exec cucumber'
+  sh 'bundle exec cucumber --tags ~@javascript'
+  sh 'xvfb-run bundle exec cucumber --tags @javascript'
 end
