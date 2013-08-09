@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-function warn() {
+function warn () {
   printf >&2 $*
 }
 
