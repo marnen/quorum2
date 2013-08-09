@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe EventsHelper do
   before(:each) do
+    User.delete_all # TODO: why is this necessary?
     @event = FactoryGirl.create :event
   end
 

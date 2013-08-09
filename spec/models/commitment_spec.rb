@@ -15,6 +15,8 @@ end
 describe Commitment, "(validations)" do
   let(:commitment) { FactoryGirl.create :commitment, event: FactoryGirl.create(:event), user: FactoryGirl.create(:user) }
 
+  before(:each) { User.delete_all } # TODO: why is this necessary?
+
   it "should not be valid without an event" do
     commitment.should be_valid
     commitment.event_id = nil

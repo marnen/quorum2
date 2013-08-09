@@ -8,6 +8,7 @@ include EventsHelper
 
 describe 'events/_attendance' do
   before(:each) do
+    User.delete_all # TODO: why is this necessary?
     render :partial => 'events/attendance', :locals => {:event => FactoryGirl.create(:event)}
   end
 
