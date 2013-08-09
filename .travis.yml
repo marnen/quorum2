@@ -10,8 +10,4 @@ before_script:
   - ./ci/install_postgis.sh
   - ./ci/create_config_files.sh
   - bundle exec rake db:setup_with_postgis
-  - |
-    cat >config/initializers/secret_token.rb <<EOF
-    Quorum2::Application.config.secret_token = '`bundle exec rake secret`'
-    EOF
 script: bundle exec rspec -O .rspec.travis && bundle exec cucumber
