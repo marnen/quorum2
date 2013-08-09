@@ -9,6 +9,7 @@ include EventsHelper
 describe 'events/_event' do
   before(:each) do
     Role.destroy_all(:name => 'admin')
+    User.destroy_all # TODO: why is this necessary?
     @event = FactoryGirl.create :event
     @user = FactoryGirl.create :user
     [User, view].each {|x| x.stub!(:current_user).and_return @user }
