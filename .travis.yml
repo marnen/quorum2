@@ -8,12 +8,12 @@ before_install:
   - gem update --system 1.8.25 # since ZenTest needs ~> 1.8
   - gem --version
 before_script:
-  # PostGIS installation stuff from https://github.com/GUI/activerecord-postgis-adapter/blob/545a2856b151172fc3f1b53f26951e5af3d6b0fc/bin/ci/before_install.sh
+  # PostGIS installation stuff from https://github.com/geoalchemy/geoalchemy2/pull/43/files
   # TODO: this could really use some refinement
-  - echo "yes" | sudo apt-add-repository ppa:ubuntugis/ubuntugis-unstable
+  - sudo apt-add-repository -y ppa:sharpie/for-science
+  - sudo apt-add-repository -y ppa:sharpie/postgis-nightly
   - sudo apt-get update
-  - sudo apt-get install -qq libgeos-dev libproj-dev postgresql-9.1-postgis
-  - sudo apt-get install -qq libgeos++-dev
+  - sudo apt-get install postgresql-9.1-postgis -q
 
   - |
     cat >config/database.yml <<EOF
