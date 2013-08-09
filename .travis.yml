@@ -7,13 +7,7 @@ before_install:
   - gem update --system 1.8.25 # since ZenTest needs ~> 1.8
   - gem --version
 before_script:
-  # PostGIS installation stuff from https://github.com/geoalchemy/geoalchemy2/pull/43/files
-  # TODO: this could really use some refinement
-  - sudo apt-add-repository -y ppa:sharpie/for-science
-  - sudo apt-add-repository -y ppa:sharpie/postgis-nightly
-  - sudo apt-get update
-  - sudo apt-get install postgresql-9.1-postgis -q
-
+  - ./install_postgis.sh
   - |
     cat >config/database.yml <<EOF
     test:
