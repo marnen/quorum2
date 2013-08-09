@@ -19,11 +19,11 @@ namespace :ci do
   task cucumber: %w(ci:cucumber:no_javascript ci:cucumber:javascript)
 
   namespace :cucumber do
-    task :no_javascript 'db:setup_with_postgis' do
+    task :no_javascript do
       sh 'bundle exec cucumber --tags ~@javascript'
     end
 
-    task :javascript 'db:setup_with_postgis' do
+    task :javascript do
       sh 'xvfb-run bundle exec cucumber --tags @javascript'
     end
   end
