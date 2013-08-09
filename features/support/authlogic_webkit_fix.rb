@@ -1,5 +1,7 @@
 # See http://stackoverflow.com/questions/10775472/authlogic-with-capybara-cucumber-selenium-driver-not-working .
 
+require 'authlogic/test_case'
+
 module Authlogic
   module Session
     module Activation
