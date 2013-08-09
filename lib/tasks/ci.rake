@@ -9,8 +9,22 @@ namespace :db do
 end
 
 desc 'Run CI tests (intended for Travis)'
-task ci: 'db:setup_with_postgis' do
-  sh 'bundle exec rspec -O .rspec.travis'
-  sh 'bundle exec cucumber --tags ~@javascript'
-  sh 'xvfb-run bundle exec cucumber --tags @javascript'
+task ci: %w(db:setup_with_postgis ci:rspec ci:cucumber)
+
+namespace :ci do
+  task :rspec do
+    sh 'bundle exec rspec -O .rspec.travis'
+  end
+
+  task cucumber: %w(ci:cucumber:no_javascript ci:cucumber:javascript)
+
+  namespace :cucumber do
+    task :no_javascript 'db:setup_with_postgis' do
+      sh 'bundle exec cucumber --tags ~@javascript'
+    end
+
+    task :javascript 'db:setup_with_postgis' do
+      sh 'xvfb-run bundle exec cucumber --tags @javascript'
+    end
+  end
 end
