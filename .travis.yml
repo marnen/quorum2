@@ -30,5 +30,4 @@ before_script:
     cat >config/initializers/secret_token.rb <<EOF
     Quorum2::Application.config.secret_token = '`bundle exec rake secret`'
     EOF
-  - cat config/initializers/secret_token.rb
 script: bundle exec rspec -O .rspec.travis && bundle exec cucumber
