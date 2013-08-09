@@ -7,16 +7,8 @@ before_install:
   - gem update --system 1.8.25 # since ZenTest needs ~> 1.8
   - gem --version
 before_script:
-  - ./install_postgis.sh
-  - |
-    cat >config/database.yml <<EOF
-    test:
-      adapter: postgis
-      database: quorum2_test
-      username: postgres
-      encoding: UTF8
-    EOF
-  - cp config/config-orig.yml config/config.yml
+  - ./ci/install_postgis.sh
+  - ./ci/create_config_files.sh
   - bundle exec rake db:create
   - psql -U postgres -d quorum2_test -c 'CREATE EXTENSION postgis;'
   - bundle exec rake db:schema:load
