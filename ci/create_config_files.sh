@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
-function warn () {
-  printf >&2 $*
+warn () {
+  printf >&2 "$*"
 }
 
 warn 'Setting up config files... '
