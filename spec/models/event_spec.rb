@@ -270,6 +270,8 @@ end
 describe Event, "(validations)" do
   let(:event) { FactoryGirl.build :event }
 
+  before(:each) { User.delete_all } # TODO: why do we need this?
+
   it "should not be valid without a state" do
    event.should be_valid
    event.state_id = nil
