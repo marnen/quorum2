@@ -75,3 +75,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 ## v0.5.10, 5 August 2013
 * Make some configuration changes for Passenger
 * Remove YM4R and Spatial Adapter, since neither is currently supported [#82, #86]
+
+## v0.5.11, 23 October 2013
+* Add patch for ActionMailer vulnerability at http://seclists.org/oss-sec/2013/q4/118 [#88]
