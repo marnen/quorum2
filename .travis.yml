@@ -3,8 +3,5 @@ rvm:
   - 1.9.3
 bundler_args: --without development
 services: postgresql
-before_install:
-  - gem update --system 1.8.25 # since ZenTest needs ~> 1.8
-  - gem --version
 before_script: ./ci/before_script.sh
 script: rake ci
