@@ -44,13 +44,13 @@ gem 'exception_notification'
 group :development do
   gem 'rvm-capistrano'
   gem 'gettext', '>= 1.9.3', :require => false
-  gem 'ruby-debug19'
 end
 
 group :test, :development do
   gem 'autotest-rails', :require => false
   gem 'rspec-rails', '~> 2.11.0', :require => false
   gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
+  gem 'debugger'
   gem 'cucumber-rails', :require => false
   gem 'launchy'
   gem 'pickle'
