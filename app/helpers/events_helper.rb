@@ -1,6 +1,6 @@
 # coding: UTF-8
 
-module EventsHelper 
+module EventsHelper
   # Returns #User's commitment status for #Event as a symbol -- :yes, :no, :or maybe.
   def attendance_status(event, user)
     if event.find_committed(:yes).include? user then
@@ -11,7 +11,12 @@ module EventsHelper
       status = :maybe
     end
   end
-  
+
+  # Returns #User's commitment comment for #Event.
+  def attendance_comment(event, user)
+    event.comments.find {|c| c.user == user }.try :comment
+  end
+
   # Generates an HTML date element for #Event, including hCalendar[http://microformats.org/wiki/hcalendar] annotation.
   #
   # Usage:
@@ -25,47 +30,30 @@ module EventsHelper
     full_date = h event.date.to_formatted_s(:rfc822)
     content_tag :abbr, full_date, :class => :dtstart, :title => ical_date
   end
-  
+
   # Generates a delete link for #Event.
   def delete_link(event)
     link_to h(_("delete")), url_for(:controller => 'events', :action => 'delete', :id => event.id), :class => :delete
   end
-  
+
   # Returns the distance from #Event to #User's address, in a #String of the form <tt>"35.2 miles"</tt>.
   # If something goes wrong, returns <tt>"0.0 miles"</tt>.
   def distance_string(event, user)
     begin
-      meters = event.coords.ellipsoidal_distance(user.coords)
+      meters = event.coords.distance(user.coords)
       miles = meters / 1609.344
-      
+
       content_tag(:span, h(_("%.1f miles" % miles)), :class => :distance)
     rescue
       content_tag(:span, h(_("%.1f miles" % 0)), :class => :distance)
     end
   end
-  
+
   # Generates an edit link for #Event.
   def edit_link(event)
     link_to h(_("edit")), url_for(:controller => 'events', :action => 'edit', :id => event.id), :class => :edit
   end
-  
-  # Generates a <div> element with a map for #Event, using the Google API key for <em>host</em>.
-  # TODO: figure out how to make this html_safe!
-  def event_map(event, hostname)
-    return nil if event.nil?
-    
-    @extra_headers ||= ''.html_safe
-    @extra_headers << GMap.header(:host => hostname).to_s.html_safe << javascript_include_tag('events/map').html_safe
 
-    map = GMap.new(:map)
-    result = ''.html_safe
-    result << info(event)
-    result << content_tag(:div, event.coords.lat, :id => :lat, :class => :hidden)
-    result << content_tag(:div, event.coords.lng, :id => :lng, :class => :hidden)
-    result << map.div(:width => 500, :height => 400).html_safe
-    result
-  end
-  
   # Escapes characters in <em>string</em> that would be illegal in iCalendar format.
   def ical_escape(string)
     string.gsub(%r{[\\,;]}) {|c| '\\' + c}.gsub("\n", '\\n')
@@ -80,7 +68,7 @@ module EventsHelper
   def ical_uid(event)
     "event-" << event.id.to_s << "@" << DOMAIN
   end
-  
+
   # Generates text for the info window on Google map of #Event.
   #
   # TODO: this should probably become a partial.
@@ -91,7 +79,7 @@ module EventsHelper
     result << content_tag(:h3, (event.site || event.name))
     city = [event.city, event.state.code, event.state.country.code].compact.join(', ')
     result << content_tag(:p, [h(event.street), h(event.street2), h(city)].compact.join(tag :br).html_safe)
-    
+
     gmaps = 'http://maps.google.com'
     from = "saddr=#{u User.current_user.address.to_s(:geo)}"
     to = "daddr=#{u event.address.to_s(:geo)}"
@@ -99,7 +87,7 @@ module EventsHelper
     result << content_tag(:p, link_to(_('Get directions'), h("#{gmaps}?#{params}")))
     content_tag(:div, result, :id => :info)
   end
-  
+
   # Given an #Array (or similar) of #User objects, returns an #Array of their full names as #Strings.
   def list_names(users)
     return '' if users.nil? or users.size == 0
@@ -110,13 +98,13 @@ module EventsHelper
   def map_link(event)
     link_to h(_("map")), url_for(:controller => 'events', :action => 'map', :id => event.id), :class => 'map', :target => 'map'
   end
-  
+
   # Generates a hint to use Markdown for formatting.
   # TODO: make this work as html_safe properly.
   def markdown_hint
     content_tag(:span, (h(_ '(use %{Markdown} for formatting)').to_str % {:Markdown => link_to(_('Markdown'), 'http://daringfireball.net/projects/markdown/basics', :target => 'markdown')}).html_safe, :class => :hint)
   end
-  
+
   # Generates an RSS URL for the current user's events feed.
   def rss_url
     if User.current_user
@@ -136,5 +124,9 @@ module EventsHelper
     my_class = options[:class]
     my_class ||= 'sort'
     link_to h(_(title)), url_for(params.merge :order => field, :direction => direction), :class => my_class
+  end
+
+  def status_strings
+    @status_strings ||= {yes: _('attending'), no: _('not attending'), maybe: _('uncommitted')}
   end
 end

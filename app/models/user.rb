@@ -1,15 +1,14 @@
 # coding: UTF-8
-
+require 'acts/geocoded'
 require 'digest/sha1'
-require 'geocoding_utilities'
 
 class User < ActiveRecord::Base
   acts_as_authentic do |c|
     c.transition_from_restful_authentication = true
   end
-  
-  acts_as_addressed
-  include GeocodingUtilities
+
+  acts_as_geocoded
+
   cattr_accessor :current_user
 
   has_many :commitments
@@ -17,7 +16,7 @@ class User < ActiveRecord::Base
   has_many :permissions
   has_many :calendars, :through => :permissions
   # validates_presence_of :permissions
-  
+
   validates_presence_of :email
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
@@ -27,28 +26,29 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email, :case_sensitive => false
   before_save :make_single_access_token
   after_create :set_calendar
+
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :email, :password, :password_confirmation, :firstname, :lastname, :street, :street2, :city, :state, :state_id, :zip, :show_contact
-  
+
   # Sets the User's active status to true.
   # TODO: Rename to activate! , since it's destructive.
   def activate
     update_attribute(:active, true)
   end
-  
+
   def admin?
     @admin ||= Role.find_by_name('admin')
     !(self.permissions.find_by_role_id(@admin).nil?)
   end
-  
+
   # Compares users by last name, first name, and e-mail address in that order.
   # ['Smith', 'John', 'jsmith1@aol.com'] < ['Smith', 'John', 'jsmith2@aol.com']
   def <=>(other)
     attrs = [:lastname, :firstname, :email]
     attrs.collect{|a| self[a].downcase rescue nil}.compact <=> attrs.collect{|a| other[a].downcase rescue nil}.compact
   end
-  
+
   # Resets the user's password and password_confirmation to a random string. Designed to be used for password resets.
   def reset_password!
     new_password = Digest::MD5.hexdigest(Time.now.to_s.split(//).sort_by {rand}.join)[0, 10]
@@ -71,19 +71,20 @@ class User < ActiveRecord::Base
   end
 
   protected
-    def password_required?
-      crypted_password.blank? || !password.blank? || !password_confirmation.blank?
+
+  def password_required?
+    crypted_password.blank? || !password.blank? || !password_confirmation.blank?
+  end
+
+  def make_single_access_token
+    if single_access_token.blank?
+      reset_single_access_token!
     end
-    
-    def make_single_access_token
-      if single_access_token.blank?
-        reset_single_access_token!
-      end
+  end
+
+  def set_calendar
+    if Calendar.count == 1
+      permissions.create(:user => self, :calendar => Calendar.find(:first), :role => Role.find_or_create_by_name('user'))
     end
-    
-    def set_calendar
-      if Calendar.count == 1
-        permissions.create(:user => self, :calendar => Calendar.find(:first), :role => Role.find_or_create_by_name('user'))
-      end
-    end
+  end
 end

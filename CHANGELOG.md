@@ -37,3 +37,44 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 ## v0.3.8, 23 September 2011
 * Replace many controller specs with Cucumber stories [#54]
 * Deal better with HTML escaping
+
+## v0.3.9, 28 December 2011
+* Fix iCal export issues: we were exporting an invalid iCalendar file [#65]
+
+## v0.4.0, 29 December 2011
+* Remove make_resourceful now that Rails offers `respond_with` [#64]
+
+## v0.5.0, 12 March 2012
+* Add the ability to make comments on one's commitment status [#69]
+
+## v0.5.1, 12 March 2012
+* Fix invalid HTML on event list [#71]
+
+## v0.5.2, 12 March 2012
+* Autolink URLs in event descriptions [#75]
+
+## v0.5.3, 13 March 2012
+* Show commitment status icons on comments [#74]
+
+## v0.5.4, 13 March 2012
+* Bugfix.
+
+## v0.5.5, 2 July 2012
+* Put event comments on separate lines [#77]
+* Add application information in footer [#79]
+
+## v0.5.6, v0.5.7, 2 July 2012
+* Bugfix.
+
+## v0.5.8, 2 July 2012
+* Put attendance icons in "attending" and "not attending" columns [#81]
+
+## v0.5.9, 30 January 2013
+* Update to Rails 3.0.20 to patch security hole
+
+## v0.5.10, 5 August 2013
+* Make some configuration changes for Passenger
+* Remove YM4R and Spatial Adapter, since neither is currently supported [#82, #86]
+
+## v0.5.11, 23 October 2013
+* Add patch for ActionMailer vulnerability at http://seclists.org/oss-sec/2013/q4/118 [#88]

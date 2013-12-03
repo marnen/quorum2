@@ -1,12 +1,18 @@
 # coding: UTF-8
 
+Given /^a user named "([^"]*)" exists with email "([^"]*)"$/ do |name, email|
+  first, last = name.split ' ', 2
+  FactoryGirl.create :user, firstname: first, lastname: last, email: email
+end
+
+Given /^I am logged in as "([^"]*)"$/ do |email|
+  user = User.find_by_email email
+  login_as user
+end
+
 Given /^I am logged in$/ do
   user = FactoryGirl.create :user, :password => 'passw0rd'
-  visit login_path
-  fill_in('user_session[email]', :with => user.email)
-  fill_in('user_session[password]', :with => 'passw0rd')
-  click_button 'Log in'
-  UserSession.find.record.should == user
+  login_as user
 end
 
 Given /^I am not logged in$/ do
@@ -27,4 +33,14 @@ Then /^I should (not )?have a user account for "([^\"]*)"$/ do |negation, email|
   else
     user.should_not be_nil
   end
+end
+
+private
+
+def login_as(user)
+  visit login_path
+  fill_in('user_session[email]', :with => user.email)
+  fill_in('user_session[password]', :with => 'passw0rd')
+  click_button 'Log in'
+  UserSession.find.record.should == user
 end

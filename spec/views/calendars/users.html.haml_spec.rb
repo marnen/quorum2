@@ -6,24 +6,24 @@ include ERB::Util
 
 describe "/calendars/users" do
   before(:each) do
-    @calendar = Factory :calendar
-    
+    @calendar = FactoryGirl.create :calendar
+
     Role.destroy_all
-    @admin_role = Factory :admin_role
-    @user_role = Factory :role
-    
-    @admin = Factory.attributes_for :permission, :calendar => @calendar, :role => @admin_role, :user => nil
-    @user = Factory.attributes_for :permission, :calendar => @calendar, :role => @user_role, :user => nil
-    
-    @marnen = Factory(:user, :show_contact => true).tap do |u|
+    @admin_role = FactoryGirl.create :admin_role
+    @user_role = FactoryGirl.create :role
+
+    @admin = FactoryGirl.build(:permission, :calendar => @calendar, :role => @admin_role, :user => nil).attributes
+    @user = FactoryGirl.build(:permission, :calendar => @calendar, :role => @user_role, :user => nil).attributes
+
+    @marnen = FactoryGirl.create(:user, :show_contact => true).tap do |u|
       u.permissions.destroy_all
       u.permissions.create!(@admin.merge :user => u)
     end
-    @millie = Factory(:user, :show_contact => true).tap do |u|
+    @millie = FactoryGirl.create(:user, :show_contact => true).tap do |u|
       u.permissions.destroy_all
       u.permissions.create!(@user.merge :user => u)
     end
-    @quentin = Factory(:user, :show_contact => false).tap do |u|
+    @quentin = FactoryGirl.create(:user, :show_contact => false).tap do |u|
       u.permissions.destroy_all
       u.permissions.create!(@user.merge :user => u)
     end
@@ -34,18 +34,18 @@ describe "/calendars/users" do
     assign :current_object, @calendar
     render :file => 'calendars/users'
   end
-  
+
   it "should show the results in a table" do
     rendered.should have_selector("table.users")
   end
-  
+
   it "should show first and last names for each user" do
     for u in @users
       rendered.should have_selector("tr#user_#{u.id} td._name", :content => u.firstname)
       rendered.should have_selector("tr#user_#{u.id} td._name", :content => u.lastname)
     end
   end
-  
+
   it "should show street and e-mail addresses for each user who has not requested to be hidden" do
     @users.each do |u|
       Capybara.string(rendered).find("tr#user_#{u.id}").tap do |row|
@@ -62,7 +62,7 @@ describe "/calendars/users" do
       end
     end
   end
-  
+
   it "should show each user's role in this calendar, and -- except for the current user -- should allow it to be changed" do
     for u in @users
       Capybara.string(rendered).find("tr#user_#{u.id}").tap do |row|
@@ -75,7 +75,7 @@ describe "/calendars/users" do
       end
     end
   end
-  
+
   it "should show whether each user is visible on commitment reports" do
     for u in @users
       rendered.should have_selector("tr#user_#{u.id} td._show input[type=checkbox]")

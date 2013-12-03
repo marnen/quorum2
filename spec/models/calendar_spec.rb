@@ -31,33 +31,33 @@ end
 
 describe Calendar, '(validations)' do
   before(:each) do
-    @calendar = Factory.build :calendar
+    @calendar = FactoryGirl.build :calendar
   end
-  
+
   it 'should require a name' do
     @calendar.should be_valid
     @calendar.name = nil
     # @calendar.should_not be_valid
   end
-  
+
   it 'should set its creator as admin' do
-    @admin = Factory :admin_role
+    @admin = FactoryGirl.create :admin_role
     Role.should_receive(:find_by_name).with('admin').and_return(@admin)
-    @user = Factory :user
+    @user = FactoryGirl.create :user
     User.stub!(:current_user).and_return(@user)
     @calendar.save!
     @calendar.permissions(true).where(:user_id => @user, :role_id => @admin).count.should >= 1
   end
-  
+
   it 'should not set admin when no one is logged in' do
     [false, :false, nil].each do |v|
       User.stub!(:current_user).and_return(v)
-      @calendar = Factory.build :calendar
+      @calendar = FactoryGirl.build :calendar
       @calendar.permissions.should_not_receive(:create)
       @calendar.save!
     end
   end
-  
+
   it 'should not create permissions when the calendar is invalid' do
     @calendar.name = nil
     @calendar.permissions.should_not_receive(:create)

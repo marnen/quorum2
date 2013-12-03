@@ -1,10 +1,7 @@
+@import "_icon";
+
+$light_gray: #999999;
 $title_blue: #3333ff;
-
-// size of icons from Silk set
-$silk_icon_size: 16px;
-
-// margin around icons
-$default_icon_margin: 3px;
 
 body {
   color: black;
@@ -27,10 +24,6 @@ body {
     style: oblique;
     weight: bolder;
     size: 116%; }; }
-
-.footer {
-  border-top: 1px solid black;
-  padding-top: 2px; }
 
 #navbar {
   color: white;
@@ -65,38 +58,34 @@ th {
     size: 90%;
     weight: lighter; }; }
 
-span.yes {
-  color: lime;
-  font-weight: bolder; }
-
-span.no {
-  font-weight: bolder;
-  color: red; }
-
-span.maybe {
-  color: yellow;
-  font-weight: bolder; }
-
-$circle_size: 12px;
-$attend_yes_url: url("../images/attend_yes.png");
-$attend_no_url: url("../images/attend_no.png");
-$attend_maybe_url: url("../images/attend_maybe.gif");
-
 td.yes p {
-  background-image: $attend_yes_url; }
+  @include attendance_icon(yes);
+}
 
 td.no p {
-  background-image: $attend_no_url; }
+  @include attendance_icon(no);
+}
 
 td.maybe p {
-  background-image: $attend_maybe_url; }
+  @include attendance_icon(maybe);
+}
 
-td.yes, td.no, td.maybe {
+td.attendance {
   background-color: black;
   color: white;
-  p {
-    padding-left: $circle_size + $default_icon_margin;
-    background-repeat: no-repeat; } }
+
+  span.yes {
+    color: lime;
+    font-weight: bolder; }
+
+  span.no {
+    font-weight: bolder;
+    color: red; }
+
+  span.maybe {
+    color: yellow;
+    font-weight: bolder; }
+}
 
 td.actions {
   background-color: transparent;
@@ -105,14 +94,27 @@ td.actions {
   a {
     display: inline-block; } }
 
-// Toolbar links with icons
+.comments .user {
+  font-weight: bolder;
 
-@mixin icon($icon_url, $icon_size: $silk_icon_size, $icon_margin: $default_icon_margin) {
-  background: {
-    image: $icon_url;
-    repeat: no-repeat; };
-  min-height: $icon_size + $icon_margin;
-  padding-left: $icon_size + $icon_margin; }
+  &.yes {
+    @include attendance_icon(yes);
+  }
+
+  &.no {
+    @include attendance_icon(no);
+  }
+
+  &.maybe {
+    @include attendance_icon(maybe);
+  }
+}
+
+td .count {
+  font-weight: bolder;
+}
+
+// Toolbar links with icons
 
 $edit_icon_url: url("../images/pencil.png");
 
@@ -195,6 +197,20 @@ $error_icon_url: url("../images/exclamation.png");
     background-color: #ffcccc; }
   p {
     padding: 0.25em; } }
+
+#footer {
+  margin-top: 2em;
+  border-top: 1px solid $light_gray;
+  .version {
+    font-size: 90%;
+    color: $light_gray;
+  }
+}
+
+#map {
+  height: 400px;
+  width: 500px;
+}
 
 /* Some hCalendar properties... */
 abbr {
