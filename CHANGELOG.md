@@ -81,3 +81,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 
 ## v0.5.12, 3 December 2013
 * Ruby 1.9 compatibility, since 1.8 has a security vulnerability: https://www.ruby-lang.org/en/news/2013/11/22/heap-overflow-in-floating-point-parsing-cve-2013-4164/ [#66]
+
+## v0.5.13, 3 December 2013
+* Fix security alerts [CVE-2013-6414](http://seclists.org/oss-sec/2013/q4/400) and [CVE-2013-4491](http://seclists.org/oss-sec/2013/q4/401) [#89]
