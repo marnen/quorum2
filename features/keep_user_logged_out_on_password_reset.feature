@@ -9,6 +9,7 @@ Feature: Keep user logged out on password reset
     And I am on the password reset page
     When I fill in "email" with "<email>"
     And I press "Reset password"
+    And I go to the event list
     Then I should not be logged in
     And I should not see "<name>"
 

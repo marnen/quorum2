@@ -70,7 +70,6 @@ class UsersController < ApplicationController
 
   # Resets password of user specified in <tt>params[:email]</tt>, and sends the new password to the user by e-mail.
   def reset
-    current_user_session.try :destroy
     if request.post?
       user = User.find_by_email(params[:email])
       if user.nil?
@@ -88,6 +87,7 @@ class UsersController < ApplicationController
     else
       @page_title = _("Reset password")
     end
+    current_user_session.try :destroy
   end
 
  protected
