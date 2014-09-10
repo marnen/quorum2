@@ -20,7 +20,7 @@ class UsersController < ApplicationController
       render :action => 'new'
     end
   end
-  
+
   def edit
     if request.post?
       form = params[:user]
@@ -54,7 +54,7 @@ class UsersController < ApplicationController
     end
     redirect_back_or_default('/login')
   end
-  
+
   # Regenerates #single_access_token of current_user, then redirects to previous page.
   def regenerate_key
     u = current_user
@@ -67,9 +67,10 @@ class UsersController < ApplicationController
       redirect_to :back
     end
   end
-  
+
   # Resets password of user specified in <tt>params[:email]</tt>, and sends the new password to the user by e-mail.
   def reset
+    current_user_session.try :destroy
     if request.post?
       user = User.find_by_email(params[:email])
       if user.nil?
@@ -88,7 +89,7 @@ class UsersController < ApplicationController
       @page_title = _("Reset password")
     end
   end
-  
+
  protected
   # Returns the name of the layout we should be using. This enables us to have different layouts depending on whether a user is logged in.
   def get_layout

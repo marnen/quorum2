@@ -18,7 +18,7 @@ module NavigationHelpers
     #
     #   when /^(.*)'s profile page$/i
     #     user_profile_path(User.find_by_login($1))
-    
+
     when /the admin page$/
       '/admin'
     when /the event list$/
@@ -27,6 +27,8 @@ module NavigationHelpers
       map_event_path model!($1)
     when /the login page$/
       login_path
+    when 'the password reset page'
+      reset_password_path
     when /the user list for "([^"]*)"$/
       url_for :controller => 'calendars', :id => Calendar.find_by_name($1).id, :action => 'users', :only_path => true
     when /the calendar edit page for "([^"]*)"$/
