@@ -85,5 +85,5 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 ## v0.5.13, 3 December 2013
 * Fix security alerts [CVE-2013-6414](http://seclists.org/oss-sec/2013/q4/400) and [CVE-2013-4491](http://seclists.org/oss-sec/2013/q4/401) [#89]
 
-## v0.5.14, 10 September 2014
+## v0.5.15, 10 September 2014
 * Fix a security bug where password resets could log the user in [#92]
