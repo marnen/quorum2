@@ -26,6 +26,10 @@ Given /^there is no user account for "([^\"]*)"$/ do |email|
   end
 end
 
+Then /^I should not be logged in$/ do
+  !!(User.current_user).should == false
+end
+
 Then /^I should (not )?have a user account for "([^\"]*)"$/ do |negation, email|
   user = User.find_by_email(email)
   if negation
