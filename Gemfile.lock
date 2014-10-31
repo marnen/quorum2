@@ -100,7 +100,8 @@ GEM
       fast_gettext
     gherkin (2.4.16)
       json (>= 1.4.6)
-    haml (3.0.25)
+    haml (4.0.5)
+      tilt
     highline (1.6.19)
     hike (1.2.3)
     hoe (3.5.0)
