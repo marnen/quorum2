@@ -28,7 +28,7 @@ describe "/events/new" do
   end
 
   it "should have a Markdown hint in the description field" do
-    header = assert_select("table.edit th", /Description/)
+    header = assert_select("table.edit th", /Description/).first
     header.should_not be_nil
     header.should have_selector("a", :content => 'Markdown')
   end
