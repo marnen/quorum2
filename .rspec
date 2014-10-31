@@ -3,4 +3,3 @@
 progress
 --format
 html --out spec-results/index.html
---debugger
