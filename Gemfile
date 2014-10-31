@@ -2,8 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'rails', github: 'rails/rails', branch: '3-0-stable'
-# TODO: go back to released gem if 5aeb472d990fef093a3d674bd20e4e9eb45ac962 gets incorporated into 3.0.21 (or when we upgrade to 3.2).
+gem 'rails', '~> 3.2.19'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
