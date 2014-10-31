@@ -17,6 +17,6 @@ EMAIL = APP_CONFIG['email'] # Address that application-generated e-mail will com
 
 Date::DATE_FORMATS[:ical] = "%Y%m%d" # yyyymmdd, for iCal conversion
 
-FONT_ROOT = "#{RAILS_ROOT}/fonts/dejavu-fonts-ttf-2.26/ttf"
+FONT_ROOT = "#{Rails.root}/fonts/dejavu-fonts-ttf-2.26/ttf"
 
 GMAPS_API_KEY = YAML.load_file(File.join Rails.root, 'config', 'gmaps_api_key.yml')[Rails.env]
