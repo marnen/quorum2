@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+ruby '2.0.0'
+
 gem 'rails', github: 'rails/rails', branch: '3-0-stable'
 # TODO: go back to released gem if 5aeb472d990fef093a3d674bd20e4e9eb45ac962 gets incorporated into 3.0.21 (or when we upgrade to 3.2).
 
@@ -26,6 +28,7 @@ gem 'haml'
 gem 'sass'
 gem 'pg'
 gem 'gettext_i18n_rails'
+gem 'iconv'
 gem 'prawn'
 gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
@@ -51,7 +54,7 @@ group :test, :development do
   gem 'autotest-rails', :require => false
   gem 'rspec-rails', '~> 2.11.0', :require => false
   gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
-  gem 'debugger'
+  gem 'byebug'
   gem 'cucumber-rails', :require => false
   gem 'launchy'
   gem 'pickle'
