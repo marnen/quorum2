@@ -29,6 +29,7 @@ gem 'pg'
 gem 'gettext_i18n_rails'
 gem 'iconv'
 gem 'prawn'
+gem 'prawn-rails'
 gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
 gem 'rgeo-activerecord', github: 'marnen/rgeo-activerecord', branch: 'fix-proc-error-in-default-factory' # TODO: waiting for https://github.com/dazuma/rgeo-activerecord/pull/10
