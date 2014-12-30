@@ -25,6 +25,7 @@ gem 'rails', '~> 3.2.19'
 
 gem 'haml'
 gem 'sass'
+gem 'prototype-rails' # TODO: remove when we switch to jQuery.
 gem 'pg'
 gem 'gettext_i18n_rails'
 gem 'iconv'
