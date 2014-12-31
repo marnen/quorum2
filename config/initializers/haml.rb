@@ -5,6 +5,7 @@ Haml::Template.options[:format] = :xhtml
 
 Haml::Filters::Markdown.module_eval do
   def render(text)
+    text = text.chomp('</p>').gsub /\A<p>/, ''
     RDiscount.new(text, :autolink).to_html
   end
 end
