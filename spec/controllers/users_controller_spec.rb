@@ -171,7 +171,9 @@ describe UsersController, '(reset/POST)' do
     @user = FactoryGirl.create :user
     @user.should_receive(:reset_password!).and_return(true)
     User.should_receive(:find_by_email).and_return(@user)
-    UserMailer.should_receive(:deliver_reset).with(@user).at_least(:once).and_return(true)
+    reset = mock('Mail::Message')
+    UserMailer.should_receive(:reset).with(@user).at_least(:once).and_return(reset)
+    reset.should_receive :deliver
     post :reset, :email => @user.email
     flash[:error].should be_nil
     flash[:notice].should_not be_nil
