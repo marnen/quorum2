@@ -4,15 +4,15 @@ require 'spec_helper'
 
 describe UsersController do
 
-  
+
 # Uncomment this spec when we set up e-mail activation.
-=begin  
+=begin
   it 'signs up user with activation code' do
     create_user
     assigns(:user).activation_code.should_not be_nil
   end
 =end
-  
+
   it 'activates user' do
     pending "meaningless until we start doing activation" do
       email = 'aaron@example.com'
@@ -25,21 +25,21 @@ describe UsersController do
       User.authenticate(email, password).should == aaron
     end
   end
-  
+
   it 'does not activate user without key' do
     pending "meaningless until we start doing activation" do
       get :activate
       flash[:notice].should be_nil
     end
   end
-  
+
   it 'does not activate user with blank key' do
     pending "meaningless until we start doing activation" do
       get :activate, :activation_code => ''
       flash[:notice].should be_nil
     end
   end
-  
+
   def create_user(options = {})
     post :create, :user => { :login => 'quire', :email => 'quire@example.com',
     :password => 'quire', :password_confirmation => 'quire', :permissions => [mock_model(Permission)] }.merge(options)
@@ -52,15 +52,15 @@ describe UsersController, "edit" do
     UserSession.create @user
     get :edit
   end
-  
+
   it "should reuse the 'new' form" do
     response.should render_template :new
   end
-  
+
   it "should get the current user" do
     assigns[:user].should == User.current_user
   end
-  
+
   it "should not require password validation if both password fields are nil" do
     test_user = FactoryGirl.create :user
     my_attr = test_user.attributes
@@ -70,7 +70,7 @@ describe UsersController, "edit" do
     post :edit, :user => my_attr
     test_user.errors.should be_empty
   end
-  
+
   it "should validate password if at least one password field is supplied" do
     pending "could this ever have worked?!?" do
       my_attr = @user.attributes
@@ -79,7 +79,7 @@ describe UsersController, "edit" do
       my_attr.should_not be_nil
       post :edit, @user
       @user.errors.should_not be_empty
-  
+
       @user = FactoryGirl.create :user
       UserSession.create @user
       get :edit
@@ -91,7 +91,7 @@ describe UsersController, "edit" do
       @user.errors.should_not be_empty
     end
   end
-  
+
   it "should set coords to nil" do
     post :edit, :user => @user.attributes
     pending "Can this really work? Won't coords just be set as soon as it's called?" do
@@ -105,13 +105,13 @@ describe UsersController, '(regenerate_key)' do
     request.env['HTTP_REFERER'] = 'http://test.host/referer' # so redirect_to :back works
     # controller.stub!(:require_user).and_return(true)
   end
-  
+
   it "should be a valid action" do
     UserSession.create FactoryGirl.create(:user)
     get :regenerate_key
     response.should redirect_to(:back)
   end
-  
+
   it "should reset the current user's single_access_token" do
     @user = FactoryGirl.create :user
     token = @user.single_access_token
@@ -119,7 +119,7 @@ describe UsersController, '(regenerate_key)' do
     get :regenerate_key
     User.find(UserSession.find.record.id).single_access_token.should_not == token
   end
-  
+
   it 'should set flash[:notice] on success' do
     UserSession.create FactoryGirl.create(:user)
     get :regenerate_key
@@ -139,20 +139,20 @@ end
 
 describe UsersController, '(reset)' do
   render_views
-  
+
   before(:each) do
     get :reset
   end
-  
+
   it "should be a valid action" do
     response.should be_success
   end
-  
+
   it "should display a form asking for e-mail address, with a submit button" do
     response.body.should have_selector('input[type=text]')
     response.body.should have_selector('input[type=submit]')
   end
-  
+
   it "should set the page title" do
     assigns[:page_title].should_not be_blank
   end
@@ -160,13 +160,13 @@ end
 
 describe UsersController, '(reset/POST)' do
   render_views
-  
+
   it "should give an error message if e-mail isn't valid" do
     User.should_receive(:find_by_email).and_return(nil)
     post :reset, :email => 'someone@example.com'
     flash[:error].should_not be_nil
   end
-  
+
   it "should reset password if e-mail is valid" do
     @user = FactoryGirl.create :user
     @user.should_receive(:reset_password!).and_return(true)
