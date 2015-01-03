@@ -12,12 +12,10 @@ module Acts
       after_validation :geocode
     end
 
-    module InstanceMethods
-      private
+    private
 
-      def address_for_geocoding
-        address.to_s :geo
-      end
+    def address_for_geocoding
+      address.to_s :geo
     end
   end
 end
