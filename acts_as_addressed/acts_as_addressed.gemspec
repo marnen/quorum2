@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = ActsAsAddressed::VERSION
   spec.authors       = ["Marnen Laibow-Koser"]
   spec.email         = ["marnen@marnen.org"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Some quick and dirty geocoding utilities.}
+  spec.summary       = %q{Some quick and dirty geocoding utilities.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
