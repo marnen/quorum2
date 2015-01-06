@@ -34,3 +34,17 @@ module Acts #:nodoc:
     end
   end
 end
+
+Dir[File.join(File.dirname(__FILE__), 'acts', 'addressed', '**', '*.rb')].each do |file|
+  require file.chomp '.rb'
+end
+
+if defined? Rails
+  class Acts::Addressed::Railtie < Rails::Railtie
+    initializer 'acts_as_addressed' do
+      ActiveRecord::Base.class_eval do
+        include Acts::Addressed
+      end
+    end
+  end
+end
