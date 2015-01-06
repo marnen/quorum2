@@ -247,18 +247,17 @@ describe EventsController, "new" do
 
   it "should redirect to event list with flash after post with successful save, but not otherwise" do
     get 'new'
-    response.should_not redirect_to(:action => :list)
+    response.should_not be_redirect
 
     my_event = FactoryGirl.build :event, name: nil, calendar: nil, state: nil # invalid
     post :create, :event => my_event.attributes
-    response.should_not redirect_to(:action => :list)
+    response.should_not be_redirect
 
     my_event = FactoryGirl.build :event
     post :create, :event => my_event.attributes
     response.should redirect_to(:action => :index)
     flash[:notice].should_not be_nil
   end
-
 end
 
 describe EventsController, "create" do
@@ -295,7 +294,7 @@ describe EventsController, "edit" do
     Event.should_receive(:find).and_return(@event)
     get 'edit', :id => @event.id
     flash[:error].should be_nil
-    response.should_not redirect_to(:action => :index)
+    response.should_not be_redirect
   end
 
   it "should redirect to list with an error if the event does not exist" do
@@ -337,7 +336,7 @@ describe EventsController, "edit" do
 
     event.name = nil # now it's invalid
     post 'update', :event => event.attributes, :id => id
-    response.should_not redirect_to(:action => :index)
+    response.should_not be_redirect
   end
 end
 
