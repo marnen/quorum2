@@ -24,7 +24,6 @@ gem 'rails', '~> 3.2.19'
 # gem 'aws-s3', :require => 'aws/s3'
 
 gem 'haml'
-gem 'sass'
 gem 'prototype-rails' # TODO: remove when we switch to jQuery.
 gem 'pg'
 gem 'gettext_i18n_rails'
@@ -39,6 +38,12 @@ gem 'acts_as_addressed', path: './acts_as_addressed'
 gem 'authlogic', '~> 3.0.3'
 gem 'dynamic_form'
 gem 'exception_notification'
+
+group :assets do
+  gem 'sass-rails',   '~> 3.2.6'
+  gem 'coffee-rails', '~> 3.2.2'
+  gem 'uglifier',     '>= 1.0.3'
+end
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

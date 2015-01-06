@@ -45,5 +45,9 @@ module Quorum2
       g.template_engine :haml
       g.test_framework :rspec, :fixture => false
     end
+
+    # Enable the asset pipeline
+    config.assets.enabled = true
+    config.assets.version = '1.0'
   end
 end

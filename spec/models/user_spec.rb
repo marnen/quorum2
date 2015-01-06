@@ -108,7 +108,7 @@ describe User, "(validations)" do
     User.stub!(:current_user).and_return(FactoryGirl.create :user)
     calendar = FactoryGirl.create :calendar
     Calendar.count.should == 1
-    user = User.create!(FactoryGirl.attributes_for :user)
+    user = User.create!(FactoryGirl.attributes_for(:user), without_protection: true)
     user.permissions.should_not be_nil
     user.permissions.should_not be_empty
     user.permissions[0].user.should == user
@@ -282,9 +282,9 @@ describe User, "(geographical features)" do
 
   it "should reset coords on update" do
     User.stub!(:current_user).and_return(FactoryGirl.create :user)
-    @user.update_attributes(FactoryGirl.attributes_for :user)
+    @user.update_attributes(FactoryGirl.attributes_for(:user), without_protection: true)
     @user.should_receive(:coords=)
-    @user.update_attributes(:name => 'foo')
+    @user.update_attributes firstname: 'foo'
   end
 end
 
