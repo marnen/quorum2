@@ -5,13 +5,13 @@ module Acts::Addressed
   #
   # WARNING: This class is easy to abuse. Please resist temptation!
 
-  class QuietNil < ActiveSupport::BasicObject
+  class QuietNil < ActiveSupport::ProxyObject
     # Implementation is yanked from http://coderrr.wordpress.com/2007/09/15/the-ternary-destroyer/
     include ::Singleton
-  
+
     def method_missing(method, *args, &b)
       return self  unless nil.respond_to? method
-      nil.send(method, *args, &b)  rescue self  
+      nil.send(method, *args, &b)  rescue self
     end
   end
 end

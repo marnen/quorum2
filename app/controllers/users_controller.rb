@@ -21,6 +21,7 @@ class UsersController < ApplicationController
     end
   end
 
+  # TODO: split into edit and update!
   def edit
     if request.post?
       form = params[:user]

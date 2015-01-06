@@ -15,7 +15,7 @@ class Event < ActiveRecord::Base
 
   before_create :set_created_by_id
 
-  default_scope :conditions => 'deleted is distinct from true'
+  default_scope -> { where 'deleted is distinct from true' }
 
   # Returns true if #User.current_user is allowed to perform <i>operation</i> on the current #Event, false otherwise.
   # <i>Operation</i> may be <tt>:edit</tt>, <tt>:delete</tt>, or <tt>:show</tt>.
