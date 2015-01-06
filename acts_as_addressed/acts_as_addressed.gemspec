@@ -19,11 +19,20 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   [
+    ['activerecord', ">= 3.2.19"]
+  ].each do |dependency|
+    spec.add_dependency *dependency
+  end
+
+  [
     ["bundler", "~> 1.3"],
     'rake',
-    'byebug',
     ['rspec', '~> 2.11.0'],
-    'autotest'
+    'autotest',
+    'byebug',
+    'ffaker',
+    ['machinist', '>= 1.0.6', '< 2'],
+    'sqlite3'
   ].each do |dependency|
     spec.add_development_dependency *dependency
   end
