@@ -116,39 +116,39 @@ td .count {
 
 // Toolbar links with icons
 
-$edit_icon_url: url("../images/pencil.png");
+$edit_icon_url: image-url("pencil.png");
 
 a.edit {
   @include icon($edit_icon_url); }
 
-$delete_icon_url: url("../images/cross.png");
+$delete_icon_url: image-url("cross.png");
 
 a.delete {
   @include icon($delete_icon_url); }
 
-$ical_icon_url: url("../images/date.png");
+$ical_icon_url: image-url("date.png");
 
 a.ical {
   @include icon($ical_icon_url); }
 
-$map_icon_url: url("../images/map.png");
+$map_icon_url: image-url("map.png");
 
 a.map {
   @include icon($map_icon_url); }
 
-$subscribe_icon_url: url("../images/add.png");
+$subscribe_icon_url: image-url("add.png");
 
 a.subscribe {
   @include icon($subscribe_icon_url); }
 
-$unsubscribe_icon_url: url("../images/delete.png");
+$unsubscribe_icon_url: image-url("delete.png");
 
 a.unsubscribe {
   @include icon($unsubscribe_icon_url); }
 
 // Other links with icons
 
-$rss_icon_url: url("../images/feed-icon-14x14.png");
+$rss_icon_url: image-url("feed-icon-14x14.png");
 $rss_icon_size: 14px;
 
 .rss {
@@ -158,7 +158,7 @@ $rss_icon_size: 14px;
 .url {
   font-weight: bolder; }
 
-$pdf_icon_url: url("../images/pdf-icon-16x16.png");
+$pdf_icon_url: image-url("pdf-icon-16x16.png");
 $pdf_icon_size: 16px;
 
 .pdf {
@@ -175,9 +175,9 @@ $pdf_icon_size: 16px;
   color: red * 0.8;
 }
 
-$notice_icon_url: url("../images/accept.png");
-$warning_icon_url: url("../images/star.png");
-$error_icon_url: url("../images/exclamation.png");
+$notice_icon_url: image-url("accept.png");
+$warning_icon_url: image-url("star.png");
+$error_icon_url: image-url("exclamation.png");
 
 #flash {
   background: {

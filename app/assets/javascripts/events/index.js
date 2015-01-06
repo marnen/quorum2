@@ -4,7 +4,7 @@
 
 // preload the progress spinner
 var progress_gif = new Image();
-progress_gif.src = '/images/progress.gif';
+progress_gif.src = '/assets/progress.gif';
 
 function ajaxify_page() {
    Event.addBehavior({
