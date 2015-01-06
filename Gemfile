@@ -35,6 +35,7 @@ gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
 gem 'rgeo-activerecord', github: 'marnen/rgeo-activerecord', branch: 'fix-proc-error-in-default-factory' # TODO: waiting for https://github.com/dazuma/rgeo-activerecord/pull/10
 gem 'activerecord-postgis-adapter'
+gem 'acts_as_addressed', path: './acts_as_addressed'
 gem 'authlogic', '~> 3.0.3'
 gem 'dynamic_form'
 gem 'exception_notification'

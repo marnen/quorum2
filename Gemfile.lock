@@ -8,6 +8,12 @@ GIT
       arel (>= 2.0.6)
       rgeo (>= 0.3.20)
 
+PATH
+  remote: ./acts_as_addressed
+  specs:
+    acts_as_addressed (0.0.1)
+      activerecord (>= 3.2.19)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -217,6 +223,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-postgis-adapter
+  acts_as_addressed!
   authlogic (~> 3.0.3)
   autotest-rails
   byebug
