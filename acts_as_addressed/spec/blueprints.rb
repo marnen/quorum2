@@ -11,7 +11,7 @@ module Acts::Addressed
     name {Sham.generic_name}
     code
   end
-  
+
   State.blueprint do
     country
     name {Sham.generic_name}
@@ -21,5 +21,5 @@ end
 
 Sham.define do
   generic_name {Faker::Name.last_name}
-  code {LETTERS.rand + LETTERS.rand} # 2 random letters
+  code {LETTERS.shuffle.take(2).join} # 2 random letters
 end

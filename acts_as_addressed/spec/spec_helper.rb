@@ -2,8 +2,9 @@
 
 $: << File.dirname(__FILE__) + '/../lib'
 
-require 'rubygems'
-require 'spec'
+ENV["RAILS_ENV"] ||= 'test'
+require 'rspec'
+require 'rspec/autorun'
 # Require ActiveRecord so we can test AR-specific stuff.
 require 'active_record'
 
@@ -22,19 +23,19 @@ Acts::Addressed.module_eval do
   end
 end
 Dir.chdir pwd
-      
+
 require 'machinist'
 require 'blueprints'
 
 Spec::Runner.configure do |config|
   # I think we can get away with DB setup and teardown before each spec -- it's in memory so should be fast.
-  
+
   config.before :each do
     setup_db
     # Reset Shams for Machinist.
     Sham.reset
   end
-  
+
   config.after :each do
     teardown_db
   end
@@ -48,13 +49,13 @@ def setup_db
         t.column "code", :string, :limit => 2, :null => false
         t.column "name", :string, :null => false
       end
-      
+
       create_table "states", :force => true do |t|
         t.column "country_id", :integer
         t.column "code", :string, :limit => 10, :null => false
         t.column "name", :string, :null => false
       end
-      
+
       create_table "dummies", :force => true do |t|
         # so we have something to use for dummy classes
         t.column 'fake', :string
