@@ -59,7 +59,7 @@ namespace :deploy do
     end
 
     # Remove image source files.
-    run "rm -rf #{rpath}/public/images/sources"
+    run "rm -rf #{rpath}/assets/images/sources"
 
     #run "chown www-data #{current_path}/config/environment.rb"
 

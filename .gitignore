@@ -3,6 +3,7 @@ coverage
 db/*.sqlite3
 log/*.log
 tmp/
+.sass-cache
 doc
 spec-results
 features_report.html

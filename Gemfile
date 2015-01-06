@@ -2,8 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'rails', github: 'rails/rails', branch: '3-0-stable'
-# TODO: go back to released gem if 5aeb472d990fef093a3d674bd20e4e9eb45ac962 gets incorporated into 3.0.21 (or when we upgrade to 3.2).
+gem 'rails', '~> 3.2.19'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -25,18 +24,26 @@ gem 'rails', github: 'rails/rails', branch: '3-0-stable'
 # gem 'aws-s3', :require => 'aws/s3'
 
 gem 'haml'
-gem 'sass'
+gem 'prototype-rails' # TODO: remove when we switch to jQuery.
 gem 'pg'
 gem 'gettext_i18n_rails'
 gem 'iconv'
 gem 'prawn'
+gem 'prawn-rails'
 gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
 gem 'rgeo-activerecord', github: 'marnen/rgeo-activerecord', branch: 'fix-proc-error-in-default-factory' # TODO: waiting for https://github.com/dazuma/rgeo-activerecord/pull/10
 gem 'activerecord-postgis-adapter'
+gem 'acts_as_addressed', path: './acts_as_addressed'
 gem 'authlogic', '~> 3.0.3'
 gem 'dynamic_form'
 gem 'exception_notification'
+
+group :assets do
+  gem 'sass-rails',   '~> 3.2.6'
+  gem 'coffee-rails', '~> 3.2.2'
+  gem 'uglifier',     '>= 1.0.3'
+end
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators

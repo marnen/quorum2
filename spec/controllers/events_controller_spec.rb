@@ -192,13 +192,10 @@ describe EventsController, "change_status" do
 
   it "should change attendance status for current user if called with a non-nil event id" do
     event = FactoryGirl.create :event
-    commitment = FactoryGirl.create :commitment, :user => @user, :event => event, :status => true
-    id = event.id
+    id = event.id.to_s
     status = :yes # could also be :no or :maybe
     Event.should_receive(:find_by_id).with(id).once.and_return(event)
-    event.commitments.should_receive(:find_or_create_by_user_id).with(@user.id).once.and_return(commitment)
-    commitment.should_receive(:status=).with(true).once.and_return(true)
-    commitment.should_receive(:save!).once.and_return(true)
+    event.should_receive(:change_status!).with(@user, true, nil)
     get "change_status", :id => id, :status => status
   end
 
@@ -380,7 +377,7 @@ describe EventsController, "delete" do
 
   it "should work from admin account" do
     UserSession.create admin_user(@event.calendar)
-    Event.should_receive(:find).with(@id.to_i).and_return(@event)
+    Event.should_receive(:find).with(@id.to_s).and_return(@event)
     @event.should_receive(:hide)
     post 'delete', :id => @id
     User.current_user.permissions.find_by_calendar_id(@event.calendar_id).role.name.should == 'admin'

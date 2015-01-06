@@ -30,7 +30,7 @@
   %td
     %div.description
       :markdown
-        #{h event.description}
+        #{event.description}
     - if event.comments.present?
       .comments= render partial: 'comment', collection: event.comments, locals: {event: event}
   = render :partial => 'attendance', :locals => {:event => event}

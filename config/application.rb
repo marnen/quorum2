@@ -10,8 +10,6 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module Quorum2
   class Application < Rails::Application
-    ActionController::Base.config.relative_url_root = '' # TODO: remove when we upgrade to Rails 3.2; see https://github.com/rails/rails/issues/9619
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -47,5 +45,9 @@ module Quorum2
       g.template_engine :haml
       g.test_framework :rspec, :fixture => false
     end
+
+    # Enable the asset pipeline
+    config.assets.enabled = true
+    config.assets.version = '1.0'
   end
 end

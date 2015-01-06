@@ -78,7 +78,7 @@ class UsersController < ApplicationController
       end
       begin
         user.reset_password!
-        UserMailer.deliver_reset(user)
+        UserMailer.reset(user).deliver
         flash[:notice] = _("Password reset for %{email}. Please check your e-mail for your new password.") % {:email => params[:email]}
       #rescue
         #flash[:error] = _("Couldn't reset password. Please try again.")

@@ -1,5 +1,6 @@
 - content_for :javascript do
-  = javascript_include_tag :defaults, 'lowpro/lowpro', 'events/index'
+  -# TODO: Replace 'prototype' with :defaults when we switch to jQuery.
+  = javascript_include_tag 'prototype', 'lowpro/lowpro', 'events/index'
 %table.events
   = render :partial => 'table_header', :locals => {:sortlinks => false}
   = render :partial => 'event', :locals => {:event => @event}
