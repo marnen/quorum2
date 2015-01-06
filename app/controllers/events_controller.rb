@@ -32,9 +32,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new params.require(:event).permit(
-      :calendar_id, :name, :description, :date, :site, :street, :street2, :city, :state_id, :zip
-    )
+    @event = Event.new event_params
     respond_with_flash { @event.save }
   end
 
@@ -48,11 +46,7 @@ class EventsController < ApplicationController
   end
 
   def update
-    respond_with_flash do
-      @event.update_attributes params.require(:event).permit(
-        :calendar_id, :name, :description, :date, :site, :street, :street2, :city, :state_id, :zip
-      )
-    end
+    respond_with_flash { @event.update_attributes event_params }
   end
 
   def show
@@ -160,6 +154,13 @@ class EventsController < ApplicationController
 
     # TODO: can we use more Arel and less literal SQL?
     @current_objects ||= Event.includes(:commitments => :user).where(["calendar_id IN (:calendars) AND #{date_query}", {:calendars => calendars, :from_date => from_date, :to_date => to_date}]).order("#{order} #{direction}")
+  end
+
+  def event_params
+    params.require(:event).permit(
+      # TODO: move this list of field names into the model.
+      :calendar_id, :name, :description, :date, :site, :street, :street2, :city, :state_id, :zip
+    )
   end
 
   # Return an HTTP header with proper MIME type for iCal.
