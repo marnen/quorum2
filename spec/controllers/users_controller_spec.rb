@@ -74,8 +74,8 @@ describe UsersController, "edit" do
   it "should validate password if at least one password field is supplied" do
     pending "could this ever have worked?!?" do
       my_attr = @user.attributes
-      @user[:password] = 'a'
-      @user[:password_confirmation] = nil
+      @user.password = 'a'
+      @user.password_confirmation = nil
       my_attr.should_not be_nil
       post :edit, @user
       @user.errors.should_not be_empty

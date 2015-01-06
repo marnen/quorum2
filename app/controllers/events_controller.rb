@@ -88,7 +88,7 @@ class EventsController < ApplicationController
   def export
     begin
       @event = Event.find(params[:id].to_i)
-      render :template => 'events/ical.ics.erb'
+      render template: 'events/ical', formats: [:ics], handlers: [:erb]
     rescue
       flash[:error] = _("Couldn't find any event to export!")
       redirect_to(:action => :index) and return

@@ -64,7 +64,7 @@ describe "/events/index" do
 
   it "should render _event for each event" do
     pending "Not sure how to make this work." do
-      template.should_receive(:render).with(:partial => 'event', :collection => @events)
+      view.should_receive(:render).with(:partial => 'event', :collection => @events)
       render :file => 'events/index'
     end
   end
