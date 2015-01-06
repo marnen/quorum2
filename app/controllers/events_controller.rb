@@ -32,7 +32,9 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new params[:event]
+    @event = Event.new params.require(:event).permit(
+      :calendar_id, :name, :description, :date, :site, :street, :street2, :city, :state_id, :zip
+    )
     respond_with_flash { @event.save }
   end
 
@@ -46,7 +48,11 @@ class EventsController < ApplicationController
   end
 
   def update
-    respond_with_flash { @event.update_attributes params[:event] }
+    respond_with_flash do
+      @event.update_attributes params.require(:event).permit(
+        :calendar_id, :name, :description, :date, :site, :street, :street2, :city, :state_id, :zip
+      )
+    end
   end
 
   def show
