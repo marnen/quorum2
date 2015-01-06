@@ -16,3 +16,6 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+
+# TODO: remove when we make this directory into its own repository
+_unused_git
