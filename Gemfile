@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'rails', '~> 3.2.19'
+gem 'rails', '~> 4.0.12'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -39,11 +39,9 @@ gem 'authlogic', '~> 3.0.3'
 gem 'dynamic_form'
 gem 'exception_notification'
 
-group :assets do
-  gem 'sass-rails',   '~> 3.2.6'
-  gem 'coffee-rails', '~> 3.2.2'
-  gem 'uglifier',     '>= 1.0.3'
-end
+gem 'sass-rails'
+gem 'coffee-rails'
+gem 'uglifier',     '>= 1.0.3'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
