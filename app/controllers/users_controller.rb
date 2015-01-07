@@ -24,7 +24,9 @@ class UsersController < ApplicationController
   # TODO: split into edit and update!
   def edit
     if request.post?
-      form = params[:user]
+      form = params.require(:user).permit(
+        :email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact
+      )
       if form[:password].nil? and form[:password_confirmation].nil?
         # bypass encryption if both passwords are blank:
         # User.encrypt_password will not change anything if password is empty
