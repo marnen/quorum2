@@ -61,6 +61,8 @@ group :test, :development do
   gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
   gem 'byebug'
   gem 'cucumber-rails', :require => false
+  # gem 'term-ansicolor' # TODO: Cucumber loads it but doesn't declare the dependency; remove if future versions declare the dependency.
+  gem 'capybara', '>= 1.0.1', '< 2' # TODO: temporary only, to get Cucumber working. We should remove this line and rewrite for Capybara 2.
   gem 'launchy'
   gem 'pickle'
   gem 'database_cleaner'
