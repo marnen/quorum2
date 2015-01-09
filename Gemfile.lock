@@ -1,13 +1,3 @@
-GIT
-  remote: git://github.com/marnen/rgeo-activerecord.git
-  revision: 26bd2daa1650b35643a3f0aef9ae82186bf1556b
-  branch: fix-proc-error-in-default-factory
-  specs:
-    rgeo-activerecord (0.5.0)
-      activerecord (>= 3.0.3)
-      arel (>= 2.0.6)
-      rgeo (>= 0.3.20)
-
 PATH
   remote: ./acts_as_addressed
   specs:
@@ -36,8 +26,9 @@ GEM
       activesupport (= 4.0.12)
       arel (~> 4.0.0)
     activerecord-deprecated_finders (1.0.3)
-    activerecord-postgis-adapter (0.6.5)
-      rgeo-activerecord (~> 0.5.0)
+    activerecord-postgis-adapter (2.2.1)
+      activerecord (>= 4.0.0, < 4.2.0)
+      rgeo-activerecord (~> 1.2)
     activesupport (4.0.12)
       i18n (~> 0.6, >= 0.6.9)
       minitest (~> 4.2)
@@ -180,6 +171,9 @@ GEM
     rdiscount (2.1.7.1)
     request_store (1.1.0)
     rgeo (0.3.20)
+    rgeo-activerecord (1.2.0)
+      activerecord (~> 4.0)
+      rgeo (~> 0.3)
     rspec-core (2.13.1)
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
@@ -263,7 +257,6 @@ DEPENDENCIES
   prototype-rails
   rails (~> 4.0.12)
   rdiscount
-  rgeo-activerecord!
   rspec-rails (~> 2.13.1)
   rvm-capistrano
   sass-rails
