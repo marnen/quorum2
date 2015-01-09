@@ -34,7 +34,7 @@ gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
 gem 'activerecord-postgis-adapter'
 gem 'acts_as_addressed', path: './acts_as_addressed'
-gem 'authlogic', '~> 3.4.4'
+gem 'authlogic', '~> 3.3.0'
 gem 'dynamic_form'
 gem 'exception_notification'
 
