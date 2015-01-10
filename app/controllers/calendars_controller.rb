@@ -46,7 +46,7 @@ class CalendarsController < ApplicationController
   # Lists all the users for the current #Calendar.
   def users
     @page_title = _('Users for calendar %{calendar_name}') % {:calendar_name => @calendar}
-    @users = @calendar.users.find(:all, order: 'lastname, firstname')
+    @users = @calendar.users.order :lastname, :firstname
   end
 
   private
@@ -57,7 +57,7 @@ class CalendarsController < ApplicationController
 
   def make_admin_permission_for(calendar)
     p = User.current_user.permissions
-    @admin ||= Role.find_or_create_by_name('admin')
+    @admin ||= Role.find_or_create_by(name: 'admin')
     if !p.find_by_calendar_id_and_role_id(calendar.id, @admin.id)
       p << Permission.create!(:user => User.current_user, :calendar => calendar, :role => @admin)
     end

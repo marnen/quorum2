@@ -3,6 +3,7 @@
     - if current_user.calendars.size > 1
       %tr
         %th= _("Calendar")
+        -# TODO: remove DB access from view!
         %td= f.collection_select :calendar_id, User.current_user.calendars.sort{|x, y| x.name <=> y.name}, :id, :name
     - else
       = f.hidden_field :calendar_id, :value => User.current_user.calendars[0].id
@@ -37,7 +38,8 @@
     %tr
       %th= _("State")
       %td
-        = f.collection_select :state_id, Acts::Addressed::State.find(:all), :id, :name
+        -# TODO: remove DB access from view!
+        = f.collection_select :state_id, Acts::Addressed::State.all, :id, :name
         = _(error_message_on :event, :state)
     %tr
       %th= _("Zip")

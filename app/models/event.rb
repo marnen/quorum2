@@ -38,7 +38,7 @@ class Event < ActiveRecord::Base
 
   # Sets the #User's attendance status on the Event, where status is one of true (attending), false (not attending), or nil (uncommitted).
   def change_status!(user, status, comment = nil)
-    commitment = commitments.find_or_create_by_user_id(user.id)
+    commitment = commitments.find_or_create_by(user_id: user.id)
     commitment.update_attributes! :status => status, :comment => comment
   end
 

@@ -16,7 +16,7 @@ describe 'events/_event' do
   end
 
   it "should contain edit and delete links for the event, if the current user is an admin" do
-    admin_role = Role.find_or_create_by_name 'admin'
+    admin_role = Role.find_or_create_by name: 'admin'
     admin = FactoryGirl.create(:user).tap do |u|
       u.permissions.destroy_all
       u.permissions << FactoryGirl.create(:permission, :role => admin_role, :calendar => @event.calendar, :user => u)
