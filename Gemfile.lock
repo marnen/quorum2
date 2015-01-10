@@ -7,6 +7,15 @@ GIT
       cucumber (>= 0.8)
       rake
 
+GIT
+  remote: git://github.com/marnen/authlogic.git
+  revision: 79e61151debd565d637b3e1aa8c70b889f419a0e
+  branch: backport-pull-369-onto-v3.3.0
+  specs:
+    authlogic (3.2.1)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+
 PATH
   remote: ./acts_as_addressed
   specs:
@@ -46,9 +55,6 @@ GEM
       tzinfo (~> 0.3.37)
     addressable (2.2.6)
     arel (4.0.2)
-    authlogic (3.3.0)
-      activerecord (>= 3.2)
-      activesupport (>= 3.2)
     autotest-rails (4.1.0)
       ZenTest
     builder (3.1.4)
@@ -230,7 +236,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgis-adapter
   acts_as_addressed!
-  authlogic (~> 3.3.0)
+  authlogic!
   autotest-rails
   byebug
   capybara (>= 1.0.1, < 2)

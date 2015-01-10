@@ -34,7 +34,7 @@ gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
 gem 'activerecord-postgis-adapter'
 gem 'acts_as_addressed', path: './acts_as_addressed'
-gem 'authlogic', '~> 3.3.0'
+gem 'authlogic', github: 'marnen/authlogic', branch: 'backport-pull-369-onto-v3.3.0' # TODO: waiting for https://github.com/binarylogic/authlogic/pull/446
 gem 'dynamic_form'
 gem 'exception_notification'
 
