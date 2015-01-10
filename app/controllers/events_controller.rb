@@ -14,6 +14,9 @@ class EventsController < ApplicationController
   respond_to :pdf, only: :index
   respond_to :rss, only: :feed
 
+  require 'resource_params'
+  include ResourceParams
+
   def index
     set_table_headers
     @events = current_objects
@@ -32,7 +35,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new event_params
+    @event = Event.new resource_params
     respond_with_flash { @event.save }
   end
 
@@ -46,7 +49,7 @@ class EventsController < ApplicationController
   end
 
   def update
-    respond_with_flash { @event.update_attributes event_params }
+    respond_with_flash { @event.update_attributes resource_params }
   end
 
   def show
@@ -154,10 +157,6 @@ class EventsController < ApplicationController
 
     # TODO: can we use more Arel and less literal SQL?
     @current_objects ||= Event.includes(:commitments => :user).where(["calendar_id IN (:calendars) AND #{date_query}", {:calendars => calendars, :from_date => from_date, :to_date => to_date}]).order("#{order} #{direction}")
-  end
-
-  def event_params
-    params.require(:event).permit *Event.permitted_params
   end
 
   # Return an HTTP header with proper MIME type for iCal.
