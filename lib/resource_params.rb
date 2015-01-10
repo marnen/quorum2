@@ -6,14 +6,14 @@ module ResourceParams
   private
 
   def resource_name
-    resource_class_name.underscore.to_sym
+    @_resource_name ||= resource_class_name.underscore.to_sym
   end
 
   def resource_class
-    Module.const_get resource_class_name
+    @_resource_class ||= Module.const_get resource_class_name
   end
 
   def resource_class_name
-    self.class.name.chomp("Controller").singularize
+    @_resource_class_name ||= self.class.name.chomp("Controller").singularize
   end
 end
