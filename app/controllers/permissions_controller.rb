@@ -20,9 +20,9 @@ class PermissionsController < ApplicationController
     @page_title = _('Subscriptions')
     @permissions = User.current_user.permissions.includes(:calendar, :role)
     if @permissions.empty?
-      @unsubscribed = Calendar.find(:all)
+      @unsubscribed = Calendar.all
     else
-      @unsubscribed = Calendar.find(:all, :conditions => ['id NOT IN (:permissions)', {:permissions => @permissions.collect{|p| p.calendar.id}}])
+      @unsubscribed = Calendar.where ['id NOT IN (:permissions)', {permissions: @permissions.collect {|p| p.calendar.id } }]
     end
     respond_with @permissions
   end
