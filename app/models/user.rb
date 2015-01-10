@@ -27,10 +27,6 @@ class User < ActiveRecord::Base
   before_save :make_single_access_token
   after_create :set_calendar
 
-  # prevents a user from submitting a crafted form that bypasses activation
-  # anything else you want your user to change should be added here.
-  # attr_accessible :email, :password, :password_confirmation, :firstname, :lastname, :street, :street2, :city, :state, :state_id, :zip, :show_contact
-
   def self.permitted_params
     [:email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact]
   end
