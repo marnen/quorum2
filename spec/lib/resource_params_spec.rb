@@ -4,7 +4,7 @@ require 'resource_params'
 describe ResourceParams do
   describe '#resource_params' do
     it "returns the model's list of permitted params" do
-      resource_name = Faker::Lorem.words(1).first
+      resource_name = Faker::Lorem.words(1).first.singularize
 
       model_name = resource_name.titleize
 
