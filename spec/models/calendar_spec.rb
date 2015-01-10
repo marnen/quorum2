@@ -68,6 +68,8 @@ describe Calendar do
   end
 
   describe '.permitted_params' do
+    subject { Calendar.permitted_params }
+
     it { should == [:name] }
   end
 end

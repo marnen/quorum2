@@ -157,10 +157,7 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(
-      # TODO: move this list of field names into the model.
-      :calendar_id, :name, :description, :date, :site, :street, :street2, :city, :state_id, :zip
-    )
+    params.require(:event).permit *Event.permitted_params
   end
 
   # Return an HTTP header with proper MIME type for iCal.

@@ -49,8 +49,7 @@ class CalendarsController < ApplicationController
   private
 
   def calendar_params
-    # TODO: move to model.
-    params.require(:calendar).permit(:name)
+    params.require(:calendar).permit(*Calendar.permitted_params)
   end
 
   def load_calendar

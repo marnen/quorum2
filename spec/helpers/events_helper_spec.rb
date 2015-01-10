@@ -73,7 +73,7 @@ describe EventsHelper do
     user = User.new
     # distance_string(@event, user).should == "" # user.coords is nil -- this spec is not working right now
     @event = Event.new do |e| e.coords = Event.rgeo_factory_for_column(:coords, srid: DEFAULT_SRID).point(0, 2) end
-    user.coords = User.rgeo_factory_for_column(:coords).point(0, 1)
+    user.coords = User.rgeo_factory_for_column(:coords, srid: DEFAULT_SRID).point(0, 1)
     helper.distance_string(@event, user).should =~ /\D6(8\.7)|9\D.*miles/ # 1 degree of latitude
   end
 

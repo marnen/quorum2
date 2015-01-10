@@ -97,9 +97,6 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    # TODO: move into model.
-    params.require(:user).permit(
-      :email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact
-    )
+    params.require(:user).permit *User.permitted_params
   end
 end
