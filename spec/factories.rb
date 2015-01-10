@@ -17,7 +17,7 @@ shams = {
   :password => lambda {(1..(rand(15) + 4)).map{(32..127).to_a.sample.chr}.join},
   :street => lambda {Faker::Address.street_address},
   :street2 => lambda {Faker::Address.secondary_address},
-  :zip => lambda {Faker::Address.zip_code},
+  :zip => lambda {Faker::AddressUS.zip_code},
   :code => lambda {LETTERS.sample + LETTERS.sample}, # 2 random letters
   :event_name => lambda {Faker::Lorem.words(3).join(' ')}
 }
@@ -30,7 +30,7 @@ FactoryGirl.define do
     street2 { Faker::Address.secondary_address }
     city { Faker::Address.city }
     association :state_raw, :factory => :state
-    zip { Faker::Address.zip_code }
+    zip { Faker::AddressUS.zip_code }
     date { Date.civil(rand(10) + 2100, rand(12) + 1, rand(28) + 1) } # way in the future so it shows up on the event list
     calendar
     association :created_by, :factory => :user
@@ -65,7 +65,7 @@ FactoryGirl.define do
     street2 { Faker::Address.secondary_address }
     city {Faker::Address.city}
     association :state_raw, :factory => :state
-    zip { Faker::Address.zip_code }
+    zip { Faker::AddressUS.zip_code }
     active {true}
 
     factory :inactive_user do

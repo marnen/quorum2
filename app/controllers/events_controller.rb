@@ -22,7 +22,7 @@ class EventsController < ApplicationController
     @events = current_objects
     respond_with @events do |format|
       format.pdf do
-        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort # TODO: fix for multiple calendars
+        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.where(show_in_report: true).includes(:user).collect{|x| x.user }.sort # TODO: fix for multiple calendars
         render layout: false
       end
     end

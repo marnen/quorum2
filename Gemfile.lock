@@ -1,3 +1,21 @@
+GIT
+  remote: git://github.com/ianwhite/pickle.git
+  revision: d2e4bb87f9ea218b763c9375b29fe75363c4b3c4
+  ref: d2e4bb87f9ea218b763c9375b29fe75363c4b3c4
+  specs:
+    pickle (0.5.0)
+      cucumber (>= 0.8)
+      rake
+
+GIT
+  remote: git://github.com/marnen/authlogic.git
+  revision: 79e61151debd565d637b3e1aa8c70b889f419a0e
+  branch: backport-pull-369-onto-v3.3.0
+  specs:
+    authlogic (3.2.1)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+
 PATH
   remote: ./acts_as_addressed
   specs:
@@ -37,9 +55,6 @@ GEM
       tzinfo (~> 0.3.37)
     addressable (2.2.6)
     arel (4.0.2)
-    authlogic (3.3.0)
-      activerecord (>= 3.2)
-      activesupport (>= 3.2)
     autotest-rails (4.1.0)
       ZenTest
     builder (3.1.4)
@@ -133,9 +148,6 @@ GEM
       mini_portile (~> 0.6.0)
     pdf-core (0.4.0)
     pg (0.17.1)
-    pickle (0.4.8)
-      cucumber (>= 0.8)
-      rake
     prawn (1.3.0)
       pdf-core (~> 0.4.0)
       ttfunk (~> 1.4.0)
@@ -224,7 +236,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgis-adapter
   acts_as_addressed!
-  authlogic (~> 3.3.0)
+  authlogic!
   autotest-rails
   byebug
   capybara (>= 1.0.1, < 2)
@@ -242,7 +254,7 @@ DEPENDENCIES
   iconv
   launchy
   pg
-  pickle
+  pickle!
   prawn
   prawn-rails
   prototype-rails

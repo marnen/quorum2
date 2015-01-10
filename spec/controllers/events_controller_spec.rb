@@ -326,7 +326,7 @@ describe EventsController, "edit" do
 =end
 
   it "should redirect to event list with flash after post with successful save, but not otherwise" do
-    event = Event.find(:first)
+    event = Event.first
     id = event.id
     event.should be_valid
     post 'update', :event => event.attributes, :id => id # valid
@@ -458,7 +458,7 @@ end
 
 # Returns a User with admin permissions on the specified Calendar.
 def admin_user(calendar)
-  admin = Role.find_or_create_by_name('admin')
+  admin = Role.find_or_create_by(name: 'admin')
   FactoryGirl.create(:user).tap do |u|
     u.permissions.destroy_all
     u.permissions << FactoryGirl.create(:permission, :calendar => calendar, :user => u, :role => admin)

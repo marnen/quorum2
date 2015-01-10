@@ -34,7 +34,7 @@ gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
 gem 'activerecord-postgis-adapter'
 gem 'acts_as_addressed', path: './acts_as_addressed'
-gem 'authlogic', '~> 3.3.0'
+gem 'authlogic', github: 'marnen/authlogic', branch: 'backport-pull-369-onto-v3.3.0' # TODO: waiting for https://github.com/binarylogic/authlogic/pull/446
 gem 'dynamic_form'
 gem 'exception_notification'
 
@@ -62,7 +62,7 @@ group :test, :development do
   gem 'cucumber-rails', :require => false
   gem 'capybara', '>= 1.0.1', '< 2' # TODO: temporary only, to get Cucumber working. We should remove this line and rewrite for Capybara 2.
   gem 'launchy'
-  gem 'pickle'
+  gem 'pickle', github: 'ianwhite/pickle', ref: 'd2e4bb87f9ea218b763c9375b29fe75363c4b3c4' # TODO: waiting for https://github.com/ianwhite/pickle/pull/48
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'ffaker'

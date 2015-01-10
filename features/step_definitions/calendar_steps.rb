@@ -8,7 +8,7 @@ Given /^(I|"[^\"]*") (?:am|is) subscribed to "([^\"]*)"$/ do |user, calendar|
     user = FactoryGirl.create :user, :firstname => names.first, :lastname => names.last
   end
   cal = fetch_calendar calendar
-  Permission.destroy(cal.permissions.find_all_by_user_id(user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
+  cal.permissions.where(user_id: user.id).destroy_all # make sure we don't have any superfluous admin permissions hanging around
   FactoryGirl.create :permission, :user => user, :calendar => cal
 end
 
@@ -19,7 +19,7 @@ end
 
 Given /^someone else has a calendar called "([^\"]*)"$/ do |calendar|
   cal = fetch_calendar calendar
-  Permission.destroy(cal.permissions.find_all_by_user_id(User.current_user.id).collect(&:id)) # make sure we don't have any superfluous admin permissions hanging around
+  cal.permissions.where(user_id: User.current_user.id).destroy_all # make sure we don't have any superfluous admin permissions hanging around
   FactoryGirl.create :admin_permission, :calendar => cal
 end
 
@@ -32,9 +32,9 @@ Then /^I should have a calendar called "([^\"]*)"$/ do |calendar|
 end
 
 Then /^I should be an admin(?:istrator)? of "([^\"]*)"$/ do |calendar|
-  admin = Role.find_or_create_by_name('admin')
+  admin = Role.find_or_create_by(name: 'admin')
   cal = fetch_calendar calendar
-  User.current_user.permissions.find_by_calendar_id_and_role_id(cal.id, admin.id).should_not be_nil
+  User.current_user.permissions.where(calendar_id: cal.id, role_id: admin.id).should_not be_empty
 end
 
 Then /^I should (not )?be subscribed to "([^"]*)"$/ do |negation, calendar|

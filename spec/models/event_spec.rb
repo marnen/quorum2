@@ -78,9 +78,9 @@ describe Event do
       rescue ActiveRecord::RecordNotFound
         # don't worry about it -- since default_scope excludes this record, it won't be found.
       end
-      all = Event.find :all
-      all.should include(undeleted)
-      all.should_not include(deleted)
+      all_events = Event.all
+      all_events.should include(undeleted)
+      all_events.should_not include(deleted)
     end
 
     it "should have a description" do
@@ -161,9 +161,9 @@ describe Event do
     end
 
     it "should create a new commitment if there isn't one" do
-      event.commitments.find_all_by_user_id(user.id).should be_empty
+      event.commitments.where(user_id: user.id).should be_empty
       event.change_status!(user, nil) # somewhat arbitrary choice of status
-      event.commitments.find_all_by_user_id(user.id).should_not be_empty
+      event.commitments.where(user_id: user.id).should_not be_empty
     end
 
     it "should add a comment to the commitment if one is supplied" do
