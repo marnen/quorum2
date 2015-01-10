@@ -31,6 +31,10 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   # attr_accessible :email, :password, :password_confirmation, :firstname, :lastname, :street, :street2, :city, :state, :state_id, :zip, :show_contact
 
+  def self.permitted_params
+    [:email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact]
+  end
+
   # Sets the User's active status to true.
   # TODO: Rename to activate! , since it's destructive.
   def activate
