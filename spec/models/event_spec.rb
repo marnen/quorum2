@@ -92,6 +92,7 @@ describe Event, "(allow?)" do
   let!(:event) { FactoryGirl.create :event }
   let(:admin) do
     FactoryGirl.create(:user).tap do |u|
+      Permission.where(user: u, calendar: event.calendar).destroy_all
       u.permissions << FactoryGirl.create(:admin_permission, calendar: event.calendar, user: u)
     end
   end

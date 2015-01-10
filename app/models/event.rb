@@ -92,7 +92,7 @@ class Event < ActiveRecord::Base
   # Returns the #Role of the #User for the #Event.
   def role_of(user)
     # TODO: use joins to make one DB query, not two.
-    p = user.permissions.find_by_calendar_id(self.calendar_id)
+    p = user.permissions.reload.find_by_calendar_id(self.calendar_id)
     p.nil? ? nil : p.role
   end
 
