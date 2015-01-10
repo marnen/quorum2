@@ -9,6 +9,9 @@ class CalendarsController < ApplicationController
 
   respond_to :html
 
+  require 'resource_params'
+  include ResourceParams
+
   def new
     @page_title = _('Create calendar')
     @calendar = Calendar.new
@@ -16,7 +19,7 @@ class CalendarsController < ApplicationController
   end
 
   def create
-    @calendar = Calendar.new calendar_params
+    @calendar = Calendar.new resource_params
     if @calendar.save
       make_admin_permission_for @calendar
       redirect_to '/admin', notice: _('Your calendar was successfully created.')
@@ -32,7 +35,7 @@ class CalendarsController < ApplicationController
   end
 
   def update
-    if @calendar.update_attributes calendar_params
+    if @calendar.update_attributes resource_params
       redirect_to '/admin', notice: _('Your calendar was successfully saved.')
     else
       flash[:error] = _('Couldn\'t save your calendar!')
@@ -47,10 +50,6 @@ class CalendarsController < ApplicationController
   end
 
   private
-
-  def calendar_params
-    params.require(:calendar).permit(*Calendar.permitted_params)
-  end
 
   def load_calendar
     @calendar = Calendar.find params[:id]

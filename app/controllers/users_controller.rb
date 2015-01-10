@@ -7,8 +7,11 @@ class UsersController < ApplicationController
   def new
   end
 
+  require 'resource_params'
+  include ResourceParams
+
   def create
-    @user = User.new user_params
+    @user = User.new resource_params
     @user.save
     if @user.errors.empty?
       @user.activate # so we don't have to go through activation right now
@@ -24,14 +27,14 @@ class UsersController < ApplicationController
   # TODO: split into edit and update!
   def edit
     if request.post?
-      if user_params[:password].nil? and user_params[:password_confirmation].nil?
+      if resource_params[:password].nil? and resource_params[:password_confirmation].nil?
         # bypass encryption if both passwords are blank:
         # User.encrypt_password will not change anything if password is empty
-        user_params[:password] = ''
-        user_params[:password_confirmation] = ''
+        resource_params[:password] = ''
+        resource_params[:password_confirmation] = ''
       end
       @user = current_user # User.find(params[:id].to_i)
-      @user.update_attributes(user_params)
+      @user.update_attributes(resource_params)
       @user.update_attribute(:coords, nil)
       if @user.errors.empty?
         flash[:notice] = _("Your changes have been saved.")
@@ -94,9 +97,5 @@ class UsersController < ApplicationController
   # Returns the name of the layout we should be using. This enables us to have different layouts depending on whether a user is logged in.
   def get_layout
     current_user ? "standard" : "unauthenticated"
-  end
-
-  def user_params
-    params.require(:user).permit *User.permitted_params
   end
 end
