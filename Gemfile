@@ -29,7 +29,7 @@ gem 'pg'
 gem 'gettext_i18n_rails'
 gem 'iconv'
 gem 'prawn'
-gem 'prawn-rails'
+gem 'prawn-rails', github: 'cortiz/prawn-rails', ref: '261ed59ca55420a590811c31eadd9606d4c067ae' # TODO: waiting for https://github.com/cortiz/prawn-rails/issues/6
 gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
 gem 'activerecord-postgis-adapter'

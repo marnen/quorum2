@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/cortiz/prawn-rails.git
+  revision: 261ed59ca55420a590811c31eadd9606d4c067ae
+  branch: master
+  specs:
+    prawn-rails (0.1.0)
+      prawn
+      prawn-table
+      rails (>= 3.1.0)
+
+GIT
   remote: git://github.com/ianwhite/pickle.git
   revision: d2e4bb87f9ea218b763c9375b29fe75363c4b3c4
   ref: d2e4bb87f9ea218b763c9375b29fe75363c4b3c4
@@ -151,10 +161,6 @@ GEM
     prawn (1.3.0)
       pdf-core (~> 0.4.0)
       ttfunk (~> 1.4.0)
-    prawn-rails (0.1.0)
-      prawn
-      prawn-table
-      rails (>= 3.1.0)
     prawn-table (0.2.1)
     prototype-rails (4.0.0)
       rails (~> 4.0)
@@ -256,7 +262,7 @@ DEPENDENCIES
   pg
   pickle!
   prawn
-  prawn-rails
+  prawn-rails!
   prototype-rails
   rails (~> 4.0.12)
   rdiscount
