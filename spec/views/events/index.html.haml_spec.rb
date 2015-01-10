@@ -46,7 +46,7 @@ describe "/events/index" do
     User.current_user.stub!(:calendars).and_return((1..2).map{ FactoryGirl.create :calendar })
     render :file => 'events/index'
     form = "form[action='#{url_for params}'][method=get]"
-    rendered.should have_selector("#{form} select #{name_selector "search[calendar_id]"}")
+    rendered.should have_selector("#{form} select#{name_selector "search[calendar_id]"}")
   end
 
   it "should show a sort link in date and event column header" do

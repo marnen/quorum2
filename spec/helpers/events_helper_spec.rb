@@ -67,13 +67,13 @@ describe EventsHelper do
   end
 
   it "should generate a distance string from an event to a user's coords," do
-    marnen = FactoryGirl.create :user, :coords => User.rgeo_factory_for_column(:coords).point(5, 10) # TODO: use Faker instead of arbitrary coordinates
+    marnen = FactoryGirl.create :user, :coords => User.rgeo_factory_for_column(:coords, srid: DEFAULT_SRID).point(5, 10) # TODO: use Faker instead of arbitrary coordinates
     @event.coords = marnen.coords
     helper.distance_string(@event, marnen).should =~ /\D\d(\.\d+)? miles/
     user = User.new
     # distance_string(@event, user).should == "" # user.coords is nil -- this spec is not working right now
-    @event = Event.new do |e| e.coords = Event.rgeo_factory_for_column(:coords).point(0, 2) end
-    user.coords = User.rgeo_factory_for_column(:coords).point(0, 1)
+    @event = Event.new do |e| e.coords = Event.rgeo_factory_for_column(:coords, srid: DEFAULT_SRID).point(0, 2) end
+    user.coords = User.rgeo_factory_for_column(:coords, srid: DEFAULT_SRID).point(0, 1)
     helper.distance_string(@event, user).should =~ /\D6(8\.7)|9\D.*miles/ # 1 degree of latitude
   end
 
@@ -119,7 +119,8 @@ describe EventsHelper, "info" do
   end
 
   it "should display the address separated by line breaks" do
-    @info.should include([h(@event.street), h(@event.street2), h([@event.city, @event.state.code, @event.state.country.code].join(', '))].join(tag :br))
+    address_lines = [@event.street, @event.street2, [@event.city, @event.state.code, @event.state.country.code].join(', ')]
+    @info.should include(address_lines.map {|line| ERB::Util.h line }.join(tag :br))
   end
 end
 

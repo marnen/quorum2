@@ -63,7 +63,7 @@ describe UsersController, "edit" do
 
   it "should not require password validation if both password fields are nil" do
     test_user = FactoryGirl.create :user
-    my_attr = test_user.attributes.slice *User.accessible_attributes
+    my_attr = test_user.attributes
     my_attr[:password] = nil
     my_attr[:password_confirmation] = nil
     User.stub!(:current_user).and_return(test_user)
@@ -93,7 +93,7 @@ describe UsersController, "edit" do
   end
 
   it "should set coords to nil" do
-    post :edit, :user => @user.attributes.slice(*User.accessible_attributes)
+    post :edit, :user => @user.attributes
     pending "Can this really work? Won't coords just be set as soon as it's called?" do
       @user.coords.should be_nil
     end

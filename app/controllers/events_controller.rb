@@ -14,6 +14,9 @@ class EventsController < ApplicationController
   respond_to :pdf, only: :index
   respond_to :rss, only: :feed
 
+  require 'resource_params'
+  include ResourceParams
+
   def index
     set_table_headers
     @events = current_objects
@@ -32,7 +35,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new params[:event]
+    @event = Event.new resource_params
     respond_with_flash { @event.save }
   end
 
@@ -46,7 +49,7 @@ class EventsController < ApplicationController
   end
 
   def update
-    respond_with_flash { @event.update_attributes params[:event] }
+    respond_with_flash { @event.update_attributes resource_params }
   end
 
   def show

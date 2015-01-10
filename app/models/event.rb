@@ -17,6 +17,10 @@ class Event < ActiveRecord::Base
 
   default_scope -> { where 'deleted is distinct from true' }
 
+  def self.permitted_params
+    [:calendar_id, :name, :description, :date, :site, :street, :street2, :city, :state_id, :zip]
+  end
+
   # Returns true if #User.current_user is allowed to perform <i>operation</i> on the current #Event, false otherwise.
   # <i>Operation</i> may be <tt>:edit</tt>, <tt>:delete</tt>, or <tt>:show</tt>.
   def allow?(operation)
@@ -92,7 +96,7 @@ class Event < ActiveRecord::Base
   # Returns the #Role of the #User for the #Event.
   def role_of(user)
     # TODO: use joins to make one DB query, not two.
-    p = user.permissions.find_by_calendar_id(self.calendar_id)
+    p = user.permissions.reload.find_by_calendar_id(self.calendar_id)
     p.nil? ? nil : p.role
   end
 

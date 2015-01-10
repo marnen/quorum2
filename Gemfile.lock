@@ -1,13 +1,3 @@
-GIT
-  remote: git://github.com/marnen/rgeo-activerecord.git
-  revision: 26bd2daa1650b35643a3f0aef9ae82186bf1556b
-  branch: fix-proc-error-in-default-factory
-  specs:
-    rgeo-activerecord (0.5.0)
-      activerecord (>= 3.0.3)
-      arel (>= 2.0.6)
-      rgeo (>= 0.3.20)
-
 PATH
   remote: ./acts_as_addressed
   specs:
@@ -36,8 +26,9 @@ GEM
       activesupport (= 4.0.12)
       arel (~> 4.0.0)
     activerecord-deprecated_finders (1.0.3)
-    activerecord-postgis-adapter (0.6.5)
-      rgeo-activerecord (~> 0.5.0)
+    activerecord-postgis-adapter (2.2.1)
+      activerecord (>= 4.0.0, < 4.2.0)
+      rgeo-activerecord (~> 1.2)
     activesupport (4.0.12)
       i18n (~> 0.6, >= 0.6.9)
       minitest (~> 4.2)
@@ -46,11 +37,9 @@ GEM
       tzinfo (~> 0.3.37)
     addressable (2.2.6)
     arel (4.0.2)
-    authlogic (3.4.4)
+    authlogic (3.3.0)
       activerecord (>= 3.2)
       activesupport (>= 3.2)
-      request_store (~> 1.0)
-      scrypt (~> 1.2)
     autotest-rails (4.1.0)
       ZenTest
     builder (3.1.4)
@@ -64,15 +53,15 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
-    capybara (1.0.1)
+    capybara (1.1.4)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
-    childprocess (0.2.2)
-      ffi (~> 1.0.6)
+    childprocess (0.5.5)
+      ffi (~> 1.0, >= 1.0.11)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -81,16 +70,18 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     columnize (0.8.9)
-    cucumber (1.0.2)
+    cucumber (1.3.18)
       builder (>= 2.1.2)
-      diff-lcs (>= 1.1.2)
-      gherkin (~> 2.4.5)
-      json (>= 1.4.6)
-      term-ansicolor (>= 1.0.5)
-    cucumber-rails (1.0.2)
-      capybara (>= 1.0.0)
-      cucumber (~> 1.0.0)
-      nokogiri (>= 1.4.6)
+      diff-lcs (>= 1.1.3)
+      gherkin (~> 2.12)
+      multi_json (>= 1.7.5, < 2.0)
+      multi_test (>= 0.1.1)
+    cucumber-rails (1.4.2)
+      capybara (>= 1.1.2, < 3)
+      cucumber (>= 1.3.8, < 2)
+      mime-types (>= 1.16, < 3)
+      nokogiri (~> 1.5)
+      rails (>= 3, < 5)
     database_cleaner (1.1.1)
     debugger-linecache (1.2.0)
     diff-lcs (1.2.5)
@@ -106,16 +97,13 @@ GEM
       railties (>= 3.0.0)
     fast_gettext (0.5.13)
     ffaker (1.25.0)
-    ffi (1.0.11)
-    ffi-compiler (0.1.3)
-      ffi (>= 1.0.0)
-      rake
+    ffi (1.9.6)
     geocoder (1.1.8)
     gettext (2.0.0)
     gettext_i18n_rails (0.2.20)
       fast_gettext
-    gherkin (2.4.16)
-      json (>= 1.4.6)
+    gherkin (2.12.2)
+      multi_json (~> 1.3)
     haml (4.0.5)
       tilt
     highline (1.6.19)
@@ -125,15 +113,15 @@ GEM
     i18n (0.7.0)
     iconv (1.0.4)
     json (1.8.1)
-    json_pure (1.5.4)
-      spruz (~> 0.2.8)
     launchy (2.0.5)
       addressable (~> 2.2.6)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
+    mini_portile (0.6.2)
     minitest (4.7.5)
     multi_json (1.10.1)
+    multi_test (0.1.1)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -141,7 +129,8 @@ GEM
     net-ssh (2.6.8)
     net-ssh-gateway (1.2.0)
       net-ssh (>= 2.6.5)
-    nokogiri (1.5.0)
+    nokogiri (1.6.5)
+      mini_portile (~> 0.6.0)
     pdf-core (0.4.0)
     pg (0.17.1)
     pickle (0.4.8)
@@ -175,8 +164,10 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdiscount (2.1.7.1)
-    request_store (1.1.0)
     rgeo (0.3.20)
+    rgeo-activerecord (1.2.0)
+      activerecord (~> 4.0)
+      rgeo (~> 0.3)
     rspec-core (2.13.1)
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
@@ -188,7 +179,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
-    rubyzip (0.9.4)
+    rubyzip (1.1.6)
     rvm-capistrano (1.3.0)
       capistrano (>= 2.0.0)
     sass (3.4.9)
@@ -198,14 +189,11 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
-    scrypt (1.2.1)
-      ffi-compiler (>= 0.0.2)
-      rake
-    selenium-webdriver (2.5.0)
-      childprocess (>= 0.2.1)
-      ffi (>= 1.0.7)
-      json_pure
-      rubyzip
+    selenium-webdriver (2.44.0)
+      childprocess (~> 0.5)
+      multi_json (~> 1.0)
+      rubyzip (~> 1.0)
+      websocket (~> 1.0)
     slop (3.6.0)
     sprockets (2.12.3)
       hike (~> 1.2)
@@ -216,8 +204,6 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    spruz (0.2.13)
-    term-ansicolor (1.0.6)
     test-unit (1.2.3)
       hoe (>= 1.5.1)
     thor (0.19.1)
@@ -228,6 +214,7 @@ GEM
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    websocket (1.2.1)
     xpath (0.1.4)
       nokogiri (~> 1.3)
 
@@ -237,9 +224,10 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgis-adapter
   acts_as_addressed!
-  authlogic (~> 3.4.4)
+  authlogic (~> 3.3.0)
   autotest-rails
   byebug
+  capybara (>= 1.0.1, < 2)
   coffee-rails
   cucumber-rails
   database_cleaner
@@ -260,7 +248,6 @@ DEPENDENCIES
   prototype-rails
   rails (~> 4.0.12)
   rdiscount
-  rgeo-activerecord!
   rspec-rails (~> 2.13.1)
   rvm-capistrano
   sass-rails
