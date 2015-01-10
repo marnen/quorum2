@@ -8,9 +8,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new params.require(:user).permit(
-      :email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact
-    )
+    @user = User.new user_params
     @user.save
     if @user.errors.empty?
       @user.activate # so we don't have to go through activation right now
@@ -26,17 +24,14 @@ class UsersController < ApplicationController
   # TODO: split into edit and update!
   def edit
     if request.post?
-      form = params.require(:user).permit(
-        :email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact
-      )
-      if form[:password].nil? and form[:password_confirmation].nil?
+      if user_params[:password].nil? and user_params[:password_confirmation].nil?
         # bypass encryption if both passwords are blank:
         # User.encrypt_password will not change anything if password is empty
-        form[:password] = ''
-        form[:password_confirmation] = ''
+        user_params[:password] = ''
+        user_params[:password_confirmation] = ''
       end
       @user = current_user # User.find(params[:id].to_i)
-      @user.update_attributes(form)
+      @user.update_attributes(user_params)
       @user.update_attribute(:coords, nil)
       if @user.errors.empty?
         flash[:notice] = _("Your changes have been saved.")
@@ -99,5 +94,12 @@ class UsersController < ApplicationController
   # Returns the name of the layout we should be using. This enables us to have different layouts depending on whether a user is logged in.
   def get_layout
     current_user ? "standard" : "unauthenticated"
+  end
+
+  def user_params
+    # TODO: move into model.
+    params.require(:user).permit(
+      :email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact
+    )
   end
 end
