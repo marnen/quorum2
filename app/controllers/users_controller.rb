@@ -8,7 +8,9 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(params[:user])
+    @user = User.new params.require(:user).permit(
+      :email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact
+    )
     @user.save
     if @user.errors.empty?
       @user.activate # so we don't have to go through activation right now

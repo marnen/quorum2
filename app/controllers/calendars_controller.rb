@@ -16,7 +16,7 @@ class CalendarsController < ApplicationController
   end
 
   def create
-    @calendar = Calendar.new params[:calendar]
+    @calendar = Calendar.new params.require(:calendar).permit(:name)
     if @calendar.save
       make_admin_permission_for @calendar
       redirect_to '/admin', notice: _('Your calendar was successfully created.')
@@ -32,7 +32,7 @@ class CalendarsController < ApplicationController
   end
 
   def update
-    if @calendar.update_attributes params[:calendar]
+    if @calendar.update_attributes params.require(:calendar).permit(:name)
       redirect_to '/admin', notice: _('Your calendar was successfully saved.')
     else
       flash[:error] = _('Couldn\'t save your calendar!')
