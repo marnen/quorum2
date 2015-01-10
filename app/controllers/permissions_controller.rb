@@ -46,7 +46,7 @@ class PermissionsController < ApplicationController
       Permission.create! do |p|
         p.calendar_id = params[:calendar_id]
         p.user = User.current_user
-        p.role = Role.find_or_create_by_name('user')
+        p.role = Role.find_or_create_by(name: 'user')
       end
     rescue
       flash[:error] = _("Something went wrong. Please try again.")
