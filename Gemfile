@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'rails', '~> 4.0.12'
+gem 'rails', github: 'marnen/rails', branch: 'backport-13321-to-4.0' # TODO: waiting for https://github.com/rails/rails/pull/18442
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
