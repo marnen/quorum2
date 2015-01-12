@@ -27,9 +27,9 @@ class User < ActiveRecord::Base
   before_save :make_single_access_token
   after_create :set_calendar
 
-  # prevents a user from submitting a crafted form that bypasses activation
-  # anything else you want your user to change should be added here.
-  attr_accessible :email, :password, :password_confirmation, :firstname, :lastname, :street, :street2, :city, :state, :state_id, :zip, :show_contact
+  def self.permitted_params
+    [:email, :firstname, :lastname, :password, :password_confirmation, :street, :street2, :city, :state_id, :zip, :show_contact]
+  end
 
   # Sets the User's active status to true.
   # TODO: Rename to activate! , since it's destructive.
@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
 
   def set_calendar
     if Calendar.count == 1
-      permissions.create(:user => self, :calendar => Calendar.find(:first), :role => Role.find_or_create_by_name('user'))
+      permissions.create user: self, calendar: Calendar.first, role: Role.find_or_create_by(name: 'user')
     end
   end
 end

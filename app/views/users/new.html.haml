@@ -25,7 +25,7 @@
         %br
         %span.hint= _("(for confirmation)")
       %td= f.password_field :password_confirmation
-  
+
   %h2= _("Where do you live?")
   %p= _("This information is optional, but if you provide it, we can tell you the distance from your house to events. And of course we'll never share it with anyone else without your permission (except anonymously for geocoding).")
   %table.edit
@@ -40,7 +40,8 @@
       %td= f.text_field :city
     %tr
       %th= f.label :state_id, _("State")
-      %td= f.collection_select(:state_id, Acts::Addressed::State.find(:all, :order => :name), :id, :name, :include_blank => true)
+      -# TODO: remove DB access from view!
+      %td= f.collection_select(:state_id, Acts::Addressed::State.order(:name), :id, :name, :include_blank => true)
     %tr
       %th= f.label :zip, _("ZIP code")
       %td= f.text_field :zip

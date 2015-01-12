@@ -7,7 +7,7 @@ describe "/events/ical.ics" do
   before(:each) do
     @event = FactoryGirl.create :event
     assign :event, @event
-    render :file => 'events/ical.ics.erb'
+    render file: 'events/ical', formats: [:ics], handlers: [:erb]
   end
 
   it "should use Windows line ends" do

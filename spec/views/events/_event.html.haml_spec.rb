@@ -16,7 +16,7 @@ describe 'events/_event' do
   end
 
   it "should contain edit and delete links for the event, if the current user is an admin" do
-    admin_role = Role.find_or_create_by_name 'admin'
+    admin_role = Role.find_or_create_by name: 'admin'
     admin = FactoryGirl.create(:user).tap do |u|
       u.permissions.destroy_all
       u.permissions << FactoryGirl.create(:permission, :role => admin_role, :calendar => @event.calendar, :user => u)
@@ -24,8 +24,8 @@ describe 'events/_event' do
     [User, view].each {|x| x.stub!(:current_user).and_return admin }
 
     render_view
-    edit_url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
-    delete_url = url_for(:controller => 'events', :action => 'delete', :id => @event.id, :escape => false)
+    edit_url = url_for(:controller => 'events', :action => 'edit', :id => @event.id)
+    delete_url = url_for(:controller => 'events', :action => 'delete', :id => @event.id)
     [edit_url, delete_url].each do |url|
       rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
     end
@@ -51,7 +51,7 @@ describe 'events/_event' do
 
   it "should have a control to set the current user's attendance for the event" do
     pending "This works, but spec fails strangely." do
-      template.should_receive(:render).with(:partial => 'attendance', :locals => {:event => @event})
+      view.should_receive(:render).with(:partial => 'attendance', :locals => {:event => @event})
       render_view
     end
   end
@@ -107,13 +107,13 @@ describe 'events/_event' do
 
   it "should show a map link for the event" do
     render_view
-    url = url_for(:controller => 'events', :action => 'map', :id => @event.id, :escape => false)
+    url = url_for(:controller => 'events', :action => 'map', :id => @event.id)
     rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
   end
 
   it "should show an iCal export link for the event, of class 'ical'" do
     render_view
-    url = url_for(:controller => 'events', :action => 'export', :id => @event.id, :escape => false)
+    url = url_for(:controller => 'events', :action => 'export', :id => @event.id)
     rendered.should have_selector("#event_#{@event.id} a.ical[href='#{url}']")
   end
 
@@ -140,7 +140,7 @@ describe 'events/_event' do
     @user.permissions << FactoryGirl.create(:permission, :calendar => @event.calendar)
     @event.created_by = @user
     render_view
-    url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
+    url = url_for(:controller => 'events', :action => 'edit', :id => @event.id)
     rendered.should have_selector("#event_#{@event.id} a[href='#{url}']")
   end
 
@@ -148,7 +148,7 @@ describe 'events/_event' do
     @user.permissions << FactoryGirl.create(:permission, :calendar => @event.calendar)
     @event.created_by = FactoryGirl.create :user # some other guy
     render_view
-    url = url_for(:controller => 'events', :action => 'edit', :id => @event.id, :escape => false)
+    url = url_for(:controller => 'events', :action => 'edit', :id => @event.id)
     rendered.should_not have_selector("#event_#{@event.id} a[href='#{url}']")
   end
 

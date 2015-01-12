@@ -20,9 +20,9 @@ class PermissionsController < ApplicationController
     @page_title = _('Subscriptions')
     @permissions = User.current_user.permissions.includes(:calendar, :role)
     if @permissions.empty?
-      @unsubscribed = Calendar.find(:all)
+      @unsubscribed = Calendar.all
     else
-      @unsubscribed = Calendar.find(:all, :conditions => ['id NOT IN (:permissions)', {:permissions => @permissions.collect{|p| p.calendar.id}}])
+      @unsubscribed = Calendar.where ['id NOT IN (:permissions)', {permissions: @permissions.collect {|p| p.calendar.id } }]
     end
     respond_with @permissions
   end
@@ -46,7 +46,7 @@ class PermissionsController < ApplicationController
       Permission.create! do |p|
         p.calendar_id = params[:calendar_id]
         p.user = User.current_user
-        p.role = Role.find_or_create_by_name('user')
+        p.role = Role.find_or_create_by(name: 'user')
       end
     rescue
       flash[:error] = _("Something went wrong. Please try again.")

@@ -6,18 +6,16 @@ module Acts
       acts_as_addressed
       geocoded_by :address_for_geocoding do |model, results|
         if result = results.first
-          model.coords = model.class.rgeo_factory_for_column(:coords).point result.longitude, result.latitude
+          model.coords = model.class.rgeo_factory_for_column(:coords, srid: DEFAULT_SRID).point result.longitude, result.latitude
         end
       end
       after_validation :geocode
     end
 
-    module InstanceMethods
-      private
+    private
 
-      def address_for_geocoding
-        address.to_s :geo
-      end
+    def address_for_geocoding
+      address.to_s :geo
     end
   end
 end

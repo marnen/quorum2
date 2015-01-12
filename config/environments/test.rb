@@ -9,9 +9,6 @@ Quorum2::Application.configure do
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = true
 
-  # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
-
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
@@ -34,4 +31,10 @@ Quorum2::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Configure static asset server for tests with Cache-Control for performance
+  config.serve_static_files = true
+  config.static_cache_control = 'public, max-age=3600'
+
+  config.eager_load = false # set to true if we preload the test environment
 end

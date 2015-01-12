@@ -1,11 +1,11 @@
 # coding: UTF-8
 
 Then /^I should see the word "([^\"]*)"$/ do |word|
-  Then %Q{I should see /\\b#{word}\\b/}
+  step %Q{I should see /\\b#{word}\\b/}
 end
 
 Then /^I should not see the word "([^\"]*)"$/ do |word|
-  Then %Q{I should not see /\\b#{word}\\b/}
+  step %Q{I should not see /\\b#{word}\\b/}
 end
 
 Then /^I should see an element matching "([^\"]*)"$/ do |selector|

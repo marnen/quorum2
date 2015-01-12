@@ -1,11 +1,11 @@
 # coding: UTF-8
 
-# This controller handles the login/logout function of the site.  
+# This controller handles the login/logout function of the site.
 class UserSessionsController < ApplicationController
   layout 'unauthenticated'
   before_filter :require_no_user, :only => [:new, :create]
   before_filter :require_user, :only => :destroy
-  
+
   # render new.rhtml
   def new
     @page_title = _("Login")

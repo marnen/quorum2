@@ -7,8 +7,11 @@ class UsersController < ApplicationController
   def new
   end
 
+  require 'resource_params'
+  include ResourceParams
+
   def create
-    @user = User.new(params[:user])
+    @user = User.new resource_params
     @user.save
     if @user.errors.empty?
       @user.activate # so we don't have to go through activation right now
@@ -21,17 +24,17 @@ class UsersController < ApplicationController
     end
   end
 
+  # TODO: split into edit and update!
   def edit
     if request.post?
-      form = params[:user]
-      if form[:password].nil? and form[:password_confirmation].nil?
+      if resource_params[:password].nil? and resource_params[:password_confirmation].nil?
         # bypass encryption if both passwords are blank:
         # User.encrypt_password will not change anything if password is empty
-        form[:password] = ''
-        form[:password_confirmation] = ''
+        resource_params[:password] = ''
+        resource_params[:password_confirmation] = ''
       end
       @user = current_user # User.find(params[:id].to_i)
-      @user.update_attributes(form)
+      @user.update_attributes(resource_params)
       @user.update_attribute(:coords, nil)
       if @user.errors.empty?
         flash[:notice] = _("Your changes have been saved.")
@@ -78,7 +81,7 @@ class UsersController < ApplicationController
       end
       begin
         user.reset_password!
-        UserMailer.deliver_reset(user)
+        UserMailer.reset(user).deliver
         flash[:notice] = _("Password reset for %{email}. Please check your e-mail for your new password.") % {:email => params[:email]}
       #rescue
         #flash[:error] = _("Couldn't reset password. Please try again.")

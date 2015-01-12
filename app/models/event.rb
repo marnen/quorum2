@@ -15,7 +15,11 @@ class Event < ActiveRecord::Base
 
   before_create :set_created_by_id
 
-  default_scope :conditions => 'deleted is distinct from true'
+  default_scope -> { where 'deleted is distinct from true' }
+
+  def self.permitted_params
+    [:calendar_id, :name, :description, :date, :site, :street, :street2, :city, :state_id, :zip]
+  end
 
   # Returns true if #User.current_user is allowed to perform <i>operation</i> on the current #Event, false otherwise.
   # <i>Operation</i> may be <tt>:edit</tt>, <tt>:delete</tt>, or <tt>:show</tt>.
@@ -34,7 +38,7 @@ class Event < ActiveRecord::Base
 
   # Sets the #User's attendance status on the Event, where status is one of true (attending), false (not attending), or nil (uncommitted).
   def change_status!(user, status, comment = nil)
-    commitment = commitments.find_or_create_by_user_id(user.id)
+    commitment = commitments.find_or_create_by(user_id: user.id)
     commitment.update_attributes! :status => status, :comment => comment
   end
 
@@ -92,7 +96,7 @@ class Event < ActiveRecord::Base
   # Returns the #Role of the #User for the #Event.
   def role_of(user)
     # TODO: use joins to make one DB query, not two.
-    p = user.permissions.find_by_calendar_id(self.calendar_id)
+    p = user.permissions.reload.find_by_calendar_id(self.calendar_id)
     p.nil? ? nil : p.role
   end
 

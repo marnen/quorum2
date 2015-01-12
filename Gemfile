@@ -2,8 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'rails', github: 'rails/rails', branch: '3-0-stable'
-# TODO: go back to released gem if 5aeb472d990fef093a3d674bd20e4e9eb45ac962 gets incorporated into 3.0.21 (or when we upgrade to 3.2).
+gem 'rails', github: 'marnen/rails', branch: 'backport-13321-to-4.0' # TODO: waiting for https://github.com/rails/rails/pull/18442
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -25,18 +24,23 @@ gem 'rails', github: 'rails/rails', branch: '3-0-stable'
 # gem 'aws-s3', :require => 'aws/s3'
 
 gem 'haml'
-gem 'sass'
+gem 'prototype-rails' # TODO: remove when we switch to jQuery.
 gem 'pg'
 gem 'gettext_i18n_rails'
 gem 'iconv'
 gem 'prawn'
+gem 'prawn-rails', '~> 0.1.1'
 gem 'geocoder', '~> 1.1.8'
 gem 'rdiscount'
-gem 'rgeo-activerecord', github: 'marnen/rgeo-activerecord', branch: 'fix-proc-error-in-default-factory' # TODO: waiting for https://github.com/dazuma/rgeo-activerecord/pull/10
 gem 'activerecord-postgis-adapter'
-gem 'authlogic', '~> 3.0.3'
+gem 'acts_as_addressed', path: './acts_as_addressed'
+gem 'authlogic', github: 'marnen/authlogic', branch: 'backport-pull-369-onto-v3.3.0' # TODO: waiting for https://github.com/binarylogic/authlogic/pull/446
 gem 'dynamic_form'
 gem 'exception_notification'
+
+gem 'sass-rails'
+gem 'coffee-rails'
+gem 'uglifier',     '>= 1.0.3'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -52,12 +56,13 @@ end
 
 group :test, :development do
   gem 'autotest-rails', :require => false
-  gem 'rspec-rails', '~> 2.11.0', :require => false
+  gem 'rspec-rails', '~> 2.13.1', :require => false
   gem 'test-unit', '1.2.3', :require => false # amazingly, RSpec needs this
   gem 'byebug'
   gem 'cucumber-rails', :require => false
+  gem 'capybara', '>= 1.0.1', '< 2' # TODO: temporary only, to get Cucumber working. We should remove this line and rewrite for Capybara 2.
   gem 'launchy'
-  gem 'pickle'
+  gem 'pickle', github: 'ianwhite/pickle', ref: 'd2e4bb87f9ea218b763c9375b29fe75363c4b3c4' # TODO: waiting for https://github.com/ianwhite/pickle/pull/48
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'ffaker'

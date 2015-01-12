@@ -9,10 +9,13 @@ class Calendar < ActiveRecord::Base
 
   after_create :set_admin
 
+  def self.permitted_params
+    [:name]
+  end
+
   def to_s
     self.name
   end
-
 
  protected
   def set_admin # TODO: is this being used anywhere?

@@ -14,13 +14,15 @@ class EventsController < ApplicationController
   respond_to :pdf, only: :index
   respond_to :rss, only: :feed
 
+  require 'resource_params'
+  include ResourceParams
+
   def index
     set_table_headers
     @events = current_objects
     respond_with @events do |format|
       format.pdf do
-        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.find_all_by_show_in_report(true, :include => :user).collect{|x| x.user}.sort # TODO: fix for multiple calendars
-        prawnto prawn: {page_layout: :landscape}
+        @users = current_objects.blank? ? [] : current_objects[0].calendar.permissions.where(show_in_report: true).includes(:user).collect{|x| x.user }.sort # TODO: fix for multiple calendars
         render layout: false
       end
     end
@@ -33,7 +35,7 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new params[:event]
+    @event = Event.new resource_params
     respond_with_flash { @event.save }
   end
 
@@ -47,7 +49,7 @@ class EventsController < ApplicationController
   end
 
   def update
-    respond_with_flash { @event.update_attributes params[:event] }
+    respond_with_flash { @event.update_attributes resource_params }
   end
 
   def show
@@ -89,7 +91,7 @@ class EventsController < ApplicationController
   def export
     begin
       @event = Event.find(params[:id].to_i)
-      render :template => 'events/ical.ics.erb'
+      render template: 'events/ical', formats: [:ics], handlers: [:erb]
     rescue
       flash[:error] = _("Couldn't find any event to export!")
       redirect_to(:action => :index) and return
