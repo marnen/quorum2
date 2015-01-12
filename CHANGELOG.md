@@ -87,3 +87,7 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 
 ## v0.5.15, 10 September 2014
 * Fix a security bug where password resets could log the user in [#92]
+
+## v0.6.0, 12 January 2015
+* Upgrade to Ruby 2.0. [#83]
+* Upgrade to Rails 4.0. [#84]
