@@ -76,9 +76,11 @@ Quorum2::Application.configure do
   config.eager_load = true
 
   # Set up ExceptionNotifier.
-  config.middleware.use ExceptionNotifier, {
-    :email_prefix => "[#{SITE_TITLE}] ",
-    :sender_address => %Q{"#{SITE_TITLE} errors" <quorum.pokingbrook@gmail.com>},
-    :exception_recipients => APP_CONFIG['exception_recipients']
-  }
+  config.after_initialize do
+    config.middleware.use ExceptionNotifier, {
+      :email_prefix => "[#{SITE_TITLE}] ",
+      :sender_address => %Q{"#{SITE_TITLE} errors" <quorum.pokingbrook@gmail.com>},
+      :exception_recipients => APP_CONFIG['exception_recipients']
+    }
+  end
 end
