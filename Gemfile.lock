@@ -281,5 +281,6 @@ DEPENDENCIES
   rdiscount
   rspec-rails (~> 2.13.1)
   sass-rails
+  sprockets-rails
   test-unit (= 1.2.3)
   uglifier (>= 1.0.3)
