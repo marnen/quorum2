@@ -56,7 +56,7 @@ Quorum2::Application.configure do
 
   # Compress JavaScripts and CSS
   config.assets.js_compressor = :uglifier
-  config.assets.css_compressor = :yui
+  config.assets.css_compressor = :sass
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
   config.assets.compile = false
@@ -76,6 +76,7 @@ Quorum2::Application.configure do
   config.eager_load = true
 
   # Set up ExceptionNotifier.
+  require File.join(Rails.root, 'config', 'initializers', 'app_globals') # TODO: can we avoid requiring this out of sequence?
   config.middleware.use ExceptionNotifier, {
     :email_prefix => "[#{SITE_TITLE}] ",
     :sender_address => %Q{"#{SITE_TITLE} errors" <quorum.pokingbrook@gmail.com>},
