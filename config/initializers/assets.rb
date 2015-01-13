@@ -15,3 +15,5 @@ Rails.application.config.assets.precompile << Proc.new do |path|
     false
   end
 end
+
+Rails.application.config.assets.precompile << 'prototype.js'
