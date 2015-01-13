@@ -13,5 +13,6 @@ config/deploy.rb
 config/database.yml
 config/initializers/secret_token.rb
 old_cap/deploy.rb
+public/assets/*
 .redcar
 *~
