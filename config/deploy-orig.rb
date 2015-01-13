@@ -1,77 +1,48 @@
-# coding: UTF-8
+# config valid only for current version of Capistrano
+lock '3.3.5'
 
-require 'bundler/capistrano'
+set :application, 'my_app_name'
+set :repo_url, 'git@example.com:me/my_repo.git'
 
-set :application, "quorum2"
-set :repository,  "REPOSITORY_URL" # CONFIG: use a Git clone URL or SVN repo spec here.
+# Default branch is :master
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-# If you aren't deploying to /u/apps/#{application} on the target
-# servers (which is the default), you can specify the actual location
-# via the :deploy_to variable:
-set :deploy_to, "PATH" # CONFIG: set the deploy path
-set :user, "capistrano"
+# Default deploy_to directory is /var/www/my_app_name
+# set :deploy_to, '/var/www/my_app_name'
 
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
-# set :scm, :subversion
-# set :scm_user, "capistrano"
-set :scm, :git
-set :branch, :master
-set :deploy_via, :remote_cache
-set :remote, 'origin'
+# Default value for :scm is :git
+# set :scm, :git
 
-=begin
-set :scm_password, Proc.new { Capistrano::CLI.password_prompt("SVN
-password for #{scm_user}, please: ") }
-set :repository, Proc.new { "--username #{scm_user} --password
-#{scm_password} --no-auth-cache #{repository}" }
-=end
+# Default value for :format is :pretty
+# set :format, :pretty
 
-# CONFIG: normally this will be the name of your application server.
-role :app, "HOST"
-role :web, "HOST"
-role :db,  "HOST", :primary => true
+# Default value for :log_level is :debug
+# set :log_level, :debug
 
-# set process runner
-set :runner, "capistrano" # might want to change this
-set :use_sudo, false
+# Default value for :pty is false
+# set :pty, true
 
-set :migrate_target, :current
+# Default value for :linked_files is []
+# set :linked_files, fetch(:linked_files, []).push('config/database.yml')
 
-after 'deploy:update_code', 'deploy:remove_unnecessary_files', 'deploy:tag'
+# Default value for linked_dirs is []
+# set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+
+# Default value for default_env is {}
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+
+# Default value for keep_releases is 5
+# set :keep_releases, 5
 
 namespace :deploy do
 
-  # CONFIG: Comment out task :restart block unless you're using Phusion Passenger -- it won't work with other servers
-  desc 'Restart the application server.'
-  task :restart, :roles => :app do
-    run "if test ! -d #{current_path}/tmp; then mkdir #{current_path}/tmp; fi"
-    run "/usr/bin/touch #{current_path}/tmp/restart.txt"
-  end
-
-  desc 'Remove shared files and image sources.'
-  task :remove_unnecessary_files, :roles => :app do
-    # Remove some unversioned YAML config files and link to shared directory.
-    rpath = File.expand_path(release_path)
-    ['database.yml', 'config.yml', 'gmaps_api_key.yml', 'initializers/secret_token.rb'].each do |file|
-      run "rm -f #{rpath}/config/#{file}"
-      run "ln -s #{deploy_to}/shared/config/#{file} #{rpath}/config/#{file}"
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      # within release_path do
+      #   execute :rake, 'cache:clear'
+      # end
     end
-
-    # Remove image source files.
-    run "rm -rf #{rpath}/assets/images/sources"
-
-    #run "chown www-data #{current_path}/config/environment.rb"
-
   end
 
-  # From http://stackoverflow.com/questions/5735656/tagging-release-before-deploying-with-capistrano
-  desc 'Tags deployed release with a unique Git tag.'
-  task :tag do
-    user = `git config --get user.name`.chomp
-    email = `git config --get user.email`.chomp
-    tag_name = "#{remote}_#{release_name}"
-    puts `git tag #{tag_name} #{latest_revision} -m "Deployed by #{user} <#{email}>"`
-    puts `git push #{remote} #{tag_name}`
-  end
 end
