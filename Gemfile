@@ -50,8 +50,11 @@ gem 'uglifier',     '>= 1.0.3'
 # end
 
 group :development do
-  gem 'rvm-capistrano'
-  gem 'gettext', '>= 1.9.3', :require => false
+  gem 'capistrano',  '~> 3.1', require: false
+  gem 'capistrano-rails', '~> 1.1', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'gettext', '>= 1.9.3', require: false
 end
 
 group :test, :development do
