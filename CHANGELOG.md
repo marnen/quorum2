@@ -91,3 +91,6 @@ Quorum is distributed under the [BSD 3-Clause License](http://www.opensource.org
 ## v0.6.0, 12 January 2015
 * Upgrade to Ruby 2.0. [#83]
 * Upgrade to Rails 4.0. [#84]
+
+## v0.6.1, 13 January 2015
+* Handle asset pipline and deployment properly.
