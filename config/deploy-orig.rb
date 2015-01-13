@@ -41,7 +41,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/ca
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-after 'deploy:updated', 'deploy:remove_sources'
+before 'deploy:updated', 'deploy:remove_sources'
 
 namespace :deploy do
   after :restart, :clear_cache do
