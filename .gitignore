@@ -8,8 +8,10 @@ doc
 spec-results
 features_report.html
 config/config.yml
+config/deploy
 config/deploy.rb
 config/database.yml
 config/initializers/secret_token.rb
+old_cap/deploy.rb
 .redcar
 *~
