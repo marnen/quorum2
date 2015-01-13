@@ -76,11 +76,10 @@ Quorum2::Application.configure do
   config.eager_load = true
 
   # Set up ExceptionNotifier.
-  config.after_initialize do
-    config.middleware.use ExceptionNotifier, {
-      :email_prefix => "[#{SITE_TITLE}] ",
-      :sender_address => %Q{"#{SITE_TITLE} errors" <quorum.pokingbrook@gmail.com>},
-      :exception_recipients => APP_CONFIG['exception_recipients']
-    }
-  end
+  require File.join(Rails.root, 'config', 'initializers', 'app_globals') # TODO: can we avoid requiring this out of sequence?
+  config.middleware.use ExceptionNotifier, {
+    :email_prefix => "[#{SITE_TITLE}] ",
+    :sender_address => %Q{"#{SITE_TITLE} errors" <quorum.pokingbrook@gmail.com>},
+    :exception_recipients => APP_CONFIG['exception_recipients']
+  }
 end
