@@ -14,8 +14,8 @@ namespace :deploy do
     run_locally do
       remote = fetch :remote
 
-      user = capture(:git, "config --get user.name")
-      email = capture(:git, "config --get user.email")
+      user = capture(:git, "config --get user.name").chomp
+      email = capture(:git, "config --get user.email").chomp
       tag_msg = "Deployed by #{user} <#{email}> to #{fetch :stage} as #{fetch :release_name}"
 
       tag_name = "#{remote}_#{fetch :stage }_#{fetch :release_name}"
