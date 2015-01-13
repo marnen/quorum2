@@ -42,7 +42,6 @@ set :linked_dirs, fetch(:linked_dirs, []).push('bin', 'log', 'tmp/pids', 'tmp/ca
 # set :keep_releases, 5
 
 after 'deploy:updated', 'deploy:remove_sources'
-after 'deploy:published', 'deploy:tag'
 
 namespace :deploy do
   after :restart, :clear_cache do
