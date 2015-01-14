@@ -11,11 +11,7 @@ describe EventsController, "index" do
     order = 'name'
     direction = 'desc'
     params = {:order => order, :direction => direction}
-    begin
-      {:get => "/events/index/#{order}/#{direction}"}.should route_to params.merge(:controller => 'events', :action => 'index')
-    rescue NoMethodError
-      warn "route_to is currently problematic: see https://github.com/rspec/rspec-rails/issues/1262"
-    end
+    {:get => "/events/index/#{order}/#{direction}"}.should route_to params.merge(:controller => 'events', :action => 'index')
     mock_conditions = mock 'conditions'
     mock_conditions.should_receive(:order).with "#{order} #{direction}"
     mock_includes = mock 'includes'
