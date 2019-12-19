@@ -59,7 +59,7 @@ GIT
       thor (>= 0.18.1, < 2.0)
 
 PATH
-  remote: ./acts_as_addressed
+  remote: acts_as_addressed
   specs:
     acts_as_addressed (0.0.1)
       activerecord (>= 3.2.19)
@@ -184,7 +184,7 @@ GEM
     prawn-table (0.2.1)
     prototype-rails (4.0.0)
       rails (~> 4.0)
-    rack (1.5.2)
+    rack (1.5.5)
     rack-test (0.6.2)
       rack (>= 1.0)
     rake (10.4.2)
