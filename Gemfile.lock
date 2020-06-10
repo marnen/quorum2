@@ -59,7 +59,7 @@ GIT
       thor (>= 0.18.1, < 2.0)
 
 PATH
-  remote: ./acts_as_addressed
+  remote: acts_as_addressed
   specs:
     acts_as_addressed (0.0.1)
       activerecord (>= 3.2.19)
@@ -144,7 +144,7 @@ GEM
     fast_gettext (0.5.13)
     ffaker (1.25.0)
     ffi (1.9.6)
-    geocoder (1.1.8)
+    geocoder (1.6.3)
     gettext (2.0.0)
     gettext_i18n_rails (0.2.20)
       fast_gettext
@@ -266,7 +266,7 @@ DEPENDENCIES
   exception_notification
   factory_girl_rails
   ffaker
-  geocoder (~> 1.1.8)
+  geocoder (~> 1.6.3)
   gettext (>= 1.9.3)
   gettext_i18n_rails
   haml
